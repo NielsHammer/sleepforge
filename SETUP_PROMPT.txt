@@ -1,0 +1,175 @@
+You are building SleepForge, a personal automated sleep story video engine for Niels. Before touching anything, read these files from the reference codebase (DO NOT modify them, reference only):
+cat /opt/videvo/engine/src/pipeline.js
+cat /opt/videvo/engine/src/ffmpeg.js
+cat /opt/videvo/engine/src/worker.js
+cat /opt/videvo/engine/src/script-generator.js
+cat /opt/videvo/engine/src/video-bible.js
+cat /opt/videvo/engine/src/remotion-renderer.js
+cat /opt/videvo/engine/src/thumbnail-v3.js
+cat /opt/videvo/engine/src/fal.js
+cat /opt/videvo/engine/src/v2/pipeline-v2.js
+Then do the following in order. Do not stop between steps, complete everything:
+STEP 1 — Create full folder structure:
+mkdir -p /opt/sleepforge/{src,engine/remotion/{backgrounds/marcus-aurelius-night,components},assets/{images/sleepless-philosophers/{stoicism,marcus-aurelius,socrates,nietzsche,aristotle,plato,epictetus},sprites/{campfire-7frame,forest-trees},sfx,voices/cloned-niels},output,secrets,dashboard,scripts,db,channels}
+STEP 2 — Create .env with API keys:
+/opt/sleepforge/.env
+With this content:
+ANTHROPIC_API_KEY=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
+ELEVENLABS_API_KEY=sk_ef6b966f2d7053f43d39b5445d31f873d1320dbbf574afac
+FAL_KEY=990bd210-85b8-4794-b806-b3400b8cc69c:03266cc3bfab3e3c604b19bf64078711
+BRAVE_API_KEY=BSA4LivwKjD_8vPUPKUgLMUyXWbmYpH
+PEXELS_API_KEY=76Ci0vX2xQEpbvPMpgUMeAKuTfzY1JE8gxE17HCCjIW5JkWshwoXL2Zt
+VOICE_SAMPLE=/opt/sleepforge/assets/voice-samples/niels-voice-sample.mp3
+STEP 3 — Create .gitignore:
+/opt/sleepforge/.gitignore
+Content:
+.env
+secrets/
+output/
+assets/voices/
+node_modules/
+STEP 4 — Create package.json:
+/opt/sleepforge/package.json
+Content:
+{
+  "name": "sleepforge",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "worker": "node src/worker.js",
+    "dashboard": "node dashboard/server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
+    "@fal-ai/client": "^0.14.0",
+    "better-sqlite3": "^9.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "node-fetch": "^3.3.2",
+    "ws": "^8.16.0"
+  }
+}
+STEP 5 — Initialize git and connect to GitHub:
+cd /opt/sleepforge
+git init
+git remote add origin https://github.com/NielsHammer/sleepforge.git
+STEP 6 — Create the channel config:
+Create /opt/sleepforge/channels/sleepless-philosophers.js with this content:
+export default {
+  id: "sleepless-philosophers",
+  name: "Sleepless Philosophers",
+  niche: "philosophy",
+  youtubeChannelId: "",
+  topics: ["stoicism", "marcus aurelius", "socrates", "nietzsche", "aristotle", "plato", "epictetus", "seneca", "diogenes", "heraclitus"],
+  videoLengthMinutes: 60,
+  voice: "cloned-niels",
+  voiceFallback: "kokoro-warm",
+  background: "marcus-aurelius-night",
+  imageStyle: "pixel art, 16-bit, warm candlelight palette, ancient rome and greece, cozy atmospheric night scene, detailed",
+  imageFrame: "stone-tablet",
+  thumbnailStyle: "dark moody, philosophical, dramatic portrait lighting, bold quote overlay, ancient aesthetic",
+  sfx: {
+    fireplace: "assets/sfx/fireplace-cozy-loop.mp3",
+    ambience: "assets/sfx/night-crickets-loop.mp3",
+  },
+  sfxVolume: {
+    fireplace: 0.20,
+    ambience: 0.08,
+    voiceover: 1.0,
+  },
+  youtubeDefaults: {
+    categoryId: "27",
+    language: "en",
+    scheduleHoursAfterGeneration: 24,
+    tags: ["philosophy", "sleep", "stoicism", "marcus aurelius", "meditations", "ancient philosophy", "sleep stories", "insomnia", "relaxing"],
+  },
+  scriptStyle: {
+    opening: "Welcome the viewer into the cozy pixel art world — reference the fireplace crackling, the stars overhead, Rome sleeping in the distance. Make them feel safe and warm before introducing the topic.",
+    pace: "Slow, flowing, meditative. This is sleep content — never rushed.",
+    tone: "Warm, wise, intimate. Like a knowledgeable friend telling you a story by firelight.",
+    closing: "Drift the viewer gently toward sleep. Reference the fire dying down, the night deepening, invite them to rest.",
+  },
+  cta: "Want to go deeper on {topic}? Test your knowledge in our free learning app: [APP LINK]",
+}
+STEP 7 — Create CLAUDE.md:
+Create /opt/sleepforge/CLAUDE.md with this content:
+# SleepForge — CLAUDE.md
+Read this before doing anything else.
+
+## What This Is
+SleepForge is a personal automated video engine for long-form sleep story YouTube channels. Generates complete 1-2 hour videos fully automated.
+
+Owner: Niels
+Server: 157.180.124.232
+Project root: /opt/sleepforge/
+GitHub: NielsHammer/sleepforge
+Reference codebase (READ ONLY): /opt/videvo/engine/src/
+
+## Rules — Never Break
+1. Always restart PM2 after code changes: pm2 restart sleepforge-worker
+2. Always commit after changes: git add -A && git commit -m "..." && git push
+3. Never burn API credits without confirming with Niels first
+4. Read actual files before editing — never assume
+5. Fix root causes not symptoms
+6. Subtitles are ASS karaoke format — NEVER SRT
+7. TTS is Kokoro or F5-TTS — NEVER ElevenLabs for voiceover
+8. Check PM2 logs first when something breaks
+9. Background is pre-rendered once per channel — never re-render per video
+10. Images are pre-generated — never call Fal.ai live during video generation
+11. Every 15 minutes update /opt/sleepforge/PROGRESS.md with timestamp, what was completed, what is in progress, what is next, any problems encountered
+12. Before building any module — read the equivalent file in /opt/videvo/engine/src/ first
+
+## VideoForge Reference Files (Read Before Building Equivalent)
+- pipeline.js → /opt/videvo/engine/src/pipeline.js
+- ffmpeg.js → /opt/videvo/engine/src/ffmpeg.js
+- worker.js → /opt/videvo/engine/src/worker.js
+- script-generator.js → /opt/videvo/engine/src/script-generator.js
+- video-bible.js → /opt/videvo/engine/src/video-bible.js
+- remotion-renderer.js → /opt/videvo/engine/src/remotion-renderer.js
+- thumbnail.js → /opt/videvo/engine/src/thumbnail-v3.js
+- fal.js → /opt/videvo/engine/src/fal.js
+
+## AI Model Rules
+- Script writing: Claude Haiku only (claude-haiku-4-5-20251001)
+- SEO titles: Claude Haiku only
+- Scene keywords: Claude Haiku only
+- Metadata: Claude Haiku only
+- Thumbnail prompt: Claude Sonnet only (claude-sonnet-4-6)
+- NEVER use Opus
+- NEVER use Sonnet for bulk tasks
+- Target cost: under $0.20 per video
+
+## Voice Sample
+Primary: /opt/sleepforge/assets/voice-samples/niels-voice-sample.mp3
+This is a 2-hour ElevenLabs Archer voiceover — use for F5-TTS voice cloning
+
+## Cost Budget Per Video
+- Claude Haiku: ~$0.10
+- TTS: $0.00
+- Whisper: $0.00
+- Fal.ai thumbnail: ~$0.03
+- Pre-gen images amortized: ~$0.02
+- Server: ~$0.05
+- Total target: ~$0.20
+STEP 8 — Create initial PROGRESS.md:
+Create /opt/sleepforge/PROGRESS.md:
+# SleepForge Progress Log
+
+## 2026-04-23 — Project Initialized
+✅ Completed: Folder structure, API keys, git setup, channel config, CLAUDE.md
+🔄 In Progress: Installing dependencies
+⏭ Next: Install Kokoro TTS, Whisper, generate SFX files
+⚠ Notes: Voice sample at /opt/sleepforge/assets/voice-samples/niels-voice-sample.mp3 ready for cloning
+STEP 9 — Install Node dependencies:
+cd /opt/sleepforge && npm install
+STEP 10 — First git commit:
+cd /opt/sleepforge
+git add -A
+git commit -m "Initial SleepForge setup — folder structure, configs, channel config"
+git push -u origin main
+After completing all steps report back with:
+
+Full folder structure (tree /opt/sleepforge --max-depth 3)
+Confirmation git push succeeded
+Any errors encountered
+Your assessment of the VideoForge reference files — what's most reusable for SleepForge
