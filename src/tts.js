@@ -184,13 +184,16 @@ def generate_tts():
             ref_text = f.read().strip()
 
         # Generate speech
-        wav, sr = f5tts.infer(
+        result = f5tts.infer(
             ref_file="${voiceConfig.refAudio}",
             ref_text=ref_text,
             gen_text="${text.replace(/"/g, '\\"')}",
             file_wave=None,
             speed=${_currentPacing ? _currentPacing.speed : 1.0}
         )
+
+        # F5-TTS returns (wav, sr, mel_spectrogram)
+        wav, sr, _ = result
 
         # Save to file
         sf.write("${outputPath}", wav, sr)
@@ -269,10 +272,10 @@ def generate_tts():
 
         for word in "${text}".split():
             words.append({
-                word: word,
-                start: current_time,
-                end: current_time + duration_per_word
-            });
+                "word": word,
+                "start": current_time,
+                "end": current_time + duration_per_word
+            })
             current_time += duration_per_word
 
         return {

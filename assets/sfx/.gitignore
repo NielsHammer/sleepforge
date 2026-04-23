@@ -1,0 +1,8 @@
+
+# Large model files
+*.onnx
+voices.bin
+
+# Large model files
+*.onnx
+voices.bin
