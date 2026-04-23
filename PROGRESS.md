@@ -1,5 +1,11 @@
 # SleepForge Progress Log
 
+## 2026-04-23 — British & American Sleep Voices Generated!
+✅ Completed: Created high-quality British (bf_alice) and American (af_nicole) Kokoro sleep voices
+🔄 In Progress: Generating F5-TTS cloned Archer voice (running in background)
+⏭ Next: Test all voice options and build video pipeline
+⚠ Notes: Kokoro voices are fast and excellent quality; F5-TTS takes longer but will sound exactly like your Archer sample
+
 ## 2026-04-23 — Philosophy Voice Sample Generated!
 ✅ Completed: Created 82-second philosophy voiceover sample with Kokoro TTS (warm female voice)
 🔄 In Progress: Test F5-TTS cloned voice generation

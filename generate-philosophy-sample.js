@@ -12,17 +12,21 @@ As you drift toward sleep, consider this: The obstacle is the way. Every challen
 Sleep well, knowing that tomorrow brings new opportunities to live according to nature's design. The universe is change, and our duty is to flow with it gracefully.`;
 
 async function generatePhilosophyVoiceover() {
-  console.log('🎤 Generating 1-minute philosophy voiceover...');
+  console.log('🎤 Generating 1-minute philosophy voiceover with YOUR cloned Archer voice...');
 
   try {
-    // Try Kokoro first (faster)
-    const outputPath = '/opt/sleepforge/assets/voice-samples/philosophy-sample-kokoro.mp3';
-    const voiceId = 'kokoro-warm';
+    const outputPath = '/opt/sleepforge/assets/voice-samples/philosophy-sample-archer.mp3';
 
-    console.log('🎵 Using Kokoro TTS (warm female voice)...');
+    // Use the cloned Archer voice (F5-TTS)
+    const voiceId = 'cloned-niels';
+
+    console.log('🎵 Using F5-TTS with your cloned Archer voice...');
+    console.log('📝 Reference audio: ElevenLabs_test_archer.mp3');
+    console.log('📝 Reference text: Exact transcript match');
+
     const result = await generateVoiceoverWithTimestamps(philosophyScript, voiceId, outputPath);
 
-    console.log('✅ Philosophy voiceover generated successfully!');
+    console.log('✅ Philosophy voiceover with YOUR voice generated successfully!');
     console.log(`📁 Saved to: ${outputPath}`);
     console.log(`⏱️  Duration: ~${Math.round(result.duration)} seconds`);
 
@@ -30,11 +34,21 @@ async function generatePhilosophyVoiceover() {
     if (fs.existsSync(outputPath)) {
       const stats = fs.statSync(outputPath);
       console.log(`📊 File size: ${Math.round(stats.size / 1024)} KB`);
-      console.log('🎧 You can now listen to the philosophy sample!');
+      console.log('🎧 You can now hear YOUR voice in the philosophy sample!');
     }
 
   } catch (error) {
-    console.error('❌ Voiceover generation failed:', error.message);
+    console.error('❌ F5-TTS voiceover failed:', error.message);
+    console.error('🔄 Falling back to Kokoro with warm female voice...');
+
+    try {
+      const outputPath = '/opt/sleepforge/assets/voice-samples/philosophy-sample-fallback.mp3';
+      const result = await generateVoiceoverWithTimestamps(philosophyScript, 'kokoro-warm', outputPath);
+      console.log('✅ Fallback philosophy voiceover generated!');
+      console.log(`📁 Saved to: ${outputPath}`);
+    } catch (fallbackError) {
+      console.error('❌ Fallback also failed:', fallbackError.message);
+    }
   }
 }
 

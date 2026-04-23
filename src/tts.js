@@ -16,14 +16,22 @@ const VOICE_MAP = {
     refAudio: "/opt/sleepforge/assets/voices/cloned-niels/ref_audio.wav",
     refText: "/opt/sleepforge/assets/voices/cloned-niels/ref_text.txt"
   },
-  // Fallback voices using Kokoro
+  // Kokoro voices for different accents
   "kokoro-warm": {
     type: "kokoro",
-    voice: "af_nicole"  // Warm female voice as fallback
+    voice: "af_nicole"  // Warm American female voice
   },
   "kokoro-neutral": {
     type: "kokoro",
-    voice: "af_bella"
+    voice: "af_bella"   // Neutral American female voice
+  },
+  "kokoro-british": {
+    type: "kokoro",
+    voice: "bf_alice"   // British female voice
+  },
+  "kokoro-american": {
+    type: "kokoro",
+    voice: "af_nicole"  // American female voice (same as warm)
   }
 };
 
@@ -31,7 +39,9 @@ const VOICE_MAP = {
 export const VOICE_CATALOG = [
   { id: "cloned-niels", name: "Niels (Cloned)", description: "Primary cloned voice from Niels' voice sample", style: "natural", gender: "male", accent: "neutral" },
   { id: "kokoro-warm", name: "Kokoro Warm", description: "Warm, comforting female voice (fallback)", style: "warm", gender: "female", accent: "american" },
-  { id: "kokoro-neutral", name: "Kokoro Neutral", description: "Neutral, clear voice (fallback)", style: "neutral", gender: "female", accent: "american" }
+  { id: "kokoro-neutral", name: "Kokoro Neutral", description: "Neutral, clear voice (fallback)", style: "neutral", gender: "female", accent: "american" },
+  { id: "kokoro-british", name: "British Sleep Voice", description: "Elegant British female voice for sleep content", style: "elegant", gender: "female", accent: "british" },
+  { id: "kokoro-american", name: "American Sleep Voice", description: "Warm American female voice for sleep content", style: "warm", gender: "female", accent: "american" }
 ];
 
 // ═══════════════════════════════════════════
