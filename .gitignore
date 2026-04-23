@@ -3,3 +3,7 @@ secrets/
 output/
 assets/voices/
 node_modules/
+
+# Large model files
+*.onnx
+voices.bin
