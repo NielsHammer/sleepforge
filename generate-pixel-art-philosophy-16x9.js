@@ -28,20 +28,31 @@ if (fs.existsSync(promptFile)) {
   }
 }
 
+function formatPrompt(prompt) {
+  return prompt
+    .replace(/^Dark 16:9 pixel art of /, 'Dark 16:9 pixel art, medium shot with close focus on characters and their actions, detailed faces and gestures, ')
+    .replace(/, meaningful philosophical scene, no text$/, ', intimate foreground detail, meaningful philosophical scene, no text');
+}
+
 async function generate() {
-  const outputDir = 'assets/images';
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
+  const baseOutputDir = path.join('assets', 'images');
+  const batchArg = process.argv.find(arg => arg.startsWith('--batch='));
+  const batchName = batchArg ? batchArg.split('=')[1] : `batch-${new Date().toISOString().replace(/[:.]/g, '-')}`;
+  const outputDir = path.join(baseOutputDir, batchName);
+
+  if (fs.existsSync(baseOutputDir)) {
+    fs.rmSync(baseOutputDir, { recursive: true, force: true });
   }
+  fs.mkdirSync(outputDir, { recursive: true });
 
   const count = Number(process.argv[2]) || 5;
   const random = process.argv.includes('--random');
   const usePrompts = random ? samplePrompts(prompts, count) : prompts.slice(0, count);
 
-  console.log(`Generating ${usePrompts.length} new 16:9 philosophy pixel art images...`);
+  console.log(`Cleaning old images and generating ${usePrompts.length} new 16:9 philosophy pixel art images in ${outputDir}...`);
 
   for (let i = 0; i < usePrompts.length; i++) {
-    const prompt = usePrompts[i];
+    const prompt = formatPrompt(usePrompts[i]);
     const outputPath = path.join(outputDir, `philosophy-16x9-${i + 1}.png`);
     try {
       console.log(`Generating ${i + 1}/${usePrompts.length}: ${prompt}`);
@@ -52,7 +63,7 @@ async function generate() {
     }
   }
 
-  console.log(`Done generating ${usePrompts.length} 16:9 philosophy images.`);
+  console.log(`Done generating ${usePrompts.length} 16:9 philosophy images in ${outputDir}.`);
 }
 
 function samplePrompts(arr, n) {
