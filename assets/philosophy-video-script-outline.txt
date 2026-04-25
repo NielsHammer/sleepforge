@@ -1,47 +1,199 @@
-1. Socrates and the hemlock - Socrates chooses death over dishonoring his principles, teaching students in a stone prison courtyard that truth is worth any cost.
+1. Socrates Questioning the Youth - Socrates is questioning youth in an Athenian agora, exploring truth through questions.
 
-2. Plato and the cave - Plato shows a prisoner the light outside the cave, a turning point for understanding the difference between appearance and reality.
+2. Socrates and the Hemlock - Socrates is drinking hemlock in a prison courtyard, exploring integrity over life.
 
-3. Aristotle classifies life - Aristotle arranges stone animal figures in his academy, demonstrating the first systematic attempt to categorize nature and reason.
+3. Plato and the Cave - Plato is leading a chained prisoner toward cave light, exploring illusion versus reality.
 
-4. Marcus Aurelius writing - Marcus Aurelius sits on a street bench writing his journal, making private notes about stoic self-discipline and inner freedom.
+4. Plato's Sunlit Exit - Plato is helping a prisoner step into sunlight, exploring awakening to the good.
 
-5. Nietzsche and eternal recurrence - Nietzsche walks a curved stone path past ruins at dusk, reflecting on whether he would gladly relive this life forever.
+5. Aristotle Teaching the Lyceum - Aristotle is instructing students in a peristyle garden, exploring classifying nature.
 
-6. Descartes doubts - Descartes sits alone in a candlelit study, turning over a skull as he questions the certainty of the material world.
+6. Aristotle Sorting Forms - Aristotle is arranging stone animal models on a table, exploring order in nature.
 
-7. Kant and the moral law - Kant walks under lantern light in Königsberg, thinking about duty and the universal principles that should govern action.
+7. Zeno and the Arrow - Zeno is pointing at an arrow frozen in flight, exploring motion and paradox.
 
-8. Locke on experience - Locke writes by a window with apple and key nearby, illustrating that mind and knowledge begin from experience, not from innate ideas.
+8. Parmenides before the One - Parmenides is standing before a monolithic wall, exploring being as unity.
 
-9. Hume and the senses - Hume sits at a tavern table, watching a river of thought flow past as he considers how impressions form the basis of belief.
+9. Heraclitus at the River - Heraclitus is watching a river flow by, exploring everything changes.
 
-10. Mill and the greatest happiness - Mill sits in a garden as bees hover, thinking about how actions should be judged by the happiness they promote for the many.
+10. Epicurus in the Garden - Epicurus is sitting among simple fruit and flowers, exploring pleasure as tranquility.
 
-11. Confucius teaching virtue - Confucius sits beneath a pine tree instructing his students on the importance of ritual, family, and proper conduct.
+11. Seneca Closing a Scroll - Seneca is closing a scroll by candlelight, exploring reason over passion.
 
-12. Buddha under the fig tree - The Buddha meditates beneath the fig tree, embodying the quiet path beyond desire and suffering.
+12. Marcus Walking the Shore - Marcus Aurelius is walking a stormy shore, exploring inner calm amid turmoil.
 
-13. Ship of Theseus - A wooden ship at a moonlit harbor is rebuilt plank by plank, asking whether the same object survives change.
+13. Marcus Writing Meditations - Marcus Aurelius is writing in a leather journal, exploring self-reflection and discipline.
 
-14. Mind and body split - A stone statue split in two shows a physical body on one side and a thought-filled interior on the other.
+14. Confucius Teaching Ritual - Confucius is teaching pupils under a pine tree, exploring virtue and proper conduct.
 
-15. Free will crossroads - A lone traveler stands at a fork in a dark stone road, contemplating whether actions are chosen freely or predetermined.
+15. Mencius and the Child - Mencius is reaching toward a child near a well, exploring innate compassion.
 
-16. Ethics of action - A scale balances a stone heart against a stone sword, symbolizing the tension between compassion and duty.
+16. Laozi by the River Gate - Laozi is standing by a gate beside a flowing river, exploring softness over force.
 
-17. Pragmatism in practice - A builder lays stone steps by hand, showing philosophy tested through real outcomes rather than abstract doctrine.
+17. Buddha under the Bodhi Tree - Buddha is meditating beneath the Bodhi tree, exploring release from suffering.
 
-18. Phenomenology of perception - A figure touches a floating stone shape, emphasizing experience over explanation.
+18. Nagarjuna Drawing the Circle - Nagarjuna is tracing a circle in the air, exploring emptiness of phenomena.
 
-19. Existential choice - A lone thinker stands on a cliff edge, feeling the weight of self-created meaning in an indifferent landscape.
+19. Hypatia Teaching Geometry - Hypatia is teaching students from a balcony, exploring reason and mathematics.
 
-20. Nihilism emptiness - A dark chamber with a single empty chair captures the unsettling openness of a world without inherent meaning.
+20. Avicenna in the Library - Avicenna is studying ancient texts in a library, exploring philosophy and medicine.
 
-21. Sartre in the cafe - Sartre writes in a rain-speckled cafe window, thinking about freedom, bad faith, and human choice.
+21. Ibn Rushd Debating Law - Ibn Rushd is debating scholars in a courtyard, exploring faith and reason.
 
-22. Aquinas in the monastery - Aquinas works in a dim scriptorium, synthesizing reason and faith in quiet stone corridors.
+22. Locke and the Blank Slate - John Locke is writing with an apple and key nearby, exploring knowledge from experience.
 
-23. Philosophy of life - A long stone path leads through changing seasons, symbolizing the search for a meaningful life.
+23. Hume in the Tavern - David Hume is watching a rainy river from a tavern, exploring impressions and belief.
 
-24. Meaning of life horizon - A traveler reaches a bright horizon after a long dark journey, asking whether purpose is on the other side or generated along the way.
+24. Descartes with the Skull - René Descartes is holding a skull in candlelight, exploring doubt and certainty.
+
+25. Kant under Lantern Arches - Immanuel Kant is walking beneath lantern-lit arches, exploring duty and universal law.
+
+26. Hegel and the Spiral of History - Georg Wilhelm Friedrich Hegel is drawing a spiral of ideas, exploring thesis and synthesis.
+
+27. Marx in the Factory - Karl Marx is observing workers among machines, exploring class struggle.
+
+28. Mill Weighing Happiness - John Stuart Mill is balancing symbolic weights in a garden, exploring utility and greatest happiness.
+
+29. Nietzsche on the Mountain - Friedrich Nietzsche is walking a mountain ridge alone, exploring eternal recurrence.
+
+30. Kierkegaard in the Pew - Søren Kierkegaard is kneeling in a church pew, exploring leap of faith.
+
+31. Sartre in the Cafe - Jean-Paul Sartre is writing in a rain-speckled cafe, exploring existence and freedom.
+
+32. Beauvoir before the Mirror - Simone de Beauvoir is looking into a dark mirror, exploring selfhood and otherness.
+
+33. Camus at the Cliff - Albert Camus is standing at a sheer cliff edge, exploring absurdity and revolt.
+
+34. Aquinas in the Scriptorium - Thomas Aquinas is writing in a monastery scriptorium, exploring reason and faith.
+
+35. Emerson on the Hill - Ralph Waldo Emerson is standing on a misty hill with a journal, exploring self-reliance.
+
+36. Thoreau at Walden - Henry David Thoreau is sitting by a pond near a cabin, exploring simple living.
+
+37. Rumi Spinning in the Meadow - Rumi is spinning in a moonlit meadow, exploring mystical union.
+
+38. Woolf Listening to Waves - Virginia Woolf is listening to waves on a cliff, exploring consciousness and time.
+
+39. Arendt at the Trial - Hannah Arendt is observing a trial in a courtroom, exploring banality of evil.
+
+40. Fanon with Broken Chains - Frantz Fanon is breaking chains in a square, exploring colonial liberation.
+
+41. Plato's Cave Shadow Play - A figure is gesturing toward shadow puppets on a cave wall, exploring illusion and meaning.
+
+42. Ship of Theseus Repair - A crew is replacing planks on a moonlit ship, exploring identity through change.
+
+43. Mind-Body Split Statue - A sculptor is chiseling a statue split between body and mind, exploring dualism.
+
+44. Free Will Crossroads - A traveler is standing before two diverging paths, exploring freedom of choice.
+
+45. Ethics Scale Heart Sword - A judge is balancing a heart and sword on a scale, exploring compassion and duty.
+
+46. Duty Lantern Path - A pilgrim is walking a lit path at night, exploring moral obligation.
+
+47. Justice Blindfolded Hall - Justice is holding a scale in a blindfolded stance, exploring fairness.
+
+48. Beauty Carved Rose - An artist is carving a rose from stone, exploring aesthetics.
+
+49. Truth Light Beam - A seeker is following a beam of light through darkness, exploring truth.
+
+50. Memory Stone Library - A scholar is reading from stone tablets, exploring memory and identity.
+
+51. Time Broken Clock - A watcher is gazing at a broken clock face, exploring time and impermanence.
+
+52. Silence Empty Room - A monk is sitting in a quiet empty room, exploring silence and reflection.
+
+53. Absurd Theater Stage - Actors is performing with strange masks on a dark stage, exploring absurdity.
+
+54. Meaning Horizon Road - A wanderer is walking toward a glowing horizon, exploring search for purpose.
+
+55. Identity Shifting Masks - A thinker is changing masks in a dark room, exploring identity.
+
+56. Perception Glowing Shape - A hand is reaching toward a glowing floating shape, exploring perception.
+
+57. Consciousness Flame in Skull - A skull is containing a living flame, exploring consciousness.
+
+58. Language Carved Symbols - A writer is carving symbols into stone, exploring language and meaning.
+
+59. Knowledge Key Pedestal - A key is resting on a stone pedestal, exploring knowledge unlocks.
+
+60. Wisdom Tree with Leaf - A tree is bearing one glowing leaf, exploring wisdom.
+
+61. Nature Stone Forest - A forest is rising from carved stone trunks, exploring nature and philosophy.
+
+62. Community Stone Circle - A circle is of figures holding hands around a fire, exploring community.
+
+63. Democracy Agora Gathering - Citizens is speaking together in an agora, exploring self-government.
+
+64. Equality Twin Pillars - Two pillars is standing side by side in symmetry, exploring equality.
+
+65. Rights Burning Torch - A torch is illuminating carved promises, exploring rights.
+
+66. Courage Torchbearer - A torchbearer is carrying fire up a dark stair, exploring courage.
+
+67. Compassion Joined Hands - Hands is reaching across a gap in darkness, exploring compassion.
+
+68. Empathy Shared Light - Two figures is passing a glowing stone, exploring empathy.
+
+69. Responsibility Heavy Stone - A figure is lifting a heavy stone weight, exploring responsibility.
+
+70. Choice Flaming Fork - A traveler is standing at a fork of burning paths, exploring choice.
+
+71. Purpose Compass Rose - A compass is etched into stone and glowing, exploring purpose.
+
+72. Destiny Winding Path - A path is winding through foggy hills, exploring destiny.
+
+73. Transcendence Spiral Stair - A staircase is spiraling into light, exploring transcendence.
+
+74. Existence Stone Figure - A statue is standing alone on a cliff, exploring existence.
+
+75. Nothingness Dark Room - A room is empty except for a single light, exploring nothingness.
+
+76. Curiosity Spark - A spark is jumping from flint to stone, exploring curiosity.
+
+77. Wonder Starry Sky - A sky is filled with stars above ruins, exploring wonder.
+
+78. Faith Open Book - An open book is resting on a stone altar, exploring faith.
+
+79. Reason Geometry Floor - Geometric lines is glowing on a stone floor, exploring reason.
+
+80. Intuition Quiet Flame - A flame is burning softly in darkness, exploring intuition.
+
+81. Skepticism Fog Valley - A valley is covered by rolling fog, exploring skepticism.
+
+82. Certainty Stone Wall - A wall is standing solid and unyielding, exploring certainty.
+
+83. Mystery Sealed Door - A door is sealed with faint light behind it, exploring mystery.
+
+84. Discovery Open Gate - A gate is opening onto a bright garden, exploring discovery.
+
+85. Change Crumbling Wall - A wall is falling into dust and sand, exploring change.
+
+86. Impermanence Falling Leaves - Leaves is drifting across a stone floor, exploring impermanence.
+
+87. Causation Ripples - A stone is creating expanding ripples in water, exploring causality.
+
+88. Necessity Stone Chain - A chain is stretching through darkness, exploring necessity.
+
+89. Potential Glowing Seed - A seed is glowing faintly on stone, exploring potential.
+
+90. Actuality Blooming Flower - A flower is blooming from stone, exploring actuality.
+
+91. Tradition Ancient Arch - An arch is standing among old ruins, exploring tradition.
+
+92. Innovation Shattered Stone - Shards is bursting outward from a stone slab, exploring innovation.
+
+93. Authority Empty Throne - A throne is standing empty in a grand hall, exploring authority.
+
+94. Politics Stone Market - A market is filled with quiet exchange, exploring politics.
+
+95. Economy Silent Exchange - Traders is exchanging goods without words, exploring economy.
+
+96. Power Crown Cushion - A crown is resting on a velvet cushion, exploring power.
+
+97. Law Stone Tablet - A tablet is etched with solemn words, exploring law.
+
+98. Violence Broken Bridge - A bridge is broken over a dark chasm, exploring violence.
+
+99. Peace Stone Garden - A garden is filled with quiet stone sculptures, exploring peace.
+
+100. Liberation Broken Chain - A chain is lying broken on the ground, exploring liberation.
