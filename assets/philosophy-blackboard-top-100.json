@@ -1,0 +1,855 @@
+[
+  {
+    "id": "philosopher-socrates-1",
+    "type": "philosopher",
+    "philosopher": "Socrates",
+    "idea": "truth through questioning",
+    "title": "Socrates Cross-Examining a Youth",
+    "why": "This image captures Socrates in his most iconic role: forcing truth out through relentless questioning.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Socrates leaning forward and questioning a young man, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-plato-1",
+    "type": "philosopher",
+    "philosopher": "Plato",
+    "idea": "higher reality and the good",
+    "title": "Plato Pointing Toward the Light",
+    "why": "This image references the allegory of the cave while keeping the focus on Plato guiding the viewer toward the good.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Plato pointing toward a shaft of light on the blackboard, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-aristotle-1",
+    "type": "philosopher",
+    "philosopher": "Aristotle",
+    "idea": "classification and practical knowledge",
+    "title": "Aristotle Arranging Models",
+    "why": "This image highlights his method of organizing the world through close observation and classification.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Aristotle arranging small animal figures on the blackboard table, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-confucius-1",
+    "type": "philosopher",
+    "philosopher": "Confucius",
+    "idea": "ritual, harmony, and duty",
+    "title": "Confucius Correcting a Student's Gesture",
+    "why": "This moments shows his teaching through ritual posture and moral refinement.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Confucius adjusting a student's hand placement with precise chalk lines, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-buddha-1",
+    "type": "philosopher",
+    "philosopher": "Buddha",
+    "idea": "awakening and release from suffering",
+    "title": "Buddha Opening His Eyes",
+    "why": "This moment condenses awakening into a single, powerful action.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Buddha opening his eyes after meditation in a quiet chalk gesture, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-descartes-1",
+    "type": "philosopher",
+    "philosopher": "Descartes",
+    "idea": "methodical doubt and the thinking self",
+    "title": "Descartes Holding a Skull",
+    "why": "This classic image makes his doubt and mortality feel immediate and personal.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Descartes holding a skull close to his face in chalky detail, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-kant-1",
+    "type": "philosopher",
+    "philosopher": "Kant",
+    "idea": "duty, moral law, and universality",
+    "title": "Kant Pointing to Duty",
+    "why": "It makes his ethic visible as a single guiding gesture.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Kant pointing to a written moral law on the board, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-nietzsche-1",
+    "type": "philosopher",
+    "philosopher": "Nietzsche",
+    "idea": "affirmation, strength, and new values",
+    "title": "Nietzsche Raising a Hammer",
+    "why": "This image captures his aggressive affirmation and the act of breaking old idols.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Nietzsche raising a hammer above his head with fierce chalk strokes, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-hume-1",
+    "type": "philosopher",
+    "philosopher": "Hume",
+    "idea": "impressions, belief, and skepticism",
+    "title": "Hume Watching a Droplet",
+    "why": "It shows his philosophy as a close attention to experience and impression.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Hume watching a single chalk droplet fall, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-john-locke-1",
+    "type": "philosopher",
+    "philosopher": "John Locke",
+    "idea": "experience as the source of ideas",
+    "title": "Locke Writing a Blank Slate",
+    "why": "It makes his famous tabula rasa metaphor concrete and powerful.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of John Locke writing on a blank slate with a rough chalk tip, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-karl-marx-1",
+    "type": "philosopher",
+    "philosopher": "Karl Marx",
+    "idea": "class struggle and material conditions",
+    "title": "Marx Observing Workers",
+    "why": "It captures his focus on labor and the structure of society.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Karl Marx observing workers drawn as simple chalk silhouettes, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-seneca-1",
+    "type": "philosopher",
+    "philosopher": "Seneca",
+    "idea": "Stoic calm and control over emotion",
+    "title": "Seneca Closing a Scroll",
+    "why": "It shows his choice to end a thought deliberately and calmly.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Seneca closing a scroll by candlelight in rough chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-marcus-aurelius-1",
+    "type": "philosopher",
+    "philosopher": "Marcus Aurelius",
+    "idea": "self-examination and duty",
+    "title": "Marcus Aurelius Writing a Meditation",
+    "why": "It shows his central practice of daily self-reflection in a simple image.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Marcus Aurelius writing in a journal with a worn chalk hand, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-aquinas-1",
+    "type": "philosopher",
+    "philosopher": "Aquinas",
+    "idea": "faith and reason in harmony",
+    "title": "Aquinas Writing in the Scriptorium",
+    "why": "It presents his synthesis of theology and philosophy as disciplined work.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Aquinas writing with slow chalk strokes in a monastic tone, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-sartre-1",
+    "type": "philosopher",
+    "philosopher": "Sartre",
+    "idea": "existence precedes essence and freedom",
+    "title": "Sartre Writing in the Cafe",
+    "why": "It presents his existential thinking as a direct, lived writing moment.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Sartre writing with a cigarette in hand at a chalk table, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-beauvoir-1",
+    "type": "philosopher",
+    "philosopher": "Beauvoir",
+    "idea": "selfhood and otherness",
+    "title": "Beauvoir Looking in the Mirror",
+    "why": "It visualizes her exploration of identity and the gaze of the other.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Beauvoir looking into a dark mirror drawn in chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-camus-1",
+    "type": "philosopher",
+    "philosopher": "Camus",
+    "idea": "absurdity and revolt",
+    "title": "Camus Standing at the Cliff",
+    "why": "It captures his image of the absurd hero confronting life's limits.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Camus standing at the edge of a chalk cliff, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-rumi-1",
+    "type": "philosopher",
+    "philosopher": "Rumi",
+    "idea": "mystical union and love",
+    "title": "Rumi Spinning in the Meadow",
+    "why": "It brings the ecstatic movement of his poetry into a chalkboard form.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Rumi spinning with flowing chalk lines around him, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-laozi-1",
+    "type": "philosopher",
+    "philosopher": "Laozi",
+    "idea": "natural flow and effortless action",
+    "title": "Laozi Leaning on a Staff",
+    "why": "It suggests his principle of effortless strength through stillness.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Laozi leaning on a staff with calm chalk lines, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-hegel-1",
+    "type": "philosopher",
+    "philosopher": "Hegel",
+    "idea": "dialectic and historical development",
+    "title": "Hegel Drawing a Spiral",
+    "why": "It makes his idea of development through contradiction visually obvious.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Hegel drawing a spiral of history with bold chalk lines, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-emerson-1",
+    "type": "philosopher",
+    "philosopher": "Emerson",
+    "idea": "self-reliance and the inner voice",
+    "title": "Emerson Standing on a Hill",
+    "why": "It evokes his call to trust oneself and the natural world.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Emerson standing on a faint chalk hill with a journal in hand, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-thoreau-1",
+    "type": "philosopher",
+    "philosopher": "Thoreau",
+    "idea": "simple living and natural awareness",
+    "title": "Thoreau at Walden Pond",
+    "why": "It makes his message of simplicity and observation into a quiet action.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Thoreau sitting with a notebook by a chalk pond, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-arendt-1",
+    "type": "philosopher",
+    "philosopher": "Arendt",
+    "idea": "the public sphere and responsibility",
+    "title": "Arendt Observing a Trial",
+    "why": "It captures her concern with the political consequences of thought.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Arendt observing a trial with intent chalk lines, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-fanon-1",
+    "type": "philosopher",
+    "philosopher": "Fanon",
+    "idea": "colonial liberation and identity",
+    "title": "Fanon Breaking Chains",
+    "why": "It makes his call to liberation immediately visible and visceral.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Fanon breaking a chain in rough chalk detail, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-hypatia-1",
+    "type": "philosopher",
+    "philosopher": "Hypatia",
+    "idea": "reason, mathematics, and teaching",
+    "title": "Hypatia Teaching Geometry",
+    "why": "It shows her mastery of mathematics and her role as a teacher in a single, simple act.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Hypatia drawing a geometric diagram on the board, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-truth-1",
+    "type": "idea",
+    "idea": "truth",
+    "title": "Beam of Light in Motion",
+    "why": "Beam of Light is used to represent truth as a simple chalkboard concept, with this variation emphasizing truth is represented as a light cutting through uncertainty.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of beam of light moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-justice-1",
+    "type": "idea",
+    "idea": "justice",
+    "title": "Balance Scale in Motion",
+    "why": "Balance Scale is used to represent justice as a simple chalkboard concept, with this variation emphasizing justice is symbolized as a careful balance in the face of rough life.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of balance scale moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-freedom-1",
+    "type": "idea",
+    "idea": "freedom",
+    "title": "Open Gate in Motion",
+    "why": "Open Gate is used to represent freedom as a simple chalkboard concept, with this variation emphasizing freedom is shown as a gate opening onto possibility without clutter.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of open gate moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-empathy-1",
+    "type": "idea",
+    "idea": "empathy",
+    "title": "Joined Hands in Motion",
+    "why": "Joined Hands is used to represent empathy as a simple chalkboard concept, with this variation emphasizing empathy is the action of reaching toward another with shared touch.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of joined hands moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-courage-1",
+    "type": "idea",
+    "idea": "courage",
+    "title": "Torchbearer in Motion",
+    "why": "Torchbearer is used to represent courage as a simple chalkboard concept, with this variation emphasizing courage is carried like a torch into darkness, small but bright.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of torchbearer moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-virtue-1",
+    "type": "idea",
+    "idea": "virtue",
+    "title": "Laurel Wreath in Motion",
+    "why": "Laurel Wreath is used to represent virtue as a simple chalkboard concept, with this variation emphasizing virtue is represented as a simple wreath of achievement and restraint.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of laurel wreath moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-duty-1",
+    "type": "idea",
+    "idea": "duty",
+    "title": "Lantern Path in Motion",
+    "why": "Lantern Path is used to represent duty as a simple chalkboard concept, with this variation emphasizing duty is a narrow lit path that one follows regardless of comfort.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of lantern path moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-wisdom-1",
+    "type": "idea",
+    "idea": "wisdom",
+    "title": "Oak Tree in Motion",
+    "why": "Oak Tree is used to represent wisdom as a simple chalkboard concept, with this variation emphasizing wisdom is symbolized by a strong tree rooted in rough truth.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of oak tree moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-existence-1",
+    "type": "idea",
+    "idea": "existence",
+    "title": "Lone Statue in Motion",
+    "why": "Lone Statue is used to represent existence as a simple chalkboard concept, with this variation emphasizing existence is shown as a single standing presence on the board.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of lone statue moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-meaning-1",
+    "type": "idea",
+    "idea": "meaning",
+    "title": "Horizon Road in Motion",
+    "why": "Horizon Road is used to represent meaning as a simple chalkboard concept, with this variation emphasizing meaning is a road that stretches toward something beyond the immediate.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of horizon road moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-identity-1",
+    "type": "idea",
+    "idea": "identity",
+    "title": "Mask in Motion",
+    "why": "Mask is used to represent identity as a simple chalkboard concept, with this variation emphasizing identity is the mask one wears and the choice to remove it.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of mask moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-knowledge-1",
+    "type": "idea",
+    "idea": "knowledge",
+    "title": "Key in Motion",
+    "why": "Key is used to represent knowledge as a simple chalkboard concept, with this variation emphasizing knowledge is the key that unlocks questions, not answers alone.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of key moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-perception-1",
+    "type": "idea",
+    "idea": "perception",
+    "title": "Eye in Motion",
+    "why": "Eye is used to represent perception as a simple chalkboard concept, with this variation emphasizing perception is the act of seeing and interpreting what is offered.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of eye moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-reality-1",
+    "type": "idea",
+    "idea": "reality",
+    "title": "Mirror Shard in Motion",
+    "why": "Mirror Shard is used to represent reality as a simple chalkboard concept, with this variation emphasizing reality is a fractured mirror, partial and hard to grasp.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of mirror shard moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-memory-1",
+    "type": "idea",
+    "idea": "memory",
+    "title": "Stone Tablet in Motion",
+    "why": "Stone Tablet is used to represent memory as a simple chalkboard concept, with this variation emphasizing memory is carved into the mind like words on stone.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of stone tablet moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-time-1",
+    "type": "idea",
+    "idea": "time",
+    "title": "Broken Clock in Motion",
+    "why": "Broken Clock is used to represent time as a simple chalkboard concept, with this variation emphasizing time is irregular and worn, not always orderly.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of broken clock moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-love-1",
+    "type": "idea",
+    "idea": "love",
+    "title": "Pair of Figures in Motion",
+    "why": "Pair of Figures is used to represent love as a simple chalkboard concept, with this variation emphasizing love is a connection between two simple presences.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of pair of figures moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-power-1",
+    "type": "idea",
+    "idea": "power",
+    "title": "Crown in Motion",
+    "why": "Crown is used to represent power as a simple chalkboard concept, with this variation emphasizing power is an object that can be held lightly or abused.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of crown moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-equality-1",
+    "type": "idea",
+    "idea": "equality",
+    "title": "Twin Pillars in Motion",
+    "why": "Twin Pillars is used to represent equality as a simple chalkboard concept, with this variation emphasizing equality is reflected in symmetrical forms side by side.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of twin pillars moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-community-1",
+    "type": "idea",
+    "idea": "community",
+    "title": "Circle of Hands in Motion",
+    "why": "Circle of Hands is used to represent community as a simple chalkboard concept, with this variation emphasizing community is the gathered circle that holds one another.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of circle of hands moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-beauty-1",
+    "type": "idea",
+    "idea": "beauty",
+    "title": "Carved Rose in Motion",
+    "why": "Carved Rose is used to represent beauty as a simple chalkboard concept, with this variation emphasizing beauty is a single carved rose on a rough surface.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of carved rose moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-faith-1",
+    "type": "idea",
+    "idea": "faith",
+    "title": "Open Book in Motion",
+    "why": "Open Book is used to represent faith as a simple chalkboard concept, with this variation emphasizing faith is shown as a book held open without requiring proof.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of open book moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-reason-1",
+    "type": "idea",
+    "idea": "reason",
+    "title": "Geometry Floor in Motion",
+    "why": "Geometry Floor is used to represent reason as a simple chalkboard concept, with this variation emphasizing reason is represented by precise lines on an otherwise rough board.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of geometry floor moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-consciousness-1",
+    "type": "idea",
+    "idea": "consciousness",
+    "title": "Flame in Skull in Motion",
+    "why": "Flame in Skull is used to represent consciousness as a simple chalkboard concept, with this variation emphasizing consciousness is a flame burning within a mind-shaped outline.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of flame in skull moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-change-1",
+    "type": "idea",
+    "idea": "change",
+    "title": "Crumbling Wall in Motion",
+    "why": "Crumbling Wall is used to represent change as a simple chalkboard concept, with this variation emphasizing change is a wall breaking down into dust and fragments.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of crumbling wall moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-impermanence-1",
+    "type": "idea",
+    "idea": "impermanence",
+    "title": "Falling Leaves in Motion",
+    "why": "Falling Leaves is used to represent impermanence as a simple chalkboard concept, with this variation emphasizing impermanence is the quiet drift of leaves into dust.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of falling leaves moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-choice-1",
+    "type": "idea",
+    "idea": "choice",
+    "title": "Diverging Path in Motion",
+    "why": "Diverging Path is used to represent choice as a simple chalkboard concept, with this variation emphasizing choice is a fork in the road drawn with rough lines.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of diverging path moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-responsibility-1",
+    "type": "idea",
+    "idea": "responsibility",
+    "title": "Heavy Stone in Motion",
+    "why": "Heavy Stone is used to represent responsibility as a simple chalkboard concept, with this variation emphasizing responsibility is a stone that must be carried, not ignored.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of heavy stone moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-soul-1",
+    "type": "idea",
+    "idea": "soul",
+    "title": "Flickering Candle in Motion",
+    "why": "Flickering Candle is used to represent soul as a simple chalkboard concept, with this variation emphasizing the soul is a small candle flame that can be tended or extinguished.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of flickering candle moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-morality-1",
+    "type": "idea",
+    "idea": "morality",
+    "title": "Weighing Scales in Motion",
+    "why": "Weighing Scales is used to represent morality as a simple chalkboard concept, with this variation emphasizing morality is balance and careful judgment in a simple visual form.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of weighing scales moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-democracy-1",
+    "type": "idea",
+    "idea": "democracy",
+    "title": "Agora Gathering in Motion",
+    "why": "Agora Gathering is used to represent democracy as a simple chalkboard concept, with this variation emphasizing democracy is a group speaking together, rendered as joined chalk figures.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of agora gathering moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-rights-1",
+    "type": "idea",
+    "idea": "rights",
+    "title": "Burning Torch in Motion",
+    "why": "Burning Torch is used to represent rights as a simple chalkboard concept, with this variation emphasizing rights are a torch carried to illuminate what should be protected.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of burning torch moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-nature-1",
+    "type": "idea",
+    "idea": "nature",
+    "title": "Stone Forest in Motion",
+    "why": "Stone Forest is used to represent nature as a simple chalkboard concept, with this variation emphasizing nature is the living stone forms that grow out of the board itself.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of stone forest moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-silence-1",
+    "type": "idea",
+    "idea": "silence",
+    "title": "Empty Room in Motion",
+    "why": "Empty Room is used to represent silence as a simple chalkboard concept, with this variation emphasizing silence is the quiet emptiness of a fair blackboard surface.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of empty room moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-curiosity-1",
+    "type": "idea",
+    "idea": "curiosity",
+    "title": "Spark in Motion",
+    "why": "Spark is used to represent curiosity as a simple chalkboard concept, with this variation emphasizing curiosity is a spark that jumps from one idea to the next.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of spark moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-wonder-1",
+    "type": "idea",
+    "idea": "wonder",
+    "title": "Starry Sky in Motion",
+    "why": "Starry Sky is used to represent wonder as a simple chalkboard concept, with this variation emphasizing wonder is the sense of awe at a sky full of stars even on a rough board.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of starry sky moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-authority-1",
+    "type": "idea",
+    "idea": "authority",
+    "title": "Empty Throne in Motion",
+    "why": "Empty Throne is used to represent authority as a simple chalkboard concept, with this variation emphasizing authority is an empty throne that still commands attention.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of empty throne moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-tradition-1",
+    "type": "idea",
+    "idea": "tradition",
+    "title": "Ancient Arch in Motion",
+    "why": "Ancient Arch is used to represent tradition as a simple chalkboard concept, with this variation emphasizing tradition is an old arch standing in chalk form against the dark.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of ancient arch moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-innovation-1",
+    "type": "idea",
+    "idea": "innovation",
+    "title": "Shattered Stone in Motion",
+    "why": "Shattered Stone is used to represent innovation as a simple chalkboard concept, with this variation emphasizing innovation is breaking old forms apart to build something new.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of shattered stone moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-politics-1",
+    "type": "idea",
+    "idea": "politics",
+    "title": "Stone Market in Motion",
+    "why": "Stone Market is used to represent politics as a simple chalkboard concept, with this variation emphasizing politics is the exchange and tension of quiet figures in a marketplace.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of stone market moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-economy-1",
+    "type": "idea",
+    "idea": "economy",
+    "title": "Silent Exchange in Motion",
+    "why": "Silent Exchange is used to represent economy as a simple chalkboard concept, with this variation emphasizing economy is value moving without words along a rough board.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of silent exchange moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-violence-1",
+    "type": "idea",
+    "idea": "violence",
+    "title": "Broken Bridge in Motion",
+    "why": "Broken Bridge is used to represent violence as a simple chalkboard concept, with this variation emphasizing violence is destruction that leaves gaps and unfinished edges.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of broken bridge moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-peace-1",
+    "type": "idea",
+    "idea": "peace",
+    "title": "Stone Garden in Motion",
+    "why": "Stone Garden is used to represent peace as a simple chalkboard concept, with this variation emphasizing peace is a still arrangement of stone forms in quiet order.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of stone garden moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-liberation-1",
+    "type": "idea",
+    "idea": "liberation",
+    "title": "Broken Chain in Motion",
+    "why": "Broken Chain is used to represent liberation as a simple chalkboard concept, with this variation emphasizing liberation is the gap where a chain has been broken free.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of broken chain moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-logic-1",
+    "type": "idea",
+    "idea": "logic",
+    "title": "Geometric Lines in Motion",
+    "why": "Geometric Lines is used to represent logic as a simple chalkboard concept, with this variation emphasizing logic is the clarity of lines cutting through chaos on the board.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of geometric lines moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-skepticism-1",
+    "type": "idea",
+    "idea": "skepticism",
+    "title": "Fog Valley in Motion",
+    "why": "Fog Valley is used to represent skepticism as a simple chalkboard concept, with this variation emphasizing skepticism is a valley covered in fog where nothing is taken for granted.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of fog valley moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "idea-spirit-1",
+    "type": "idea",
+    "idea": "spirit",
+    "title": "Rising Spiral in Motion",
+    "why": "Rising Spiral is used to represent spirit as a simple chalkboard concept, with this variation emphasizing spirit is a spiral lifting upward from rough matter.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of rising spiral moving across the blackboard with heavy chalk dust, close medium shot, rough scratchy white chalk lines, heavy chalk dust, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-socrates-4",
+    "type": "philosopher",
+    "philosopher": "Socrates",
+    "idea": "truth through questioning",
+    "title": "Socrates Drinking Hemlock",
+    "why": "This moment embodies his commitment to principle over comfort, making the action more important than atmosphere.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Socrates lifting a cup of hemlock with a steady hand, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-socrates-3",
+    "type": "philosopher",
+    "philosopher": "Socrates",
+    "idea": "truth through questioning",
+    "title": "Socrates Writing a Question",
+    "why": "It emphasizes that his philosophy is a practice of asking the right questions rather than stating answers.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Socrates sketching a question on the blackboard with jagged chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-socrates-5",
+    "type": "philosopher",
+    "philosopher": "Socrates",
+    "idea": "truth through questioning",
+    "title": "Socrates Listening to a Student",
+    "why": "It shows the dialogue style that defines his philosophy and the focus on direct human exchange.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Socrates listening intently to a young man while tracing a line with chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-plato-5",
+    "type": "philosopher",
+    "philosopher": "Plato",
+    "idea": "higher reality and the good",
+    "title": "Plato Sketching the Cave",
+    "why": "It presents his most famous allegory in a direct, hand-drawn way without any background detail.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Plato sketching a cave outline with shadow figures in chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-aristotle-2",
+    "type": "philosopher",
+    "philosopher": "Aristotle",
+    "idea": "classification and practical knowledge",
+    "title": "Aristotle Writing Categories",
+    "why": "It shows his emphasis on defining kinds and making sense of reality through clear structure.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Aristotle writing category names in chalk with a steady hand, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-plato-3",
+    "type": "philosopher",
+    "philosopher": "Plato",
+    "idea": "higher reality and the good",
+    "title": "Plato Holding the Good",
+    "why": "This emphasizes his central idea that true reality is represented by a single guiding form.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Plato holding a faint chalk circle labeled as the good, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-descartes-5",
+    "type": "philosopher",
+    "philosopher": "Descartes",
+    "idea": "methodical doubt and the thinking self",
+    "title": "Descartes Pointing to Cogito",
+    "why": "It makes his foundational idea a focused, hand-drawn statement without any real background.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Descartes pointing to the words \"I think\" sketched faintly in chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-socrates-2",
+    "type": "philosopher",
+    "philosopher": "Socrates",
+    "idea": "truth through questioning",
+    "title": "Socrates Pointing at the Empty Bench",
+    "why": "It shows his method of probing absence and assumption, highlighting the power of inquiry.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Socrates pointing at an empty bench and demanding an answer, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-aristotle-3",
+    "type": "philosopher",
+    "philosopher": "Aristotle",
+    "idea": "classification and practical knowledge",
+    "title": "Aristotle Studying a Bird Wing",
+    "why": "It captures his empirical focus on living forms and the concrete basis of his philosophy.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Aristotle tracing the shape of a bird wing in chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-kant-2",
+    "type": "philosopher",
+    "philosopher": "Kant",
+    "idea": "duty, moral law, and universality",
+    "title": "Kant Holding a Book",
+    "why": "This image blends his scholarly seriousness with the formal structure of his philosophy.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Kant holding a book while framing a rule with chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-plato-4",
+    "type": "philosopher",
+    "philosopher": "Plato",
+    "idea": "higher reality and the good",
+    "title": "Plato Guiding a Prisoner",
+    "why": "It makes the core action of liberation and education the visual anchor of the image.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Plato touching a chained prisoner's shoulder as he turns toward light, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-thoreau-5",
+    "type": "philosopher",
+    "philosopher": "Thoreau",
+    "idea": "simple living and natural awareness",
+    "title": "Thoreau Holding a Leaf",
+    "why": "It symbolizes his belief that the smallest natural thing can teach profound lessons.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Thoreau holding a single leaf in rough chalk detail, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-plato-2",
+    "type": "philosopher",
+    "philosopher": "Plato",
+    "idea": "higher reality and the good",
+    "title": "Plato Drawing the Divided Line",
+    "why": "It captures his theory of knowledge through a simple symbolic diagram on the board.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Plato drawing a divided line with rough chalk strokes, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-hypatia-2",
+    "type": "philosopher",
+    "philosopher": "Hypatia",
+    "idea": "reason, mathematics, and teaching",
+    "title": "Hypatia Holding an Astrolabe",
+    "why": "It emphasizes her combination of astronomy and philosophy through a focused image.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Hypatia holding an astrolabe while making a note, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-aristotle-4",
+    "type": "philosopher",
+    "philosopher": "Aristotle",
+    "idea": "classification and practical knowledge",
+    "title": "Aristotle Pointing at the Golden Mean",
+    "why": "This shows his ethical idea of balance as a simple, memorable chalkboard diagram.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Aristotle pointing at a written golden mean formula, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-sartre-2",
+    "type": "philosopher",
+    "philosopher": "Sartre",
+    "idea": "existence precedes essence and freedom",
+    "title": "Sartre Looking at an Empty Chair",
+    "why": "It evokes his idea of freedom and the responsibility of choice in a single frame.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Sartre looking at an empty chair sketched in chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-emerson-3",
+    "type": "philosopher",
+    "philosopher": "Emerson",
+    "idea": "self-reliance and the inner voice",
+    "title": "Emerson Gazing at the Sky",
+    "why": "It reflects his belief that the inner voice is connected to the larger universe.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Emerson gazing up with a quiet chalk expression, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-aristotle-5",
+    "type": "philosopher",
+    "philosopher": "Aristotle",
+    "idea": "classification and practical knowledge",
+    "title": "Aristotle Balancing Causes",
+    "why": "It makes his causal theory visible in a single hand-drawn philosophical moment.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Aristotle drawing a set of linked circles to explain causes, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-confucius-5",
+    "type": "philosopher",
+    "philosopher": "Confucius",
+    "idea": "ritual, harmony, and duty",
+    "title": "Confucius Holding a Cup of Tea",
+    "why": "It gives the image a calm, interpersonal focus without any distracting scenery.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Confucius holding a cup of tea while listening to a pupil, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-nietzsche-2",
+    "type": "philosopher",
+    "philosopher": "Nietzsche",
+    "idea": "affirmation, strength, and new values",
+    "title": "Nietzsche Standing on the Ridge",
+    "why": "It suggests his lonely search for new perspectives without relying on scenery.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Nietzsche standing with sharp chalk lines at the edge of a ridge, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-nietzsche-4",
+    "type": "philosopher",
+    "philosopher": "Nietzsche",
+    "idea": "affirmation, strength, and new values",
+    "title": "Nietzsche Holding a Sun",
+    "why": "It evokes his idea of life-affirmation and creativity without textual clutter.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Nietzsche holding a rough chalk sun in his palm, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-seneca-2",
+    "type": "philosopher",
+    "philosopher": "Seneca",
+    "idea": "Stoic calm and control over emotion",
+    "title": "Seneca Gazing at a Candle",
+    "why": "It represents his focus on control and inner light rather than external chaos.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Seneca gazing at a small chalk candle with steady eyes, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-descartes-4",
+    "type": "philosopher",
+    "philosopher": "Descartes",
+    "idea": "methodical doubt and the thinking self",
+    "title": "Descartes Tracing a Circle",
+    "why": "This image represents his rationalist search for certainty through geometry.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Descartes tracing a perfect circle with chalk on the board, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-hume-3",
+    "type": "philosopher",
+    "philosopher": "Hume",
+    "idea": "impressions, belief, and skepticism",
+    "title": "Hume Holding a Lantern",
+    "why": "It symbolizes his search for reliable belief in the darkness of uncertainty.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Hume holding a lantern of faint chalk light, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-john-locke-5",
+    "type": "philosopher",
+    "philosopher": "John Locke",
+    "idea": "experience as the source of ideas",
+    "title": "Locke Needing a Child's Hand",
+    "why": "It underlines his belief in learning through early experience and education.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of John Locke stabilizing a child's hand as they write in chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-karl-marx-4",
+    "type": "philosopher",
+    "philosopher": "Karl Marx",
+    "idea": "class struggle and material conditions",
+    "title": "Marx Pointing to a Wall",
+    "why": "It references the structures of class and power with a simple, strong image.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Karl Marx pointing to a rising wall of chalk bricks, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-descartes-3",
+    "type": "philosopher",
+    "philosopher": "Descartes",
+    "idea": "methodical doubt and the thinking self",
+    "title": "Descartes Looking in a Mirror",
+    "why": "It visualizes his search for the thinking subject in a direct symbolic way.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Descartes looking into a mirror he draws in chalk, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  },
+  {
+    "id": "philosopher-arendt-4",
+    "type": "philosopher",
+    "philosopher": "Arendt",
+    "idea": "the public sphere and responsibility",
+    "title": "Arendt Studying a Witness",
+    "why": "It connects her analysis of totalitarianism to the act of paying attention.",
+    "prompt": "Dark 16:9 chalk drawing on blackboard of Arendt studying a single witness figure on the board, close medium shot, rough scratchy white chalk lines, heavy chalk dust, visible smudges, bare blackboard background, no text, no letters, no caption"
+  }
+]

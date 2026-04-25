@@ -36,3 +36,32 @@ export async function generatePixelArtImage(prompt, outputPath) {
   fs.writeFileSync(outputPath, Buffer.from(imgResp.data));
   return outputPath;
 }
+
+export async function generateChalkboardImage(prompt, outputPath) {
+  const chalkboardPrompt = `${prompt}, chalk drawing on blackboard, rough hand-drawn style, visible chalk dust and scratches, bare blackboard background, white chalk and grey highlights, no text, no letters, no caption`;
+
+  const resp = await axios.post(
+    "https://fal.run/fal-ai/flux-pro/v1.1",
+    {
+      prompt: chalkboardPrompt,
+      image_size: "landscape_16_9",
+      num_images: 1,
+    },
+    {
+      headers: {
+        Authorization: `Key ${FAL_KEY}`,
+        "Content-Type": "application/json",
+      },
+      timeout: 60000,
+    }
+  );
+
+  const imageUrl = resp.data.images[0].url;
+  const imgResp = await axios.get(imageUrl, {
+    responseType: "arraybuffer",
+    timeout: 30000,
+  });
+
+  fs.writeFileSync(outputPath, Buffer.from(imgResp.data));
+  return outputPath;
+}
