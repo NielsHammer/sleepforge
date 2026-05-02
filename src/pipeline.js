@@ -2,6 +2,7 @@ import "dotenv/config";
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
+import { PYTHON_BIN } from "./bin-paths.js";
 import { generateScript } from "./script-generator.js";
 import {
   generateVoiceoverWithTimestamps,
@@ -44,7 +45,7 @@ function runWhisper(audioPath, outputDir) {
   console.log("  Running Whisper for word timestamps...");
   try {
     const result = execSync(
-      `python3 -c "
+      `"${PYTHON_BIN}" -c "
 import whisper, json
 m = whisper.load_model('base')
 r = m.transcribe('${audioPath}', word_timestamps=True, language='en')

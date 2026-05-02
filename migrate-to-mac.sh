@@ -1,27 +1,27 @@
 #!/usr/bin/env bash
-# ─── SleepForge → Mac migration (NATIVE / no Docker) ────────────────────────
+# ─── SleepForge → Mac migration (NATIVE, no Docker) ─────────────────────────
 #
-# Idempotent setup: safe to re-run if any step fails halfway. Each step
-# checks if it's already done before doing it.
+# Idempotent: safe to re-run if any step fails halfway.
 #
-# What this script does (in order):
+# Steps:
 #   1. Verify macOS + Apple Silicon
-#   2. Install Homebrew if missing
-#   3. Install node, ffmpeg, python@3.11, git, jq, espeak-ng via Homebrew
-#   4. Clone or pull the SleepForge repo
-#   5. Python deps for SleepForge: kokoro, openai-whisper, torch (MPS-capable)
-#   6. Node deps (npm ci)
+#   2. Homebrew
+#   3. Brew packages: node, ffmpeg, python@3.11, git, jq, espeak-ng, wget
+#   4. Clone or pull SleepForge → ~/sleepforge
+#   5. SleepForge venv: kokoro, whisper, torch (MPS-capable on arm64)
+#   6. Node deps (npm ci) — installs Remotion (@remotion/bundler, /renderer)
 #   7. PM2 + login auto-start
-#   8. Clone chatterbox-tts-api + create its OWN venv (separate from SleepForge)
-#      → install torch with MPS support, install API requirements
-#   9. Upload archer voice into Chatterbox's voice library + start API under PM2
-#  10. Start the file server on port 8080 + run a self-test
+#   8. Chatterbox: own venv with `pip install chatterbox-tts`, PM2 with DEVICE=mps
+#   9. Upload archer voice to Chatterbox library
+#  10. File server under PM2 on port 8080 (auto-starts on login)
+#  11. Claude CLI (npm i -g @anthropic-ai/claude-code)
+#  12. Kalam font → ~/Library/Fonts/
+#  13. Inject PYTHON_BIN/WHISPER_BIN/CHATTERBOX_URL into ~/sleepforge/.env
+#  14. Full self-test (pass/fail per check)
 #
 # What this script does NOT do:
-#   - Use Docker (intentional — Docker on Mac can't reach Apple Silicon GPU)
-#   - Copy the .env file (you SCP this manually from Hetzner)
-#
-# Read MIGRATION.md for the friendly step-by-step.
+#   - Use Docker (Docker on Mac can't reach Apple Silicon GPU)
+#   - SCP your .env from Hetzner — you do that manually (see end of script)
 
 set -euo pipefail
 
@@ -29,7 +29,6 @@ REPO_URL="${REPO_URL:-https://github.com/NielsHammer/sleepforge.git}"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/sleepforge}"
 PORT="${PORT:-8080}"
 CHATTERBOX_DIR="${CHATTERBOX_DIR:-$HOME/chatterbox}"
-CHATTERBOX_REPO="${CHATTERBOX_REPO:-https://github.com/travisvn/chatterbox-tts-api.git}"
 CHATTERBOX_PORT="${CHATTERBOX_PORT:-4123}"
 
 green() { printf "\033[32m%s\033[0m\n" "$*"; }
@@ -38,212 +37,339 @@ yellow() { printf "\033[33m%s\033[0m\n" "$*"; }
 banner() { printf "\n\033[1;36m═══ %s ═══\033[0m\n" "$*"; }
 
 # ─── 1. Verify environment ──────────────────────────────────────────────────
-banner "Step 1/10: Verify macOS"
-if [[ "$(uname -s)" != "Darwin" ]]; then
-  red "This script is for macOS only."; exit 1
-fi
-green "✓ macOS detected ($(sw_vers -productVersion))"
-
+banner "Step 1/14: Verify macOS"
+if [[ "$(uname -s)" != "Darwin" ]]; then red "macOS only."; exit 1; fi
+green "✓ macOS $(sw_vers -productVersion)"
 ARCH="$(uname -m)"
-if [[ "$ARCH" == "arm64" ]]; then
-  green "✓ Apple Silicon (arm64) — MPS GPU acceleration available"
-else
-  yellow "⚠ Intel Mac detected — Chatterbox falls back to CPU (slower)"
-fi
+if [[ "$ARCH" == "arm64" ]]; then green "✓ Apple Silicon — MPS available"
+else yellow "⚠ Intel Mac — Chatterbox falls back to CPU"; fi
 
 # ─── 2. Homebrew ────────────────────────────────────────────────────────────
-banner "Step 2/10: Homebrew"
+banner "Step 2/14: Homebrew"
 if ! command -v brew >/dev/null 2>&1; then
-  yellow "Installing Homebrew (you'll be prompted for your password once)..."
+  yellow "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  if [[ "$ARCH" == "arm64" ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  else
-    eval "$(/usr/local/bin/brew shellenv)"
-  fi
+  if [[ "$ARCH" == "arm64" ]]; then eval "$(/opt/homebrew/bin/brew shellenv)"
+  else eval "$(/usr/local/bin/brew shellenv)"; fi
 fi
 green "✓ Homebrew $(brew --version | head -1)"
 
 # ─── 3. Brew packages ───────────────────────────────────────────────────────
-banner "Step 3/10: Brew packages"
-# espeak-ng is needed by kokoro for phonemization
-for pkg in node ffmpeg python@3.11 git jq espeak-ng; do
-  if brew list --formula "$pkg" >/dev/null 2>&1; then
-    green "✓ $pkg already installed"
-  else
-    yellow "Installing $pkg..."; brew install "$pkg"
-  fi
+banner "Step 3/14: Brew packages"
+for pkg in node ffmpeg python@3.11 git jq espeak-ng wget; do
+  if brew list --formula "$pkg" >/dev/null 2>&1; then green "✓ $pkg"
+  else yellow "Installing $pkg..."; brew install "$pkg"; fi
 done
-echo "node:    $(node --version)"
-echo "ffmpeg:  $(ffmpeg -version | head -1)"
-echo "python3: $(python3 --version)"
 
-# Use Homebrew's python@3.11 explicitly so we get a stable version
 if [[ "$ARCH" == "arm64" ]]; then
   PY_BIN="/opt/homebrew/opt/python@3.11/bin/python3.11"
 else
   PY_BIN="/usr/local/opt/python@3.11/bin/python3.11"
 fi
 [[ -x "$PY_BIN" ]] || PY_BIN="$(command -v python3.11 || command -v python3)"
+echo "node:    $(node --version)"
+echo "ffmpeg:  $(ffmpeg -version | head -1)"
 echo "python:  $PY_BIN"
 
 # ─── 4. Clone or pull repo ──────────────────────────────────────────────────
-banner "Step 4/10: SleepForge code"
+banner "Step 4/14: SleepForge code"
 if [[ -d "$INSTALL_DIR/.git" ]]; then
-  green "✓ Repo already cloned at $INSTALL_DIR; pulling latest"
   ( cd "$INSTALL_DIR" && git pull --ff-only )
+  green "✓ Pulled $INSTALL_DIR"
 else
-  yellow "Cloning $REPO_URL into $INSTALL_DIR..."
+  yellow "Cloning $REPO_URL..."
   git clone "$REPO_URL" "$INSTALL_DIR"
+  green "✓ Cloned to $INSTALL_DIR"
 fi
 cd "$INSTALL_DIR"
 
-# ─── 5. Python deps for Kokoro + Whisper (SleepForge venv) ──────────────────
-banner "Step 5/10: SleepForge Python deps (Kokoro, Whisper, Torch w/ MPS)"
-if [[ ! -d "$INSTALL_DIR/.venv" ]]; then
-  "$PY_BIN" -m venv .venv
-fi
+# ─── 5. SleepForge Python deps ──────────────────────────────────────────────
+banner "Step 5/14: SleepForge Python deps (kokoro, whisper, torch w/ MPS)"
+[[ -d "$INSTALL_DIR/.venv" ]] || "$PY_BIN" -m venv .venv
 # shellcheck disable=SC1091
 source .venv/bin/activate
 pip install --upgrade pip wheel
-# Torch on Apple Silicon: the standard wheel ships MPS support out of the box.
-pip install torch torchaudio
-pip install kokoro==0.* onnxruntime soundfile numpy
-pip install openai-whisper
+pip install torch torchaudio  # arm64 wheel ships with MPS
+pip install kokoro==0.* onnxruntime soundfile numpy openai-whisper
 deactivate
-green "✓ SleepForge Python deps installed in .venv"
+green "✓ SleepForge venv ready"
 
-# ─── 6. Node deps ───────────────────────────────────────────────────────────
-banner "Step 6/10: Node deps"
-if [[ -f package-lock.json ]]; then
-  npm ci
+# Resolve absolute whisper path inside the venv
+WHISPER_VENV_BIN="$INSTALL_DIR/.venv/bin/whisper"
+PYTHON_VENV_BIN="$INSTALL_DIR/.venv/bin/python"
+
+# ─── 6. Node deps (Remotion lives in root package.json) ─────────────────────
+banner "Step 6/14: Node deps"
+if [[ -f package-lock.json ]]; then npm ci; else npm install; fi
+# Sanity-check that Remotion is reachable
+if [[ -d "$INSTALL_DIR/node_modules/@remotion/renderer" && -d "$INSTALL_DIR/node_modules/@remotion/bundler" ]]; then
+  green "✓ Remotion @bundler + @renderer present"
 else
-  npm install
+  red "✗ Remotion modules missing after npm install"; exit 1
 fi
-green "✓ Node deps installed"
 
 # ─── 7. PM2 + auto-start ────────────────────────────────────────────────────
-banner "Step 7/10: PM2"
-if ! command -v pm2 >/dev/null 2>&1; then
-  npm install -g pm2
-fi
+banner "Step 7/14: PM2"
+command -v pm2 >/dev/null 2>&1 || npm install -g pm2
 green "✓ PM2 $(pm2 --version)"
-
-# Generate a launch agent so PM2 starts on login
 pm2 startup launchd -u "$USER" --hp "$HOME" 2>&1 | grep "sudo " | sh || true
-pm2 save
+pm2 save || true
 
-# ─── 8. Chatterbox NATIVE install (its own venv, MPS-capable) ───────────────
-banner "Step 8/10: Chatterbox TTS — native install with MPS"
-if [[ ! -d "$CHATTERBOX_DIR/.git" ]]; then
-  yellow "Cloning chatterbox-tts-api → $CHATTERBOX_DIR"
-  git clone "$CHATTERBOX_REPO" "$CHATTERBOX_DIR"
-fi
+# ─── 8. Chatterbox NATIVE (own venv, MPS) ───────────────────────────────────
+banner "Step 8/14: Chatterbox native install"
+mkdir -p "$CHATTERBOX_DIR"
 cd "$CHATTERBOX_DIR"
-
-# Chatterbox runs in ITS OWN venv so its torch / numpy don't fight SleepForge's.
-if [[ ! -d "$CHATTERBOX_DIR/.venv" ]]; then
-  "$PY_BIN" -m venv .venv
-fi
+[[ -d "$CHATTERBOX_DIR/.venv" ]] || "$PY_BIN" -m venv .venv
 # shellcheck disable=SC1091
-source .venv/bin/activate
+source "$CHATTERBOX_DIR/.venv/bin/activate"
 pip install --upgrade pip wheel
-
-# Apple Silicon: install MPS-capable torch first so requirements.txt's pin doesn't
-# downgrade to a CPU-only build. The default macOS arm64 torch wheel includes MPS.
+# Install MPS-capable torch first so subsequent installs don't downgrade it
 pip install "torch>=2.2,<2.7" "torchaudio>=2.2,<2.7"
-
-# Now install the rest of the API requirements (will skip torch since it's pinned)
-pip install -r requirements.txt
-
+pip install chatterbox-tts fastapi "uvicorn[standard]" python-multipart \
+            python-dotenv pydub psutil sse-starlette soundfile numpy
 deactivate
-green "✓ Chatterbox Python deps installed in $CHATTERBOX_DIR/.venv"
+green "✓ chatterbox-tts installed in $CHATTERBOX_DIR/.venv"
 
-# Write .env pointing at the SleepForge archer reference voice + DEVICE=mps
+# Minimal API server: a tiny shim that exposes /health, /voices, and
+# /v1/audio/speech against the chatterbox-tts python package, with DEVICE=mps.
+cat > "$CHATTERBOX_DIR/server.py" <<'PYEOF'
+import os, io, json, tempfile, threading
+from pathlib import Path
+import torch, torchaudio
+from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.responses import Response, JSONResponse
+from pydantic import BaseModel
+from chatterbox.tts import ChatterboxTTS
+
+DEVICE = os.environ.get("DEVICE", "mps" if torch.backends.mps.is_available() else "cpu")
+VOICE_LIB = Path(os.environ.get("VOICE_LIB", str(Path(__file__).parent / "voices")))
+VOICE_LIB.mkdir(parents=True, exist_ok=True)
+DEFAULT_VOICE = os.environ.get("DEFAULT_VOICE", "archer")
+
+print(f"[chatterbox] booting on device={DEVICE}")
+model = ChatterboxTTS.from_pretrained(device=DEVICE)
+print(f"[chatterbox] model ready")
+
+app = FastAPI()
+_lock = threading.Lock()
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "device": DEVICE}
+
+@app.get("/voices")
+def voices():
+    out = [{"name": p.stem} for p in VOICE_LIB.glob("*.wav")]
+    return out
+
+@app.post("/voices")
+async def upload_voice(voice_file: UploadFile = File(...), voice_name: str = Form(...)):
+    dst = VOICE_LIB / f"{voice_name}.wav"
+    dst.write_bytes(await voice_file.read())
+    return {"name": voice_name}
+
+class SpeechReq(BaseModel):
+    input: str
+    voice: str | None = None
+    response_format: str = "wav"
+    exaggeration: float | None = None
+    cfg_weight: float | None = None
+    temperature: float | None = None
+
+@app.post("/v1/audio/speech")
+def speech(req: SpeechReq):
+    voice = req.voice or DEFAULT_VOICE
+    ref = VOICE_LIB / f"{voice}.wav"
+    if not ref.exists():
+        return JSONResponse({"error": f"voice '{voice}' not in library"}, status_code=404)
+    kw = {}
+    if req.exaggeration is not None: kw["exaggeration"] = req.exaggeration
+    if req.cfg_weight   is not None: kw["cfg_weight"]   = req.cfg_weight
+    if req.temperature  is not None: kw["temperature"]  = req.temperature
+    with _lock:
+        wav = model.generate(req.input, audio_prompt_path=str(ref), **kw)
+    buf = io.BytesIO()
+    torchaudio.save(buf, wav, model.sr, format="wav")
+    return Response(buf.getvalue(), media_type="audio/wav")
+PYEOF
+
 cat > "$CHATTERBOX_DIR/.env" <<EOF
 PORT=$CHATTERBOX_PORT
 HOST=127.0.0.1
-VOICE_SAMPLE_HOST_PATH=$INSTALL_DIR/assets/voices/archer/ref_audio.wav
 DEVICE=mps
-EXAGGERATION=0.4
-CFG_WEIGHT=0.5
-TEMPERATURE=0.6
-MAX_CHUNK_LENGTH=280
-MAX_TOTAL_LENGTH=3000
-ENABLE_MEMORY_MONITORING=true
+DEFAULT_VOICE=archer
+VOICE_LIB=$CHATTERBOX_DIR/voices
 EOF
 
-# Pre-place the archer reference where Chatterbox expects it (the API also
-# accepts uploads via /voices, but having the default voice file present means
-# first-boot inference works even before the upload step below).
-mkdir -p "$CHATTERBOX_DIR/voice-samples"
-cp -f "$INSTALL_DIR/assets/voices/archer/ref_audio.wav" "$CHATTERBOX_DIR/voice-sample.mp3" || true
+# Pre-stage archer voice in the library
+mkdir -p "$CHATTERBOX_DIR/voices"
+cp -f "$INSTALL_DIR/assets/voices/archer/ref_audio.wav" "$CHATTERBOX_DIR/voices/archer.wav"
 
-# ─── 9. Run Chatterbox under PM2 + upload archer voice ──────────────────────
-banner "Step 9/10: Start Chatterbox API + upload archer voice"
-cd "$CHATTERBOX_DIR"
-
-# Use the venv's uvicorn so the API runs against the MPS-capable torch.
+# Run under PM2 using the venv's uvicorn so torch/MPS wiring is right
 if pm2 describe chatterbox-tts >/dev/null 2>&1; then
   pm2 restart chatterbox-tts --update-env
 else
   pm2 start "$CHATTERBOX_DIR/.venv/bin/uvicorn" \
     --name chatterbox-tts \
     --cwd "$CHATTERBOX_DIR" \
-    -- app.main:app --host 127.0.0.1 --port $CHATTERBOX_PORT
+    --env DEVICE=mps \
+    --env DEFAULT_VOICE=archer \
+    --env "VOICE_LIB=$CHATTERBOX_DIR/voices" \
+    -- server:app --host 127.0.0.1 --port $CHATTERBOX_PORT
 fi
-pm2 save
+pm2 save || true
 
 yellow "Waiting for Chatterbox to come up (model download + MPS warmup, up to 5 min)..."
-for i in $(seq 1 60); do
-  if curl -s -o /dev/null -w '%{http_code}' "http://localhost:$CHATTERBOX_PORT/health" | grep -q '^200$'; then
-    green "✓ Chatterbox healthy on http://localhost:$CHATTERBOX_PORT"
-    break
+HEALTHY=0
+for _ in $(seq 1 60); do
+  if curl -fs "http://localhost:$CHATTERBOX_PORT/health" >/dev/null 2>&1; then
+    HEALTHY=1; break
   fi
-  sleep 5
-  printf "."
+  sleep 5; printf "."
 done
 echo
+[[ $HEALTHY -eq 1 ]] && green "✓ Chatterbox healthy on http://localhost:$CHATTERBOX_PORT" \
+                      || yellow "⚠ Chatterbox not yet healthy — check 'pm2 logs chatterbox-tts'"
 
-# Upload archer voice to the library (idempotent — safe if already there)
-if curl -s "http://localhost:$CHATTERBOX_PORT/voices" | grep -q '"name":"archer"'; then
-  green "✓ archer voice already in Chatterbox library"
+# ─── 9. Upload archer voice (idempotent) ────────────────────────────────────
+banner "Step 9/14: archer voice in Chatterbox library"
+if curl -fs "http://localhost:$CHATTERBOX_PORT/voices" | grep -q '"name":"archer"'; then
+  green "✓ archer already registered"
 else
-  yellow "Uploading archer reference voice..."
   curl -s -X POST "http://localhost:$CHATTERBOX_PORT/voices" \
     -F "voice_file=@$INSTALL_DIR/assets/voices/archer/ref_audio.wav" \
-    -F "voice_name=archer" >/dev/null || yellow "(upload skipped — check pm2 logs chatterbox-tts)"
-  green "✓ archer voice uploaded"
+    -F "voice_name=archer" >/dev/null \
+    && green "✓ archer uploaded" \
+    || yellow "⚠ upload failed (Chatterbox may still be warming up)"
 fi
 
-# ─── 10. File server + self-test ────────────────────────────────────────────
-banner "Step 10/10: File server + self-test"
+# ─── 10. File server under PM2 ──────────────────────────────────────────────
+banner "Step 10/14: File server (port $PORT) under PM2"
 cd "$INSTALL_DIR"
-
 if pm2 describe sleepforge-fileserver >/dev/null 2>&1; then
   pm2 restart sleepforge-fileserver
 else
   pm2 start --name sleepforge-fileserver \
-    "python3 -m http.server $PORT" -- --bind 0.0.0.0
+    "$PY_BIN" -- -m http.server $PORT --bind 0.0.0.0
 fi
-pm2 save
+pm2 save || true
 green "✓ File server: http://localhost:$PORT/"
 
-if [[ ! -f "$INSTALL_DIR/.env" ]]; then
-  yellow "⚠ .env not found at $INSTALL_DIR/.env"
-  yellow "  Copy it from the Hetzner server with:"
-  yellow "    scp root@157.180.124.232:/opt/sleepforge/.env $INSTALL_DIR/.env"
+# ─── 11. Claude CLI ─────────────────────────────────────────────────────────
+banner "Step 11/14: Claude CLI"
+if ! command -v claude >/dev/null 2>&1; then
+  yellow "Installing @anthropic-ai/claude-code globally..."
+  npm install -g @anthropic-ai/claude-code
+fi
+green "✓ claude $(claude --version 2>/dev/null || echo 'installed')"
+yellow "▸ Run 'claude' once interactively to authenticate (subscription login)."
+
+# ─── 12. Kalam font ─────────────────────────────────────────────────────────
+banner "Step 12/14: Kalam font"
+FONT_DIR="$HOME/Library/Fonts"
+mkdir -p "$FONT_DIR"
+if ls "$FONT_DIR"/Kalam* >/dev/null 2>&1; then
+  green "✓ Kalam already installed"
+else
+  yellow "Downloading Kalam from Google Fonts..."
+  TMP="$(mktemp -d)"
+  for variant in Regular Bold Light; do
+    wget -q -O "$FONT_DIR/Kalam-$variant.ttf" \
+      "https://github.com/google/fonts/raw/main/ofl/kalam/Kalam-$variant.ttf" \
+      || yellow "  (skipped Kalam-$variant)"
+  done
+  rm -rf "$TMP"
+  if ls "$FONT_DIR"/Kalam* >/dev/null 2>&1; then green "✓ Kalam installed"
+  else yellow "⚠ Kalam download failed — subtitle burning may use fallback font"; fi
 fi
 
-banner "Self-test"
-echo "Chatterbox health: $(curl -s http://localhost:$CHATTERBOX_PORT/health | head -c 80)"
-echo "File server:       $(curl -s -o /dev/null -w '%{http_code}' http://localhost:$PORT/)"
-echo "PM2 processes:"
-pm2 list
+# ─── 13. Inject env vars into ~/sleepforge/.env ─────────────────────────────
+banner "Step 13/14: ~/sleepforge/.env env vars"
+ENV_FILE="$INSTALL_DIR/.env"
+touch "$ENV_FILE"
 
-green "✓ Migration complete."
+set_env_kv() {
+  local key="$1" val="$2"
+  if grep -q "^$key=" "$ENV_FILE" 2>/dev/null; then
+    # Replace existing line; use a delimiter that won't appear in paths
+    python3 -c "
+import sys, re
+p, k, v = sys.argv[1:4]
+t = open(p).read()
+t = re.sub(rf'^{re.escape(k)}=.*$', f'{k}={v}', t, flags=re.M)
+open(p, 'w').write(t)
+" "$ENV_FILE" "$key" "$val"
+  else
+    printf '\n%s=%s\n' "$key" "$val" >> "$ENV_FILE"
+  fi
+}
+
+set_env_kv PYTHON_BIN     "$PYTHON_VENV_BIN"
+set_env_kv WHISPER_BIN    "$WHISPER_VENV_BIN"
+set_env_kv CHATTERBOX_URL "http://localhost:$CHATTERBOX_PORT"
+set_env_kv CHATTERBOX_VOICE "archer"
+green "✓ PYTHON_BIN, WHISPER_BIN, CHATTERBOX_URL written to $ENV_FILE"
+
+# Warn on missing required keys (don't fail — user may not have SCP'd yet)
+REQUIRED_KEYS=(ANTHROPIC_API_KEY FAL_KEY)
+MISSING=()
+for k in "${REQUIRED_KEYS[@]}"; do
+  if ! grep -qE "^$k=.+" "$ENV_FILE"; then MISSING+=("$k"); fi
+done
+if (( ${#MISSING[@]} > 0 )); then
+  yellow "⚠ Missing required keys in $ENV_FILE: ${MISSING[*]}"
+  yellow "  SCP your Hetzner .env over the top:"
+  yellow "    scp root@157.180.124.232:/opt/sleepforge/.env $ENV_FILE"
+  yellow "  Then re-run this script (it will keep PYTHON_BIN etc. on top of yours)."
+fi
+
+# ─── 14. Full self-test ─────────────────────────────────────────────────────
+banner "Step 14/14: Self-test"
+PASS=0; FAIL=0
+check() {
+  local label="$1" cmd="$2"
+  if eval "$cmd" >/dev/null 2>&1; then
+    printf "  \033[32m✓\033[0m %s\n" "$label"; PASS=$((PASS+1))
+  else
+    printf "  \033[31m✗\033[0m %s\n" "$label"; FAIL=$((FAIL+1))
+  fi
+}
+
+NODE_MAJOR="$(node --version 2>/dev/null | sed -E 's/^v([0-9]+).*/\1/')"
+check "python3.11 callable ($PY_BIN)"           "[[ -x '$PY_BIN' ]]"
+check "venv python ($PYTHON_VENV_BIN)"          "[[ -x '$PYTHON_VENV_BIN' ]]"
+check "venv whisper ($WHISPER_VENV_BIN)"        "[[ -x '$WHISPER_VENV_BIN' ]]"
+check "node ≥ v22"                              "[[ -n '$NODE_MAJOR' && $NODE_MAJOR -ge 22 ]]"
+check "ffmpeg installed"                        "command -v ffmpeg"
+check "ffprobe installed"                       "command -v ffprobe"
+check "Chatterbox /health responds"             "curl -fs http://localhost:$CHATTERBOX_PORT/health"
+check "archer voice in Chatterbox library"      "curl -fs http://localhost:$CHATTERBOX_PORT/voices | grep -q archer"
+check "Kalam font installed"                    "ls $FONT_DIR/Kalam*"
+check "Remotion @bundler"                       "[[ -d $INSTALL_DIR/node_modules/@remotion/bundler ]]"
+check "Remotion @renderer"                      "[[ -d $INSTALL_DIR/node_modules/@remotion/renderer ]]"
+check "claude CLI"                              "command -v claude"
+check "PM2 sleepforge-fileserver online"        "pm2 jlist | grep -q sleepforge-fileserver"
+check "PM2 chatterbox-tts online"               "pm2 jlist | grep -q chatterbox-tts"
+check "File server responds on :$PORT"          "curl -fs -o /dev/null http://localhost:$PORT/"
+check ".env: ANTHROPIC_API_KEY"                 "grep -qE '^ANTHROPIC_API_KEY=.+' '$ENV_FILE'"
+check ".env: FAL_KEY"                           "grep -qE '^FAL_KEY=.+' '$ENV_FILE'"
+check ".env: PYTHON_BIN"                        "grep -qE '^PYTHON_BIN=.+' '$ENV_FILE'"
+check ".env: WHISPER_BIN"                       "grep -qE '^WHISPER_BIN=.+' '$ENV_FILE'"
+check ".env: CHATTERBOX_URL"                    "grep -qE '^CHATTERBOX_URL=.+' '$ENV_FILE'"
+
+echo
+if (( FAIL == 0 )); then
+  green "✓ All $PASS checks passed."
+else
+  yellow "$PASS passed, $FAIL failed — fix the ✗ items above and re-run."
+fi
+
 echo
 yellow "Next steps:"
-yellow "  1. SCP your .env from Hetzner if you haven't already (see above)"
-yellow "  2. Visit http://localhost:$PORT/ to see your videos"
-yellow "  3. cd $INSTALL_DIR && node run-pipeline-test.js   # to render a 5-min test"
+yellow "  1. If any .env keys were missing, SCP yours from Hetzner:"
+yellow "       scp root@157.180.124.232:/opt/sleepforge/.env $ENV_FILE"
+yellow "     (then re-run this script — env vars get re-injected on top)"
+yellow "  2. Authenticate Claude CLI: run 'claude' once in this terminal."
+yellow "  3. Render a 5-min test:"
+yellow "       cd $INSTALL_DIR && node run-pipeline-test.js"
+yellow "  4. Watch it: http://localhost:$PORT/output/"

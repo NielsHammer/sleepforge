@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
+import { PYTHON_BIN } from "./bin-paths.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PY = path.join(__dirname, "audio-pauses.py");
@@ -17,7 +18,7 @@ const PY = path.join(__dirname, "audio-pauses.py");
 export function insertSentencePauses(inputWav, whisperJson, outputWav, opts = {}) {
   const { periodMs = 350, commaMs = 120, paragraphMs = 700 } = opts;
   const cmd =
-    `python3 "${PY}" "${inputWav}" "${whisperJson}" "${outputWav}" ` +
+    `"${PYTHON_BIN}" "${PY}" "${inputWav}" "${whisperJson}" "${outputWav}" ` +
     `--period-ms ${periodMs} --comma-ms ${commaMs} --paragraph-ms ${paragraphMs}`;
   const out = execSync(cmd, { stdio: ["pipe", "pipe", "pipe"], timeout: 120000 });
   return out.toString();

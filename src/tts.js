@@ -1,14 +1,7 @@
 import { spawn, execSync } from "child_process";
 import fs from "fs";
 import { chatterboxTTS, isHealthy } from "./chatterbox.js";
-
-// Node child processes don't inherit the venv PATH the way an interactive
-// shell does, so a bare "python3" can fail with ENOENT on Macs where the
-// system python3 isn't first on PATH (or doesn't exist at all). Honour
-// PYTHON_BIN if set (e.g. /opt/homebrew/opt/python@3.11/bin/python3.11 or
-// ~/sleepforge/.venv/bin/python), else fall back to "python3.11" which is
-// what Homebrew installs and what migrate-to-mac.sh sets up.
-const PYTHON_BIN = process.env.PYTHON_BIN || "python3.11";
+import { PYTHON_BIN } from "./bin-paths.js";
 
 // ═══════════════════════════════════════════
 // VOICE LIBRARY — SleepForge voices (Kokoro-only)
