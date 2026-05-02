@@ -15,33 +15,58 @@ const FAL_KEY = process.env.FAL_KEY;
 
 const FLUX_SCHNELL_URL = "https://fal.run/fal-ai/flux/schnell";
 
+const TRANSIENT_CODES = new Set(["EPIPE", "ECONNRESET", "ETIMEDOUT", "ECONNABORTED", "ENETUNREACH", "EAI_AGAIN"]);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function isTransient(err) {
+  if (TRANSIENT_CODES.has(err?.code)) return true;
+  const status = err?.response?.status;
+  if (status === 429 || (status >= 500 && status < 600)) return true;
+  return false;
+}
+
 async function callFluxSchnell(prompt, outputPath, opts = {}) {
-  const resp = await axios.post(
-    FLUX_SCHNELL_URL,
-    {
-      prompt,
-      image_size: opts.imageSize || "landscape_16_9",
-      num_images: 1,
-      num_inference_steps: opts.steps || 4,
-      enable_safety_checker: false,
-    },
-    {
-      headers: {
-        Authorization: `Key ${FAL_KEY}`,
-        "Content-Type": "application/json",
-      },
-      timeout: 120000,
+  if (!FAL_KEY) throw new Error("FAL_KEY env var not set");
+  const maxAttempts = opts.maxAttempts ?? 5;
+  let lastErr;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const resp = await axios.post(
+        FLUX_SCHNELL_URL,
+        {
+          prompt,
+          image_size: opts.imageSize || "landscape_16_9",
+          num_images: 1,
+          num_inference_steps: opts.steps || 4,
+          enable_safety_checker: false,
+        },
+        {
+          headers: {
+            Authorization: `Key ${FAL_KEY}`,
+            "Content-Type": "application/json",
+          },
+          timeout: 120000,
+        }
+      );
+
+      const imageUrl = resp.data.images[0].url;
+      const imgResp = await axios.get(imageUrl, {
+        responseType: "arraybuffer",
+        timeout: 60000,
+      });
+
+      fs.writeFileSync(outputPath, Buffer.from(imgResp.data));
+      return outputPath;
+    } catch (err) {
+      lastErr = err;
+      if (attempt === maxAttempts || !isTransient(err)) throw err;
+      const backoffMs = Math.min(1000 * 2 ** (attempt - 1), 16000) + Math.floor(Math.random() * 500);
+      const tag = err.code || err.response?.status || err.message;
+      console.warn(`  Flux Schnell attempt ${attempt}/${maxAttempts} failed (${tag}) — retrying in ${backoffMs}ms`);
+      await sleep(backoffMs);
     }
-  );
-
-  const imageUrl = resp.data.images[0].url;
-  const imgResp = await axios.get(imageUrl, {
-    responseType: "arraybuffer",
-    timeout: 60000,
-  });
-
-  fs.writeFileSync(outputPath, Buffer.from(imgResp.data));
-  return outputPath;
+  }
+  throw lastErr;
 }
 
 /**

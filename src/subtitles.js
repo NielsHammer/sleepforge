@@ -14,7 +14,9 @@ import { execSync } from "child_process";
 // Input: Whisper word timestamps [{word, start, end}, ...]
 // Output: .ass file path
 
-const PHRASE_SIZE = 4; // 4 words per phrase — matches Niels' spec
+const PHRASE_SIZE = 4;       // soft cap, may shrink if char count overflows
+const PHRASE_MAX_CHARS = 26; // Kalam @ 72pt fits ~26 chars in the 1720px safe zone before clipping
+const PHRASE_MIN_WORDS = 2;  // never emit a single-word orphan phrase
 
 // ─── HELPERS ────────────────────────────────────────────────────────────────
 
@@ -24,6 +26,14 @@ function toASSTime(s) {
   const sec = Math.floor(s % 60);
   const cs = Math.round((s % 1) * 100);
   return h + ":" + String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0") + "." + String(cs).padStart(2, "0");
+}
+
+function flushBuffer(phrases, buf, nextStart) {
+  if (buf.length === 0) return;
+  const lastWordEnd = buf[buf.length - 1].end;
+  const nextStartGuard = nextStart != null ? nextStart - 0.01 : lastWordEnd + 0.3;
+  const endTime = Math.max(lastWordEnd, Math.min(lastWordEnd + 0.15, nextStartGuard));
+  phrases.push({ words: [...buf], start: buf[0].start, end: endTime });
 }
 
 function cleanWord(w) {
@@ -47,65 +57,85 @@ function cleanWord(w) {
 export function generateASS(wordTimestamps, outputPath) {
   if (!wordTimestamps || wordTimestamps.length === 0) return null;
 
-  // Group words into phrases of 4, respecting sentence boundaries
+  // Group words into phrases. A phrase ends when:
+  //   - the buffer would exceed PHRASE_MAX_CHARS (prevents off-screen clipping)
+  //   - we hit a sentence end AND have at least PHRASE_MIN_WORDS (prevents "all" orphans)
+  //   - we hit PHRASE_SIZE words
+  //   - we run out of words
+  const cleaned = wordTimestamps
+    .map((raw) => ({ ...raw, word: cleanWord(raw.word) }))
+    .filter((w) => w.word);
+
+  const phraseChars = (buf) => buf.reduce((n, w) => n + w.word.length, 0) + Math.max(0, buf.length - 1);
   const phrases = [];
   let phraseBuffer = [];
 
-  for (let i = 0; i < wordTimestamps.length; i++) {
-    const raw = wordTimestamps[i];
-    const cleaned = cleanWord(raw.word);
-    if (!cleaned) continue;
-    const w = { ...raw, word: cleaned };
+  for (let i = 0; i < cleaned.length; i++) {
+    const w = cleaned[i];
+    const projectedChars = phraseChars(phraseBuffer) + (phraseBuffer.length ? 1 : 0) + w.word.length;
+    const willOverflow = phraseBuffer.length > 0 && projectedChars > PHRASE_MAX_CHARS;
+
+    // Flush before adding this word if it would overflow
+    if (willOverflow) {
+      flushBuffer(phrases, phraseBuffer, cleaned[i].start);
+      phraseBuffer = [];
+    }
+
     phraseBuffer.push(w);
-
-    const endsPhrase = phraseBuffer.length >= PHRASE_SIZE;
+    const isLast = i === cleaned.length - 1;
     const endsSentence = /[.!?]$/.test(w.word.trim());
-    const isLast = i === wordTimestamps.length - 1;
+    const reachedSize = phraseBuffer.length >= PHRASE_SIZE;
+    const canCloseOnSentence = endsSentence && phraseBuffer.length >= PHRASE_MIN_WORDS;
 
-    if (endsPhrase || endsSentence || isLast) {
-      if (phraseBuffer.length > 0) {
-        const lastWordEnd = phraseBuffer[phraseBuffer.length - 1].end;
-        const nextWordStart = (i + 1 < wordTimestamps.length) ? wordTimestamps[i + 1].start : lastWordEnd + 0.3;
-        const endTime = Math.min(lastWordEnd + 0.15, nextWordStart - 0.01);
-        phrases.push({
-          words: [...phraseBuffer],
-          start: phraseBuffer[0].start,
-          end: Math.max(lastWordEnd, endTime),
-        });
-        phraseBuffer = [];
-      }
+    if (reachedSize || canCloseOnSentence || isLast) {
+      const nextStart = (i + 1 < cleaned.length) ? cleaned[i + 1].start : null;
+      flushBuffer(phrases, phraseBuffer, nextStart);
+      phraseBuffer = [];
     }
   }
 
-  // ASS header
-  // PrimaryColour: white (unhighlighted words)
-  // SecondaryColour: gold &H0066E8FF (highlighted current word via \kf)
-  // Alignment 2 = bottom center
-  // pos(960,1030) = fixed position, never moves
+  // Chalk-write effect:
+  //   Trick: \kf<centiseconds> animates the fill from SecondaryColour → PrimaryColour
+  //   left-to-right across the word's pixels over its centisecond duration. By making
+  //   Secondary fully transparent and Primary opaque chalk-white, each word literally
+  //   "writes itself on" the board as it's spoken. No per-letter dialogue events
+  //   needed — libass does the column-by-column reveal natively.
+  //
+  // ASS color format is &HAABBGGRR (alpha 00=opaque, FF=transparent)
+  //   Primary   &H00FFFFFF  pure bright white  (active word — currently being spoken)
+  //   Secondary &H40DCDCDC  ~75% chalk white   (past + upcoming words — visible but
+  //                                              clearly distinguishable from the active word
+  //                                              so the karaoke chalk-write reveal is readable)
+  //   Outline   &HC0000000  heavy black edge   (chalk-stroke pop on any background)
+  //   Shadow    &HD0000000  deep black         (cozy depth)
+  //
+  // Font bumped to 84 — subtitles are a key visual element, not an afterthought.
+  // MarginV 110 keeps text inside the chalkboard frame's lower edge.
   const header = `[Script Info]
 ScriptType: v4.00+
 PlayResX: 1920
 PlayResY: 1080
 ScaledBorderAndShadow: yes
-WrapStyle: 2
+WrapStyle: 0
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,Montserrat Bold,58,&H00FFFFFF,&H0066E8FF,&H00000000,&HA0000000,-1,0,0,0,100,100,1,0,1,4,3,2,80,80,50,1
+Style: Default,Kalam,80,&H00FFFFFF,&H40DCDCDC,&HC0000000,&HD0000000,-1,0,0,0,100,100,3,0,1,6,4,2,140,140,150,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 `;
 
-  // Build dialogue lines with karaoke timing
+  // Build dialogue lines with karaoke chalk-write timing.
+  // Each word's \kf duration matches its actual spoken duration so the
+  // letters "appear" exactly as the narrator says them.
   const lines = phrases.map(phrase => {
-    const kText = phrase.words.map((w, wi) => {
-      const nextStart = wi < phrase.words.length - 1 ? phrase.words[wi + 1].start : w.end + 0.15;
-      const dur = Math.max(1, Math.round((nextStart - w.start) * 100));
-      return "{\\kf" + dur + "}" + w.word;
+    const kText = phrase.words.map((w) => {
+      const wordDur = Math.max(15, Math.round((w.end - w.start) * 100));
+      // \kf with transparent Secondary = letters fade in column-by-column
+      return "{\\kf" + wordDur + "}" + w.word;
     }).join(" ");
-    // Fixed position: bottom center (960, 1030) on 1920x1080
-    return "Dialogue: 0," + toASSTime(phrase.start) + "," + toASSTime(phrase.end) + ",Default,,0,0,0,,{\\an2\\pos(960,1030)}" + kText;
+    return "Dialogue: 0," + toASSTime(phrase.start) + "," + toASSTime(phrase.end) + ",Default,,0,0,0,,{\\an2\\pos(960,990)}" + kText;
   });
 
   fs.writeFileSync(outputPath, header + lines.join("\n") + "\n");

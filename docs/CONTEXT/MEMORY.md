@@ -1,0 +1,6 @@
+- [User role](user_role.md) — Niels owns Videvo.io, non-technical, wants baby steps and root-cause fixes
+- [Videvo.io project context](project_videvo.md) — AI video SaaS at /opt/videvo/, infra details, and never-break rules
+- [Communication style](feedback_communication_style.md) — every task: 3 brief points (what happened / next step / creative idea); always announce what's running and whether to wait
+- [Publish outputs to file server](feedback_publish_outputs.md) — anything Niels wants to view must go on the file server with a clickable URL; SleepForge file server: http://157.180.124.232:8080/
+- [Chalk style enforcement](feedback_chalk_style_lock.md) — for SleepForge image gen, code must template the chalk style; Claude writes only subject+action or Flux renders marble statues
+- [Visual highlight on input needed](feedback_input_visual_highlight.md) — when asking Niels yes/no/decision, lead with a `> ⚠️ NEED YOUR INPUT ⚠️` block so he can spot it instantly when he returns

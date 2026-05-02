@@ -2,49 +2,13 @@
   {
     "index": 0,
     "philosopher": "Marcus Aurelius",
-    "moment": "Writing alone in his campaign tent at the Danube frontier",
-    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, Marcus Aurelius in ancient Greek toga dipping a stylus into ink with deliberate, measured movements, swirling chalk dust and atmospheric chalk strokes around the figure, Doric column visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
+    "moment": "Writing in his journal at night, reflecting on duty and acceptance",
+    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, Marcus Aurelius in ancient Greek toga setting down his stylus slowly on papyrus, hand coming to rest, swirling chalk dust and atmospheric chalk strokes around the figure, wall visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
   },
   {
     "index": 1,
-    "philosopher": "Epictetus",
-    "moment": "Teaching the dichotomy of control to his students",
-    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, Epictetus in ancient Greek toga extending one hand open, then closing the other hand into a fist, swirling chalk dust and atmospheric chalk strokes around the figure, Doric column visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
-  },
-  {
-    "index": 2,
-    "philosopher": "Seneca",
-    "moment": "Writing letters to Lucilius about the waste of time",
-    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, Seneca in ancient Greek toga folding a letter with careful precision, setting it aside unfinished, swirling chalk dust and atmospheric chalk strokes around the figure, Doric column visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
-  },
-  {
-    "index": 3,
     "philosopher": "Marcus Aurelius",
-    "moment": "Accepting the plague that ravaged his legions",
-    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, Marcus Aurelius in ancient Greek toga pressing both palms flat against his chest, breathing slowly and deliberately, swirling chalk dust and atmospheric chalk strokes around the figure, Doric column visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
-  },
-  {
-    "index": 4,
-    "philosopher": "Epictetus",
-    "moment": "His master breaking his leg, responding without complaint",
-    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, Epictetus in ancient Greek toga lying still with an expression unchanged, unresisting, swirling chalk dust and atmospheric chalk strokes around the figure, Doric column visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
-  },
-  {
-    "index": 5,
-    "philosopher": "Seneca",
-    "moment": "Standing calm before Nero's death sentence",
-    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, Seneca in ancient Greek toga straightening his shoulders, meeting the ruler's eyes without flinching, swirling chalk dust and atmospheric chalk strokes around the figure, Doric column visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
-  },
-  {
-    "index": 6,
-    "philosopher": "Marcus Aurelius",
-    "moment": "Walking the Roman forum before dawn, alone with his thoughts",
-    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, Marcus Aurelius in ancient Greek toga taking slow steps along stone columns, one hand trailing along cool marble, swirling chalk dust and atmospheric chalk strokes around the figure, forum visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
-  },
-  {
-    "index": 7,
-    "philosopher": "All Three",
-    "moment": "The quiet inheritance of their teaching, the peace that remains",
-    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, All Three in ancient Greek toga sitting in stillness, the body relaxed, the mind at rest, swirling chalk dust and atmospheric chalk strokes around the figure, Doric column visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
+    "moment": "Walking through the palace corridor at dawn, observing his own thoughts with detachment",
+    "prompt": "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only, Marcus Aurelius in ancient Greek toga pausing mid-stride, turning inward, fingers tracing the stone column beside him, swirling chalk dust and atmospheric chalk strokes around the figure, column visible in background, medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition"
   }
 ]

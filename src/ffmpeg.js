@@ -118,6 +118,170 @@ export function createImageSlideshow(imagePaths, duration, outputPath, options =
   return outputPath;
 }
 
+// ─── CLIP-DRIVEN SLIDESHOW ──────────────────────────────────────────────────
+// Renders one image per director clip, with each image showing for exactly
+// its clip's duration. Chunks the work into groups so the xfade filter graph
+// stays manageable for hour-long videos with 80-100 clips.
+//
+// clips: [{start_time, end_time, imagePath}], totalDuration (sec)
+
+const SLIDESHOW_CHUNK_SIZE = 20; // max clips per xfade chain
+
+export function createClipSlideshow(clips, totalDuration, outputPath, options = {}) {
+  // 1.5s soft fade between every clip — long enough to feel elegant, short
+  // enough to keep the storyboard moving at sleep tempo (3-5s per scene).
+  const fadeTime = options.fadeTime || 1.5;
+  const fallbackImage = options.fallbackImage || null;
+
+  // Filter null imagePaths — replace with fallback (or skip if no fallback)
+  const usable = clips
+    .map((c) => ({
+      ...c,
+      imagePath: c.imagePath || fallbackImage,
+    }))
+    .filter((c) => c.imagePath && fileExists(c.imagePath));
+
+  if (usable.length === 0) {
+    console.log("  No clip images — generating black fallback");
+    execSync(
+      `ffmpeg -y -f lavfi -i "color=c=0x0a0a0a:s=1920x1080:d=${Math.ceil(totalDuration)},format=yuv420p" ` +
+      `-c:v libx264 -preset fast -crf 23 -movflags +faststart "${outputPath}"`,
+      { stdio: "pipe", timeout: 120000 }
+    );
+    return outputPath;
+  }
+
+  console.log(`  Clip slideshow: ${usable.length} images over ${Math.round(totalDuration)}s, ${fadeTime}s xfade...`);
+
+  // Single chunk fast path
+  if (usable.length <= SLIDESHOW_CHUNK_SIZE) {
+    renderClipChunk(usable, fadeTime, outputPath);
+    return outputPath;
+  }
+
+  // Chunked render — split into groups, render each, then xfade-concat the chunks.
+  const chunks = [];
+  for (let i = 0; i < usable.length; i += SLIDESHOW_CHUNK_SIZE) {
+    chunks.push(usable.slice(i, i + SLIDESHOW_CHUNK_SIZE));
+  }
+  console.log(`  Rendering in ${chunks.length} chunks of up to ${SLIDESHOW_CHUNK_SIZE} clips...`);
+
+  const tmpDir = path.dirname(outputPath);
+  const chunkPaths = [];
+  for (let ci = 0; ci < chunks.length; ci++) {
+    const cp = path.join(tmpDir, `slideshow-chunk-${ci}.mp4`);
+    renderClipChunk(chunks[ci], fadeTime, cp);
+    chunkPaths.push(cp);
+  }
+
+  // xfade-concat chunks
+  if (chunkPaths.length === 1) {
+    fs.copyFileSync(chunkPaths[0], outputPath);
+  } else {
+    concatChunksWithXfade(chunkPaths, fadeTime, outputPath);
+  }
+
+  // Cleanup
+  for (const cp of chunkPaths) {
+    try { fs.unlinkSync(cp); } catch {}
+  }
+
+  console.log(`  Clip slideshow created: ${outputPath}`);
+  return outputPath;
+}
+
+// ─── Calm per-clip animations + transitions ────────────────────────────────
+//
+// Sleep-tempo design (May 2026): no shake, no pan, no wipes. Every clip uses
+// the SAME barely-perceptible slow zoom (1.00 → 1.04 over the clip) so the
+// image feels alive without ever drawing attention. Transitions are pure
+// 1.5s fades — long, soft, elegant. The eye rests on the chalk drawing.
+
+// Build the per-clip filter: [i:v] (a -loop 1 -t dur image) → [imgi] at
+// 1920×1080, 30fps, yuv420p. The image is held perfectly still — no zoom,
+// no pan, no zoompan. Niels: "image flickers all the time lagging around,
+// keep the image steady please". The motion comes from particles + smoke
+// overlays, not from the chalk drawing itself.
+function buildCalmZoomFilter(inputLabel, outLabel, durSec) {
+  const fps = 30;
+  // scale → fill 1920×1080 cover (crop excess), set sar/fps, normalize pix fmt.
+  // No zoompan: avoids the per-frame resampling that read as "flickering".
+  return `[${inputLabel}]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,fps=${fps},format=yuv420p,trim=duration=${durSec.toFixed(3)},setpts=PTS-STARTPTS[${outLabel}]`;
+}
+
+function renderClipChunk(clips, fadeTime, outputPath) {
+  const inputs = [];
+  const filters = [];
+
+  // xfade overlaps the two adjacent streams by fadeTime, which would compress
+  // the total slideshow by (n-1)*fadeTime. To preserve clip pacing, we render
+  // each clip for actualDur+fadeTime so its trailing fadeTime gets consumed by
+  // the next clip's xfade-in. xfade offsets are then placed at the clip's
+  // actual end_time, not actual_end - fade.
+  for (let i = 0; i < clips.length; i++) {
+    const actualDur = clips[i].end_time - clips[i].start_time;
+    const renderDur = actualDur + fadeTime; // pad tail for xfade overlap
+    // -loop 1 + -t lets ffmpeg replay the still image for the full clip
+    // duration (no zoompan needed since we now hold the image static).
+    inputs.push(`-loop 1 -framerate 30 -t ${renderDur.toFixed(3)} -i "${path.resolve(clips[i].imagePath)}"`);
+    filters.push(buildCalmZoomFilter(`${i}:v`, `img${i}`, renderDur));
+  }
+
+  if (clips.length === 1) {
+    filters.push(`[img0]null[vout]`);
+  } else {
+    let offset = clips[0].end_time - clips[0].start_time; // start xfade at clip 0's actual end
+    let chainLabel = "img0";
+    for (let i = 1; i < clips.length; i++) {
+      const isLast = i === clips.length - 1;
+      const out = isLast ? "vout" : `xf${i - 1}`;
+      filters.push(
+        `[${chainLabel}][img${i}]xfade=transition=fade:duration=${fadeTime}:offset=${offset.toFixed(2)}[${out}]`
+      );
+      chainLabel = out;
+      const thisDur = clips[i].end_time - clips[i].start_time;
+      offset += thisDur; // next xfade starts at next clip's actual end
+    }
+  }
+
+  execSync(
+    `ffmpeg -y ${inputs.join(" ")} -filter_complex "${filters.join(";")}" ` +
+    `-map "[vout]" -c:v libx264 -preset fast -crf 22 -movflags +faststart "${outputPath}"`,
+    { stdio: "pipe", timeout: 1800000 }
+  );
+}
+
+function concatChunksWithXfade(chunkPaths, fadeTime, outputPath) {
+  const inputs = chunkPaths.map((p) => `-i "${path.resolve(p)}"`);
+  const filters = [];
+
+  // Probe each chunk's duration
+  const durations = chunkPaths.map((p) => getAudioDuration(p));
+
+  // Normalize each input
+  for (let i = 0; i < chunkPaths.length; i++) {
+    filters.push(`[${i}:v]setpts=PTS-STARTPTS,fps=30,format=yuv420p[c${i}]`);
+  }
+
+  let chainLabel = "c0";
+  let offset = durations[0] - fadeTime;
+  for (let i = 1; i < chunkPaths.length; i++) {
+    const isLast = i === chunkPaths.length - 1;
+    const out = isLast ? "vout" : `xc${i - 1}`;
+    filters.push(
+      `[${chainLabel}][c${i}]xfade=transition=fade:duration=${fadeTime}:offset=${offset.toFixed(2)}[${out}]`
+    );
+    chainLabel = out;
+    offset += durations[i] - fadeTime;
+  }
+
+  execSync(
+    `ffmpeg -y ${inputs.join(" ")} -filter_complex "${filters.join(";")}" ` +
+    `-map "[vout]" -c:v libx264 -preset fast -crf 22 -movflags +faststart "${outputPath}"`,
+    { stdio: "pipe", timeout: 1800000 }
+  );
+}
+
 // Fallback for large image counts: use concat demuxer with per-image fade in/out
 function createSlideshowConcat(imagePaths, duration, outputPath, fadeTime) {
   const imageShowTime = Math.max(13, Math.ceil(duration / Math.ceil(duration / 13)));
@@ -184,21 +348,31 @@ function makeSeamlessLoop(srcPath) {
 
   // Split original into two halves at midpoint, swap, crossfade the seam,
   // then fade in/out at the new file boundaries.
+  // Use TWO independent `-i` decodes (input 0 for tail, input 1 for head):
+  // a single input feeding asplit→atrim branches deadlocks because both
+  // atrim branches need to consume the same buffer in different time ranges.
+  // Independent decodes let each branch read from its own demuxer.
+  const outLen = dur - xfade;
+  const fadeOutStart = Math.max(0, outLen - edgeFade);
   const filter =
-    `[0:a]atrim=0:${rotate},asetpts=PTS-STARTPTS[head];` +
-    `[0:a]atrim=${rotate},asetpts=PTS-STARTPTS[tail];` +
+    `[0:a]atrim=start=${rotate},asetpts=PTS-STARTPTS[tail];` +
+    `[1:a]atrim=start=0:end=${rotate},asetpts=PTS-STARTPTS[head];` +
     `[tail][head]acrossfade=d=${xfade}:c1=tri:c2=tri[xf];` +
-    `[xf]afade=t=in:st=0:d=${edgeFade},afade=t=out:st=${(dur - xfade - edgeFade).toFixed(3)}:d=${edgeFade}[out]`;
+    `[xf]afade=t=in:st=0:d=${edgeFade},afade=t=out:st=${fadeOutStart.toFixed(3)}:d=${edgeFade}[out]`;
 
   try {
     execSync(
-      `ffmpeg -y -i "${srcPath}" -filter_complex "${filter}" ` +
+      `ffmpeg -y -i "${srcPath}" -i "${srcPath}" -filter_complex "${filter}" ` +
       `-map "[out]" -c:a libmp3lame -b:a 192k "${seamlessPath}"`,
       { stdio: "pipe", timeout: 60000 }
     );
+    if (!fileExists(seamlessPath) || fs.statSync(seamlessPath).size < 5000) {
+      throw new Error(`output file too small (${fs.existsSync(seamlessPath) ? fs.statSync(seamlessPath).size : 0} bytes)`);
+    }
     return seamlessPath;
   } catch (err) {
     console.error(`  Seamless build failed (${err.message}) — using original`);
+    try { fs.unlinkSync(seamlessPath); } catch {}
     return srcPath;
   }
 }
@@ -258,42 +432,237 @@ export function mixAudio(voiceoverPath, duration, outputPath, options = {}) {
 }
 
 // ─── COMPOSE FINAL VIDEO ────────────────────────────────────────────────────
-// Overlays the image slideshow centered at 60% on top of the Remotion background.
-// If no Remotion background exists, uses slideshow as the full video track.
+// Layered composition (back→front):
+//   1. bg.mp4 (Kling night-study), darkened ~50% so it reads as ambience
+//   2. Drifting chalk-dust particle layer (overlay)
+//   3. Chalkboard-framed image panel (slideshow + frame border)
+//   Subtitle burn happens later in `compose()` after this stage.
 
 const REMOTION_BG = "engine/remotion/backgrounds/marcus-aurelius-night/bg.mp4";
+const PARTICLES_PATH = "engine/remotion/backgrounds/particles-loop.mp4";
+const SMOKE_PATH = "engine/remotion/backgrounds/smoke-loop.mp4";
+const FRAME_PATH = "assets/frames/chalkboard-frame.png";
 
-export function composeVideo(slideshowPath, audioPath, outputPath, duration, options = {}) {
-  const bgPath = options.backgroundPath || REMOTION_BG;
-  const hasBg = fileExists(bgPath);
+// Generate a sparse white chalk-dust field as a static PNG, sized 2× video
+// width so we can scroll it horizontally and wrap. Using deterministic geq
+// gives reproducible particle positions per channel.
+function ensureDustPng(outPath) {
+  if (fileExists(outPath)) return outPath;
+  console.log(`  Generating dust texture: ${outPath}...`);
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  // Threshold/100000 = pixel density. 12 → ~460 lit pixels in 3840×1080.
+  // Pixels cluster from neighboring hash hits to form ~80-120 visible dots.
+  const aExpr = `if(lt(mod(X*7919+Y*6113,100000),12),220,0)`;
+  execSync(
+    `ffmpeg -y -f lavfi -i "color=c=white@0.0:s=3840x1080,format=rgba" ` +
+    `-vf "geq=r=255:g=255:b=255:a='${aExpr}'" -frames:v 1 -update 1 "${outPath}"`,
+    { stdio: "pipe", timeout: 60000 }
+  );
+  return outPath;
+}
 
-  console.log(`  Composing final video (${Math.round(duration)}s)...`);
-  console.log(`  Background: ${hasBg ? bgPath : "none (slideshow only)"}`);
+// Build a 30s loop of a single subtle dust layer drifting up-and-slightly-right.
+// Procedural via geq: noise pattern position offset by time, so dots translate
+// upward (~12 px/s) and rightward (~3 px/s). Subtle, sleep-appropriate.
+// Once cached, costs nothing on subsequent renders.
+export function ensureSmokeLoop(outPath = SMOKE_PATH) {
+  if (fileExists(outPath) && fs.statSync(outPath).size > 100000) return outPath;
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  console.log(`  Generating smoke loop → ${outPath} (one-time)...`);
+  // SLOW gradient smoke: very low-res blurred noise generated once, then
+  // gently translated across a 60s loop with a soft sin-eased motion (~3 px/s).
+  // The animation is the slow drift only — no per-frame regen — so motion is
+  // calm and deterministic, not the previous frenetic per-frame noise.
+  // Dark + desaturated so screen-blend reads as atmospheric haze, not blocking.
+  execSync(
+    `ffmpeg -y -f lavfi -i "color=c=gray:s=240x135:r=1:d=1" ` +
+    `-filter_complex "` +
+      // 1) Generate ONE noise frame, blur heavily → smooth grey cloud
+      `[0:v]noise=alls=70:allf=t,boxblur=22:2,format=yuv420p[cloud];` +
+      // 2) Loop that single frame, scale to 2x final width so we can drift it
+      `[cloud]loop=loop=-1:size=1:start=0,trim=duration=60,setpts=N/60/TB,` +
+      `scale=3840:1080,format=yuv420p[wide];` +
+      // 3) Crop a moving 1920×1080 window — slow horizontal drift across 60s
+      `[wide]crop=1920:1080:'960+960*sin(2*PI*t/60)':0,` +
+      `eq=brightness=-0.50:contrast=1.4:saturation=0,format=yuv420p[v]` +
+    `" -map "[v]" -t 60 -r 30 -c:v libx264 -preset medium -crf 28 -movflags +faststart "${outPath}"`,
+    { stdio: "pipe", timeout: 120000 }
+  );
+  return outPath;
+}
 
-  if (hasBg) {
-    // Overlay slideshow centered at 60% width on looping Remotion background
-    // Image panel: 60% of 1920 = 1152px wide, centered at (384, 108)
-    const panelW = 1152;
-    const panelH = Math.round(panelW * 9 / 16); // 648
-    const panelX = Math.round((1920 - panelW) / 2); // 384
-    const panelY = Math.round((1080 - panelH) / 2) - 20; // 196
+export async function ensureParticleLoop(outPath = PARTICLES_PATH) {
+  if (fileExists(outPath)) return outPath;
+  console.log(`  Rendering fireplace-spark particle loop via Remotion: ${outPath}...`);
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  const { renderFireplaceParticles } = await import("./remotion-particles.js");
+  await renderFireplaceParticles(outPath);
+  return outPath;
+}
 
-    execSync(
-      `ffmpeg -y -stream_loop -1 -i "${bgPath}" -i "${slideshowPath}" -i "${audioPath}" ` +
-      `-filter_complex "[1:v]scale=${panelW}:${panelH}[img];[0:v][img]overlay=${panelX}:${panelY}:shortest=0[v]" ` +
-      `-map "[v]" -map 2:a -c:v libx264 -preset fast -crf 22 -c:a copy ` +
-      `-t ${Math.ceil(duration)} -movflags +faststart "${outputPath}"`,
-      { stdio: "pipe", timeout: 1200000 }
-    );
-  } else {
-    // No background — slideshow is the full video
-    execSync(
-      `ffmpeg -y -i "${slideshowPath}" -i "${audioPath}" ` +
-      `-map 0:v -map 1:a -c:v copy -c:a copy ` +
-      `-t ${Math.ceil(duration)} -movflags +faststart "${outputPath}"`,
-      { stdio: "pipe", timeout: 600000 }
-    );
+// Legacy ffmpeg-geq fallback. Kept inline so we can fall back if Remotion fails.
+function ensureParticleLoopLegacy(outPath = PARTICLES_PATH) {
+  if (fileExists(outPath)) return outPath;
+  console.log(`  Building fireplace-spark particle loop (legacy): ${outPath}...`);
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+
+  // Fireplace-spark embers, 60s loop, 30fps.
+  //
+  // Why geq instead of a particle simulator: ffmpeg has no native particle
+  // system, but a deterministic hash gives us reproducible "embers" that
+  // appear at integer positions. By making each spark short-lived (3-5 sec)
+  // and spawning many of them, the eye reads a steady drift of glowing dots,
+  // not a static grid.
+  //
+  // Math:
+  //   For each pixel (X, Y) and time T:
+  //     - hash(X, Y) decides if this pixel could ever be a spark spawn point
+  //     - the spawn point's vertical position drifts up linearly: Y_now = Y0 - speed*T
+  //     - we draw a soft warm-orange glow (R≈255, G≈170, B≈70) at that point
+  //
+  // Drift speed: ~10 px/s upward — matches a real fireplace spark rising in
+  // still air. Spawn density tuned so ~25 sparks visible at once (sparse).
+  // Slight horizontal sway via sin(t + hash) so they don't move on rails.
+  //
+  // Output is RGB on near-black canvas — screen-blended downstream, so the
+  // black falls away and only the glowing dots remain.
+
+  const speed = 10;        // px/sec upward drift
+  const spawnDensity = 8;  // lower = denser sparks; ~25 visible at any time
+  const lifetime = 4;      // each spark lives 4 seconds (Y travels ~40px)
+
+  // The spawn-point hash is over (X, Y) — Y here is the spawn Y, not screen Y.
+  // We invert: for each screen Y, look up the spark whose age is t = (Y0 - Y)/speed.
+  // For each pixel, we pretend it might be a spawn point that was emitted t seconds
+  // ago and has risen to (X+sway, Y - speed*t). Spawn density × lifetime determines
+  // how many sparks land on screen on average.
+  //
+  // Simplified expr: at time T, ember at original (X, Y) is at screen position
+  // (X + sway(T+hash), Y - speed*T). To render: for each screen pixel (sx, sy)
+  // and time T, we ask "is there a spawn (X, Y) such that X+sway≈sx and Y-speed*T≈sy?"
+  // We approximate by walking the inverse: spawn Y = sy + speed*T, and X = sx (sway
+  // small enough we ignore in hash lookup). Then check spawn validity.
+
+  // Active window: only pixels in the lower 80% of the screen are eligible to be
+  // a "current spark" (sparks rise from below the chalk figure and float past).
+  // Brightness fades over lifetime via sin(pi * age/lifetime).
+  // Spark mask (1 if pixel is a spark, 0 otherwise). Used both for luma AND
+  // chroma so non-spark pixels stay neutral grey-on-black instead of dumping
+  // a global warm tint that bleeds through screen-blend downstream.
+  const sparkMask = `lt(mod(X*7919+(Y+${speed}*T)*6113,100000),${spawnDensity})`;
+  const lumExpr =
+    `if(${sparkMask},220*sin(PI*mod(T+0.001*X,${lifetime})/${lifetime}),0)`;
+  // Chroma: 128 = neutral grey. Only diverge from neutral on actual spark pixels.
+  const cbExpr = `if(${sparkMask},90,128)`;   // blue chroma drop → warm
+  const crExpr = `if(${sparkMask},200,128)`;  // red chroma boost → orange
+
+  execSync(
+    `ffmpeg -y -f lavfi -i "color=c=black:s=1920x1080:r=30:d=60" ` +
+    `-vf "format=yuv420p,geq=lum='${lumExpr}':cb='${cbExpr}':cr='${crExpr}',gblur=sigma=1.2" ` +
+    `-c:v libx264 -preset fast -crf 22 -pix_fmt yuv420p -movflags +faststart "${outPath}"`,
+    { stdio: "pipe", timeout: 600000 }
+  );
+  return outPath;
+}
+
+// Generate a 1152×648 chalkboard frame PNG: dark slate-grey border with
+// scattered white chalk flecks along the inner edge, transparent center.
+// Uses drawbox primitives so geq edge-cases don't break the build.
+export function ensureChalkboardFrame(outPath = FRAME_PATH, panelW = 1152, panelH = 648) {
+  if (fileExists(outPath)) return outPath;
+  console.log(`  Generating chalkboard frame: ${outPath}...`);
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+
+  const borderW = 50;             // dark slate border thickness (was 36 — too thin)
+  const chalkLineW = 3;           // bright chalk line just inside the slate
+  const chalkBand = 14;           // band beyond the chalk line where flecks appear
+  const slate = "0x141414@1.0";   // dark slate
+  const chalk = "0xF5F1E8@1.0";   // warm chalk white (matches subtitle Primary)
+
+  // Layered build (back→front):
+  //   1. Four solid slate border rectangles  →  thick dark frame
+  //   2. Four chalk-white inner-edge stripes →  hand-drawn chalk rectangle
+  //   3. Scattered chalk flecks in the chalk band → smudgy chalk-dust feel
+  const inner = borderW;
+  const innerEnd = panelW - borderW;
+  const innerEndY = panelH - borderW;
+  const filters = [
+    // Slate border ring
+    `drawbox=x=0:y=0:w=${panelW}:h=${borderW}:color=${slate}:t=fill`,
+    `drawbox=x=0:y=${panelH - borderW}:w=${panelW}:h=${borderW}:color=${slate}:t=fill`,
+    `drawbox=x=0:y=${borderW}:w=${borderW}:h=${panelH - 2 * borderW}:color=${slate}:t=fill`,
+    `drawbox=x=${panelW - borderW}:y=${borderW}:w=${borderW}:h=${panelH - 2 * borderW}:color=${slate}:t=fill`,
+    // Chalk-white rectangle stroke just inside the slate
+    `drawbox=x=${inner}:y=${inner}:w=${innerEnd - inner}:h=${chalkLineW}:color=${chalk}:t=fill`,
+    `drawbox=x=${inner}:y=${innerEndY - chalkLineW}:w=${innerEnd - inner}:h=${chalkLineW}:color=${chalk}:t=fill`,
+    `drawbox=x=${inner}:y=${inner}:w=${chalkLineW}:h=${innerEndY - inner}:color=${chalk}:t=fill`,
+    `drawbox=x=${innerEnd - chalkLineW}:y=${inner}:w=${chalkLineW}:h=${innerEndY - inner}:color=${chalk}:t=fill`,
+  ];
+
+  // Chalk flecks — small 1-3px boxes scattered in the band beyond the chalk line.
+  // Deterministic LCG so the frame is identical every render.
+  let seed = 12345;
+  const lcg = () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  const fleckCount = 200;
+  for (let i = 0; i < fleckCount; i++) {
+    const side = i % 4;
+    let x, y;
+    if (side === 0) {
+      x = Math.floor(lcg() * panelW);
+      y = inner + chalkLineW + Math.floor(lcg() * chalkBand);
+    } else if (side === 1) {
+      x = Math.floor(lcg() * panelW);
+      y = innerEndY - chalkLineW - chalkBand + Math.floor(lcg() * chalkBand);
+    } else if (side === 2) {
+      x = inner + chalkLineW + Math.floor(lcg() * chalkBand);
+      y = Math.floor(lcg() * panelH);
+    } else {
+      x = innerEnd - chalkLineW - chalkBand + Math.floor(lcg() * chalkBand);
+      y = Math.floor(lcg() * panelH);
+    }
+    const w = 1 + Math.floor(lcg() * 3);
+    const h = 1 + Math.floor(lcg() * 3);
+    filters.push(`drawbox=x=${x}:y=${y}:w=${w}:h=${h}:color=${chalk}:t=fill`);
   }
+
+  execSync(
+    `ffmpeg -y -f lavfi -i "color=c=black@0.0:s=${panelW}x${panelH},format=rgba" ` +
+    `-vf "${filters.join(",")}" -frames:v 1 -update 1 "${outPath}"`,
+    { stdio: "pipe", timeout: 60000 }
+  );
+  return outPath;
+}
+
+export async function composeVideo(slideshowPath, audioPath, outputPath, duration, options = {}) {
+  console.log(`  Composing final video (${Math.round(duration)}s)...`);
+
+  // Slideshow fills the full 1920x1080 frame; particles + smoke are
+  // screen-blended on top for atmosphere. Particles come from Remotion
+  // (cozy fireplace embers); smoke is a slow ffmpeg-generated drift.
+  const particlesPath = await ensureParticleLoop();
+  const smokePath = ensureSmokeLoop();
+
+  const filter =
+    // [0] = slideshow scaled to fill 1920x1080 (cover/crop)
+    `[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,` +
+      `setsar=1,fps=30,format=gbrp[base];` +
+    // [1] = particles loop, screen-blended (sparkle over chalk)
+    `[1:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[parts];` +
+    `[base][parts]blend=all_mode=screen:shortest=0[withParts];` +
+    // [2] = smoke loop, screen-blended on top (atmospheric drift)
+    `[2:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[smoke];` +
+    `[withParts][smoke]blend=all_mode=screen:shortest=0,format=yuv420p[v]`;
+
+  execSync(
+    `ffmpeg -y -i "${slideshowPath}" ` +                    // [0] slideshow (full)
+    `-stream_loop -1 -i "${particlesPath}" ` +              // [1] particles
+    `-stream_loop -1 -i "${smokePath}" ` +                  // [2] smoke
+    `-i "${audioPath}" ` +                                  // [3] audio
+    `-filter_complex "${filter}" ` +
+    `-map "[v]" -map 3:a -c:v libx264 -preset fast -crf 22 -c:a copy ` +
+    `-t ${Math.ceil(duration)} -movflags +faststart "${outputPath}"`,
+    { stdio: "pipe", timeout: 1800000 }
+  );
 
   console.log(`  Video composed: ${outputPath}`);
   return outputPath;
@@ -305,6 +674,8 @@ export async function compose(config) {
   const {
     voiceoverPath,
     imagePaths = [],
+    clips = null,           // director clips with start_time/end_time/imagePath
+    fallbackImage = null,   // used to fill clips with imagePath=null
     assPath = null,
     outputDir,
     introPath = null,
@@ -313,13 +684,21 @@ export async function compose(config) {
   const duration = getAudioDuration(voiceoverPath);
   console.log(`\n  FFmpeg Composition`);
   console.log(`  Duration: ${Math.round(duration)}s (${(duration / 60).toFixed(1)} min)`);
-  console.log(`  Images: ${imagePaths.length}`);
+  if (clips) console.log(`  Clips: ${clips.length} (director-driven)`);
+  else console.log(`  Images: ${imagePaths.length} (legacy slideshow)`);
 
   fs.mkdirSync(outputDir, { recursive: true });
 
-  // Step 1: Image slideshow (covers full duration, no black frames)
+  // Step 1: Image slideshow.
+  // Prefer director-driven clip slideshow when clips are provided — each
+  // image then shows for exactly its clip's duration. Falls back to the
+  // legacy fixed-cadence slideshow if clips aren't passed.
   const slideshowPath = path.join(outputDir, "slideshow.mp4");
-  createImageSlideshow(imagePaths, Math.ceil(duration), slideshowPath);
+  if (clips && clips.length > 0) {
+    createClipSlideshow(clips, Math.ceil(duration), slideshowPath, { fallbackImage });
+  } else {
+    createImageSlideshow(imagePaths, Math.ceil(duration), slideshowPath);
+  }
 
   // Step 2: Audio mix
   const mixedAudioPath = path.join(outputDir, "mixed-audio.m4a");
@@ -327,20 +706,64 @@ export async function compose(config) {
 
   // Step 3: Compose video (slideshow + audio)
   const rawVideoPath = path.join(outputDir, "raw.mp4");
-  composeVideo(slideshowPath, mixedAudioPath, rawVideoPath, duration);
+  await composeVideo(slideshowPath, mixedAudioPath, rawVideoPath, duration);
 
   // Step 4: Prepend intro (if provided)
+  // Cannot use `-c copy` concat: the intro has no audio track and a different
+  // time_base than raw.mp4, so concat demuxer silently drops the main video
+  // stream. Use the concat filter (re-encodes) and synthesize ambient audio
+  // (looped fireplace + crickets) for the intro window so it isn't silent.
   let videoForSubs = rawVideoPath;
   if (introPath && fileExists(introPath)) {
-    console.log("  Prepending intro animation...");
+    const introDur = getAudioDuration(introPath);
+    console.log(`  Prepending intro animation (${introDur.toFixed(1)}s) with ambient audio...`);
     const withIntroPath = path.join(outputDir, "with-intro.mp4");
-    const concatFile = path.join(outputDir, "intro-concat.txt");
-    fs.writeFileSync(concatFile, `file '${path.resolve(introPath)}'\nfile '${path.resolve(rawVideoPath)}'`);
+
+    // Try to use the seamless SFX loops we already built; fall back to silence.
+    const fireSrc = makeSeamlessLoop("assets/sfx/fireplace-cozy-loop.mp3");
+    const cricketSrc = makeSeamlessLoop("assets/sfx/night-crickets-loop.mp3");
+    const haveFire = fireSrc && fileExists(fireSrc);
+    const haveCricket = cricketSrc && fileExists(cricketSrc);
+
+    const inputs = [`-i "${introPath}"`, `-i "${rawVideoPath}"`];
+    let introAudioFilter;
+
+    if (haveFire || haveCricket) {
+      let nextIdx = 2;
+      const ambParts = [];
+      if (haveFire) {
+        inputs.push(`-stream_loop -1 -t ${introDur.toFixed(2)} -i "${fireSrc}"`);
+        ambParts.push({ idx: nextIdx++, vol: "0.08", label: "fire" });
+      }
+      if (haveCricket) {
+        inputs.push(`-stream_loop -1 -t ${introDur.toFixed(2)} -i "${cricketSrc}"`);
+        ambParts.push({ idx: nextIdx++, vol: "0.05", label: "cricket" });
+      }
+      const ambFilters = ambParts
+        .map((p) => `[${p.idx}:a]volume=${p.vol}[${p.label}]`)
+        .join(";");
+      const mixInputs = ambParts.map((p) => `[${p.label}]`).join("");
+      const mixCount = ambParts.length;
+      introAudioFilter = `${ambFilters};${mixInputs}amix=inputs=${mixCount}:duration=first,atrim=0:${introDur.toFixed(2)},asetpts=PTS-STARTPTS[introAudio]`;
+    } else {
+      inputs.push(`-f lavfi -t ${introDur.toFixed(2)} -i "anullsrc=channel_layout=stereo:sample_rate=48000"`);
+      introAudioFilter = `[2:a]asetpts=PTS-STARTPTS[introAudio]`;
+    }
+
+    // Normalize both video streams to identical params before concat
+    const filter =
+      `${introAudioFilter};` +
+      `[0:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,format=yuv420p,setpts=PTS-STARTPTS[v0];` +
+      `[1:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,format=yuv420p,setpts=PTS-STARTPTS[v1];` +
+      `[1:a]asetpts=PTS-STARTPTS[a1];` +
+      `[v0][introAudio][v1][a1]concat=n=2:v=1:a=1[outv][outa]`;
+
     execSync(
-      `ffmpeg -y -f concat -safe 0 -i "${concatFile}" -c copy -movflags +faststart "${withIntroPath}"`,
-      { stdio: "pipe", timeout: 300000 }
+      `ffmpeg -y ${inputs.join(" ")} -filter_complex "${filter}" ` +
+      `-map "[outv]" -map "[outa]" -c:v libx264 -preset fast -crf 22 -c:a aac -b:a 192k -movflags +faststart "${withIntroPath}"`,
+      { stdio: "pipe", timeout: 600000 }
     );
-    try { fs.unlinkSync(concatFile); } catch (e) {}
+
     videoForSubs = withIntroPath;
     console.log(`  Intro prepended: ${withIntroPath}`);
   }

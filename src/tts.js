@@ -1,27 +1,12 @@
-import { spawn } from "child_process";
+import { spawn, execSync } from "child_process";
 import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { chatterboxTTS, isHealthy } from "./chatterbox.js";
 
 // ═══════════════════════════════════════════
-// VOICE LIBRARY — SleepForge voices
+// VOICE LIBRARY — SleepForge voices (Kokoro-only)
+// F5-TTS removed: this server has no GPU and CPU inference is ~10× realtime.
 // ═══════════════════════════════════════════
 const VOICE_MAP = {
-  // Primary cloned voice
-  "cloned-niels": {
-    type: "f5-tts",
-    refAudio: "/opt/sleepforge/assets/voices/cloned-niels/ref_audio.wav",
-    refText: "/opt/sleepforge/assets/voices/cloned-niels/ref_text.txt"
-  },
-  // Archer cloned voice
-  "f5-archer": {
-    type: "f5-tts",
-    refAudio: "/opt/sleepforge/assets/voices/archer/ref_audio.wav",
-    refText: "/opt/sleepforge/assets/voices/archer/ref_text.txt"
-  },
   // Kokoro voices for different accents
   "kokoro-warm": {
     type: "kokoro",
@@ -51,13 +36,16 @@ const VOICE_MAP = {
   "bm_daniel": { type: "kokoro", voice: "bm_daniel" },
   "bm_fable": { type: "kokoro", voice: "bm_fable" },
   "bm_george": { type: "kokoro", voice: "bm_george" },
-  "bm_lewis": { type: "kokoro", voice: "bm_lewis" }
+  "bm_lewis": { type: "kokoro", voice: "bm_lewis" },
+  // Sleep-tested warm female voices added 2026-04-26
+  "af_sarah": { type: "kokoro", voice: "af_sarah" },
+  "af_heart": { type: "kokoro", voice: "af_heart" },
+  "bf_emma": { type: "kokoro", voice: "bf_emma" },
+  "bf_isabella": { type: "kokoro", voice: "bf_isabella" }
 };
 
 // Voice metadata for order form display + auto-selection
 export const VOICE_CATALOG = [
-  { id: "cloned-niels", name: "Niels (Cloned)", description: "Primary cloned voice from Niels' voice sample", style: "natural", gender: "male", accent: "neutral" },
-  { id: "f5-archer", name: "Archer (Cloned)", description: "High-quality cloned Archer voice for sleep content", style: "professional", gender: "male", accent: "american" },
   { id: "kokoro-warm", name: "Kokoro Warm", description: "Warm, comforting female voice (fallback)", style: "warm", gender: "female", accent: "american" },
   { id: "kokoro-neutral", name: "Kokoro Neutral", description: "Neutral, clear voice (fallback)", style: "neutral", gender: "female", accent: "american" },
   { id: "kokoro-british", name: "British Sleep Voice", description: "Elegant British female voice for sleep content", style: "elegant", gender: "female", accent: "british" },
@@ -82,12 +70,12 @@ export const VOICE_CATALOG = [
 // AUTO-SELECTION: theme/mood → voice (primary + backup)
 // ═══════════════════════════════════════════
 const STYLE_VOICES = {
-  philosophy: { primary: "cloned-niels", backup: "kokoro-warm" },
-  stoicism: { primary: "cloned-niels", backup: "kokoro-warm" },
-  marcus_aurelius: { primary: "cloned-niels", backup: "kokoro-warm" },
-  meditation: { primary: "kokoro-warm", backup: "cloned-niels" },
+  philosophy: { primary: "am_echo", backup: "kokoro-warm" },
+  stoicism: { primary: "am_echo", backup: "kokoro-warm" },
+  marcus_aurelius: { primary: "am_echo", backup: "kokoro-warm" },
+  meditation: { primary: "kokoro-warm", backup: "am_echo" },
   sleep: { primary: "am_echo", backup: "am_michael" },
-  default: { primary: "cloned-niels", backup: "kokoro-warm" }
+  default: { primary: "am_echo", backup: "kokoro-warm" }
 };
 
 // Detect best voice style from script content
@@ -138,8 +126,8 @@ export async function getVoiceId(voiceNameOrId) {
   );
   if (match) return match.id;
 
-  console.log(`Voice "${voiceNameOrId}" not found, using cloned-niels`);
-  return "cloned-niels";
+  console.log(`Voice "${voiceNameOrId}" not found, using am_echo`);
+  return "am_echo";
 }
 
 // ═══════════════════════════════════════════
@@ -149,7 +137,7 @@ let _currentPacing = null;
 
 export function setPacingOverride(pacing) {
   _currentPacing = {
-    speed: Math.max(0.85, Math.min(1.15, parseFloat(pacing.speed) || 1.0)),
+    speed: Math.max(0.70, Math.min(1.15, parseFloat(pacing.speed) || 1.0)),
     stability: Math.max(0.35, Math.min(0.65, parseFloat(pacing.stability) || 0.55)),
     style: Math.max(0.15, Math.min(0.55, parseFloat(pacing.style) || 0.35)),
     label: pacing.label || 'custom pacing',
@@ -166,10 +154,10 @@ export async function analyzePacing(niche, topic, tone, scriptPreview) {
     // For SleepForge, we use fixed pacing optimized for sleep content
     // Slow, calm, meditative delivery
     const sleepPacing = {
-      speed: 0.90,      // Slightly slower than normal
+      speed: 0.82,      // Sleep-cadence: slow, breathy, lulling
       stability: 0.55,  // Balanced stability
       style: 0.35,      // Natural expressiveness
-      label: "sleep-optimized: calm, meditative"
+      label: "sleep-optimized: slow, breathy, lulling"
     };
     console.log(`🎙️  Pacing (SleepForge): ${sleepPacing.label}`);
     _currentPacing = sleepPacing;
@@ -179,7 +167,7 @@ export async function analyzePacing(niche, topic, tone, scriptPreview) {
   }
 
   // Fallback
-  const fallback = { speed: 0.90, stability: 0.55, style: 0.35, label: "calm, meditative" };
+  const fallback = { speed: 0.82, stability: 0.55, style: 0.35, label: "slow, breathy, lulling" };
   console.log(`🎙️  Pacing (default): ${fallback.label}`);
   _currentPacing = fallback;
   return fallback;
@@ -207,83 +195,6 @@ function chunkText(text, maxChars = 4500) {
 // ═══════════════════════════════════════════
 // TTS GENERATION
 // ═══════════════════════════════════════════
-
-async function generateWithF5TTS(text, voiceConfig, outputPath) {
-  return new Promise((resolve, reject) => {
-    const pythonScript = `
-import sys
-import os
-sys.path.insert(0, '/opt/sleepforge')
-
-from f5_tts.api import F5TTS
-import soundfile as sf
-import numpy as np
-
-def generate_tts():
-    try:
-        f5tts = F5TTS()
-
-        # Load reference files
-        with open("${voiceConfig.refText}", "r") as f:
-            ref_text = f.read().strip()
-
-        # Generate speech
-        result = f5tts.infer(
-            ref_file="${voiceConfig.refAudio}",
-            ref_text=ref_text,
-            gen_text="${text.replace(/"/g, '\\"')}",
-            file_wave=None,
-            speed=${_currentPacing ? _currentPacing.speed : 1.0}
-        )
-
-        # F5-TTS returns (wav, sr, mel_spectrogram)
-        wav, sr, _ = result
-
-        # Save to file
-        sf.write("${outputPath}", wav, sr)
-
-        # Return basic info (we'll add timestamps later)
-        return {"duration": len(wav)/sr, "sample_rate": sr}
-
-    except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
-
-if __name__ == "__main__":
-    result = generate_tts()
-    print(f"Duration: {result['duration']}")
-    print(f"Sample Rate: {result['sample_rate']}")
-`;
-
-    const tempScript = `/tmp/f5tts_${Date.now()}.py`;
-    fs.writeFileSync(tempScript, pythonScript);
-
-    const python = spawn("python3", [tempScript], {
-      stdio: ["pipe", "pipe", "pipe"],
-      cwd: "/opt/sleepforge"
-    });
-
-    let stdout = "";
-    let stderr = "";
-
-    python.stdout.on("data", (data) => { stdout += data.toString(); });
-    python.stderr.on("data", (data) => { stderr += data.toString(); });
-
-    python.on("close", (code) => {
-      fs.unlinkSync(tempScript);
-      if (code === 0) {
-        const lines = stdout.trim().split("\n");
-        const duration = parseFloat(lines[0].split(": ")[1]);
-        const sampleRate = parseInt(lines[1].split(": ")[1]);
-        resolve({ duration, sampleRate, words: [] }); // Basic word timestamps for now
-      } else {
-        reject(new Error(`F5-TTS failed: ${stderr}`));
-      }
-    });
-
-    python.on("error", reject);
-  });
-}
 
 async function generateWithKokoro(text, voiceConfig, outputPath) {
   return new Promise((resolve, reject) => {
@@ -372,17 +283,37 @@ if __name__ == "__main__":
 
 async function ttsChunk(text, voiceId, outputPath) {
   const voiceConfig = VOICE_MAP[voiceId];
-  if (!voiceConfig) {
-    throw new Error(`Unknown voice: ${voiceId}`);
+  if (!voiceConfig) throw new Error(`Unknown voice: ${voiceId}`);
+
+  const t0 = Date.now();
+
+  // Try Chatterbox (archer voice clone) first; fall back to Kokoro on any
+  // error so a dead container never breaks a render.
+  if (await isHealthy()) {
+    try {
+      await chatterboxTTS(text, outputPath);
+      const audioDur = getAudioDurationFast(outputPath);
+      const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+      const rt = audioDur ? (elapsed / audioDur).toFixed(2) : "?";
+      console.log(`  TTS (Chatterbox): ${text.length} chars → ${audioDur?.toFixed(1)}s audio in ${elapsed}s (${rt}× realtime)`);
+      return { words: [], duration: audioDur, audioPath: outputPath };
+    } catch (err) {
+      console.warn(`  Chatterbox failed (${err.message}) → falling back to Kokoro`);
+    }
   }
 
-  if (voiceConfig.type === "f5-tts") {
-    return await generateWithF5TTS(text, voiceConfig, outputPath);
-  } else if (voiceConfig.type === "kokoro") {
-    return await generateWithKokoro(text, voiceConfig, outputPath);
-  } else {
-    throw new Error(`Unsupported voice type: ${voiceConfig.type}`);
-  }
+  const result = await generateWithKokoro(text, voiceConfig, outputPath);
+  const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+  const rtFactor = result.duration ? (elapsed / result.duration).toFixed(2) : "?";
+  console.log(`  TTS (Kokoro): ${text.length} chars → ${result.duration?.toFixed(1)}s audio in ${elapsed}s (${rtFactor}× realtime)`);
+  return result;
+}
+
+function getAudioDurationFast(p) {
+  try {
+    const out = execSync(`ffprobe -v error -show_entries format=duration -of csv=p=0 "${p}"`).toString().trim();
+    return parseFloat(out);
+  } catch { return null; }
 }
 
 export async function generateVoiceoverWithTimestamps(text, voiceId, outputPath) {

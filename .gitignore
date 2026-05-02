@@ -1,9 +1,44 @@
+# Secrets
 .env
+.env.local
+.env.*.local
 secrets/
+
+# Build outputs
 output/
-assets/voices/
 node_modules/
 
-# Large model files
+# Logs
+*.log
+*.tmp
+.DS_Store
+
+# Large regenerable caches
+assets/images/library-v1/
+assets/images/library-v1-rejected/
+assets/images/library-v2/
+assets/voice-samples/
+db/image-cache.json
+db/runs.sqlite*
+
+# Remotion caches (regenerated from code)
+engine/remotion/backgrounds/particles-loop.mp4
+engine/remotion/backgrounds/smoke-loop.mp4
+engine/remotion/backgrounds/**/bg.mp4
+engine/remotion/backgrounds/**/bg-source*.mp4
+engine/remotion/backgrounds/**/bg-v*.mp4
+engine/remotion/backgrounds/**/*.bak
+engine/remotion/backgrounds/**/*.mp4.bak
+
+# Cloned voices that aren't archer (the only one we ship)
+assets/voices/cloned-niels/
+
+# Seamless SFX builds (regenerated from raw)
+assets/sfx/*-seamless.mp3
+
+# Per-render generated scripts
+scripts/*-image-prompts.json
+
+# Model files
 *.onnx
 voices.bin

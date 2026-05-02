@@ -1,6 +1,6 @@
-import axios from "axios";
 import fs from "fs";
 import path from "path";
+import { callClaudeCLI } from "./claude-cli.js";
 
 // ─── SleepForge Script Generator ────────────────────────────────────────────
 //
@@ -20,7 +20,6 @@ import path from "path";
 // The image_prompt_context feeds into craftImagePrompt() later in the pipeline,
 // which wraps it in the locked chalk-on-blackboard style template.
 
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const MODEL = "claude-haiku-4-5-20251001"; // CLAUDE.md rule: Haiku for scripts
 const WORDS_PER_MINUTE = 110; // Slower than VideoForge's 130 — sleep pacing
 
@@ -269,6 +268,39 @@ NUMBER OF SCENES: exactly ${sceneCount} scenes (each ~37 seconds / ~65 words)
 Use ONLY these philosophers and their real teachings. Do not invent quotes or moments.
 ${philBlock}
 
+═══ HARD CONSTRAINTS — VIOLATIONS WILL BE REJECTED ═══
+
+1. NO FICTIONAL NAMED CHARACTERS.
+   - Every named person in the narration must be a real historical figure from the
+     PHILOSOPHER REFERENCE block above, OR a documented historical contemporary
+     of one of those philosophers (e.g. Crito, Xanthippe, Lucilius, Faustina,
+     a named student/wife/friend who actually existed).
+   - DO NOT invent characters like "Aurelia", "Theron", "Marcus's friend Justus",
+     "a young student named Lyra", etc. If you need a generic figure, use roles:
+     "a student", "a soldier", "a young woman in the agora", "a merchant" — never
+     give them invented proper names.
+   - DO NOT use Marcus Aurelius's real wife/family without their documented names
+     (Faustina, Commodus, etc.) and documented relationships.
+
+2. NO ANACHRONISTIC OBJECTS.
+   - The world is ancient Greece / Rome. Only objects that existed in those eras
+     may be referenced: oil lamps, scrolls, wax tablets, amphorae, togas, tunics,
+     sandals, stylus, lyre, marble, chariots, swords, shields, bread, olives,
+     wine, water from a well or fountain, cool stone, candle flames, hearth fire.
+   - NEVER reference: clocks, watches, glass windows, paper books, pencils,
+     metal cans, plastic, electricity, machinery, modern weapons, modern foods
+     like coffee/tea/tobacco/sugar, modern furniture (chairs with backs and arms
+     existed but no sofas/recliners), modern clothing (no buttons, zippers, suits).
+
+3. NO MODERN PHRASING.
+   - Avoid contemporary idioms ("at the end of the day", "let that sink in",
+     "circle back", "process emotions", "self-care"). Use plain, timeless prose.
+
+4. EVERY NAMED PHILOSOPHER MUST EXIST.
+   - If unsure whether a person is real, replace with a role.
+   - If a quote is attributed, the quote must be one this philosopher actually
+     wrote or said (paraphrase is fine; fabrication is not).
+
 ═══ NARRATIVE ARC ═══
 
 OPENING (first scene):
@@ -335,24 +367,8 @@ async function generateScriptBlock(topic, blockNum, totalBlocks, philosophers, d
   const prompt = buildSleepPhilosophyPrompt(topic, blockMinutes.toString(), blockPhilosophers)
     + continuityNote + closingNote;
 
-  const response = await axios.post(
-    "https://api.anthropic.com/v1/messages",
-    {
-      model: MODEL,
-      max_tokens: 8192,
-      messages: [{ role: "user", content: prompt }],
-    },
-    {
-      headers: {
-        "x-api-key": ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-      },
-      timeout: 180000,
-    }
-  );
-
-  const text = response.data.content[0].text.trim()
+  const raw = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 180000 });
+  const text = raw.trim()
     .replace(/^```(?:json)?\s*/gm, "").replace(/```\s*$/gm, "").trim();
 
   return JSON.parse(text);
@@ -366,7 +382,7 @@ async function generateScriptBlock(topic, blockNum, totalBlocks, philosophers, d
 // Included here so the prompt template lives next to the scene format.
 
 const CHALK_STYLE_PREFIX = "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only,";
-const CHALK_STYLE_SUFFIX = "medium distance three-quarter body shot, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, 16:9 landscape composition";
+const CHALK_STYLE_SUFFIX = "medium distance three-quarter body shot, subject centered horizontally in the frame with balanced negative space on both left and right sides, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, no signature no watermark no artist mark, 16:9 landscape composition";
 
 export function craftImagePrompt(scene) {
   // Build a context-rich prompt from scene metadata
@@ -383,6 +399,60 @@ export function craftImagePrompt(scene) {
   const archDetail = archElements ? archElements[0].toLowerCase() : "Doric column";
 
   return `${CHALK_STYLE_PREFIX} ${who} in ancient Greek toga ${action}, swirling chalk dust and atmospheric chalk strokes around the figure, ${archDetail} visible in background, ${CHALK_STYLE_SUFFIX}`;
+}
+
+// ─── CONSTRAINT LINT ────────────────────────────────────────────────────────
+// Flags proper-noun names in scene narration that aren't real historical figures.
+// Catches "Aurelia"-style hallucinations that slip past the prompt constraints.
+
+const ALLOWED_HISTORICAL_NAMES = new Set([
+  // Pre-Socratics + Classical Greek
+  "Heraclitus", "Parmenides", "Empedocles", "Anaximander", "Pythagoras", "Thales",
+  "Xenophanes", "Xenophon", "Socrates", "Plato", "Aristotle", "Diogenes",
+  "Protagoras", "Gorgias", "Antisthenes", "Crito", "Phaedo", "Alcibiades",
+  "Critias", "Glaucon", "Adeimantus", "Theaetetus", "Meno", "Hippias", "Lysis",
+  "Aspasia", "Xanthippe", "Crates", "Hipparchia", "Speusippus", "Theophrastus",
+  // Hellenistic
+  "Zeno", "Cleanthes", "Chrysippus", "Epicurus", "Lucretius", "Pyrrho",
+  "Sextus Empiricus", "Epaphroditus",
+  // Roman Stoics + their circle
+  "Marcus", "Aurelius", "Seneca", "Epictetus", "Cicero", "Cato", "Brutus",
+  "Lucilius", "Faustina", "Commodus", "Antoninus", "Hadrian", "Nero", "Plutarch",
+  "Boethius", "Musonius", "Rufus", "Pliny", "Tacitus",
+  // Place names (proper nouns but not "named characters")
+  "Athens", "Rome", "Sparta", "Corinth", "Thebes", "Delphi", "Olympia", "Ephesus",
+  "Miletus", "Samos", "Crete", "Sicily", "Greece", "Italy", "Egypt", "Persia",
+  "Asia", "Europe", "Mediterranean", "Aegean", "Tiber", "Danube", "Rhine",
+  "Acropolis", "Parthenon", "Lyceum", "Academy", "Stoa", "Agora", "Forum",
+  "Capitoline", "Palatine", "Nicopolis", "Epirus", "Macedonia", "Carthage",
+  "Alexandria", "Syracuse", "Argos", "Mycenae", "Lesbos", "Rhodes", "Cyprus",
+  "Anatolia", "Gaul", "Britannia", "Hispania", "Pannonia", "Antioch", "Smyrna",
+  "Pergamon", "Halicarnassus", "Cyrene", "Tarsus", "Capua", "Ostia", "Pompeii",
+  "Hellespont", "Bosphorus", "Nile", "Apennines", "Olympus",
+]);
+
+// Scan scene narration for capitalized words that look like a proper name
+// (not at start of sentence). Returns flagged names.
+function lintForFictionalNames(scenes) {
+  const flagged = new Map(); // name → first sentence it appeared in
+  for (const scene of scenes) {
+    const text = scene.narration || "";
+    // Split into sentences, then for each sentence skip the first word and look
+    // at subsequent capitalized words. Two-word capitalized sequences get joined.
+    const sentences = text.split(/(?<=[.!?])\s+/);
+    for (const sentence of sentences) {
+      const tokens = sentence.split(/\s+/);
+      for (let i = 1; i < tokens.length; i++) {
+        const raw = tokens[i].replace(/[^A-Za-z'-]/g, "");
+        if (!/^[A-Z][a-z]+$/.test(raw)) continue;
+        if (ALLOWED_HISTORICAL_NAMES.has(raw)) continue;
+        // Allow common capitalized words that aren't names: "I", "Stoic", "Greek", "Roman", etc.
+        if (/^(I|Stoic|Stoics|Greek|Greeks|Roman|Romans|God|Gods|Olympian|Olympians|Spartan|Spartans|Cynic|Cynics|Epicurean|Epicureans|Skeptic|Skeptics|Platonist|Platonists|Aristotelian|Sophist|Sophists|Persian|Persians|Egyptian|Egyptians|Sicilian|Sicilians|Athenian|Athenians|Theban|Thebans|Imperial|Empire|Republic|Senate|Consul|Praetor|Tribune|Legion|North|South|East|West|Northern|Southern|Eastern|Western|January|February|March|April|May|June|July|August|September|October|November|December|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Spring|Summer|Autumn|Winter)$/.test(raw)) continue;
+        if (!flagged.has(raw)) flagged.set(raw, sentence.trim().slice(0, 100));
+      }
+    }
+  }
+  return flagged;
 }
 
 // ─── MAIN EXPORT ────────────────────────────────────────────────────────────
@@ -431,6 +501,20 @@ export async function generateScript(topic, options = {}) {
         throw retryErr;
       }
     }
+  }
+
+  // Constraint lint — flag any fictional names that slipped through.
+  // We log them but don't throw: ASR-corrupted Whisper text or genuine new
+  // historical figures should not block the pipeline. The signal is enough
+  // to spot patterns over time.
+  const flaggedNames = lintForFictionalNames(allScenes);
+  if (flaggedNames.size > 0) {
+    console.log(`  ⚠ Constraint lint flagged ${flaggedNames.size} possibly-fictional name(s):`);
+    for (const [name, sentence] of flaggedNames) {
+      console.log(`     ${name}: "${sentence}…"`);
+    }
+  } else {
+    console.log(`  ✓ Constraint lint: no suspicious named characters`);
   }
 
   // Build outputs

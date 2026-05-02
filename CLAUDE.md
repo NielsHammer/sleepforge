@@ -17,7 +17,7 @@ Reference codebase (READ ONLY): /opt/videvo/engine/src/
 4. Read actual files before editing — never assume
 5. Fix root causes not symptoms
 6. Subtitles are ASS karaoke format — NEVER SRT
-7. TTS is Kokoro or F5-TTS — NEVER ElevenLabs for voiceover
+7. TTS is Kokoro only — NEVER ElevenLabs, NEVER F5-TTS (removed: no GPU on this server)
 8. Check PM2 logs first when something breaks
 9. Background is pre-rendered once per channel — never re-render per video
 10. Images are pre-generated — never call Fal.ai live during video generation
