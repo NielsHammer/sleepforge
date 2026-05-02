@@ -205,17 +205,30 @@ EOF
 mkdir -p "$CHATTERBOX_DIR/voices"
 cp -f "$INSTALL_DIR/assets/voices/archer/ref_audio.wav" "$CHATTERBOX_DIR/voices/archer.wav"
 
-# Run under PM2 using the venv's uvicorn so torch/MPS wiring is right
+# Run under PM2 using the venv's uvicorn so torch/MPS wiring is right.
+# PM2 defaults to interpreting unknown files as Node — uvicorn is a Python
+# entrypoint, so we wrap it in a shell launcher and tell PM2 to exec it with
+# bash. The wrapper is also where DEVICE=mps and friends get exported, since
+# PM2's CLI doesn't support per-process env overrides reliably.
+cat > "$CHATTERBOX_DIR/start-chatterbox.sh" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$CHATTERBOX_DIR"
+export DEVICE=mps
+export DEFAULT_VOICE=archer
+export VOICE_LIB="$CHATTERBOX_DIR/voices"
+exec "$CHATTERBOX_DIR/.venv/bin/uvicorn" server:app \\
+  --host 127.0.0.1 --port $CHATTERBOX_PORT
+EOF
+chmod +x "$CHATTERBOX_DIR/start-chatterbox.sh"
+
 if pm2 describe chatterbox-tts >/dev/null 2>&1; then
   pm2 restart chatterbox-tts --update-env
 else
-  pm2 start "$CHATTERBOX_DIR/.venv/bin/uvicorn" \
+  pm2 start "$CHATTERBOX_DIR/start-chatterbox.sh" \
     --name chatterbox-tts \
-    --cwd "$CHATTERBOX_DIR" \
-    --env DEVICE=mps \
-    --env DEFAULT_VOICE=archer \
-    --env "VOICE_LIB=$CHATTERBOX_DIR/voices" \
-    -- server:app --host 127.0.0.1 --port $CHATTERBOX_PORT
+    --interpreter bash \
+    --cwd "$CHATTERBOX_DIR"
 fi
 pm2 save || true
 
@@ -246,11 +259,23 @@ fi
 # ─── 10. File server under PM2 ──────────────────────────────────────────────
 banner "Step 10/14: File server (port $PORT) under PM2"
 cd "$INSTALL_DIR"
+# Same uvicorn-style trap: PM2 would try to interpret python3.11 as a Node
+# script. Wrap it in a launcher and pin --interpreter bash.
+cat > "$INSTALL_DIR/start-fileserver.sh" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$INSTALL_DIR"
+exec "$PY_BIN" -m http.server $PORT --bind 0.0.0.0
+EOF
+chmod +x "$INSTALL_DIR/start-fileserver.sh"
+
 if pm2 describe sleepforge-fileserver >/dev/null 2>&1; then
   pm2 restart sleepforge-fileserver
 else
-  pm2 start --name sleepforge-fileserver \
-    "$PY_BIN" -- -m http.server $PORT --bind 0.0.0.0
+  pm2 start "$INSTALL_DIR/start-fileserver.sh" \
+    --name sleepforge-fileserver \
+    --interpreter bash \
+    --cwd "$INSTALL_DIR"
 fi
 pm2 save || true
 green "✓ File server: http://localhost:$PORT/"
