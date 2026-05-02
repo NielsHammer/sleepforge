@@ -42,35 +42,53 @@ export async function isHealthy() {
   return _healthCache;
 }
 
+// Serialization queue: Chatterbox CPU/MPS PyTorch backends are NOT thread
+// safe — concurrent /v1/audio/speech calls produced tensor-shape mismatches
+// ("stack expects each tensor to be equal size", "got NoneType"). We chain
+// requests through a single Promise so only ONE Chatterbox inference runs
+// at a time, regardless of how many pipeline workers call us in parallel.
+// Kokoro fallback path stays parallel because Kokoro runs in isolated
+// Python subprocesses.
+let _chatterboxQueue = Promise.resolve();
+function serializeChatterbox(fn) {
+  const next = _chatterboxQueue.then(() => fn(), () => fn());
+  // Don't let one failing job poison the chain — swallow rejections after
+  // the awaited result has resolved so the next caller still proceeds.
+  _chatterboxQueue = next.catch(() => {});
+  return next;
+}
+
 // Generate speech for a single chunk to outputPath. Returns the path on
 // success. Throws on any error so the caller can decide whether to fall
-// back to Kokoro.
-export async function chatterboxTTS(text, outputPath, opts = {}) {
-  const voice = opts.voice || CHATTERBOX_VOICE;
-  const url = `${CHATTERBOX_URL}/v1/audio/speech`;
+// back to Kokoro. Calls are automatically serialized via the queue above.
+export function chatterboxTTS(text, outputPath, opts = {}) {
+  return serializeChatterbox(async () => {
+    const voice = opts.voice || CHATTERBOX_VOICE;
+    const url = `${CHATTERBOX_URL}/v1/audio/speech`;
 
-  const resp = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      input: text,
-      voice,
-      response_format: "wav",
-    }),
-    signal: AbortSignal.timeout(CHATTERBOX_TIMEOUT_MS),
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        input: text,
+        voice,
+        response_format: "wav",
+      }),
+      signal: AbortSignal.timeout(CHATTERBOX_TIMEOUT_MS),
+    });
+
+    if (!resp.ok) {
+      const body = await resp.text().catch(() => "");
+      throw new Error(`Chatterbox HTTP ${resp.status}: ${body.slice(0, 200)}`);
+    }
+
+    const buffer = Buffer.from(await resp.arrayBuffer());
+    if (buffer.length < 1024) {
+      throw new Error(`Chatterbox returned ${buffer.length} bytes — likely an error response`);
+    }
+
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+    fs.writeFileSync(outputPath, buffer);
+    return outputPath;
   });
-
-  if (!resp.ok) {
-    const body = await resp.text().catch(() => "");
-    throw new Error(`Chatterbox HTTP ${resp.status}: ${body.slice(0, 200)}`);
-  }
-
-  const buffer = Buffer.from(await resp.arrayBuffer());
-  if (buffer.length < 1024) {
-    throw new Error(`Chatterbox returned ${buffer.length} bytes — likely an error response`);
-  }
-
-  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  fs.writeFileSync(outputPath, buffer);
-  return outputPath;
 }
