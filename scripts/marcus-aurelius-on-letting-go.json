@@ -1,58 +1,58 @@
 [
   {
     "philosopher": "Marcus Aurelius",
-    "moment": "Writing his Meditations alone in a campaign tent",
-    "action": "gripping a stylus above wax tablets with steady fingers",
-    "setting": "a campaign tent at the Danube frontier, a stone marker carved with Latin numerals beyond the tent flap",
-    "narration": "You're standing in a tent on the edge of the Roman empire. A man sits alone, pressing his stylus into soft wax. He is an emperor, but here there are no servants, no ceremony, no demands. Just one man and his thoughts in the darkness. Marcus Aurelius writes these words to himself, again and again: the only freedom that matters isn't power or authority. It's always been inside you. It's still there now."
+    "moment": "Writing Meditations in his campaign tent",
+    "action": "Holding a stylus above a wax tablet, hesitating before writing",
+    "setting": "A campaign tent near the Danube frontier, stone ground worn by footsteps",
+    "narration": "The stone beneath Marcus Aurelius's feet is cold and worn. He sits in his tent at the frontier, above the Danube river. His hand rests on a wax tablet. The stylus touches the surface, then pauses.\n\nHe's about to write words only he will read. Words about letting go. About the things he cannot control. The empire stretches behind him. But here, in this quiet moment, he reminds himself of something ancient and true."
   },
   {
     "philosopher": "Seneca",
-    "moment": "Reflecting on mortality and the waste of time",
-    "action": "setting down a scroll and resting his forehead in his palm",
-    "setting": "a Roman villa study, marble columns rising from the floor, scrolls stacked on wooden tables",
-    "narration": "Somewhere across Rome, another philosopher sits with a scroll before him. Seneca knows what Marcus knows—and what you're beginning to understand. Most of us fritter away our days on things that don't matter. We imagine we have endless time. We don't. The hours slip away like water through open fingers. You can feel the truth of it even now as you lie here. This moment is already passing. It's already gone."
+    "moment": "Reminding himself that all things are borrowed",
+    "action": "Opening an empty amphora, letting the hand rest inside as if feeling its absence",
+    "setting": "A marble courtyard, rows of stone columns forming long shadows",
+    "narration": "In a Roman courtyard, a man holds an empty vessel. Seneca understands something that most people spend their whole lives running from and resisting. Everything you have—your body, your loved ones, even your next breath—is borrowed. None of it belongs to you forever.\n\nThis isn't a frightening thought for him. It's a relief. When you release your grip on what was never truly yours to hold, something settles in you. Freedom comes."
   },
   {
     "philosopher": "Epictetus",
-    "moment": "Teaching about what we can and cannot control",
-    "action": "spreading both palms open before a group of students",
-    "setting": "a modest school at Nicopolis, stone benches arranged in a circle, a Doric column in the corner",
-    "narration": "A slave once taught wisdom in a small school at Nicopolis. Epictetus never owned anything, never held any official power, but he was truly free. This is his paradox: you can't control what happens to you. The loss. The pain. The unfairness of it all. But you can control how you meet it. Your judgment. Your response. That choice lives entirely within you. Nothing external can ever take it."
+    "moment": "Teaching the dichotomy of control",
+    "action": "Holding both palms open, as if weighing two invisible weights",
+    "setting": "A simple school room at Nicopolis, bare stone walls and the smell of dust",
+    "narration": "A teacher stands with both hands open, palms rising gently. Epictetus has learned the most important lesson: the universe won't ask your permission. Your body will age. People you love will leave. Plans will crumble.\n\nBut here's what you can control—your judgment about these things. Your response. Your interpretation. That's the fortress. Not walls or armor. Just the space between what happens and how you choose to understand it."
+  },
+  {
+    "philosopher": "Aristotle",
+    "moment": "Observing and accepting nature",
+    "action": "Bending slightly to examine something small and ordinary in the palm of the hand",
+    "setting": "The Lyceum garden, stone pathways worn smooth by generations of walking",
+    "narration": "A man walks a garden path and bends to examine something small. Aristotle knows that everything has its nature. A river flows. A stone stays. You have a nature too. You're meant to learn. To practice. To grow slowly, patiently.\n\nNot to fight what you are. Not to rage at your limits. Your virtue isn't in being perfect—it's in walking the middle path. In accepting the ground beneath your feet."
   },
   {
     "philosopher": "Plato",
-    "moment": "The allegory of the cave and the nature of illusion",
-    "action": "rotating slowly on a stone bench to face the cave's opening",
-    "setting": "a limestone cavern, chains fixed to the rock wall, shadows dancing across marble-like stone",
-    "narration": "Imagine prisoners chained in darkness. Everything they know is shadow and echo. Then one turns. One sees the world beyond the cave. This is what Plato teaches us: most of us live inside illusions. We cling to false things as if they're real. We're afraid to let them go. But to let go isn't loss. It's awakening. It's turning toward what's actually true and real."
+    "moment": "The allegory of the cave—releasing what we hold",
+    "action": "Releasing something held in a closed fist, fingers opening slowly",
+    "setting": "The Academy beneath ancient olive trees, stone ground beneath weathered roots",
+    "narration": "Beneath the olive trees, a philosopher opens his hand and lets something fall away. Plato taught that we're all prisoners holding onto shadows. What you think is real—your money, your status, your title—these are reflections on a wall.\n\nTo let go is to turn around. To see the light beyond the cave. It's uncomfortable at first. But once you turn, once you see what's actually real, you can't unsee it."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching that life is a banquet where you accept what is offered",
+    "action": "Extending one hand as if to accept something offered without grasping",
+    "setting": "A simple room at Nicopolis, a table with bread and water",
+    "narration": "A teacher extends his hand and nods. Epictetus says life is a banquet. You sit at the table. Food comes. You eat what's offered. You don't demand better. You don't cling to the taste. You don't panic when a dish is removed. You simply accept each thing as it comes, fully enjoy it while it's there, and let it go without complaint. This is freedom. Not the absence of difficulty. But the absence of the need to control everything."
   },
   {
     "philosopher": "Socrates",
     "moment": "Drinking the hemlock with calm acceptance",
-    "action": "raising a cup to his lips with a steady hand",
-    "setting": "a stone prison cell, a Doric column in the corner, the walls bare and ancient",
-    "narration": "In an Athenian prison, an old man drinks poison. Socrates doesn't flee. Doesn't beg for mercy. He's spent a lifetime learning that the only real evil is refusing to know yourself. That's what matters. The body dies. It always dies. That's not evil. But what he is—his wisdom, his character, his integrity—that's something no one can ever take. He drinks. And he's at peace."
-  },
-  {
-    "philosopher": "Aristotle",
-    "moment": "Observing nature and finding balance in all things",
-    "action": "kneeling to examine the segmented body of a cuttlefish",
-    "setting": "the rocky shore of the Aegean, salt-worn stones underfoot, the white marble steps of the Lyceum distant",
-    "narration": "On a beach near Athens, Aristotle kneels with a scholar's curiosity. He examines a cuttlefish, its segmented body still. Nature doesn't hide wisdom. It shows it everywhere. Everything alive exists in balance—courage between cowardice and recklessness, generosity between stinginess and waste. Even letting go must be balanced, he teaches. Not indifference. Not cold detachment. But truthful acceptance of what's necessary and real and here."
+    "action": "Raising a cup to his lips with steady, deliberate hands",
+    "setting": "The prison cell, a crumbling stone wall and iron chains in shadow",
+    "narration": "In a prison cell, hands raise a cup. Socrates knows what comes next. But he's not afraid. He's spent his whole life learning. Learning that wisdom means knowing you know nothing. Learning that the soul is eternal.\n\nAnd now he drinks. Not because he wants to die, but because he's accepted what he cannot change. The law has spoken. His body will return to dust. But something in him remains untouched."
   },
   {
     "philosopher": "Marcus Aurelius",
-    "moment": "Accepting impermanence and returning to dust",
-    "action": "watching dust particles drift across the forum",
-    "setting": "the Roman forum at dawn, columns rising into silence, marble pediments catching the first light",
-    "narration": "Return to the emperor in the forum. He watches dust drift through the air. Everything returns to dust. Everything. The mighty return to dust. The weak. The victorious. The broken. You're dust too. You'll return to dust. This isn't sad. It's liberating. Once you truly understand that everything you cling to will be gone, that you can't hold it forever, you can finally let go. And you can live freely."
-  },
-  {
-    "philosopher": "Seneca",
-    "moment": "Final acceptance and peaceful surrender",
-    "action": "lowering himself into warm water with eyes closed in acceptance",
-    "setting": "a Roman bathhouse, marble basin reflecting the stone arches above",
-    "narration": "The last philosopher sits in warm water. No struggle. No fear. No resistance. He knows what you're learning now as your breath slows and your thoughts begin to drift into silence. Letting go isn't something you do. It's what happens when you stop resisting. When you accept that you were never meant to hold anything forever. Only to be present. Only to let it pass. Rest now. Just rest."
+    "moment": "Accepting mortality and impermanence",
+    "action": "Placing a hand gently over his heart, breathing slowly and deeply",
+    "setting": "The Roman forum at dawn, stone columns silent and empty",
+    "narration": "In the forum before the city wakes, a man rests his hand over his heart and breathes. Everything returns to dust. Even emperors. Even the strong. Even you. This isn't sad. It's peaceful. Because when you've truly let go, when you've stopped grasping and fighting and demanding that things stay as they are, what remains?\n\nRest. Stillness. The quiet knowledge that you're part of something much larger. You always were."
   }
 ]
