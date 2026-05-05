@@ -4,3 +4,5 @@
 - [Publish outputs to file server](feedback_publish_outputs.md) — anything Niels wants to view must go on the file server with a clickable URL; SleepForge file server: http://157.180.124.232:8080/
 - [Chalk style enforcement](feedback_chalk_style_lock.md) — for SleepForge image gen, code must template the chalk style; Claude writes only subject+action or Flux renders marble statues
 - [Visual highlight on input needed](feedback_input_visual_highlight.md) — when asking Niels yes/no/decision, lead with a `> ⚠️ NEED YOUR INPUT ⚠️` block so he can spot it instantly when he returns
+- [Mac stack deprecated](project_mac_deprecated.md) — 2026-05-02: SleepForge moved off Mac to desktop PC; don't propose more Mac-side Chatterbox/MPS work
+- [Chatterbox Mac fixes (historical)](project_chatterbox_mac.md) — four vendored patches applied to the Mac chatterbox install before the deprecation; only relevant if Mac path is ever revived
