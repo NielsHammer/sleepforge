@@ -190,30 +190,15 @@ export function createClipSlideshow(clips, totalDuration, outputPath, options = 
   return outputPath;
 }
 
-// ─── Ken Burns per-clip filter ───────────────────────────────────────────────
-// Smooth 4% zoom using scale+crop. Scale to 110% (2112×1188), then animate a
-// crop window using `n` (frame counter) for smooth continuous motion.
-// floor() removed — ffmpeg distributes fractional pixel rounding internally,
-// giving smoother motion than explicit floor() which caused 1-2fps stutter.
-// Note: crop filter does NOT support `t` (time variable) — must use `n`.
-//
-// Math: full=2112×1188 (1.0×), zoomed=2031×1142 (1.04×), delta=81w,46h, offset=40x,23y
-function buildKenBurnsFilter(inputLabel, outLabel, durSec, zoomIn = true) {
-  const fps = 30;
+// ─── Static per-clip scale filter ──────────────────────────────────────────
+// Images are held perfectly still — no zoom, no pan. Ken Burns caused visible
+// stutter (discrete pixel steps) that harmed the polish. Static hold looks
+// cleaner and lets the xfade crossfade carry all the visual motion.
+function buildStaticScaleFilter(inputLabel, outLabel, durSec) {
   const d = durSec.toFixed(3);
-  const N = Math.max(1, Math.round(durSec * fps));
-  let cropFilter;
-  if (zoomIn) {
-    // n=0: full 2112×1188 (1.0×) → n=N: 2031×1142 centred (1.04× zoom-in)
-    cropFilter = `crop=w='2112-81*n/${N}':h='1188-46*n/${N}':x='40*n/${N}':y='23*n/${N}'`;
-  } else {
-    // n=0: 2031×1142 centred (1.04×) → n=N: full 2112×1188 (zoom-out)
-    cropFilter = `crop=w='2031+81*n/${N}':h='1142+46*n/${N}':x='40*(1-n/${N})':y='23*(1-n/${N})'`;
-  }
   return (
-    `[${inputLabel}]scale=2112:1188:force_original_aspect_ratio=increase,` +
-    `setsar=1,fps=${fps},setpts=PTS-STARTPTS,` +
-    `${cropFilter},scale=1920:1080,` +
+    `[${inputLabel}]scale=1920:1080:force_original_aspect_ratio=increase,` +
+    `crop=1920:1080,setsar=1,fps=30,` +
     `format=yuv420p,trim=duration=${d},setpts=PTS-STARTPTS[${outLabel}]`
   );
 }
@@ -229,11 +214,17 @@ function renderClipChunk(clips, fadeTime, outputPath) {
   // actual end_time, not actual_end - fade.
   for (let i = 0; i < clips.length; i++) {
     const actualDur = clips[i].end_time - clips[i].start_time;
-    const renderDur = actualDur + fadeTime; // pad tail for xfade overlap
-    // -loop 1 + -t lets ffmpeg replay the still image for the full clip
-    // duration (no zoompan needed since we now hold the image static).
-    inputs.push(`-loop 1 -framerate 30 -t ${renderDur.toFixed(3)} -i "${path.resolve(clips[i].imagePath)}"`);
-    filters.push(buildKenBurnsFilter(`${i}:v`, `img${i}`, renderDur, i % 2 === 0));
+    const renderDur = actualDur + fadeTime;
+
+    if (clips[i].videoPath) {
+      // Animation clip: video input (plays naturally, no loop)
+      inputs.push(`-t ${renderDur.toFixed(3)} -i "${path.resolve(clips[i].videoPath)}"`);
+      filters.push(buildStaticScaleFilter(`${i}:v`, `img${i}`, renderDur));
+    } else {
+      // Still image: -loop 1 replays the image for the full clip duration
+      inputs.push(`-loop 1 -framerate 30 -t ${renderDur.toFixed(3)} -i "${path.resolve(clips[i].imagePath)}"`);
+      filters.push(buildStaticScaleFilter(`${i}:v`, `img${i}`, renderDur));
+    }
   }
 
   if (clips.length === 1) {
@@ -403,8 +394,11 @@ export function mixAudio(voiceoverPath, duration, outputPath, options = {}) {
 
   const fireplaceLoop = fileExists(fireplaceRaw) ? makeSeamlessLoop(fireplaceRaw) : null;
   const cricketLoop   = fileExists(cricketRaw)   ? makeSeamlessLoop(cricketRaw)   : null;
-  // bgMusic: use directly (long track, loop seam inaudible at 12% volume)
-  const bgMusicLoop   = fileExists(bgMusicRaw)   ? bgMusicRaw                     : null;
+  // Set includeBgMusic: false to omit bgmusic from this mix (e.g. when
+  // you want to pass it as a separate audio stream in the final MP4).
+  const includeBgMusic = options.includeBgMusic !== false;
+  // bgMusic: use directly (long track, loop seam inaudible at low volume)
+  const bgMusicLoop   = includeBgMusic && fileExists(bgMusicRaw) ? bgMusicRaw : null;
 
   const voiceVol     = options.voiceVolume    ?? "1.0";
   const fireplaceVol = options.fireplaceVolume ?? "0.06";
@@ -701,6 +695,126 @@ export async function composeVideo(slideshowPath, audioPath, outputPath, duratio
   );
 
   console.log(`  Video composed: ${outputPath}`);
+  return outputPath;
+}
+
+// ─── LAYERED COMPOSITION WITH BACKGROUND IMAGE ──────────────────────────────
+// Layer order (back→front):
+//   bgImagePath  → static philosophy background (e.g. Greek library)
+//   slideshowPath → chalk images, 85% opacity over bg
+//   particlesPath → screen blend (warm ember sparks)
+//   smokePath     → screen blend (atmospheric drift)
+//   assPath       → ASS karaoke subtitles burned in
+//
+// Audio:
+//   voiceAudioPath → a:0 (voice + fire + crickets)
+//   bgMusicPath    → a:1 (music at 30% of voice, no ducking — separate stream)
+//
+// The MP4 exits with two audio streams so the music is always clearly audible
+// at 30% relative to voice, with no sidechain compression.
+export function composeFinalVideoWithBg({
+  bgImagePath,
+  slideshowPath,
+  particlesPath,
+  smokePath,
+  assPath,
+  voiceAudioPath,
+  bgMusicPath,
+  outputPath,
+  duration,
+}) {
+  const d = Math.ceil(duration);
+  const escapedAss = assPath
+    ? assPath.replace(/\\/g, "/").replace(/:/g, "\\:")
+    : null;
+  const assFilter = escapedAss ? `,ass='${escapedAss}'` : "";
+
+  // Build input list, tracking indices
+  const inputs = [];
+  let idx = 0;
+
+  let bgIdx = null;
+  if (bgImagePath && fileExists(bgImagePath)) {
+    inputs.push(`-loop 1 -framerate 30 -t ${d} -i "${path.resolve(bgImagePath)}"`);
+    bgIdx = idx++;
+  }
+
+  inputs.push(`-i "${path.resolve(slideshowPath)}"`);
+  const slideshowIdx = idx++;
+
+  inputs.push(`-stream_loop -1 -i "${path.resolve(particlesPath)}"`);
+  const particlesIdx = idx++;
+
+  inputs.push(`-stream_loop -1 -i "${path.resolve(smokePath)}"`);
+  const smokeIdx = idx++;
+
+  inputs.push(`-i "${path.resolve(voiceAudioPath)}"`);
+  const voiceIdx = idx++;
+
+  let musicIdx = null;
+  if (bgMusicPath && fileExists(bgMusicPath)) {
+    inputs.push(`-stream_loop -1 -i "${path.resolve(bgMusicPath)}"`);
+    musicIdx = idx++;
+  }
+
+  // Build filter_complex
+  const filters = [];
+
+  // Base layer: bg (optional) + chalk slideshow at 85% opacity
+  if (bgIdx !== null) {
+    filters.push(
+      `[${bgIdx}:v]scale=1920:1080:force_original_aspect_ratio=increase,` +
+      `crop=1920:1080,setsar=1,fps=30,format=gbrp[bg]`
+    );
+    filters.push(
+      `[${slideshowIdx}:v]scale=1920:1080:force_original_aspect_ratio=increase,` +
+      `crop=1920:1080,setsar=1,fps=30,format=gbrp[chalk]`
+    );
+    // Normal blend: bg * 0.15 + chalk * 0.85
+    filters.push(`[bg][chalk]blend=all_mode=normal:all_opacity=0.85:shortest=1[base]`);
+  } else {
+    filters.push(
+      `[${slideshowIdx}:v]scale=1920:1080:force_original_aspect_ratio=increase,` +
+      `crop=1920:1080,setsar=1,fps=30,format=gbrp[base]`
+    );
+  }
+
+  // Particles — screen blend
+  filters.push(
+    `[${particlesIdx}:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[parts]`
+  );
+  filters.push(`[base][parts]blend=all_mode=screen:shortest=0[withParts]`);
+
+  // Smoke — screen blend + convert to yuv420p + burn subs
+  filters.push(
+    `[${smokeIdx}:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[smoke_sc]`
+  );
+  filters.push(
+    `[withParts][smoke_sc]blend=all_mode=screen:shortest=0,format=yuv420p${assFilter}[v]`
+  );
+
+  // bgmusic — normalize, volume at 30%
+  if (musicIdx !== null) {
+    filters.push(
+      `[${musicIdx}:a]aresample=async=1,volume=0.30,atrim=0:${d},asetpts=PTS-STARTPTS[music]`
+    );
+  }
+
+  // Map outputs
+  let mapArgs   = `-map "[v]" -map ${voiceIdx}:a`;
+  let codecArgs = `-c:v libx264 -preset fast -crf 22 -c:a:0 copy`;
+  if (musicIdx !== null) {
+    mapArgs   += ` -map "[music]"`;
+    codecArgs += ` -c:a:1 aac -b:a:1 128k`;
+  }
+
+  execSync(
+    `ffmpeg -y ${inputs.join(" ")} -filter_complex "${filters.join(";")}" ` +
+    `${mapArgs} ${codecArgs} -t ${d} -movflags +faststart "${path.resolve(outputPath)}"`,
+    { stdio: "pipe", timeout: 1800000 }
+  );
+
+  console.log(`  Composed: ${outputPath}`);
   return outputPath;
 }
 
