@@ -190,23 +190,37 @@ export function createClipSlideshow(clips, totalDuration, outputPath, options = 
   return outputPath;
 }
 
-// ─── Calm per-clip animations + transitions ────────────────────────────────
+// ─── Ken Burns per-clip filter ───────────────────────────────────────────────
+// Gentle 4% zoom using scale+crop (crop supports `t` — zoompan does not in v8).
+// Scale to 110% of 1920x1080 = 2112x1188, then animate a shrinking/growing
+// crop window that simulates zoom in (1.0→1.04) or out (1.04→1.0).
+// Alternate direction per clip to avoid monotony.
 //
-// Sleep-tempo design (May 2026): no shake, no pan, no wipes. Every clip uses
-// the SAME barely-perceptible slow zoom (1.00 → 1.04 over the clip) so the
-// image feels alive without ever drawing attention. Transitions are pure
-// 1.5s fades — long, soft, elegant. The eye rests on the chalk drawing.
-
-// Build the per-clip filter: [i:v] (a -loop 1 -t dur image) → [imgi] at
-// 1920×1080, 30fps, yuv420p. The image is held perfectly still — no zoom,
-// no pan, no zoompan. Niels: "image flickers all the time lagging around,
-// keep the image steady please". The motion comes from particles + smoke
-// overlays, not from the chalk drawing itself.
-function buildCalmZoomFilter(inputLabel, outLabel, durSec) {
+// Math for 1.04x zoom crop:
+//   full:   2112 × 1188  (1.0x — sees entire 110% scaled image)
+//   zoomed: 2031 × 1142  (1.04x — sees 96% of scaled image, centre crop)
+//   delta:  81 wide, 46 tall; x offset = 40, y offset = 23
+function buildKenBurnsFilter(inputLabel, outLabel, durSec, zoomIn = true) {
   const fps = 30;
-  // scale → fill 1920×1080 cover (crop excess), set sar/fps, normalize pix fmt.
-  // No zoompan: avoids the per-frame resampling that read as "flickering".
-  return `[${inputLabel}]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,fps=${fps},format=yuv420p,trim=duration=${durSec.toFixed(3)},setpts=PTS-STARTPTS[${outLabel}]`;
+  const d = durSec.toFixed(3);
+  // N = total output frames; use `n` (frame counter) since `t` is NaN for still-image inputs
+  const N = Math.max(1, Math.round(durSec * fps));
+  let cropFilter;
+  if (zoomIn) {
+    // 1.0 → 1.04: crop shrinks to centre → image appears to zoom in
+    cropFilter =
+      `crop=w='floor(2112-81*n/${N})':h='floor(1188-46*n/${N})':x='floor(40*n/${N})':y='floor(23*n/${N})'`;
+  } else {
+    // 1.04 → 1.0: crop grows from centre → image appears to zoom out
+    cropFilter =
+      `crop=w='floor(2031+81*n/${N})':h='floor(1142+46*n/${N})':x='floor(40*(${N}-n)/${N})':y='floor(23*(${N}-n)/${N})'`;
+  }
+  return (
+    `[${inputLabel}]scale=2112:1188:force_original_aspect_ratio=increase,` +
+    `setsar=1,fps=${fps},` +
+    `${cropFilter},scale=1920:1080,` +
+    `format=yuv420p,trim=duration=${d},setpts=PTS-STARTPTS[${outLabel}]`
+  );
 }
 
 function renderClipChunk(clips, fadeTime, outputPath) {
@@ -224,7 +238,7 @@ function renderClipChunk(clips, fadeTime, outputPath) {
     // -loop 1 + -t lets ffmpeg replay the still image for the full clip
     // duration (no zoompan needed since we now hold the image static).
     inputs.push(`-loop 1 -framerate 30 -t ${renderDur.toFixed(3)} -i "${path.resolve(clips[i].imagePath)}"`);
-    filters.push(buildCalmZoomFilter(`${i}:v`, `img${i}`, renderDur));
+    filters.push(buildKenBurnsFilter(`${i}:v`, `img${i}`, renderDur, i % 2 === 0));
   }
 
   if (clips.length === 1) {
@@ -244,11 +258,19 @@ function renderClipChunk(clips, fadeTime, outputPath) {
     }
   }
 
-  execSync(
-    `ffmpeg -y ${inputs.join(" ")} -filter_complex "${filters.join(";")}" ` +
-    `-map "[vout]" -c:v libx264 -preset fast -crf 22 -movflags +faststart "${outputPath}"`,
-    { stdio: "pipe", timeout: 1800000 }
-  );
+  // Write filter_complex to a temp file — Windows has an 8191-char cmd limit
+  // and zoompan filter strings push chunks over that threshold.
+  const filterFile = outputPath + ".filter.txt";
+  fs.writeFileSync(filterFile, filters.join(";"));
+  try {
+    execSync(
+      `ffmpeg -y ${inputs.join(" ")} -filter_complex_script "${filterFile}" ` +
+      `-map "[vout]" -c:v libx264 -preset fast -crf 22 -movflags +faststart "${outputPath}"`,
+      { stdio: "pipe", timeout: 1800000 }
+    );
+  } finally {
+    try { fs.unlinkSync(filterFile); } catch {}
+  }
 }
 
 function concatChunksWithXfade(chunkPaths, fadeTime, outputPath) {
@@ -380,49 +402,72 @@ function makeSeamlessLoop(srcPath) {
 // ─── AUDIO MIX ──────────────────────────────────────────────────────────────
 
 export function mixAudio(voiceoverPath, duration, outputPath, options = {}) {
-  const fireplaceRaw = options.fireplacePath || "assets/sfx/fireplace-cozy-loop.mp3";
-  const cricketRaw = options.cricketPath || "assets/sfx/night-crickets-loop.mp3";
+  const fireplaceRaw  = options.fireplacePath || "assets/sfx/fireplace-cozy-loop.mp3";
+  const cricketRaw    = options.cricketPath   || "assets/sfx/night-crickets-loop.mp3";
+  const bgMusicRaw    = options.bgMusicPath   || "assets/audio/bgmusic.mp3";
 
-  // Use seamless rotated/crossfaded versions to eliminate loop-boundary clicks
   const fireplaceLoop = fileExists(fireplaceRaw) ? makeSeamlessLoop(fireplaceRaw) : null;
-  const cricketLoop = fileExists(cricketRaw) ? makeSeamlessLoop(cricketRaw) : null;
+  const cricketLoop   = fileExists(cricketRaw)   ? makeSeamlessLoop(cricketRaw)   : null;
+  // bgMusic: use directly (long track, loop seam inaudible at 12% volume)
+  const bgMusicLoop   = fileExists(bgMusicRaw)   ? bgMusicRaw                     : null;
 
-  const voiceVol = options.voiceVolume || "1.0";
-  const fireplaceVol = options.fireplaceVolume || "0.08";
-  const cricketVol = options.cricketVolume || "0.05";
+  const voiceVol     = options.voiceVolume    ?? "1.0";
+  const fireplaceVol = options.fireplaceVolume ?? "0.06";
+  const cricketVol   = options.cricketVolume   ?? "0.05";
+  const bgMusicVol   = options.bgMusicVolume   ?? "0.12";
 
-  console.log(`  Mixing audio (voice:${voiceVol} fire:${fireplaceVol} cricket:${cricketVol})...`);
+  console.log(`  Mixing audio (voice:${voiceVol} fire:${fireplaceVol} cricket:${cricketVol} music:${bgMusicVol})...`);
 
-  const inputs = [`-i "${voiceoverPath}"`];
+  const inputs  = [`-i "${voiceoverPath}"`];
   const filters = [];
 
-  filters.push(`[0:a]volume=${voiceVol}[voice]`);
+  // [0] = voice, full volume
+  filters.push(`[0:a]volume=${voiceVol}[voice_raw]`);
 
-  let mixInputs = "[voice]";
-  let inputIndex = 1;
+  let inputIdx = 1;
+  const bgTracks = []; // { label, volLabel }
 
+  if (bgMusicLoop) {
+    inputs.push(`-stream_loop -1 -i "${bgMusicLoop}"`);
+    filters.push(`[${inputIdx}:a]aresample=async=1,volume=${bgMusicVol}[bgmusic_vol]`);
+    bgTracks.push({ label: "bgmusic", volLabel: "bgmusic_vol" });
+    inputIdx++;
+  }
   if (fireplaceLoop) {
     inputs.push(`-stream_loop -1 -i "${fireplaceLoop}"`);
-    // aresample=async=1 smooths any sample-level glitches at loop boundaries
-    filters.push(`[${inputIndex}:a]aresample=async=1,volume=${fireplaceVol}[fire]`);
-    mixInputs += "[fire]";
-    inputIndex++;
+    filters.push(`[${inputIdx}:a]aresample=async=1,volume=${fireplaceVol}[fire_vol]`);
+    bgTracks.push({ label: "fire", volLabel: "fire_vol" });
+    inputIdx++;
   }
-
   if (cricketLoop) {
     inputs.push(`-stream_loop -1 -i "${cricketLoop}"`);
-    filters.push(`[${inputIndex}:a]aresample=async=1,volume=${cricketVol}[cricket]`);
-    mixInputs += "[cricket]";
-    inputIndex++;
+    filters.push(`[${inputIdx}:a]aresample=async=1,volume=${cricketVol}[cricket_vol]`);
+    bgTracks.push({ label: "cricket", volLabel: "cricket_vol" });
+    inputIdx++;
   }
 
-  const mixCount = mixInputs.split("][").length;
-  filters.push(`${mixInputs}amix=inputs=${mixCount}:duration=first:dropout_transition=3[mixed]`);
+  // Sidechain ducking: voice ducks all background tracks by ~6dB when speaking.
+  // ratio=2 with threshold=0.02 gives ~7dB reduction during speech — natural duck.
+  // attack=50ms (fast enough to catch sentence starts), release=800ms (slow fade-back).
+  if (bgTracks.length > 0) {
+    const scLabels = bgTracks.map((_, i) => `[sc${i}]`).join("");
+    filters.push(`[voice_raw]asplit=${bgTracks.length + 1}[voice_main]${scLabels}`);
+    bgTracks.forEach((t, i) => {
+      filters.push(
+        `[${t.volLabel}][sc${i}]sidechaincompress=` +
+        `threshold=0.02:ratio=2:attack=50:release=800[${t.label}]`
+      );
+    });
+  } else {
+    filters.push(`[voice_raw]acopy[voice_main]`);
+  }
 
-  const filterComplex = filters.join(";");
+  const mixIn    = `[voice_main]${bgTracks.map((t) => `[${t.label}]`).join("")}`;
+  const mixCount = bgTracks.length + 1;
+  filters.push(`${mixIn}amix=inputs=${mixCount}:duration=first:dropout_transition=3[mixed]`);
 
   execSync(
-    `ffmpeg -y ${inputs.join(" ")} -filter_complex "${filterComplex}" ` +
+    `ffmpeg -y ${inputs.join(" ")} -filter_complex "${filters.join(";")}" ` +
     `-map "[mixed]" -c:a aac -b:a 192k -t ${duration} "${outputPath}"`,
     { stdio: "pipe", timeout: 600000 }
   );
@@ -500,8 +545,8 @@ export async function ensureParticleLoop(outPath = PARTICLES_PATH) {
   return outPath;
 }
 
-// Legacy ffmpeg-geq fallback. Kept inline so we can fall back if Remotion fails.
-function ensureParticleLoopLegacy(outPath = PARTICLES_PATH) {
+// Legacy ffmpeg-geq fallback — no Remotion needed. Used by test-video pipeline.
+export function ensureParticleLoopLegacy(outPath = PARTICLES_PATH) {
   if (fileExists(outPath)) return outPath;
   console.log(`  Building fireplace-spark particle loop (legacy): ${outPath}...`);
   fs.mkdirSync(path.dirname(outPath), { recursive: true });

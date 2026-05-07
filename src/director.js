@@ -414,4 +414,11 @@ export async function createStoryboard(scenes, wordTimestamps, totalDuration, br
   };
 }
 
+// ─── LIGHT EXPORT for test pipeline (no library lookup) ──────────────────────
+// Returns raw clip windows with philosopher/moment set but imagePath=null.
+// Caller is responsible for assigning imagePaths before passing to slideshow.
+export function buildTimedClips(scenes, wordTimestamps, totalDuration, targetClipSec = 4) {
+  return buildFineClipsByTime(scenes, wordTimestamps, totalDuration, targetClipSec);
+}
+
 export { SLEEP_PHILOSOPHY_BIBLE };

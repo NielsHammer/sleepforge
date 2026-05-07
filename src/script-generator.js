@@ -384,21 +384,29 @@ async function generateScriptBlock(topic, blockNum, totalBlocks, philosophers, d
 const CHALK_STYLE_PREFIX = "Chalk street art drawing on dark blackboard, rough imperfect white chalk strokes on pure black surface, visible chalk dust and smudges, heavy chalk texture on all surfaces including skin and clothing, strictly monochrome white and grey chalk only, absolutely no color no warm tones no gold no orange no brown, NOT a photograph NOT photorealistic NOT a painting, hand-drawn chalk lines only,";
 const CHALK_STYLE_SUFFIX = "medium distance three-quarter body shot, subject centered horizontally in the frame with balanced negative space on both left and right sides, dark blackboard texture background visible, chalk dust particles in air, no light sources no fire no candle no lantern no glow no flame no stars, no text no writing no words no letters, no signature no watermark no artist mark, 16:9 landscape composition";
 
-export function craftImagePrompt(scene) {
-  // Build a context-rich prompt from scene metadata
+// variant 0 = standard; 1 = wider establishing; 2 = hands/detail close-up
+export function craftImagePrompt(scene, variant = 0) {
   const who = scene.philosopher;
   const setting = scene.setting || "";
 
-  // Strip light-source words from the action — these break the chalk style
-  // by triggering Flux into rendering realistic colored light
   const lightWords = /candle\w*|fire\w*|flame\w*|lantern\w*|torch\w*|lamp\w*|glow\w*|burn\w*|lit |light\w*/gi;
   const action = scene.action.replace(lightWords, "").replace(/\s{2,}/g, " ").trim();
 
-  // Extract one architectural element from setting for the Greek context
   const archElements = setting.match(/column|temple|agora|forum|portico|arch|step|wall|gate|pillar|amphitheatre|lyceum|academy/i);
   const archDetail = archElements ? archElements[0].toLowerCase() : "Doric column";
 
-  return `${CHALK_STYLE_PREFIX} ${who} in ancient Greek toga ${action}, swirling chalk dust and atmospheric chalk strokes around the figure, ${archDetail} visible in background, ${CHALK_STYLE_SUFFIX}`;
+  // Variant-specific composition adjustments
+  const compositions = [
+    `medium distance three-quarter body shot, subject centered`,
+    `wide establishing shot showing full environment, figure smaller in frame`,
+    `close detail of hands and posture, gestural chalk strokes`,
+  ];
+  const compDetail = compositions[variant % compositions.length];
+
+  // Replace the suffix's default composition hint with the variant one
+  const suffixVariant = CHALK_STYLE_SUFFIX.replace("medium distance three-quarter body shot, subject centered horizontally in the frame with balanced negative space on both left and right sides", compDetail);
+
+  return `${CHALK_STYLE_PREFIX} ${who} in ancient Greek toga ${action}, swirling chalk dust and atmospheric chalk strokes around the figure, ${archDetail} visible in background, ${suffixVariant}`;
 }
 
 // ─── CONSTRAINT LINT ────────────────────────────────────────────────────────

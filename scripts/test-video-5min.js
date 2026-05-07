@@ -1,14 +1,21 @@
 /**
- * SleepForge 5-minute test video
+ * SleepForge 5-minute test video — Polish Pass 2 (May 2026)
  *
  * Full pipeline end-to-end:
  *   1. Start Chatterbox server (Python, CUDA)
- *   2. Generate 5-min script via Claude Haiku
- *   3. TTS all sentences via Chatterbox archer voice
- *   4. Whisper word timestamps
- *   5. Generate ~40 chalk images via Flux Schnell (concurrent with TTS)
- *   6. ASS karaoke subtitles
- *   7. FFmpeg compose (slideshow + audio mix + smoke overlay + subs)
+ *   2. Generate 5-min script via Claude Haiku (cached)
+ *   3. TTS all sentences via Chatterbox archer voice (cached)
+ *   4. Whisper word timestamps (cached)
+ *   5. Director: sentence → 4s clip windows
+ *   6. Generate 3 chalk images per scene via Flux Schnell (~24 images, cached)
+ *   7. Assign images to clips (round-robin per scene)
+ *   8. ASS karaoke subtitles (natural phrase breaks, \kf word highlight)
+ *   9. Fireplace particles loop (FFmpeg geq, cached)
+ *  10. Smoke loop (FFmpeg lavfi, cached)
+ *  11. FFmpeg compose:
+ *        - createClipSlideshow: Ken Burns zoom + 1.5s crossfades per clip
+ *        - mixAudio: voice + bgmusic(12%) + fireplace(6%) + crickets(5%), sidechain duck
+ *        - composeVideo: slideshow → particles (screen) → smoke (screen) → ASS subs
  *
  * Usage: node scripts/test-video-5min.js
  */
@@ -16,12 +23,19 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { spawn, execSync, execFileSync } from 'child_process';
+import { spawn, execSync } from 'child_process';
 
 import { generateScript, craftImagePrompt } from '../src/script-generator.js';
 import { generateSceneImage } from '../src/fal.js';
 import { generateASS } from '../src/subtitles.js';
-import { createImageSlideshow, mixAudio, ensureSmokeLoop, getAudioDuration } from '../src/ffmpeg.js';
+import { buildTimedClips } from '../src/director.js';
+import {
+  createClipSlideshow,
+  mixAudio,
+  ensureSmokeLoop,
+  ensureParticleLoopLegacy,
+  getAudioDuration,
+} from '../src/ffmpeg.js';
 import { isHealthy, chatterboxTTS } from '../src/chatterbox.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -32,18 +46,20 @@ const PYTHON_BIN = process.env.PYTHON_BIN
 const TOPIC = 'Marcus Aurelius on Letting Go of What You Cannot Control';
 const DURATION_MIN = 5;
 const SLUG = 'marcus-aurelius-letting-go';
-const OUTPUT_DIR = path.join(PROJECT_ROOT, 'output', SLUG);
-const ASSETS_DIR = path.join(OUTPUT_DIR, 'assets');
-const IMAGES_DIR = path.join(OUTPUT_DIR, 'images');
+const OUTPUT_DIR   = path.join(PROJECT_ROOT, 'output', SLUG);
+const ASSETS_DIR   = path.join(OUTPUT_DIR, 'assets');
+const IMAGES_DIR   = path.join(OUTPUT_DIR, 'images');
 const SENTENCES_DIR = path.join(ASSETS_DIR, 'sentences');
-const SCRIPTS_DIR = path.join(PROJECT_ROOT, 'scripts');
+const SCRIPTS_DIR  = path.join(PROJECT_ROOT, 'scripts');
 
-const VOICEOVER_PATH = path.join(ASSETS_DIR, 'voiceover.wav');
-const WHISPER_PATH   = path.join(ASSETS_DIR, 'whisper.json');
-const ASS_PATH       = path.join(ASSETS_DIR, 'subtitles.ass');
-const SLIDESHOW_PATH = path.join(OUTPUT_DIR, 'slideshow.mp4');
-const AUDIO_MIX_PATH = path.join(OUTPUT_DIR, 'mixed-audio.m4a');
-const FINAL_PATH     = path.join(OUTPUT_DIR, 'final.mp4');
+const VOICEOVER_PATH  = path.join(ASSETS_DIR, 'voiceover.wav');
+const WHISPER_PATH    = path.join(ASSETS_DIR, 'whisper.json');
+const ASS_PATH        = path.join(ASSETS_DIR, 'subtitles.ass');
+const SLIDESHOW_PATH  = path.join(OUTPUT_DIR, 'slideshow.mp4');
+const AUDIO_MIX_PATH  = path.join(OUTPUT_DIR, 'mixed-audio.m4a');
+const FINAL_PATH      = path.join(OUTPUT_DIR, 'final.mp4');
+
+const IMGS_PER_SCENE = 3; // generate 3 Flux images per scene → 24 total for 8 scenes
 
 for (const d of [OUTPUT_DIR, ASSETS_DIR, IMAGES_DIR, SENTENCES_DIR]) {
   fs.mkdirSync(d, { recursive: true });
@@ -51,7 +67,7 @@ for (const d of [OUTPUT_DIR, ASSETS_DIR, IMAGES_DIR, SENTENCES_DIR]) {
 
 const t_pipeline = Date.now();
 log('═══════════════════════════════════════════');
-log('SleepForge — 5-minute test video');
+log('SleepForge — 5-minute test video (polish pass 2)');
 log('Topic: ' + TOPIC);
 log('Output: ' + OUTPUT_DIR);
 log('═══════════════════════════════════════════');
@@ -67,11 +83,10 @@ serverProc.stdout.on('data', d => process.stdout.write('[CB] ' + d));
 serverProc.stderr.on('data', d => process.stderr.write('[CB] ' + d));
 serverProc.on('error', err => { log('Chatterbox server error: ' + err.message); });
 
-// Wait for server to be healthy (polls every 2s, up to 120s for model load)
 log('  Waiting for model load...');
 const serverReady = waitForChatterbox(300);
 
-// ── Step 2: Script (runs while Chatterbox loads) ──────────────────────────────
+// ── Step 2: Script (runs while Chatterbox loads) ───────────────────────────
 log('\n── Step 2: Script generation (Haiku, 5 min) ──');
 const scriptJsonPath = path.join(SCRIPTS_DIR, SLUG + '.json');
 let scenes;
@@ -91,13 +106,12 @@ const scriptText = scenes.map(s => s.narration).join('\n\n');
 const wordCount = scriptText.split(/\s+/).length;
 log(`  ${scenes.length} scenes, ${wordCount} words (~${Math.round(wordCount / 110)} min)`);
 
-// ── Step 3: Voiceover ─────────────────────────────────────────────────────────
+// ── Step 3: Voiceover ────────────────────────────────────────────────────────
 log('\n── Step 3: Chatterbox TTS (archer voice) ──');
 if (fs.existsSync(VOICEOVER_PATH)) {
   const dur = getAudioDuration(VOICEOVER_PATH);
   log(`  Cached voiceover: ${dur.toFixed(1)}s`);
 } else {
-  // Wait for Chatterbox to be ready now that we need it
   const healthy = await serverReady;
   if (!healthy) {
     log('  ERROR: Chatterbox server never became healthy — aborting');
@@ -111,19 +125,14 @@ if (fs.existsSync(VOICEOVER_PATH)) {
 
   const ttsStats = { totalAudio: 0, totalElapsed: 0, count: 0 };
   const partPaths = [];
-  const SENTENCE_PAUSE_MS = 350;
-  const PARA_PAUSE_MS = 700;
-
-  // Generate silence WAVs for pauses (cached)
   const silence350 = path.join(ASSETS_DIR, '_silence-350.wav');
   const silence700 = path.join(ASSETS_DIR, '_silence-700.wav');
   ensureSilence(silence350, 350);
   ensureSilence(silence700, 700);
 
-  // Sequential TTS (Chatterbox serializes internally, but we also respect that)
   for (let i = 0; i < sentences.length; i++) {
     const { text, paragraphEnd } = sentences[i];
-    const partPath = path.join(SENTENCES_DIR, `s${String(i).padStart(3,'0')}.wav`);
+    const partPath = path.join(SENTENCES_DIR, `s${String(i).padStart(3, '0')}.wav`);
 
     if (!fs.existsSync(partPath)) {
       const t0 = Date.now();
@@ -133,7 +142,6 @@ if (fs.existsSync(VOICEOVER_PATH)) {
       ttsStats.totalAudio += dur;
       ttsStats.totalElapsed += elapsed;
       ttsStats.count++;
-
       const pct = Math.round(100 * (i + 1) / sentences.length);
       log(`  [${i+1}/${sentences.length}] ${pct}% — ${elapsed.toFixed(1)}s to gen ${dur.toFixed(1)}s audio (${(elapsed/dur).toFixed(2)}x RT)`);
     }
@@ -144,15 +152,12 @@ if (fs.existsSync(VOICEOVER_PATH)) {
     }
   }
 
-  // TTS speed summary
   if (ttsStats.count > 0) {
-    const overallRT = (ttsStats.totalElapsed / ttsStats.totalAudio).toFixed(2);
-    log(`\n  ◆ Chatterbox speed: ${overallRT}x realtime on RTX 3060`);
-    log(`    Total audio generated: ${ttsStats.totalAudio.toFixed(1)}s`);
-    log(`    Total inference time: ${ttsStats.totalElapsed.toFixed(1)}s`);
+    const rt = (ttsStats.totalElapsed / ttsStats.totalAudio).toFixed(2);
+    log(`\n  ◆ Chatterbox speed: ${rt}x realtime on RTX 3060`);
+    log(`    Total audio: ${ttsStats.totalAudio.toFixed(1)}s  Inference: ${ttsStats.totalElapsed.toFixed(1)}s`);
   }
 
-  // Concatenate sentence WAVs
   log('\n  Concatenating sentences...');
   const concatFile = path.join(ASSETS_DIR, '_concat.txt');
   fs.writeFileSync(concatFile, partPaths.map(p => `file '${p.replace(/\\/g, '/')}'`).join('\n'));
@@ -163,7 +168,7 @@ if (fs.existsSync(VOICEOVER_PATH)) {
 }
 const audioDuration = getAudioDuration(VOICEOVER_PATH);
 
-// ── Step 4: Whisper timestamps ────────────────────────────────────────────────
+// ── Step 4: Whisper timestamps ───────────────────────────────────────────────
 log('\n── Step 4: Whisper word timestamps ──');
 let wordTimestamps = [];
 if (fs.existsSync(WHISPER_PATH)) {
@@ -179,7 +184,7 @@ if (fs.existsSync(WHISPER_PATH)) {
       `r=m.transcribe(r'${VOICEOVER_PATH}',word_timestamps=True,language='en');` +
       `words=[{'word':w['word'].strip(),'start':round(w['start'],3),'end':round(w['end'],3)}` +
       ` for seg in r['segments'] for w in seg.get('words',[])];` +
-      `print(json.dumps(words))" `,
+      `print(json.dumps(words))"`,
     { encoding: 'utf-8', timeout: 300000 }
   );
   wordTimestamps = JSON.parse(whisperResult.trim());
@@ -187,24 +192,30 @@ if (fs.existsSync(WHISPER_PATH)) {
   log(`  ${wordTimestamps.length} words in ${((Date.now()-t0)/1000).toFixed(0)}s`);
 }
 
-// ── Step 5: Images (up to 40 via Flux Schnell) ────────────────────────────────
-log('\n── Step 5: Chalk image generation (Flux Schnell) ──');
-const imageCount = Math.min(40, scenes.length);
-const imagePaths = [];
+// ── Step 5: Director — sentence-aligned 4s clip windows ─────────────────────
+log('\n── Step 5: Director — building clip windows ──');
+const clips = buildTimedClips(scenes, wordTimestamps, audioDuration, 4);
+log(`  ${clips.length} clips at ~4s each covering ${audioDuration.toFixed(1)}s audio`);
+
+// ── Step 6: Images — 3 per scene via Flux Schnell ───────────────────────────
+log('\n── Step 6: Chalk image generation (Flux Schnell, 3/scene) ──');
+const totalImages = scenes.length * IMGS_PER_SCENE;
+const allImagePaths = [];
 const imgJobs = [];
 
-for (let i = 0; i < imageCount; i++) {
-  const imgPath = path.join(IMAGES_DIR, `scene-${String(i+1).padStart(3,'0')}.png`);
-  imagePaths.push(imgPath);
-  if (fs.existsSync(imgPath)) continue;
-  const scene = scenes[i % scenes.length];
-  const prompt = craftImagePrompt(scene);
-  imgJobs.push({ i, imgPath, prompt });
+for (let si = 0; si < scenes.length; si++) {
+  for (let vi = 0; vi < IMGS_PER_SCENE; vi++) {
+    const idx = si * IMGS_PER_SCENE + vi;
+    const imgPath = path.join(IMAGES_DIR, `scene-${String(si+1).padStart(3,'0')}-v${vi}.png`);
+    allImagePaths.push(imgPath);
+    if (!fs.existsSync(imgPath)) {
+      const prompt = craftImagePrompt(scenes[si], vi);
+      imgJobs.push({ idx, si, vi, imgPath, prompt });
+    }
+  }
 }
+log(`  ${totalImages - imgJobs.length} cached, ${imgJobs.length} to generate`);
 
-log(`  ${imageCount - imgJobs.length} cached, ${imgJobs.length} to generate`);
-
-// Generate images with concurrency 6
 const IMG_CONCURRENCY = 6;
 let imgJobIdx = 0, imgDone = 0;
 async function imgWorker() {
@@ -214,21 +225,54 @@ async function imgWorker() {
     try {
       await generateSceneImage(j.prompt, j.imgPath);
       imgDone++;
-      log(`  [${imgDone}/${imgJobs.length}] scene-${j.i+1}.png`);
+      log(`  [${imgDone}/${imgJobs.length}] scene-${j.si+1}-v${j.vi}.png`);
     } catch (err) {
-      log(`  [img ${j.i+1}] FAILED: ${err.message}`);
+      log(`  [img scene-${j.si+1}-v${j.vi}] FAILED: ${err.message}`);
     }
   }
 }
 await Promise.all(Array.from({ length: IMG_CONCURRENCY }, imgWorker));
-log(`  Images done: ${imagePaths.filter(p => fs.existsSync(p)).length}/${imageCount}`);
+log(`  Images done: ${allImagePaths.filter(p => fs.existsSync(p)).length}/${totalImages}`);
 
-// Filter to existing images
-const existingImages = imagePaths.filter(p => fs.existsSync(p));
+// ── Step 7: Assign images to clips ──────────────────────────────────────────
+log('\n── Step 7: Assigning images to clips ──');
+const sceneDuration = audioDuration / scenes.length;
 
-// ── Step 6: ASS subtitles ─────────────────────────────────────────────────────
-log('\n── Step 6: ASS karaoke subtitles ──');
-if (!fs.existsSync(ASS_PATH) || wordTimestamps.length === 0) {
+for (const clip of clips) {
+  const clipMid = (clip.start_time + clip.end_time) / 2;
+  const sceneIdx = Math.min(scenes.length - 1, Math.floor(clipMid / sceneDuration));
+  // Track which image variation to use for this scene (cycle through variants)
+  if (!clip._sceneImageCounter) clip._sceneImageCounter = 0;
+}
+
+// Count clips per scene to distribute variants evenly
+const clipsPerScene = new Array(scenes.length).fill(0);
+const clipSceneIdx = clips.map(clip => {
+  const mid = (clip.start_time + clip.end_time) / 2;
+  return Math.min(scenes.length - 1, Math.floor(mid / sceneDuration));
+});
+const sceneClipCounters = new Array(scenes.length).fill(0);
+
+for (let ci = 0; ci < clips.length; ci++) {
+  const si = clipSceneIdx[ci];
+  const variantIdx = sceneClipCounters[si] % IMGS_PER_SCENE;
+  const imgPath = allImagePaths[si * IMGS_PER_SCENE + variantIdx];
+  clips[ci].imagePath = fs.existsSync(imgPath) ? imgPath : null;
+  sceneClipCounters[si]++;
+}
+
+// Fallback: if any clip has no image, use the nearest valid image
+const firstValidImg = allImagePaths.find(p => fs.existsSync(p));
+for (const clip of clips) {
+  if (!clip.imagePath) clip.imagePath = firstValidImg;
+}
+
+const assignedCount = clips.filter(c => c.imagePath).length;
+log(`  Assigned: ${assignedCount}/${clips.length} clips have images`);
+
+// ── Step 8: ASS karaoke subtitles ────────────────────────────────────────────
+log('\n── Step 8: ASS karaoke subtitles (natural phrase breaks) ──');
+if (!fs.existsSync(ASS_PATH)) {
   if (wordTimestamps.length > 0) {
     generateASS(wordTimestamps, ASS_PATH);
     log(`  Generated: ${ASS_PATH}`);
@@ -239,47 +283,59 @@ if (!fs.existsSync(ASS_PATH) || wordTimestamps.length === 0) {
   log(`  Cached: ${ASS_PATH}`);
 }
 
-// ── Step 7: FFmpeg compose ────────────────────────────────────────────────────
-log('\n── Step 7: FFmpeg composition ──');
+// ── Step 9: Particles + Smoke ────────────────────────────────────────────────
+log('\n── Step 9: Generating atmosphere layers ──');
+const particlesPath = ensureParticleLoopLegacy();
+log(`  Particles: ${particlesPath}`);
+const smokePath = ensureSmokeLoop();
+log(`  Smoke: ${smokePath}`);
 
-// 7a: Slideshow
-log('  Creating image slideshow...');
-createImageSlideshow(existingImages, Math.ceil(audioDuration), SLIDESHOW_PATH);
+// ── Step 10: FFmpeg compose ───────────────────────────────────────────────────
+log('\n── Step 10: FFmpeg composition ──');
 
-// 7b: Audio mix (voice + fireplace + crickets)
-log('  Mixing audio...');
+// 10a: Clip slideshow — Ken Burns zoom + 1.5s crossfades
+log('  Creating clip slideshow (Ken Burns + 1.5s crossfades)...');
+const usableClips = clips.filter(c => c.imagePath);
+createClipSlideshow(usableClips, Math.ceil(audioDuration), SLIDESHOW_PATH, { fadeTime: 1.5 });
+
+// 10b: Audio mix — voice + bgmusic(12%) + fireplace(6%) + crickets(5%), sidechain duck
+log('  Mixing audio with bgmusic + sidechain ducking...');
 mixAudio(VOICEOVER_PATH, Math.ceil(audioDuration), AUDIO_MIX_PATH);
 
-// 7c: Smoke overlay (auto-generated via FFmpeg, cached)
-log('  Ensuring smoke loop...');
-const smokePath = ensureSmokeLoop();
-
-// 7d: Final compose (slideshow + smoke screen-blend + audio + ASS subs)
+// 10c: Final compose — slideshow → particles (screen) → smoke (screen) → ASS subs
 log('  Composing final video...');
 const hasAss = fs.existsSync(ASS_PATH);
-const assFilter = hasAss ? `,ass='${ASS_PATH.replace(/\\/g, '\\\\').replace(/:/g, '\\:')}'` : '';
+const assFilter = hasAss
+  ? `,ass='${ASS_PATH.replace(/\\/g, '\\\\').replace(/:/g, '\\:')}'`
+  : '';
+
 execSync(
   `ffmpeg -y ` +
   `-i "${SLIDESHOW_PATH}" ` +
+  `-stream_loop -1 -i "${particlesPath}" ` +
   `-stream_loop -1 -i "${smokePath}" ` +
   `-i "${AUDIO_MIX_PATH}" ` +
   `-filter_complex ` +
     `"[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,fps=30,format=gbrp[base];` +
-     `[1:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[smoke];` +
-     `[base][smoke]blend=all_mode=screen:shortest=0,format=yuv420p${assFilter}[v]" ` +
-  `-map "[v]" -map 2:a ` +
+     `[1:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[parts];` +
+     `[base][parts]blend=all_mode=screen:shortest=0[withParts];` +
+     `[2:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[smoke];` +
+     `[withParts][smoke]blend=all_mode=screen:shortest=0,format=yuv420p${assFilter}[v]" ` +
+  `-map "[v]" -map 3:a ` +
   `-c:v libx264 -preset fast -crf 22 -c:a copy ` +
   `-t ${Math.ceil(audioDuration)} -movflags +faststart "${FINAL_PATH}"`,
   { stdio: 'pipe', timeout: 1800000 }
 );
 
 const finalSize = Math.round(fs.statSync(FINAL_PATH).size / 1024 / 1024);
-const elapsed = Math.round((Date.now() - t_pipeline) / 1000);
+const elapsed   = Math.round((Date.now() - t_pipeline) / 1000);
 
 log('\n═══════════════════════════════════════════');
 log('✅ DONE');
 log(`   Video: ${FINAL_PATH}`);
 log(`   Duration: ${audioDuration.toFixed(1)}s (${(audioDuration/60).toFixed(2)} min)`);
+log(`   Clips: ${clips.length} @ ~4s each`);
+log(`   Images: ${totalImages} Flux Schnell (${IMGS_PER_SCENE}/scene)`);
 log(`   File size: ${finalSize} MB`);
 log(`   Total pipeline time: ${Math.floor(elapsed/60)}m ${elapsed%60}s`);
 log('═══════════════════════════════════════════');

@@ -4,19 +4,18 @@ import { execSync } from "child_process";
 
 // ─── SleepForge ASS Karaoke Subtitle Generator ─────────────────────────────
 //
-// Adapted from VideoForge pipeline.js generateSRT().
 // Generates ASS karaoke subtitles where:
-//   - 4 words per phrase (never wraps on screen)
-//   - Current word highlights gold as spoken
+//   - Words group into natural phrases (commas, clauses, sentence ends)
+//   - Current word fills white as it's spoken (\kf animation)
+//   - Previous + upcoming words stay dim chalk-grey
 //   - Fixed position: bottom center, never moves
-//   - Calm font styling suited for sleep content
 //
 // Input: Whisper word timestamps [{word, start, end}, ...]
 // Output: .ass file path
 
-const PHRASE_SIZE = 4;       // soft cap, may shrink if char count overflows
-const PHRASE_MAX_CHARS = 26; // Kalam @ 72pt fits ~26 chars in the 1720px safe zone before clipping
+const PHRASE_MAX_CHARS = 32; // Kalam @ 80pt fits ~32 chars before wrapping
 const PHRASE_MIN_WORDS = 2;  // never emit a single-word orphan phrase
+const PHRASE_MAX_WORDS = 7;  // hard cap — natural breaks preferred
 
 // ─── HELPERS ────────────────────────────────────────────────────────────────
 
@@ -57,39 +56,48 @@ function cleanWord(w) {
 export function generateASS(wordTimestamps, outputPath) {
   if (!wordTimestamps || wordTimestamps.length === 0) return null;
 
-  // Group words into phrases. A phrase ends when:
-  //   - the buffer would exceed PHRASE_MAX_CHARS (prevents off-screen clipping)
-  //   - we hit a sentence end AND have at least PHRASE_MIN_WORDS (prevents "all" orphans)
-  //   - we hit PHRASE_SIZE words
-  //   - we run out of words
+  // Group words into natural phrases. A phrase ends at:
+  //   1. Natural punctuation boundary (comma, semicolon, colon, sentence end)
+  //   2. Whisper timing gap > 0.45s (speaker paused naturally)
+  //   3. Char overflow (PHRASE_MAX_CHARS) — prevents text running off screen
+  //   4. Hard word cap (PHRASE_MAX_WORDS) — absolute safety net
   const cleaned = wordTimestamps
     .map((raw) => ({ ...raw, word: cleanWord(raw.word) }))
     .filter((w) => w.word);
 
   const phraseChars = (buf) => buf.reduce((n, w) => n + w.word.length, 0) + Math.max(0, buf.length - 1);
+
+  // Returns true if this word ends a natural phrase boundary
+  const isNaturalBreak = (w, nextW) => {
+    const text = w.word.trim();
+    if (/[,;:]$/.test(text)) return true;              // comma / semicolon / colon
+    if (/[.!?]$/.test(text)) return true;              // sentence end
+    if (nextW && (nextW.start - w.end) > 0.45) return true; // timing gap > 450ms
+    return false;
+  };
+
   const phrases = [];
   let phraseBuffer = [];
 
   for (let i = 0; i < cleaned.length; i++) {
     const w = cleaned[i];
+    const nextW = cleaned[i + 1];
     const projectedChars = phraseChars(phraseBuffer) + (phraseBuffer.length ? 1 : 0) + w.word.length;
     const willOverflow = phraseBuffer.length > 0 && projectedChars > PHRASE_MAX_CHARS;
 
-    // Flush before adding this word if it would overflow
+    // Flush before adding if it would overflow (prevents clipping)
     if (willOverflow) {
-      flushBuffer(phrases, phraseBuffer, cleaned[i].start);
+      flushBuffer(phrases, phraseBuffer, w.start);
       phraseBuffer = [];
     }
 
     phraseBuffer.push(w);
     const isLast = i === cleaned.length - 1;
-    const endsSentence = /[.!?]$/.test(w.word.trim());
-    const reachedSize = phraseBuffer.length >= PHRASE_SIZE;
-    const canCloseOnSentence = endsSentence && phraseBuffer.length >= PHRASE_MIN_WORDS;
+    const natural = isNaturalBreak(w, nextW) && phraseBuffer.length >= PHRASE_MIN_WORDS;
+    const tooLong = phraseBuffer.length >= PHRASE_MAX_WORDS;
 
-    if (reachedSize || canCloseOnSentence || isLast) {
-      const nextStart = (i + 1 < cleaned.length) ? cleaned[i + 1].start : null;
-      flushBuffer(phrases, phraseBuffer, nextStart);
+    if (natural || tooLong || isLast) {
+      flushBuffer(phrases, phraseBuffer, nextW?.start ?? null);
       phraseBuffer = [];
     }
   }
