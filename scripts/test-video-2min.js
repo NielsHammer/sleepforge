@@ -38,6 +38,7 @@ import {
   mixAudio,
   ensureSmokeLoop,
   ensureParticleLoopLegacy,
+  ensurePhilosophyFrame,
   composeFinalVideoWithBg,
   getAudioDuration,
 } from '../src/ffmpeg.js';
@@ -63,10 +64,13 @@ const VOICEOVER_PATH = path.join(ASSETS_DIR, 'voiceover.wav');
 const WHISPER_PATH   = path.join(ASSETS_DIR, 'whisper.json');
 const ASS_PATH       = path.join(ASSETS_DIR, 'subtitles.ass');
 const SLIDESHOW_PATH = path.join(OUTPUT_DIR, 'slideshow.mp4');
-const VOICE_MIX_PATH = path.join(OUTPUT_DIR, 'voice-mix.m4a');   // voice + fire + crickets
+const VOICE_MIX_PATH = path.join(OUTPUT_DIR, 'voice-mix.m4a');   // voice + fire + crickets + bgmusic
 const BG_MUSIC_PATH  = path.join(PROJECT_ROOT, 'assets', 'audio', 'bgmusic.mp3');
 const FINAL_PATH     = path.join(OUTPUT_DIR, 'final.mp4');
 const FRAME_30S_PATH = path.join(OUTPUT_DIR, 'frame-30s.png');
+const FRAME_IMG_PATH = path.join(OUTPUT_DIR, 'verify-image-scene.png');
+const FRAME_ANIM_PATH= path.join(OUTPUT_DIR, 'verify-animation-scene.png');
+const PHILOSOPHY_FRAME_PATH = path.join(PROJECT_ROOT, 'assets', 'frames', 'philosophy-frame.png');
 
 const BG_IMAGE_PATH  = path.join(PROJECT_ROOT, 'assets', 'backgrounds', 'philosophy-bg.png');
 const BG_PROMPT      = 'ancient Greek philosophy library at dusk, marble columns, candlelight, ' +
@@ -88,10 +92,26 @@ for (const d of [OUTPUT_DIR, ASSETS_DIR, IMAGES_DIR, ANIM_DIR, SENTENCES_DIR]) {
 
 const t_pipeline = Date.now();
 log('═══════════════════════════════════════════');
-log('SleepForge — 2-minute test video (polish pass 3)');
+log('SleepForge — 2-minute test video (polish pass 4)');
 log('Topic: ' + TOPIC);
 log('Output: ' + OUTPUT_DIR);
 log('═══════════════════════════════════════════');
+
+// Pass 4: Force regeneration of cached files that changed
+const PARTICLES_CACHE = path.resolve(PROJECT_ROOT, 'engine/remotion/backgrounds/particles-loop.mp4');
+if (fs.existsSync(PARTICLES_CACHE)) {
+  log('  Clearing old particles (Pass 4 — larger/brighter embers)...');
+  fs.unlinkSync(PARTICLES_CACHE);
+}
+if (fs.existsSync(SLIDESHOW_PATH)) {
+  log('  Clearing old slideshow (Pass 4 — animation fix + bg zoom)...');
+  fs.unlinkSync(SLIDESHOW_PATH);
+}
+if (fs.existsSync(VOICE_MIX_PATH)) {
+  log('  Clearing old audio mix (Pass 4 — single track with bgmusic)...');
+  fs.unlinkSync(VOICE_MIX_PATH);
+}
+if (fs.existsSync(FINAL_PATH)) fs.unlinkSync(FINAL_PATH);
 
 // ── Step 1: Start Chatterbox server ──────────────────────────────────────────
 log('\n── Step 1: Starting Chatterbox server ──');
@@ -290,12 +310,33 @@ if (wordTimestamps.length > 0) {
   log('  No timestamps — skipping subtitles');
 }
 
-// ── Step 10: Particles + Smoke ────────────────────────────────────────────────
-log('\n── Step 10: Generating atmosphere layers ──');
+// ── Step 10: Atmosphere layers + philosophy frame ─────────────────────────────
+log('\n── Step 10: Generating atmosphere layers + frame ──');
 const particlesPath = ensureParticleLoopLegacy();
 log(`  Particles: ${particlesPath}`);
 const smokePath = ensureSmokeLoop();
 log(`  Smoke: ${smokePath}`);
+
+// Philosophy frame (generated once, cached)
+ensurePhilosophyFrame(PHILOSOPHY_FRAME_PATH);
+log(`  Frame: ${PHILOSOPHY_FRAME_PATH}`);
+
+// Pre-render bg zoom loop (10s, 30fps) for animation scenes
+// zoompan: z oscillates 1.00↔1.04 over 10s. Smooth sub-pixel movement at 30fps.
+const BG_ZOOM_PATH = path.join(ANIM_DIR, 'bg-zoom-loop.mp4');
+if (!fs.existsSync(BG_ZOOM_PATH) && fs.existsSync(BG_IMAGE_PATH)) {
+  log('  Pre-rendering bg zoom loop (10s)...');
+  execSync(
+    `ffmpeg -y -loop 1 -framerate 30 -t 10 -i "${BG_IMAGE_PATH}" ` +
+    `-vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,` +
+    `zoompan=z='1.02+0.02*cos(2*PI*on/300)':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=1:fps=30:s=1920x1080" ` +
+    `-t 10 -c:v libx264 -preset fast -crf 20 -movflags +faststart "${BG_ZOOM_PATH}"`,
+    { stdio: 'pipe', timeout: 300000 }
+  );
+  log(`  Bg zoom loop: ${BG_ZOOM_PATH}`);
+} else if (fs.existsSync(BG_ZOOM_PATH)) {
+  log(`  Bg zoom loop cached: ${BG_ZOOM_PATH}`);
+}
 
 // ── Step 11: Remotion animations ─────────────────────────────────────────────
 log('\n── Step 11: Rendering Remotion animations ──');
@@ -340,30 +381,40 @@ if (Object.keys(renderedAnims).length > 0 && clips.length >= 6) {
 // ── Step 12: FFmpeg composition ───────────────────────────────────────────────
 log('\n── Step 12: FFmpeg composition ──');
 
-// 12a: Static slideshow (no Ken Burns)
-log('  Building clip slideshow (static hold, 1.5s xfades)...');
+// 12a: Slideshow — animation clips screen-blended over zoomed bg, image clips static
+log('  Building clip slideshow (animation scenes: bg zoom + screen blend)...');
 const usableClips = clips.filter(c => c.imagePath || c.videoPath);
-createClipSlideshow(usableClips, Math.ceil(audioDuration), SLIDESHOW_PATH, { fadeTime: 1.5 });
-
-// 12b: Voice-only audio mix (fire + crickets but NOT bgmusic)
-log('  Mixing voice audio (fire + crickets, no bgmusic — music is a separate stream)...');
-mixAudio(VOICEOVER_PATH, Math.ceil(audioDuration), VOICE_MIX_PATH, { includeBgMusic: false });
-
-// 12c: Final compose — bg(15%) + chalk(85%) + particles + smoke + subs + dual audio
-log('  Composing final video with background + layers + dual audio...');
-composeFinalVideoWithBg({
-  bgImagePath:   BG_IMAGE_PATH,
-  slideshowPath: SLIDESHOW_PATH,
-  particlesPath,
-  smokePath,
-  assPath:       fs.existsSync(ASS_PATH) ? ASS_PATH : null,
-  voiceAudioPath: VOICE_MIX_PATH,
-  bgMusicPath:   fs.existsSync(BG_MUSIC_PATH) ? BG_MUSIC_PATH : null,
-  outputPath:    FINAL_PATH,
-  duration:      audioDuration,
+log(`  Usable clips: ${usableClips.length} (${usableClips.filter(c=>c.videoPath).length} animations, ${usableClips.filter(c=>!c.videoPath).length} images)`);
+createClipSlideshow(usableClips, Math.ceil(audioDuration), SLIDESHOW_PATH, {
+  fadeTime:    1.5,
+  bgVideoPath: fs.existsSync(BG_ZOOM_PATH) ? BG_ZOOM_PATH : null,
 });
 
-// ── Step 13: Verify with ffprobe + extract frame at 30s ──────────────────────
+// 12b: Single mixed audio track — voice (100%) + fire (8%) + bgmusic (25%), no sidechain
+log('  Mixing single audio track (voice + fire + bgmusic, no sidechain)...');
+mixAudio(VOICEOVER_PATH, Math.ceil(audioDuration), VOICE_MIX_PATH, {
+  includeBgMusic:  true,
+  bgMusicVolume:   '0.25',
+  fireplaceVolume: '0.08',
+});
+
+// 12c: Final compose — bg(hidden by 100% chalk) + chalk + particles + smoke + frame + subs
+// Single audio track in the output (music already mixed in 12b)
+log('  Composing final video (single audio track, frame overlay, animation visible)...');
+composeFinalVideoWithBg({
+  bgImagePath:    BG_IMAGE_PATH,
+  slideshowPath:  SLIDESHOW_PATH,
+  particlesPath,
+  smokePath,
+  assPath:        fs.existsSync(ASS_PATH) ? ASS_PATH : null,
+  voiceAudioPath: VOICE_MIX_PATH,
+  bgMusicPath:    null,  // already in voiceAudioPath — do NOT add again
+  framePath:      fs.existsSync(PHILOSOPHY_FRAME_PATH) ? PHILOSOPHY_FRAME_PATH : null,
+  outputPath:     FINAL_PATH,
+  duration:       audioDuration,
+});
+
+// ── Step 13: Verify with ffprobe + extract verification frames ───────────────
 log('\n── Step 13: Verification ──');
 
 const probeOutput = execSync(
@@ -373,20 +424,60 @@ const probeOutput = execSync(
 const videoStreams = (probeOutput.match(/codec_type=video/g) || []).length;
 const audioStreams = (probeOutput.match(/codec_type=audio/g) || []).length;
 log(`  Streams: ${videoStreams} video, ${audioStreams} audio`);
-if (audioStreams >= 2) {
-  log('  ✓ Dual audio (a:0 voice, a:1 bgmusic) confirmed');
+if (audioStreams === 1) {
+  log('  ✓ Single audio track confirmed (WMP-compatible)');
+} else if (audioStreams === 0) {
+  log('  ✗ No audio stream detected!');
 } else {
-  log('  ⚠ Only 1 audio stream — bgmusic may be missing from assets/audio/bgmusic.mp3');
+  log(`  ⚠ ${audioStreams} audio streams — expected 1`);
 }
 
-// Extract frame at 30s (proof of particle/bg/smoke layers)
+// Frame at 30s — proof of layers
 const frameTs = Math.min(30, audioDuration * 0.4);
 execSync(
   `ffmpeg -y -ss ${frameTs.toFixed(1)} -i "${FINAL_PATH}" -vframes 1 -q:v 2 "${FRAME_30S_PATH}"`,
   { stdio: 'pipe' }
 );
 const frameOk = fs.existsSync(FRAME_30S_PATH) && fs.statSync(FRAME_30S_PATH).size > 5000;
-log(`  Frame extract at ${frameTs.toFixed(1)}s: ${frameOk ? FRAME_30S_PATH : 'FAILED'}`);
+log(`  Frame at ${frameTs.toFixed(1)}s: ${frameOk ? FRAME_30S_PATH : 'FAILED'}`);
+
+// Image scene verification — frame from early in video (image clip zone)
+try {
+  execSync(
+    `ffmpeg -y -ss 8 -i "${FINAL_PATH}" -vframes 1 -q:v 2 "${FRAME_IMG_PATH}"`,
+    { stdio: 'pipe' }
+  );
+  log(`  Image scene frame (8s): ${FRAME_IMG_PATH}`);
+} catch {}
+
+// Animation scene verification — find first animation clip's timestamp
+const firstAnimClip = usableClips.find(c => c.videoPath);
+if (firstAnimClip) {
+  const animTs = ((firstAnimClip.start_time + firstAnimClip.end_time) / 2).toFixed(1);
+  try {
+    execSync(
+      `ffmpeg -y -ss ${animTs} -i "${FINAL_PATH}" -vframes 1 -q:v 2 "${FRAME_ANIM_PATH}"`,
+      { stdio: 'pipe' }
+    );
+    log(`  Animation scene frame (${animTs}s): ${FRAME_ANIM_PATH}`);
+  } catch {}
+} else {
+  log('  No animation clips assigned — animation scene frame skipped');
+}
+
+// volumedetect on first 5s — confirm voice is audible (FFmpeg writes to stderr)
+try {
+  const volOut = execSync(
+    `ffmpeg -y -i "${FINAL_PATH}" -t 5 -af "volumedetect" -f null NUL 2>&1`,
+    { encoding: 'utf-8' }
+  );
+  const meanVol = volOut.match(/mean_volume:\s*(-[\d.]+)\s*dB/);
+  if (meanVol) log(`  Audio mean (first 5s): ${meanVol[1]} dBFS`);
+} catch (e) {
+  const combined = (e.stdout || '') + (e.stderr || '') + (e.message || '');
+  const meanVol = combined.match(/mean_volume:\s*(-[\d.]+)\s*dB/);
+  if (meanVol) log(`  Audio mean (first 5s): ${meanVol[1]} dBFS`);
+}
 
 // ── Done ──────────────────────────────────────────────────────────────────────
 const finalSize = Math.round(fs.statSync(FINAL_PATH).size / 1024 / 1024);
@@ -394,13 +485,16 @@ const elapsed   = Math.round((Date.now() - t_pipeline) / 1000);
 
 log('\n═══════════════════════════════════════════');
 log('✅ DONE');
-log(`   Video:      ${FINAL_PATH}`);
-log(`   Duration:   ${audioDuration.toFixed(1)}s (${(audioDuration/60).toFixed(2)} min)`);
-log(`   Clips:      ${clips.length} @ ~4s each`);
-log(`   Animations: ${Object.keys(renderedAnims).length} rendered`);
-log(`   File size:  ${finalSize} MB`);
-log(`   Pipeline:   ${Math.floor(elapsed/60)}m ${elapsed%60}s`);
-log(`   Frame 30s:  ${FRAME_30S_PATH}`);
+log(`   Video:         ${FINAL_PATH}`);
+log(`   Duration:      ${audioDuration.toFixed(1)}s (${(audioDuration/60).toFixed(2)} min)`);
+log(`   Clips:         ${clips.length} @ ~4s each`);
+log(`   Animations:    ${Object.keys(renderedAnims).length} rendered (${usableClips.filter(c=>c.videoPath).length} in slideshow)`);
+log(`   Audio streams: ${audioStreams} (target: 1 — single mixed track)`);
+log(`   File size:     ${finalSize} MB`);
+log(`   Pipeline:      ${Math.floor(elapsed/60)}m ${elapsed%60}s`);
+log(`   Frame 30s:     ${FRAME_30S_PATH}`);
+log(`   Verify image:  ${FRAME_IMG_PATH}`);
+log(`   Verify anim:   ${FRAME_ANIM_PATH}`);
 log('═══════════════════════════════════════════');
 
 serverProc.kill();

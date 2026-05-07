@@ -132,14 +132,21 @@ export function createClipSlideshow(clips, totalDuration, outputPath, options = 
   // enough to keep the storyboard moving at sleep tempo (3-5s per scene).
   const fadeTime = options.fadeTime || 1.5;
   const fallbackImage = options.fallbackImage || null;
+  const bgImagePath  = options.bgImagePath  || null;
+  const bgVideoPath  = options.bgVideoPath  || null;
 
-  // Filter null imagePaths — replace with fallback (or skip if no fallback)
+  // Keep clips that have a video (animation) OR an image (still).
+  // Animation clips have videoPath set and imagePath=null — previously they were
+  // dropped here because imagePath resolved to null after fallback lookup.
   const usable = clips
     .map((c) => ({
       ...c,
-      imagePath: c.imagePath || fallbackImage,
+      imagePath: c.videoPath ? c.imagePath : (c.imagePath || fallbackImage),
     }))
-    .filter((c) => c.imagePath && fileExists(c.imagePath));
+    .filter((c) =>
+      (c.videoPath && fs.existsSync(c.videoPath)) ||
+      (c.imagePath && fileExists(c.imagePath))
+    );
 
   if (usable.length === 0) {
     console.log("  No clip images — generating black fallback");
@@ -155,7 +162,7 @@ export function createClipSlideshow(clips, totalDuration, outputPath, options = 
 
   // Single chunk fast path
   if (usable.length <= SLIDESHOW_CHUNK_SIZE) {
-    renderClipChunk(usable, fadeTime, outputPath);
+    renderClipChunk(usable, fadeTime, outputPath, { bgImagePath, bgVideoPath });
     return outputPath;
   }
 
@@ -170,7 +177,7 @@ export function createClipSlideshow(clips, totalDuration, outputPath, options = 
   const chunkPaths = [];
   for (let ci = 0; ci < chunks.length; ci++) {
     const cp = path.join(tmpDir, `slideshow-chunk-${ci}.mp4`);
-    renderClipChunk(chunks[ci], fadeTime, cp);
+    renderClipChunk(chunks[ci], fadeTime, cp, { bgImagePath, bgVideoPath });
     chunkPaths.push(cp);
   }
 
@@ -203,9 +210,14 @@ function buildStaticScaleFilter(inputLabel, outLabel, durSec) {
   );
 }
 
-function renderClipChunk(clips, fadeTime, outputPath) {
+function renderClipChunk(clips, fadeTime, outputPath, opts = {}) {
+  const bgImagePath = opts.bgImagePath || null;
+  const bgVideoPath = opts.bgVideoPath || null; // pre-rendered zoom loop for animation scenes
   const inputs = [];
   const filters = [];
+  // nextIdx tracks actual ffmpeg input index across all clips (animation clips
+  // consume 2 inputs: the animation + the bg behind it).
+  let nextIdx = 0;
 
   // xfade overlaps the two adjacent streams by fadeTime, which would compress
   // the total slideshow by (n-1)*fadeTime. To preserve clip pacing, we render
@@ -217,13 +229,39 @@ function renderClipChunk(clips, fadeTime, outputPath) {
     const renderDur = actualDur + fadeTime;
 
     if (clips[i].videoPath) {
-      // Animation clip: video input (plays naturally, no loop)
-      inputs.push(`-t ${renderDur.toFixed(3)} -i "${path.resolve(clips[i].videoPath)}"`);
-      filters.push(buildStaticScaleFilter(`${i}:v`, `img${i}`, renderDur));
+      // Animation clip: screen-blend the animation over a bg (zoom loop or static).
+      // The animation has a black (#080808) background — screen blend makes dark
+      // pixels transparent, revealing the bg behind the glowing elements.
+      const animIdx = nextIdx++;
+      // stream_loop so short animations (3s) loop to fill clip+fadeTime slot
+      inputs.push(`-stream_loop -1 -t ${renderDur.toFixed(3)} -i "${path.resolve(clips[i].videoPath)}"`);
+
+      const bgPath = bgVideoPath || bgImagePath;
+      if (bgPath && fs.existsSync(bgPath)) {
+        const bgIdx = nextIdx++;
+        if (bgVideoPath && fs.existsSync(bgVideoPath)) {
+          // Pre-rendered zoom loop — stream-loop it for the clip duration
+          inputs.push(`-stream_loop -1 -t ${renderDur.toFixed(3)} -i "${path.resolve(bgVideoPath)}"`);
+        } else {
+          // Static bg image — still, no zoom
+          inputs.push(`-loop 1 -framerate 30 -t ${renderDur.toFixed(3)} -i "${path.resolve(bgImagePath)}"`);
+        }
+        filters.push(`[${bgIdx}:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,fps=30,format=gbrp[bg${i}]`);
+        filters.push(`[${animIdx}:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[anim${i}]`);
+        // screen blend in gbrp (RGB planar) — avoids YUV chroma offset corruption
+        filters.push(
+          `[bg${i}][anim${i}]blend=all_mode=screen:shortest=1,` +
+          `trim=duration=${renderDur.toFixed(3)},setpts=PTS-STARTPTS,format=yuv420p[img${i}]`
+        );
+      } else {
+        // No bg available — just scale the animation
+        filters.push(buildStaticScaleFilter(`${animIdx}:v`, `img${i}`, renderDur));
+      }
     } else {
       // Still image: -loop 1 replays the image for the full clip duration
+      const imgIdx = nextIdx++;
       inputs.push(`-loop 1 -framerate 30 -t ${renderDur.toFixed(3)} -i "${path.resolve(clips[i].imagePath)}"`);
-      filters.push(buildStaticScaleFilter(`${i}:v`, `img${i}`, renderDur));
+      filters.push(buildStaticScaleFilter(`${imgIdx}:v`, `img${i}`, renderDur));
     }
   }
 
@@ -401,9 +439,9 @@ export function mixAudio(voiceoverPath, duration, outputPath, options = {}) {
   const bgMusicLoop   = includeBgMusic && fileExists(bgMusicRaw) ? bgMusicRaw : null;
 
   const voiceVol     = options.voiceVolume    ?? "1.0";
-  const fireplaceVol = options.fireplaceVolume ?? "0.06";
+  const fireplaceVol = options.fireplaceVolume ?? "0.08";
   const cricketVol   = options.cricketVolume   ?? "0.05";
-  const bgMusicVol   = options.bgMusicVolume   ?? "0.18";
+  const bgMusicVol   = options.bgMusicVolume   ?? "0.25";
 
   console.log(`  Mixing audio (voice:${voiceVol} fire:${fireplaceVol} cricket:${cricketVol} music:${bgMusicVol})...`);
 
@@ -435,24 +473,10 @@ export function mixAudio(voiceoverPath, duration, outputPath, options = {}) {
     inputIdx++;
   }
 
-  // Sidechain ducking: voice ducks background music by ~4-5dB when speaking.
-  // ratio=1.3 with threshold=0.05: at typical voice level (-6dBFS), music is
-  // reduced ~4.6dB (18%→~11%). Inaudible at 2:1 ratio was the prior bug.
-  // attack=100ms, release=1500ms — slow enough to avoid pumping.
-  if (bgTracks.length > 0) {
-    const scLabels = bgTracks.map((_, i) => `[sc${i}]`).join("");
-    filters.push(`[voice_raw]asplit=${bgTracks.length + 1}[voice_main]${scLabels}`);
-    bgTracks.forEach((t, i) => {
-      filters.push(
-        `[${t.volLabel}][sc${i}]sidechaincompress=` +
-        `threshold=0.05:ratio=1.3:attack=100:release=1500[${t.label}]`
-      );
-    });
-  } else {
-    filters.push(`[voice_raw]acopy[voice_main]`);
-  }
+  // Simple direct mix — no sidechain ducking.
+  filters.push(`[voice_raw]acopy[voice_main]`);
 
-  const mixIn    = `[voice_main]${bgTracks.map((t) => `[${t.label}]`).join("")}`;
+  const mixIn    = `[voice_main]${bgTracks.map((t) => `[${t.volLabel}]`).join("")}`;
   const mixCount = bgTracks.length + 1;
   filters.push(`${mixIn}amix=inputs=${mixCount}:duration=first:dropout_transition=3[mixed]`);
 
@@ -557,9 +581,9 @@ export function ensureParticleLoopLegacy(outPath = PARTICLES_PATH) {
   // Output is RGB on near-black canvas — screen-blended downstream, so the
   // black falls away and only the glowing dots remain.
 
-  const speed = 10;        // px/sec upward drift
-  const spawnDensity = 15; // lower = denser sparks; ~300 visible at any time (was 8 = too sparse)
-  const lifetime = 4;      // each spark lives 4 seconds (Y travels ~40px)
+  const speed = 8;         // px/sec upward drift (slower = longer on screen)
+  const spawnDensity = 20; // lower = denser; ~415 spawn points, prominent embers
+  const lifetime = 5;      // each spark lives 5 seconds — more visible at once
 
   // The spawn-point hash is over (X, Y) — Y here is the spawn Y, not screen Y.
   // We invert: for each screen Y, look up the spark whose age is t = (Y0 - Y)/speed.
@@ -581,14 +605,14 @@ export function ensureParticleLoopLegacy(outPath = PARTICLES_PATH) {
   // a global warm tint that bleeds through screen-blend downstream.
   const sparkMask = `lt(mod(X*7919+(Y+${speed}*T)*6113,100000),${spawnDensity})`;
   const lumExpr =
-    `if(${sparkMask},220*sin(PI*mod(T+0.001*X,${lifetime})/${lifetime}),0)`;
-  // Chroma: 128 = neutral grey. Only diverge from neutral on actual spark pixels.
-  const cbExpr = `if(${sparkMask},90,128)`;   // blue chroma drop → warm
-  const crExpr = `if(${sparkMask},200,128)`;  // red chroma boost → orange
+    `if(${sparkMask},255*sin(PI*mod(T+0.001*X,${lifetime})/${lifetime}),0)`;
+  // Chroma: 128 = neutral grey. Diverge on spark pixels for warm orange/amber.
+  const cbExpr = `if(${sparkMask},80,128)`;   // blue chroma drop → warm amber
+  const crExpr = `if(${sparkMask},215,128)`;  // red chroma boost → bright orange
 
   execSync(
     `ffmpeg -y -f lavfi -i "color=c=black:s=1920x1080:r=30:d=60" ` +
-    `-vf "format=yuv420p,geq=lum='${lumExpr}':cb='${cbExpr}':cr='${crExpr}',gblur=sigma=1.2" ` +
+    `-vf "format=yuv420p,geq=lum='${lumExpr}':cb='${cbExpr}':cr='${crExpr}',gblur=sigma=2.5" ` +
     `-c:v libx264 -preset fast -crf 22 -pix_fmt yuv420p -movflags +faststart "${outPath}"`,
     { stdio: "pipe", timeout: 600000 }
   );
@@ -663,6 +687,74 @@ export function ensureChalkboardFrame(outPath = FRAME_PATH, panelW = 1152, panel
   return outPath;
 }
 
+// Generate a 1920×1080 philosophy frame PNG with a transparent center.
+// Rendered once; overlay on top of the final video to give all scenes an
+// elegant gold-on-slate border with corner accent squares.
+export function ensurePhilosophyFrame(outPath) {
+  if (fileExists(outPath)) return outPath;
+  console.log(`  Generating philosophy frame: ${outPath}...`);
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+
+  const W = 1920, H = 1080;
+  const bw = 52;       // border thickness (px)
+  const gl = 4;        // gold inner line thickness
+  const slate = "0x110E08@1.0";  // warm dark slate
+  const gold  = "0xC8A040@1.0";  // burnished gold
+
+  const filters = [
+    // Solid slate border ring (four rectangles)
+    `drawbox=x=0:y=0:w=${W}:h=${bw}:color=${slate}:t=fill`,
+    `drawbox=x=0:y=${H-bw}:w=${W}:h=${bw}:color=${slate}:t=fill`,
+    `drawbox=x=0:y=${bw}:w=${bw}:h=${H-2*bw}:color=${slate}:t=fill`,
+    `drawbox=x=${W-bw}:y=${bw}:w=${bw}:h=${H-2*bw}:color=${slate}:t=fill`,
+    // Gold inner rectangle stroke just inside the slate
+    `drawbox=x=${bw}:y=${bw}:w=${W-2*bw}:h=${gl}:color=${gold}:t=fill`,
+    `drawbox=x=${bw}:y=${H-bw-gl}:w=${W-2*bw}:h=${gl}:color=${gold}:t=fill`,
+    `drawbox=x=${bw}:y=${bw+gl}:w=${gl}:h=${H-2*bw-2*gl}:color=${gold}:t=fill`,
+    `drawbox=x=${W-bw-gl}:y=${bw+gl}:w=${gl}:h=${H-2*bw-2*gl}:color=${gold}:t=fill`,
+    // Corner accent squares (open stroke, not filled)
+    `drawbox=x=${bw-gl}:y=${bw-gl}:w=32:h=32:color=${gold}:t=3`,
+    `drawbox=x=${W-bw-22}:y=${bw-gl}:w=32:h=32:color=${gold}:t=3`,
+    `drawbox=x=${bw-gl}:y=${H-bw-22}:w=32:h=32:color=${gold}:t=3`,
+    `drawbox=x=${W-bw-22}:y=${H-bw-22}:w=32:h=32:color=${gold}:t=3`,
+  ];
+
+  // Deterministic chalk flecks scattered along the border band
+  let seed = 77341;
+  const lcg = () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  const band = bw - gl - 6;
+  for (let i = 0; i < 180; i++) {
+    const side = i % 4;
+    let x, y;
+    if (side === 0) { x = Math.floor(lcg() * W); y = gl + 6 + Math.floor(lcg() * band); }
+    else if (side === 1) { x = Math.floor(lcg() * W); y = H - bw + 6 + Math.floor(lcg() * band); }
+    else if (side === 2) { x = gl + 6 + Math.floor(lcg() * band); y = Math.floor(lcg() * H); }
+    else { x = W - bw + 6 + Math.floor(lcg() * band); y = Math.floor(lcg() * H); }
+    const fw = 1 + Math.floor(lcg() * 2);
+    const fh = 1 + Math.floor(lcg() * 2);
+    filters.push(`drawbox=x=${x}:y=${y}:w=${fw}:h=${fh}:color=${gold}:t=fill`);
+  }
+
+  // Windows CMD has an 8191-char limit. Write the filter graph to a temp file
+  // and use -filter_complex_script to avoid "command line too long" errors.
+  // drawbox does not write alpha on a transparent source.
+  // Workaround: start with opaque black, draw the border, then colorkey
+  // pure black → transparent to reveal the video through the center.
+  // similarity=0.001 only keys exact or near-exact black; slate (0x110E08) is safe.
+  const filterScript = outPath + ".filter.txt";
+  fs.writeFileSync(filterScript, `[0:v]${filters.join(",")},colorkey=0x000000:0.001:0.0,format=rgba[v]`);
+  try {
+    execSync(
+      `ffmpeg -y -f lavfi -i "color=c=black:s=${W}x${H}" ` +
+      `-filter_complex_script "${filterScript}" -map "[v]" -frames:v 1 -update 1 "${outPath}"`,
+      { stdio: "pipe", timeout: 60000 }
+    );
+  } finally {
+    try { fs.unlinkSync(filterScript); } catch {}
+  }
+  return outPath;
+}
+
 export async function composeVideo(slideshowPath, audioPath, outputPath, duration, options = {}) {
   console.log(`  Composing final video (${Math.round(duration)}s)...`);
 
@@ -700,18 +792,16 @@ export async function composeVideo(slideshowPath, audioPath, outputPath, duratio
 
 // ─── LAYERED COMPOSITION WITH BACKGROUND IMAGE ──────────────────────────────
 // Layer order (back→front):
-//   bgImagePath  → static philosophy background (e.g. Greek library)
-//   slideshowPath → chalk images, 85% opacity over bg
-//   particlesPath → screen blend (warm ember sparks)
-//   smokePath     → screen blend (atmospheric drift)
-//   assPath       → ASS karaoke subtitles burned in
+//   bgImagePath   → static philosophy background (hidden by 100% chalk, but
+//                   visible through animation clips where it was screen-blended
+//                   into the slideshow by renderClipChunk)
+//   slideshowPath → chalk images at 100% opacity (no bg bleed on image clips)
+//   particlesPath → screen blend (warm orange ember sparks)
+//   smokePath     → screen blend (atmospheric dust drift)
+//   framePath     → philosophy frame PNG (RGBA, transparent centre) — overlay
+//   assPath       → ASS karaoke subtitles burned in on top
 //
-// Audio:
-//   voiceAudioPath → a:0 (voice + fire + crickets)
-//   bgMusicPath    → a:1 (music at 30% of voice, no ducking — separate stream)
-//
-// The MP4 exits with two audio streams so the music is always clearly audible
-// at 30% relative to voice, with no sidechain compression.
+// Audio: single mixed stereo track (voice + bgmusic + fire all in voiceAudioPath).
 export function composeFinalVideoWithBg({
   bgImagePath,
   slideshowPath,
@@ -719,7 +809,8 @@ export function composeFinalVideoWithBg({
   smokePath,
   assPath,
   voiceAudioPath,
-  bgMusicPath,
+  bgMusicPath,   // ignored — mix music into voiceAudioPath via mixAudio() instead
+  framePath,     // optional: philosophy-frame.png (RGBA, transparent centre)
   outputPath,
   duration,
 }) {
@@ -727,7 +818,6 @@ export function composeFinalVideoWithBg({
   const escapedAss = assPath
     ? assPath.replace(/\\/g, "/").replace(/:/g, "\\:")
     : null;
-  const assFilter = escapedAss ? `,ass='${escapedAss}'` : "";
 
   // Build input list, tracking indices
   const inputs = [];
@@ -751,16 +841,19 @@ export function composeFinalVideoWithBg({
   inputs.push(`-i "${path.resolve(voiceAudioPath)}"`);
   const voiceIdx = idx++;
 
-  let musicIdx = null;
-  if (bgMusicPath && fileExists(bgMusicPath)) {
-    inputs.push(`-stream_loop -1 -i "${path.resolve(bgMusicPath)}"`);
-    musicIdx = idx++;
+  let frameIdx = null;
+  if (framePath && fileExists(framePath)) {
+    inputs.push(`-loop 1 -framerate 1 -i "${path.resolve(framePath)}"`);
+    frameIdx = idx++;
   }
 
   // Build filter_complex
   const filters = [];
 
-  // Base layer: bg (optional) + chalk slideshow at 85% opacity
+  // Base layer: bg (optional) + chalk slideshow at 100% opacity.
+  // For image clips: chalk fully covers the bg (desired — no bg bleed).
+  // For animation clips: the slideshow already has bg baked in via screen blend
+  // in renderClipChunk, so the static bg here is hidden anyway.
   if (bgIdx !== null) {
     filters.push(
       `[${bgIdx}:v]scale=1920:1080:force_original_aspect_ratio=increase,` +
@@ -770,8 +863,10 @@ export function composeFinalVideoWithBg({
       `[${slideshowIdx}:v]scale=1920:1080:force_original_aspect_ratio=increase,` +
       `crop=1920:1080,setsar=1,fps=30,format=gbrp[chalk]`
     );
-    // Normal blend: bg * 0.15 + chalk * 0.85
-    filters.push(`[bg][chalk]blend=all_mode=normal:all_opacity=0.85:shortest=1[base]`);
+    // blend normal: all_opacity = weight of FIRST input (bg).
+    // 0.0 → 100% chalk (second input), bg completely hidden.
+    // Animation clips already have bg baked in via screen blend in renderClipChunk.
+    filters.push(`[bg][chalk]blend=all_mode=normal:all_opacity=0.0:shortest=1[base]`);
   } else {
     filters.push(
       `[${slideshowIdx}:v]scale=1920:1080:force_original_aspect_ratio=increase,` +
@@ -785,28 +880,31 @@ export function composeFinalVideoWithBg({
   );
   filters.push(`[base][parts]blend=all_mode=screen:shortest=0[withParts]`);
 
-  // Smoke — screen blend + convert to yuv420p + burn subs
+  // Smoke — screen blend → yuv420p (ASS and frame applied after)
   filters.push(
     `[${smokeIdx}:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[smoke_sc]`
   );
   filters.push(
-    `[withParts][smoke_sc]blend=all_mode=screen:shortest=0,format=yuv420p${assFilter}[v]`
+    `[withParts][smoke_sc]blend=all_mode=screen:shortest=0,format=yuv420p[with_smoke]`
   );
 
-  // bgmusic — normalize, volume at 30%
-  if (musicIdx !== null) {
-    filters.push(
-      `[${musicIdx}:a]aresample=async=1,volume=0.30,atrim=0:${d},asetpts=PTS-STARTPTS[music]`
-    );
+  // Philosophy frame overlay (optional) — borders over the full frame
+  let afterSmoke = "with_smoke";
+  if (frameIdx !== null) {
+    filters.push(`[${afterSmoke}][${frameIdx}:v]overlay=x=0:y=0[with_frame]`);
+    afterSmoke = "with_frame";
   }
 
-  // Map outputs
-  let mapArgs   = `-map "[v]" -map ${voiceIdx}:a`;
-  let codecArgs = `-c:v libx264 -preset fast -crf 22 -c:a:0 copy`;
-  if (musicIdx !== null) {
-    mapArgs   += ` -map "[music]"`;
-    codecArgs += ` -c:a:1 aac -b:a:1 128k`;
+  // ASS subtitles (optional) — subtitles appear on top of everything
+  if (escapedAss) {
+    filters.push(`[${afterSmoke}]ass='${escapedAss}'[v]`);
+  } else {
+    filters.push(`[${afterSmoke}]null[v]`);
   }
+
+  // Single audio output — music is already mixed into voiceAudioPath via mixAudio()
+  const mapArgs   = `-map "[v]" -map ${voiceIdx}:a`;
+  const codecArgs = `-c:v libx264 -preset fast -crf 22 -c:a copy`;
 
   execSync(
     `ffmpeg -y ${inputs.join(" ")} -filter_complex "${filters.join(";")}" ` +
