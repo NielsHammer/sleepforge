@@ -37,7 +37,7 @@ import {
   createClipSlideshow,
   mixAudio,
   ensureSmokeLoop,
-  ensureParticleLoopLegacy,
+  ensureParticleLoop,
   ensurePhilosophyFrame,
   composeFinalVideoWithBg,
   getAudioDuration,
@@ -97,12 +97,7 @@ log('Topic: ' + TOPIC);
 log('Output: ' + OUTPUT_DIR);
 log('═══════════════════════════════════════════');
 
-// Pass 4: Force regeneration of cached files that changed
-const PARTICLES_CACHE = path.resolve(PROJECT_ROOT, 'engine/remotion/backgrounds/particles-loop.mp4');
-if (fs.existsSync(PARTICLES_CACHE)) {
-  log('  Clearing old particles (Pass 4 — larger/brighter embers)...');
-  fs.unlinkSync(PARTICLES_CACHE);
-}
+// Force re-render of slideshow/audio on each pass (lightweight; particles-loop is kept)
 if (fs.existsSync(SLIDESHOW_PATH)) {
   log('  Clearing old slideshow (Pass 4 — animation fix + bg zoom)...');
   fs.unlinkSync(SLIDESHOW_PATH);
@@ -312,7 +307,7 @@ if (wordTimestamps.length > 0) {
 
 // ── Step 10: Atmosphere layers + philosophy frame ─────────────────────────────
 log('\n── Step 10: Generating atmosphere layers + frame ──');
-const particlesPath = ensureParticleLoopLegacy();
+const particlesPath = await ensureParticleLoop();
 log(`  Particles: ${particlesPath}`);
 const smokePath = ensureSmokeLoop();
 log(`  Smoke: ${smokePath}`);
