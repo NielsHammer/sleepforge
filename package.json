@@ -7,7 +7,6 @@
     "dashboard": "node dashboard/server.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.20.0",
     "@fal-ai/client": "^1.9.0",
     "@remotion/bundler": "^4.0.451",
     "@remotion/cli": "^4.0.451",

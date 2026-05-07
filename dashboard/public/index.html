@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SleepForge Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <span class="logo">⚡ SleepForge</span>
+    </div>
+    <div id="pipeline-status" class="pipeline-idle">
+      <span class="pulse-dot"></span>
+      <span id="pipeline-label">Loading…</span>
+    </div>
+    <div class="header-right">
+      <span id="counts"></span>
+      <button id="refresh-btn" onclick="loadData()">↻ Refresh</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="section-thumbnails">
+      <h2>Thumbnails</h2>
+      <div id="thumbnail-grid" class="grid"></div>
+      <p id="no-thumbnails" class="empty-msg" hidden>No thumbnails generated yet.</p>
+    </section>
+
+    <section id="section-videos">
+      <h2>Videos</h2>
+      <div id="video-list"></div>
+      <p id="no-videos" class="empty-msg" hidden>No videos generated yet.</p>
+    </section>
+
+    <section id="section-scripts">
+      <h2>Scripts</h2>
+      <div id="script-list"></div>
+      <p id="no-scripts" class="empty-msg" hidden>No scripts generated yet.</p>
+    </section>
+  </main>
+
+  <!-- Reject modal -->
+  <div id="modal-overlay" class="modal-overlay" hidden>
+    <div class="modal">
+      <h3>Reject thumbnail</h3>
+      <p id="modal-title" class="modal-subtitle"></p>
+      <label>Reason <span class="required">*</span></label>
+      <textarea id="modal-reason" rows="3" placeholder="What's wrong with this thumbnail? Be specific — this goes into the learning pool."></textarea>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-reject" onclick="submitReject()">Reject</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

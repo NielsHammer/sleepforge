@@ -19,13 +19,13 @@
  *   9. Critic rates 1-10, retry if < 7, max 3 attempts (Pass 5)
  *  10. Best-of-attempts promoted as final
  */
-import Anthropic from '@anthropic-ai/sdk';
 import puppeteer from 'puppeteer';
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import { callClaudeCLI } from './claude-cli.js';
 import { selectReferenceThumbnailImages } from './thumbnail-reference-loader.js';
 import { loadWinners, loadLosers } from './thumbnail-learning-pool.js';
 
@@ -34,12 +34,11 @@ dotenv.config();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const FAL_KEY = process.env.FAL_KEY;
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 const BRAVE_API_KEY = process.env.BRAVE_API_KEY;
 
-const MODEL = 'claude-sonnet-4-6';
+const CLI_MODEL = 'claude-sonnet-4-6';
 const CANVAS_W = 1280;
 const CANVAS_H = 720;
 const MAX_ATTEMPTS = 3;
@@ -246,12 +245,7 @@ Pick the SINGLE BEST hook. Return ONLY this JSON:
   "winner_reasoning": "one sentence: why this hook + the likely image makes a viewer think 'I have to watch this'"
 }`;
 
-  const response = await anthropic.messages.create({
-    model: MODEL,
-    max_tokens: 2000,
-    messages: [{ role: 'user', content: prompt }],
-  });
-  const text = response.content[0].text;
+  const text = await callClaudeCLI(prompt, { model: CLI_MODEL, timeoutMs: 120000 });
   const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/, '');
   const m = cleaned.match(/\{[\s\S]*\}/);
   if (!m) throw new Error('Hook planner returned no JSON');
@@ -279,12 +273,7 @@ Return ONLY this JSON:
 { "is_abstract": true | false, "subject": "the literal subject if CONCRETE, or null if ABSTRACT", "reason": "one sentence why" }`;
 
   try {
-    const response = await anthropic.messages.create({
-      model: MODEL,
-      max_tokens: 300,
-      messages: [{ role: 'user', content: prompt }],
-    });
-    const text = response.content[0].text;
+    const text = await callClaudeCLI(prompt, { model: CLI_MODEL, timeoutMs: 60000 });
     const m = text.match(/\{[\s\S]*\}/);
     if (!m) return { is_abstract: true, reason: 'classifier returned no JSON, defaulting to abstract' };
     return JSON.parse(m[0]);
@@ -347,12 +336,7 @@ Return ONLY this JSON:
   "winner_reasoning": "one sentence explaining why this metaphor beats the others for THIS specific topic + hook"
 }`;
 
-  const response = await anthropic.messages.create({
-    model: MODEL,
-    max_tokens: 3000,
-    messages: [{ role: 'user', content: prompt }],
-  });
-  const text = response.content[0].text;
+  const text = await callClaudeCLI(prompt, { model: CLI_MODEL, timeoutMs: 120000 });
   const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/, '');
   const m = cleaned.match(/\{[\s\S]*\}/);
   if (!m) throw new Error('Metaphor planner returned no JSON');
@@ -534,27 +518,7 @@ async function planThumbnail({ title, scriptText, niche, tone, priorAttempt, loc
 
   const prompt = buildPlannerPrompt({ title, scriptText, niche, tone, priorAttempt, visionRefs, poolWinners: pool.winners, poolLosers: pool.losers, lockedHook, lockedMetaphor });
 
-  const content = [];
-  for (const r of visionRefs) {
-    try {
-      const buf = fs.readFileSync(r.path);
-      content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: buf.toString('base64') } });
-    } catch (e) { /* skip */ }
-  }
-  for (const w of pool.winners) {
-    content.push({ type: 'image', source: { type: 'base64', media_type: 'image/png', data: w._bytes.toString('base64') } });
-  }
-  for (const l of pool.losers) {
-    content.push({ type: 'image', source: { type: 'base64', media_type: 'image/png', data: l._bytes.toString('base64') } });
-  }
-  content.push({ type: 'text', text: prompt });
-
-  const response = await anthropic.messages.create({
-    model: MODEL,
-    max_tokens: 8000,
-    messages: [{ role: 'user', content }],
-  });
-  const text = response.content[0].text;
+  const text = await callClaudeCLI(prompt, { model: CLI_MODEL, timeoutMs: 480000 });
   const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/, '');
   const m = cleaned.match(/\{[\s\S]*\}/);
   if (!m) throw new Error('Planner returned no JSON');
@@ -619,58 +583,54 @@ async function renderHtmlToPng(html, outPath, tempHtmlPath) {
 // ─── CRITIC ───────────────────────────────────────────────────────────────────
 
 async function reviewThumbnail(pngPath, title) {
-  const buffer = fs.readFileSync(pngPath);
-  const base64 = buffer.toString('base64');
   const pool = loadPoolEntriesWithImages(3, 0);
-  const content = [
-    { type: 'image', source: { type: 'base64', media_type: 'image/png', data: base64 } },
-  ];
-  for (const w of pool.winners) {
-    content.push({ type: 'image', source: { type: 'base64', media_type: 'image/png', data: w._bytes.toString('base64') } });
-  }
+  const pngDir = path.dirname(pngPath);
+  const pngFilename = path.basename(pngPath);
 
   const referenceBlock = pool.winners.length > 0
-    ? `\n\nThe ${pool.winners.length} additional images are real thumbnails Niels personally APPROVED. They are your calibration anchor — outputs that match their level of intentionality should rate 7+.\n\nApproved reference reasoning:\n${pool.winners.map((w, i) => `  ${i + 1}. "${w.title}": ${w.approved_reason}`).join('\n')}`
+    ? `\nApproved reference designs (Niels personally approved these — calibrate your rating against their quality level):\n${pool.winners.map((w, i) => `  ${i + 1}. "${w.title}": ${w.approved_reason}`).join('\n')}\nOutputs that match this level of intentionality should rate 7+.\n`
     : '';
 
-  content.push({
-    type: 'text',
-    text: `You are reviewing a YouTube thumbnail for the video "${title}". The first image is the candidate to review.${referenceBlock}
+  const prompt = `Use the Read tool to view the thumbnail image at this path:
+${pngPath}
 
+Then rate this YouTube thumbnail for the video "${title}".
+${referenceBlock}
 Rate 1-10:
 - 1-3: Has a hard defect (typo, unreadable text, wrong subject, looks broken)
 - 4-5: Functional but forgettable, looks like a template
 - 6: Decent — one good idea but execution has issues
-- 7: Solid — same league as the approved reference thumbnails above
+- 7: Solid — publishable quality
 - 8-9: Excellent — would actually go on a real channel
 - 10: Best-of-the-year tier
 
-Be honest, not reflexively harsh. If the candidate is structurally as good as the reference winners, rate it 7+.
+Be honest, not reflexively harsh.
 
 Hard defects that cap the rating at 4:
 - Visible typos
 - Text covering the focal subject of the image
 - Subject identity is wrong
 - Floating clip-art / emoji icons used as decoration
-- Compositionally identical to a template (no specific design choices for THIS topic)
+- Compositionally identical to a template with no specific design choices for THIS topic
 
 Return ONLY valid JSON:
 {
-  "rating": 1-10,
-  "would_use_on_real_channel": true | false,
+  "rating": 1,
+  "would_use_on_real_channel": false,
   "designer_verdict": "one sentence — what's good or bad about this specific design",
   "specific_problems": ["concrete defects, empty array if none"],
   "what_works": ["genuine wins, empty array if none"],
   "fix_instructions": "if rating < 7, the SINGLE most important thing to change"
-}`,
-  });
+}`;
 
-  const response = await anthropic.messages.create({
-    model: MODEL,
-    max_tokens: 1500,
-    messages: [{ role: 'user', content }],
+  const text = await callClaudeCLI(prompt, {
+    model: CLI_MODEL,
+    timeoutMs: 120000,
+    tools: 'Read',
+    addDirs: [pngDir],
+    allowedTools: 'Read',
+    permissionMode: 'bypassPermissions',
   });
-  const text = response.content[0].text;
   const m = text.match(/\{[\s\S]*\}/);
   if (!m) return { rating: 5, problems: ['parse failed'], strengths: [], fix_instructions: null };
   const parsed = JSON.parse(m[0]);

@@ -61,10 +61,12 @@ export async function callClaudeCLI(prompt, opts = {}) {
     delete env.ANTHROPIC_API_KEY;
     delete env.ANTHROPIC_AUTH_TOKEN;
 
+    // shell: true required on Windows — npm CLIs are .cmd files that need cmd.exe
     const child = spawn("claude", args, {
       stdio: ["pipe", "pipe", "pipe"],
       cwd: os.tmpdir(),
       env,
+      shell: process.platform === 'win32',
     });
 
     let stdout = "";
