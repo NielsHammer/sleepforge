@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(py *)",
+      "PowerShell(node --version)",
+      "PowerShell(nvidia-smi *)",
+      "PowerShell(winget install *)",
+      "PowerShell(C:\\\\dev\\\\sleepforge\\\\.venv\\\\Scripts\\\\python.exe --version)",
+      "PowerShell(C:\\\\dev\\\\sleepforge\\\\.venv\\\\Scripts\\\\pip.exe install torch torchaudio --index-url https://download.pytorch.org/whl/cu121)",
+      "PowerShell(C:\\\\dev\\\\sleepforge\\\\.venv\\\\Scripts\\\\python.exe -c \"import torch; print\\('CUDA available:', torch.cuda.is_available\\(\\)\\); print\\('GPU:', torch.cuda.get_device_name\\(0\\) if torch.cuda.is_available\\(\\) else 'none'\\); print\\('PyTorch:', torch.__version__\\)\")",
+      "PowerShell(C:\\\\dev\\\\sleepforge\\\\.venv\\\\Scripts\\\\pip.exe install chatterbox-tts)",
+      "PowerShell(C:\\\\dev\\\\sleepforge\\\\.venv\\\\Scripts\\\\pip.exe install torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu121 --force-reinstall)",
+      "PowerShell(C:\\\\dev\\\\sleepforge\\\\.venv\\\\Scripts\\\\pip.exe install torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124 --force-reinstall)",
+      "PowerShell(C:\\\\dev\\\\sleepforge\\\\.venv\\\\Scripts\\\\python.exe -c \"from chatterbox.tts import ChatterboxTTS; print\\('Chatterbox import OK'\\)\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(node *)",
+      "Bash(Get-Content \"C:\\\\Users\\\\niels\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--dev-sleepforge\\\\5f8a4933-0f6e-4024-afcb-499652f066e8\\\\tasks\\\\bctr2lzub.output\" -Wait)",
+      "Bash(Select-String --line-buffered -Pattern \"Done|Failed|Error|error|Exception|hook|planner|critic|pass|PASS|FAIL|timeout|✅|✗\")",
+      "PowerShell(Get-Content *)",
+      "PowerShell(New-Item *)",
+      "PowerShell(Start-Sleep -Seconds 3; Invoke-WebRequest -Uri \"http://localhost:3000/api/data\" -UseBasicParsing | Select-Object StatusCode, Content)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3000/api/data\" -UseBasicParsing -TimeoutSec 5 | Select-Object StatusCode)",
+      "PowerShell(netstat *)",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:3000/api/data\" -UseBasicParsing; $data = $r.Content | ConvertFrom-Json; Write-Output \"Thumbnails: $\\($data.thumbnails.Count\\)\"; Write-Output \"Videos: $\\($data.videos.Count\\)\"; Write-Output \"Scripts: $\\($data.scripts.Count\\)\"; Write-Output \"Pipeline active: $\\($data.pipeline.active\\)\")",
+      "Bash(git reset *)",
+      "PowerShell(git *)",
+      "PowerShell(git -C \"C:\\\\dev\\\\sleepforge\" commit -m $msg)",
+      "Bash(ffmpeg -version)",
+      "Bash(C:/dev/sleepforge/.venv/Scripts/python -c \"import whisper; print\\('whisper ok'\\)\")",
+      "Bash(C:/dev/sleepforge/.venv/Scripts/pip install *)",
+      "Bash(C:/dev/sleepforge/.venv/Scripts/python *)",
+      "Bash(Get-Content *)",
+      "Bash(Get-ChildItem *)",
+      "Bash(ffprobe -v error -show_streams -show_format output/marcus-aurelius-letting-go/final.mp4)",
+      "Bash(ffprobe -v error -show_streams engine/remotion/backgrounds/particles-loop.mp4)",
+      "Bash(ffprobe -v error -show_streams output/marcus-aurelius-letting-go/mixed-audio.m4a)"
+    ]
+  }
+}

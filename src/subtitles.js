@@ -111,9 +111,9 @@ export function generateASS(wordTimestamps, outputPath) {
   //
   // ASS color format is &HAABBGGRR (alpha 00=opaque, FF=transparent)
   //   Primary   &H00FFFFFF  pure bright white  (active word — currently being spoken)
-  //   Secondary &H40DCDCDC  ~75% chalk white   (past + upcoming words — visible but
-  //                                              clearly distinguishable from the active word
-  //                                              so the karaoke chalk-write reveal is readable)
+  //   Secondary &HFF000000  fully transparent   (words invisible until it's their turn;
+  //                                              \kf animates fill from invisible→white as
+  //                                              each word is spoken — true word-by-word reveal)
   //   Outline   &HC0000000  heavy black edge   (chalk-stroke pop on any background)
   //   Shadow    &HD0000000  deep black         (cozy depth)
   //
@@ -128,7 +128,7 @@ WrapStyle: 0
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,Kalam,80,&H00FFFFFF,&H40DCDCDC,&HC0000000,&HD0000000,-1,0,0,0,100,100,3,0,1,6,4,2,140,140,150,1
+Style: Default,Kalam,80,&H00FFFFFF,&HFF000000,&HC0000000,&HD0000000,-1,0,0,0,100,100,3,0,1,6,4,2,140,140,150,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text

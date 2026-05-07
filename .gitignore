@@ -45,3 +45,6 @@ scripts/*-image-prompts.json
 # Model files
 *.onnx
 voices.bin
+
+# Conversation transcripts (contain personal context + may have secrets)
+docs/CONTEXT/transcripts/

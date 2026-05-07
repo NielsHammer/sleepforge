@@ -298,7 +298,7 @@ log('  Creating clip slideshow (Ken Burns + 1.5s crossfades)...');
 const usableClips = clips.filter(c => c.imagePath);
 createClipSlideshow(usableClips, Math.ceil(audioDuration), SLIDESHOW_PATH, { fadeTime: 1.5 });
 
-// 10b: Audio mix — voice + bgmusic(12%) + fireplace(6%) + crickets(5%), sidechain duck
+// 10b: Audio mix — voice + bgmusic(18%) + fireplace(6%) + crickets(5%), gentle sidechain duck
 log('  Mixing audio with bgmusic + sidechain ducking...');
 mixAudio(VOICEOVER_PATH, Math.ceil(audioDuration), AUDIO_MIX_PATH);
 
@@ -306,7 +306,7 @@ mixAudio(VOICEOVER_PATH, Math.ceil(audioDuration), AUDIO_MIX_PATH);
 log('  Composing final video...');
 const hasAss = fs.existsSync(ASS_PATH);
 const assFilter = hasAss
-  ? `,ass='${ASS_PATH.replace(/\\/g, '\\\\').replace(/:/g, '\\:')}'`
+  ? `,ass='${ASS_PATH.replace(/\\/g, '/').replace(/:/g, '\\:')}'`
   : '';
 
 execSync(

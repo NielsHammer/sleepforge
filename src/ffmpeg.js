@@ -191,33 +191,28 @@ export function createClipSlideshow(clips, totalDuration, outputPath, options = 
 }
 
 // ─── Ken Burns per-clip filter ───────────────────────────────────────────────
-// Gentle 4% zoom using scale+crop (crop supports `t` — zoompan does not in v8).
-// Scale to 110% of 1920x1080 = 2112x1188, then animate a shrinking/growing
-// crop window that simulates zoom in (1.0→1.04) or out (1.04→1.0).
-// Alternate direction per clip to avoid monotony.
+// Smooth 4% zoom using scale+crop. Scale to 110% (2112×1188), then animate a
+// crop window using `n` (frame counter) for smooth continuous motion.
+// floor() removed — ffmpeg distributes fractional pixel rounding internally,
+// giving smoother motion than explicit floor() which caused 1-2fps stutter.
+// Note: crop filter does NOT support `t` (time variable) — must use `n`.
 //
-// Math for 1.04x zoom crop:
-//   full:   2112 × 1188  (1.0x — sees entire 110% scaled image)
-//   zoomed: 2031 × 1142  (1.04x — sees 96% of scaled image, centre crop)
-//   delta:  81 wide, 46 tall; x offset = 40, y offset = 23
+// Math: full=2112×1188 (1.0×), zoomed=2031×1142 (1.04×), delta=81w,46h, offset=40x,23y
 function buildKenBurnsFilter(inputLabel, outLabel, durSec, zoomIn = true) {
   const fps = 30;
   const d = durSec.toFixed(3);
-  // N = total output frames; use `n` (frame counter) since `t` is NaN for still-image inputs
   const N = Math.max(1, Math.round(durSec * fps));
   let cropFilter;
   if (zoomIn) {
-    // 1.0 → 1.04: crop shrinks to centre → image appears to zoom in
-    cropFilter =
-      `crop=w='floor(2112-81*n/${N})':h='floor(1188-46*n/${N})':x='floor(40*n/${N})':y='floor(23*n/${N})'`;
+    // n=0: full 2112×1188 (1.0×) → n=N: 2031×1142 centred (1.04× zoom-in)
+    cropFilter = `crop=w='2112-81*n/${N}':h='1188-46*n/${N}':x='40*n/${N}':y='23*n/${N}'`;
   } else {
-    // 1.04 → 1.0: crop grows from centre → image appears to zoom out
-    cropFilter =
-      `crop=w='floor(2031+81*n/${N})':h='floor(1142+46*n/${N})':x='floor(40*(${N}-n)/${N})':y='floor(23*(${N}-n)/${N})'`;
+    // n=0: 2031×1142 centred (1.04×) → n=N: full 2112×1188 (zoom-out)
+    cropFilter = `crop=w='2031+81*n/${N}':h='1142+46*n/${N}':x='40*(1-n/${N})':y='23*(1-n/${N})'`;
   }
   return (
     `[${inputLabel}]scale=2112:1188:force_original_aspect_ratio=increase,` +
-    `setsar=1,fps=${fps},` +
+    `setsar=1,fps=${fps},setpts=PTS-STARTPTS,` +
     `${cropFilter},scale=1920:1080,` +
     `format=yuv420p,trim=duration=${d},setpts=PTS-STARTPTS[${outLabel}]`
   );
@@ -414,7 +409,7 @@ export function mixAudio(voiceoverPath, duration, outputPath, options = {}) {
   const voiceVol     = options.voiceVolume    ?? "1.0";
   const fireplaceVol = options.fireplaceVolume ?? "0.06";
   const cricketVol   = options.cricketVolume   ?? "0.05";
-  const bgMusicVol   = options.bgMusicVolume   ?? "0.12";
+  const bgMusicVol   = options.bgMusicVolume   ?? "0.18";
 
   console.log(`  Mixing audio (voice:${voiceVol} fire:${fireplaceVol} cricket:${cricketVol} music:${bgMusicVol})...`);
 
@@ -446,16 +441,17 @@ export function mixAudio(voiceoverPath, duration, outputPath, options = {}) {
     inputIdx++;
   }
 
-  // Sidechain ducking: voice ducks all background tracks by ~6dB when speaking.
-  // ratio=2 with threshold=0.02 gives ~7dB reduction during speech — natural duck.
-  // attack=50ms (fast enough to catch sentence starts), release=800ms (slow fade-back).
+  // Sidechain ducking: voice ducks background music by ~4-5dB when speaking.
+  // ratio=1.3 with threshold=0.05: at typical voice level (-6dBFS), music is
+  // reduced ~4.6dB (18%→~11%). Inaudible at 2:1 ratio was the prior bug.
+  // attack=100ms, release=1500ms — slow enough to avoid pumping.
   if (bgTracks.length > 0) {
     const scLabels = bgTracks.map((_, i) => `[sc${i}]`).join("");
     filters.push(`[voice_raw]asplit=${bgTracks.length + 1}[voice_main]${scLabels}`);
     bgTracks.forEach((t, i) => {
       filters.push(
         `[${t.volLabel}][sc${i}]sidechaincompress=` +
-        `threshold=0.02:ratio=2:attack=50:release=800[${t.label}]`
+        `threshold=0.05:ratio=1.3:attack=100:release=1500[${t.label}]`
       );
     });
   } else {
@@ -513,25 +509,20 @@ function ensureDustPng(outPath) {
 export function ensureSmokeLoop(outPath = SMOKE_PATH) {
   if (fileExists(outPath) && fs.statSync(outPath).size > 100000) return outPath;
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
-  console.log(`  Generating smoke loop → ${outPath} (one-time)...`);
-  // SLOW gradient smoke: very low-res blurred noise generated once, then
-  // gently translated across a 60s loop with a soft sin-eased motion (~3 px/s).
-  // The animation is the slow drift only — no per-frame regen — so motion is
-  // calm and deterministic, not the previous frenetic per-frame noise.
-  // Dark + desaturated so screen-blend reads as atmospheric haze, not blocking.
+  console.log(`  Generating smoke loop → ${outPath} (one-time, ~30s)...`);
+  // Animate noise at low resolution (240×135) then scale up — much faster than
+  // per-frame 1920×1080 geq. The noise changes each frame via allf=t+u (time +
+  // uniform), blurred to a cloud texture, then scaled up and darkened for
+  // atmospheric screen-blend overlay on the slideshow.
   execSync(
-    `ffmpeg -y -f lavfi -i "color=c=gray:s=240x135:r=1:d=1" ` +
-    `-filter_complex "` +
-      // 1) Generate ONE noise frame, blur heavily → smooth grey cloud
-      `[0:v]noise=alls=70:allf=t,boxblur=22:2,format=yuv420p[cloud];` +
-      // 2) Loop that single frame, scale to 2x final width so we can drift it
-      `[cloud]loop=loop=-1:size=1:start=0,trim=duration=60,setpts=N/60/TB,` +
-      `scale=3840:1080,format=yuv420p[wide];` +
-      // 3) Crop a moving 1920×1080 window — slow horizontal drift across 60s
-      `[wide]crop=1920:1080:'960+960*sin(2*PI*t/60)':0,` +
-      `eq=brightness=-0.50:contrast=1.4:saturation=0,format=yuv420p[v]` +
-    `" -map "[v]" -t 60 -r 30 -c:v libx264 -preset medium -crf 28 -movflags +faststart "${outPath}"`,
-    { stdio: "pipe", timeout: 120000 }
+    `ffmpeg -y -f lavfi -i "color=c=0x808080:s=240x135:r=30:d=60" ` +
+    `-vf "noise=alls=50:allf=t+u,` +
+         `boxblur=8:2,` +
+         `scale=1920:1080:flags=bicubic,` +
+         `eq=brightness=-0.55:contrast=1.2:saturation=0,` +
+         `format=yuv420p" ` +
+    `-t 60 -c:v libx264 -preset fast -crf 28 -movflags +faststart "${outPath}"`,
+    { stdio: "pipe", timeout: 300000 }
   );
   return outPath;
 }
@@ -573,7 +564,7 @@ export function ensureParticleLoopLegacy(outPath = PARTICLES_PATH) {
   // black falls away and only the glowing dots remain.
 
   const speed = 10;        // px/sec upward drift
-  const spawnDensity = 8;  // lower = denser sparks; ~25 visible at any time
+  const spawnDensity = 15; // lower = denser sparks; ~300 visible at any time (was 8 = too sparse)
   const lifetime = 4;      // each spark lives 4 seconds (Y travels ~40px)
 
   // The spawn-point hash is over (X, Y) — Y here is the spawn Y, not screen Y.
@@ -817,7 +808,7 @@ export async function compose(config) {
   const finalPath = path.join(outputDir, "final.mp4");
   if (assPath && fileExists(assPath)) {
     console.log("  Burning subtitles...");
-    const escapedAss = assPath.replace(/:/g, "\\:");
+    const escapedAss = assPath.replace(/\\/g, "/").replace(/:/g, "\\:");
     try {
       execSync(
         `ffmpeg -y -i "${videoForSubs}" -vf "ass='${escapedAss}'" -c:a copy -movflags +faststart "${finalPath}"`,
