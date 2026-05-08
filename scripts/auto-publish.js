@@ -25,6 +25,22 @@ import path           from "path";
 import { fileURLToPath } from "url";
 import dotenv         from "dotenv";
 
+// ─── JARVIS STATE HELPER ─────────────────────────────────────────────────────
+
+const JARVIS_STATE = path.join(path.dirname(path.dirname(new URL(import.meta.url).pathname.replace(/^\//,''))), 'jarvis', 'state.json');
+
+function jarvisUpdate(jobId, patch) {
+  if (!jobId) return;
+  try {
+    const stateFile = path.join(path.resolve(path.dirname(new URL(import.meta.url).pathname.slice(process.platform==='win32'?1:0)),'..'), 'jarvis', 'state.json');
+    const state = JSON.parse(fs.readFileSync(stateFile, 'utf-8'));
+    const idx   = state.renders.findIndex(r => r.id === jobId);
+    if (idx >= 0) Object.assign(state.renders[idx], patch, { updatedAt: new Date().toISOString() });
+    state.last_updated = new Date().toISOString();
+    fs.writeFileSync(stateFile, JSON.stringify(state, null, 2));
+  } catch { /* Jarvis not running — that's fine */ }
+}
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT      = path.resolve(__dirname, "..");
 dotenv.config({ path: path.join(ROOT, ".env") });
@@ -43,6 +59,7 @@ function parseArgs() {
     channel:     null,
     duration:    2,
     schedule:    null,          // ISO string or null → tomorrow 8am
+    noSchedule:  false,         // --no-schedule: upload immediately, no publishAt
     privacy:     "private",
     thumbnail:   true,
     dryRun:      false,
@@ -54,6 +71,7 @@ function parseArgs() {
       case "--channel":     opts.channel   = args[++i]; break;
       case "--duration":    opts.duration  = parseInt(args[++i], 10); break;
       case "--schedule":    opts.schedule  = args[++i]; break;
+      case "--no-schedule": opts.noSchedule = true;     break;
       case "--privacy":     opts.privacy   = args[++i]; break;
       case "--no-thumbnail":opts.thumbnail = false;     break;
       case "--dry-run":     opts.dryRun    = true;      break;
@@ -122,22 +140,26 @@ async function main() {
   const thumbDir  = path.join(outputDir, "thumbnail");
   const scriptJsonPath = path.join(ROOT, "scripts", `${slug}.json`);
 
-  const scheduledAt = opts.schedule || tomorrowAt8am();
+  const scheduledAt = opts.noSchedule ? null : (opts.schedule || tomorrowAt8am());
 
   log("\n╔══════════════════════════════════════════╗");
   log("║   SleepForge Auto-Publish Pipeline        ║");
   log("╚══════════════════════════════════════════╝");
   log(`  Topic:    ${opts.topic}`);
   log(`  Channel:  ${opts.channel || "(dry-run, no upload)"}`);
-  log(`  Schedule: ${new Date(scheduledAt).toLocaleString()}`);
+  log(`  Schedule: ${scheduledAt ? new Date(scheduledAt).toLocaleString() : "immediate (no schedule)"}`);
   log(`  Output:   ${outputDir}\n`);
+
+  const jobId = process.env.JARVIS_JOB_ID || null;
 
   // ── Step 1: Generate video ─────────────────────────────────────────────────
   if (fs.existsSync(videoPath)) {
     log("── Step 1: Video already exists, skipping render ──");
     log(`   ${videoPath}`);
+    jarvisUpdate(jobId, { step: 'Video cached', progress: 40 });
   } else {
     log("── Step 1: Rendering video ──");
+    jarvisUpdate(jobId, { step: 'Rendering video', progress: 10, status: 'rendering' });
     await runScript(path.join(ROOT, "scripts", "test-video-2min.js"), {
       SLEEPFORGE_TOPIC:    opts.topic,
       SLEEPFORGE_SLUG:     slug,
@@ -159,6 +181,7 @@ async function main() {
   let thumbnailPath = null;
   if (opts.thumbnail) {
     log("\n── Step 2: Generating thumbnail ──");
+    jarvisUpdate(jobId, { step: 'Generating thumbnail', progress: 45 });
     const existingThumb = path.join(thumbDir, "thumbnail-final.png");
     if (fs.existsSync(existingThumb)) {
       thumbnailPath = existingThumb;
@@ -182,6 +205,7 @@ async function main() {
 
   // ── Step 4: Generate metadata ──────────────────────────────────────────────
   log("\n── Step 3: Generating YouTube metadata ──");
+  jarvisUpdate(jobId, { step: 'Generating metadata', progress: 65 });
   const meta = await generateMetadata(opts.topic, scenes);
   log(`  Title:  ${meta.title}`);
   log(`  Tags:   ${meta.tags.slice(0, 5).join(", ")}… (${meta.tags.length} total)`);
@@ -201,6 +225,7 @@ async function main() {
   }
 
   log("\n── Step 4: Uploading to YouTube ──");
+  jarvisUpdate(jobId, { step: 'Uploading to YouTube', progress: 75, status: 'uploading' });
   const videoId = await uploadVideo({
     channelName:   opts.channel,
     videoPath,
@@ -211,6 +236,14 @@ async function main() {
     scheduledAt,
     privacyStatus: opts.privacy,
   });
+
+  jarvisUpdate(jobId, { step: 'Published', progress: 100, status: 'done', videoId, videoUrl: `https://youtube.com/watch?v=${videoId}` });
+
+  // Persist videoId back to metadata file so Jarvis can read it
+  fs.writeFileSync(
+    path.join(outputDir, "youtube-metadata.json"),
+    JSON.stringify({ ...meta, scheduledAt, channel: opts.channel, videoId }, null, 2)
+  );
 
   log("\n╔══════════════════════════════════════════╗");
   log("║   ✅ Published!                            ║");
