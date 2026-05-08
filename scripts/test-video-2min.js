@@ -29,10 +29,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawn, execSync } from 'child_process';
 
-import { generateScript, craftImagePrompt } from '../src/script-generator.js';
-import { generateSceneImage }               from '../src/fal.js';
-import { generateASS }                      from '../src/subtitles.js';
-import { buildTimedClips }                  from '../src/director.js';
+import { generateScript }   from '../src/script-generator.js';
+import { generateASS }      from '../src/subtitles.js';
+import { createStoryboard } from '../src/director.js';
 import {
   createClipSlideshow,
   mixAudio,
@@ -54,7 +53,6 @@ const DURATION_MIN = 2;
 const SLUG         = 'marcus-aurelius-2min';
 const OUTPUT_DIR   = path.join(PROJECT_ROOT, 'output', SLUG);
 const ASSETS_DIR   = path.join(OUTPUT_DIR, 'assets');
-const IMAGES_DIR   = path.join(OUTPUT_DIR, 'images');
 const SENTENCES_DIR = path.join(ASSETS_DIR, 'sentences');
 const SCRIPTS_DIR  = path.join(PROJECT_ROOT, 'scripts');
 
@@ -73,9 +71,7 @@ const BG_PROMPT      = 'ancient Greek philosophy library at dusk, marble columns
                        'atmospheric, cinematic, no people, no text, soft focus, warm tones, ' +
                        'oil lamps glowing, scroll shelves, stone archways, golden hour light';
 
-const IMGS_PER_SCENE = 2;
-
-for (const d of [OUTPUT_DIR, ASSETS_DIR, IMAGES_DIR, SENTENCES_DIR]) {
+for (const d of [OUTPUT_DIR, ASSETS_DIR, SENTENCES_DIR]) {
   fs.mkdirSync(d, { recursive: true });
 }
 
@@ -209,44 +205,26 @@ if (fs.existsSync(WHISPER_PATH)) {
   log(`  ${wordTimestamps.length} words in ${((Date.now()-t0)/1000).toFixed(0)}s`);
 }
 
-// ── Step 5: Director ──────────────────────────────────────────────────────────
-log('\n── Step 5: Director — building clip windows ──');
-const clips = buildTimedClips(scenes, wordTimestamps, audioDuration, 4);
-log(`  ${clips.length} clips at ~4s each covering ${audioDuration.toFixed(1)}s audio`);
+// ── Step 5: Director + library image assignment ───────────────────────────────
+log('\n── Step 5: Director + library image lookup ──');
+const { clips } = await createStoryboard(scenes, wordTimestamps, audioDuration, { targetClipSec: 4 });
 
-// ── Step 6: Images ────────────────────────────────────────────────────────────
-log(`\n── Step 6: Chalk image generation (Flux Schnell, ${IMGS_PER_SCENE}/scene) ──`);
-const totalImages  = scenes.length * IMGS_PER_SCENE;
-const allImagePaths = [];
-const imgJobs = [];
-
-for (let si = 0; si < scenes.length; si++) {
-  for (let vi = 0; vi < IMGS_PER_SCENE; vi++) {
-    const imgPath = path.join(IMAGES_DIR, `scene-${String(si+1).padStart(3,'0')}-v${vi}.png`);
-    allImagePaths.push(imgPath);
-    if (!fs.existsSync(imgPath)) {
-      imgJobs.push({ si, vi, imgPath, prompt: craftImagePrompt(scenes[si], vi) });
-    }
+// Resolve relative library paths → absolute so ffmpeg can find them
+for (const clip of clips) {
+  if (clip.imagePath && !path.isAbsolute(clip.imagePath)) {
+    clip.imagePath = path.join(PROJECT_ROOT, clip.imagePath);
   }
 }
-log(`  ${totalImages - imgJobs.length} cached, ${imgJobs.length} to generate`);
 
-let imgJobIdx = 0, imgDone = 0;
-async function imgWorker() {
-  while (true) {
-    const j = imgJobs[imgJobIdx++];
-    if (!j) return;
-    try {
-      await generateSceneImage(j.prompt, j.imgPath);
-      imgDone++;
-      log(`  [${imgDone}/${imgJobs.length}] scene-${j.si+1}-v${j.vi}.png`);
-    } catch (err) {
-      log(`  [img scene-${j.si+1}-v${j.vi}] FAILED: ${err.message}`);
-    }
-  }
+const assigned  = clips.filter(c => c.imagePath && fs.existsSync(c.imagePath)).length;
+const philsUsed = [...new Set(clips.map(c => c.philosopher).filter(Boolean))];
+log(`  ${clips.length} clips | ${assigned}/${clips.length} images from library | no Fal.ai calls`);
+log(`  Philosophers in script: ${philsUsed.join(', ')}`);
+log('  Sample assignments (first 4 clips):');
+for (const clip of clips.slice(0, 4)) {
+  const img = clip.imagePath ? path.basename(clip.imagePath) : 'none';
+  log(`    [${clip.index}] score=${clip.imageScore ?? '-'} "${(clip.text||'').slice(0,45)}…" → ${img}`);
 }
-await Promise.all(Array.from({ length: 4 }, imgWorker));
-log(`  Images done: ${allImagePaths.filter(p => fs.existsSync(p)).length}/${totalImages}`);
 
 // ── Step 7: Philosophy background image ───────────────────────────────────────
 log('\n── Step 7: Philosophy background image ──');
@@ -260,22 +238,7 @@ if (!fs.existsSync(BG_IMAGE_PATH)) {
   log(`  Cached: ${BG_IMAGE_PATH}`);
 }
 
-// ── Step 8: Assign images to clips ────────────────────────────────────────────
-log('\n── Step 8: Assigning images to clips ──');
-const sceneDuration = audioDuration / scenes.length;
-const sceneClipCounters = new Array(scenes.length).fill(0);
-
-for (let ci = 0; ci < clips.length; ci++) {
-  const mid = (clips[ci].start_time + clips[ci].end_time) / 2;
-  const si  = Math.min(scenes.length - 1, Math.floor(mid / sceneDuration));
-  const vi  = sceneClipCounters[si] % IMGS_PER_SCENE;
-  const imgPath = allImagePaths[si * IMGS_PER_SCENE + vi];
-  clips[ci].imagePath = fs.existsSync(imgPath) ? imgPath : null;
-  sceneClipCounters[si]++;
-}
-const firstValidImg = allImagePaths.find(p => fs.existsSync(p));
-for (const clip of clips) { if (!clip.imagePath) clip.imagePath = firstValidImg; }
-log(`  Assigned: ${clips.filter(c => c.imagePath).length}/${clips.length} clips have images`);
+// ── Step 8: Image assignment handled in Step 5 (createStoryboard) ────────────
 
 // ── Step 9: ASS subtitles ─────────────────────────────────────────────────────
 log('\n── Step 9: ASS karaoke subtitles ──');
