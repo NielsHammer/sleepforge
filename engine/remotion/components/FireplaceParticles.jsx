@@ -19,7 +19,7 @@ import { AbsoluteFill, useCurrentFrame, useVideoConfig } from 'remotion';
 // Composed downstream with blend=screen, so the black background drops
 // out and only the warm glow lands on top of the chalk image.
 
-const SPARK_COUNT = 35;
+const SPARK_COUNT = 42;
 
 // Tiny PRNG seeded by index — each spark gets its own deterministic
 // "personality" (speed, sway, drift direction, life duration).
@@ -53,7 +53,7 @@ export const FireplaceParticles = () => {
           const swayFreq = 0.25 + rand(i, 3) * 0.55;     // 0.25..0.8 Hz sway speed
           const lifetime = 4 + rand(i, 4) * 6;           // 4..10s lifetime
           const phase = rand(i, 5) * lifetime;           // birth offset in cycle
-          const baseSize = 1.5 + rand(i, 6) * 5;         // 1.5..6.5 px base radius
+          const baseSize = 2 + rand(i, 6) * 7;            // 2..9 px base radius (+~30%)
           const xCurve = rand(i, 7);                     // 0..1 curl direction bias
           const layer = rand(i, 8);                      // 0..1 depth layer
 
@@ -77,7 +77,7 @@ export const FireplaceParticles = () => {
 
           // Life curve: brightness peaks at half-life via sin pulse, with
           // slight per-spark intensity variation so not all peak together.
-          const intensity = 0.4 + rand(i, 11) * 0.6;
+          const intensity = 0.55 + rand(i, 11) * 0.7;    // 0.55..1.25 (+~30% brighter)
           const life = Math.sin(Math.PI * lifeT) * intensity;
 
           // Layer-based size + opacity — far layer = small + dim, near = big + bright

@@ -38,11 +38,10 @@ import {
   mixAudio,
   ensureSmokeLoop,
   ensureParticleLoop,
-  ensurePhilosophyFrame,
+  ensurePhilosophyFrameSet,
   composeFinalVideoWithBg,
   getAudioDuration,
 } from '../src/ffmpeg.js';
-import { renderAnimation } from '../src/remotion-renderer.js';
 import { isHealthy, chatterboxTTS } from '../src/chatterbox.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -56,7 +55,6 @@ const SLUG         = 'marcus-aurelius-2min';
 const OUTPUT_DIR   = path.join(PROJECT_ROOT, 'output', SLUG);
 const ASSETS_DIR   = path.join(OUTPUT_DIR, 'assets');
 const IMAGES_DIR   = path.join(OUTPUT_DIR, 'images');
-const ANIM_DIR     = path.join(OUTPUT_DIR, 'animations');
 const SENTENCES_DIR = path.join(ASSETS_DIR, 'sentences');
 const SCRIPTS_DIR  = path.join(PROJECT_ROOT, 'scripts');
 
@@ -69,8 +67,6 @@ const BG_MUSIC_PATH  = path.join(PROJECT_ROOT, 'assets', 'audio', 'bgmusic.mp3')
 const FINAL_PATH     = path.join(OUTPUT_DIR, 'final.mp4');
 const FRAME_30S_PATH = path.join(OUTPUT_DIR, 'frame-30s.png');
 const FRAME_IMG_PATH = path.join(OUTPUT_DIR, 'verify-image-scene.png');
-const FRAME_ANIM_PATH= path.join(OUTPUT_DIR, 'verify-animation-scene.png');
-const PHILOSOPHY_FRAME_PATH = path.join(PROJECT_ROOT, 'assets', 'frames', 'philosophy-frame.png');
 
 const BG_IMAGE_PATH  = path.join(PROJECT_ROOT, 'assets', 'backgrounds', 'philosophy-bg.png');
 const BG_PROMPT      = 'ancient Greek philosophy library at dusk, marble columns, candlelight, ' +
@@ -79,33 +75,20 @@ const BG_PROMPT      = 'ancient Greek philosophy library at dusk, marble columns
 
 const IMGS_PER_SCENE = 2;
 
-// Animations to render and assign — (compositionId → output filename)
-const ANIM_POOL = [
-  { id: 'RipplesAnimation',        file: 'ripples.mp4',     frames: 90  },
-  { id: 'HourglassAnimation',      file: 'hourglass.mp4',   frames: 120 },
-  { id: 'PathsDivergingAnimation', file: 'paths.mp4',       frames: 120 },
-];
-
-for (const d of [OUTPUT_DIR, ASSETS_DIR, IMAGES_DIR, ANIM_DIR, SENTENCES_DIR]) {
+for (const d of [OUTPUT_DIR, ASSETS_DIR, IMAGES_DIR, SENTENCES_DIR]) {
   fs.mkdirSync(d, { recursive: true });
 }
 
 const t_pipeline = Date.now();
 log('═══════════════════════════════════════════');
-log('SleepForge — 2-minute test video (polish pass 4)');
+log('SleepForge — 2-minute test video (polish pass 6)');
 log('Topic: ' + TOPIC);
 log('Output: ' + OUTPUT_DIR);
 log('═══════════════════════════════════════════');
 
 // Force re-render of slideshow/audio on each pass (lightweight; particles-loop is kept)
-if (fs.existsSync(SLIDESHOW_PATH)) {
-  log('  Clearing old slideshow (Pass 4 — animation fix + bg zoom)...');
-  fs.unlinkSync(SLIDESHOW_PATH);
-}
-if (fs.existsSync(VOICE_MIX_PATH)) {
-  log('  Clearing old audio mix (Pass 4 — single track with bgmusic)...');
-  fs.unlinkSync(VOICE_MIX_PATH);
-}
+if (fs.existsSync(SLIDESHOW_PATH)) fs.unlinkSync(SLIDESHOW_PATH);
+if (fs.existsSync(VOICE_MIX_PATH)) fs.unlinkSync(VOICE_MIX_PATH);
 if (fs.existsSync(FINAL_PATH)) fs.unlinkSync(FINAL_PATH);
 
 // ── Step 1: Start Chatterbox server ──────────────────────────────────────────
@@ -312,78 +295,20 @@ log(`  Particles: ${particlesPath}`);
 const smokePath = ensureSmokeLoop();
 log(`  Smoke: ${smokePath}`);
 
-// Philosophy frame (generated once, cached)
-ensurePhilosophyFrame(PHILOSOPHY_FRAME_PATH);
-log(`  Frame: ${PHILOSOPHY_FRAME_PATH}`);
+// Philosophy frame set — 10 variants, pick by FRAME_VARIANT env var (0-9)
+const framePaths = ensurePhilosophyFrameSet(path.join(PROJECT_ROOT, 'assets', 'frames'));
+const frameIdx = parseInt(process.env.FRAME_VARIANT || '0', 10);
+const selectedFramePath = framePaths[frameIdx % framePaths.length];
+log(`  Frame variant ${(frameIdx % framePaths.length) + 1}/10: ${path.basename(selectedFramePath)}`);
 
-// Pre-render bg zoom loop (10s, 30fps) for animation scenes
-// zoompan: z oscillates 1.00↔1.04 over 10s. Smooth sub-pixel movement at 30fps.
-const BG_ZOOM_PATH = path.join(ANIM_DIR, 'bg-zoom-loop.mp4');
-if (!fs.existsSync(BG_ZOOM_PATH) && fs.existsSync(BG_IMAGE_PATH)) {
-  log('  Pre-rendering bg zoom loop (10s)...');
-  execSync(
-    `ffmpeg -y -loop 1 -framerate 30 -t 10 -i "${BG_IMAGE_PATH}" ` +
-    `-vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,` +
-    `zoompan=z='1.02+0.02*cos(2*PI*on/300)':x='(iw-iw/zoom)/2':y='(ih-ih/zoom)/2':d=1:fps=30:s=1920x1080" ` +
-    `-t 10 -c:v libx264 -preset fast -crf 20 -movflags +faststart "${BG_ZOOM_PATH}"`,
-    { stdio: 'pipe', timeout: 300000 }
-  );
-  log(`  Bg zoom loop: ${BG_ZOOM_PATH}`);
-} else if (fs.existsSync(BG_ZOOM_PATH)) {
-  log(`  Bg zoom loop cached: ${BG_ZOOM_PATH}`);
-}
-
-// ── Step 11: Remotion animations ─────────────────────────────────────────────
-log('\n── Step 11: Rendering Remotion animations ──');
-const renderedAnims = {};
-for (const anim of ANIM_POOL) {
-  const outPath = path.join(ANIM_DIR, anim.file);
-  try {
-    await renderAnimation(anim.id, outPath, { durationInFrames: anim.frames });
-    renderedAnims[anim.id] = outPath;
-  } catch (err) {
-    log(`  WARNING: ${anim.id} render failed: ${err.message} — skipping`);
-  }
-}
-
-// Assign animations to clips at scene-boundary positions (every N clips).
-// Animations replace the chalk image for that clip window. They are short
-// (3-4s) so they align naturally with single clip durations.
-if (Object.keys(renderedAnims).length > 0 && clips.length >= 6) {
-  const animKeys = Object.keys(renderedAnims);
-  // Place 1 animation per 3 scenes, starting at scene boundary 1
-  const sceneTransitionClips = [];
-  let prevSi = -1;
-  for (let ci = 0; ci < clips.length; ci++) {
-    const mid = (clips[ci].start_time + clips[ci].end_time) / 2;
-    const si  = Math.min(scenes.length - 1, Math.floor(mid / sceneDuration));
-    if (si !== prevSi && si > 0 && si % 2 === 0) {
-      sceneTransitionClips.push(ci);
-    }
-    prevSi = si;
-  }
-  // Assign at most 3 animations
-  const assignCount = Math.min(animKeys.length, sceneTransitionClips.length, 3);
-  for (let i = 0; i < assignCount; i++) {
-    const ci = sceneTransitionClips[i];
-    const animPath = renderedAnims[animKeys[i % animKeys.length]];
-    clips[ci].videoPath = animPath;
-    clips[ci].imagePath = null; // clear still image for this slot
-    log(`  Animation at clip ${ci} (${clips[ci].start_time.toFixed(1)}s): ${path.basename(animPath)}`);
-  }
-}
+// ── Step 11: (animations removed — all clips are image scenes) ──────────────
 
 // ── Step 12: FFmpeg composition ───────────────────────────────────────────────
 log('\n── Step 12: FFmpeg composition ──');
 
-// 12a: Slideshow — animation clips screen-blended over zoomed bg, image clips static
-log('  Building clip slideshow (animation scenes: bg zoom + screen blend)...');
-const usableClips = clips.filter(c => c.imagePath || c.videoPath);
-log(`  Usable clips: ${usableClips.length} (${usableClips.filter(c=>c.videoPath).length} animations, ${usableClips.filter(c=>!c.videoPath).length} images)`);
-createClipSlideshow(usableClips, Math.ceil(audioDuration), SLIDESHOW_PATH, {
-  fadeTime:    1.5,
-  bgVideoPath: fs.existsSync(BG_ZOOM_PATH) ? BG_ZOOM_PATH : null,
-});
+// 12a: Slideshow — all image clips, 1.5s xfade crossfades
+log('  Building clip slideshow (image scenes, 1.5s xfade)...');
+createClipSlideshow(clips, Math.ceil(audioDuration), SLIDESHOW_PATH, { fadeTime: 1.5 });
 
 // 12b: Single mixed audio track — voice (100%) + fire (8%) + bgmusic (25%), no sidechain
 log('  Mixing single audio track (voice + fire + bgmusic, no sidechain)...');
@@ -404,7 +329,7 @@ composeFinalVideoWithBg({
   assPath:        fs.existsSync(ASS_PATH) ? ASS_PATH : null,
   voiceAudioPath: VOICE_MIX_PATH,
   bgMusicPath:    null,  // already in voiceAudioPath — do NOT add again
-  framePath:      fs.existsSync(PHILOSOPHY_FRAME_PATH) ? PHILOSOPHY_FRAME_PATH : null,
+  framePath:      selectedFramePath,
   outputPath:     FINAL_PATH,
   duration:       audioDuration,
 });
@@ -445,21 +370,6 @@ try {
   log(`  Image scene frame (8s): ${FRAME_IMG_PATH}`);
 } catch {}
 
-// Animation scene verification — find first animation clip's timestamp
-const firstAnimClip = usableClips.find(c => c.videoPath);
-if (firstAnimClip) {
-  const animTs = ((firstAnimClip.start_time + firstAnimClip.end_time) / 2).toFixed(1);
-  try {
-    execSync(
-      `ffmpeg -y -ss ${animTs} -i "${FINAL_PATH}" -vframes 1 -q:v 2 "${FRAME_ANIM_PATH}"`,
-      { stdio: 'pipe' }
-    );
-    log(`  Animation scene frame (${animTs}s): ${FRAME_ANIM_PATH}`);
-  } catch {}
-} else {
-  log('  No animation clips assigned — animation scene frame skipped');
-}
-
 // volumedetect on first 5s — confirm voice is audible (FFmpeg writes to stderr)
 try {
   const volOut = execSync(
@@ -482,14 +392,12 @@ log('\n════════════════════════�
 log('✅ DONE');
 log(`   Video:         ${FINAL_PATH}`);
 log(`   Duration:      ${audioDuration.toFixed(1)}s (${(audioDuration/60).toFixed(2)} min)`);
-log(`   Clips:         ${clips.length} @ ~4s each`);
-log(`   Animations:    ${Object.keys(renderedAnims).length} rendered (${usableClips.filter(c=>c.videoPath).length} in slideshow)`);
+log(`   Clips:         ${clips.length} @ ~4s each (all image scenes)`);
 log(`   Audio streams: ${audioStreams} (target: 1 — single mixed track)`);
 log(`   File size:     ${finalSize} MB`);
 log(`   Pipeline:      ${Math.floor(elapsed/60)}m ${elapsed%60}s`);
 log(`   Frame 30s:     ${FRAME_30S_PATH}`);
 log(`   Verify image:  ${FRAME_IMG_PATH}`);
-log(`   Verify anim:   ${FRAME_ANIM_PATH}`);
 log('═══════════════════════════════════════════');
 
 serverProc.kill();

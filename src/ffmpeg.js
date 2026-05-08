@@ -874,9 +874,12 @@ export function composeFinalVideoWithBg({
     );
   }
 
-  // Particles — screen blend
+  // Particles — multiply brightness by 1.5 before screen blend so embers are
+  // clearly visible over the chalk's dark background without grey-hazing it.
+  // colorchannelmixer multiplies (not adds) so near-black background stays black.
   filters.push(
-    `[${particlesIdx}:v]scale=1920:1080,setsar=1,fps=30,format=gbrp[parts]`
+    `[${particlesIdx}:v]scale=1920:1080,setsar=1,fps=30,` +
+    `colorchannelmixer=rr=1.5:gg=1.5:bb=1.5,format=gbrp[parts]`
   );
   filters.push(`[base][parts]blend=all_mode=screen:shortest=0[withParts]`);
 
@@ -914,6 +917,157 @@ export function composeFinalVideoWithBg({
 
   console.log(`  Composed: ${outputPath}`);
   return outputPath;
+}
+
+// ─── PHILOSOPHY FRAME SET ───────────────────────────────────────────────────
+// Generates 10 philosophy frame variants in `framesDir`, each 1920×1080 PNG
+// with a transparent center. Styles range from minimal to ornate.
+// Returns the array of 10 file paths.
+
+function buildFrameFilters(W, H, cfg) {
+  const {
+    bw = 52,          // border ring thickness
+    gl = 4,           // primary accent line thickness
+    gl2 = 0,          // second inner accent line offset from primary (0 = none)
+    slate = null,     // border fill color (FFmpeg @1.0 notation)
+    accent = null,    // accent line color
+    cornerSize = 32,  // corner square size (0 = no corners)
+    cornerStroke = 3, // corner square stroke width
+    fleckCount = 180, // chalk dust fleck count
+    fleckSeed = 77341,
+    cornersOnly = false, // skip border ring — draw L-bracket corners only
+  } = cfg;
+
+  const filters = [];
+
+  if (cornersOnly && accent) {
+    // Just elegant L-bracket corner marks — open, airy frame
+    const la = 52, lt = 5, m = 18;
+    filters.push(`drawbox=x=${m}:y=${m}:w=${la}:h=${lt}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${m}:y=${m}:w=${lt}:h=${la}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${W-m-la}:y=${m}:w=${la}:h=${lt}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${W-m-lt}:y=${m}:w=${lt}:h=${la}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${m}:y=${H-m-lt}:w=${la}:h=${lt}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${m}:y=${H-m-la}:w=${lt}:h=${la}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${W-m-la}:y=${H-m-lt}:w=${la}:h=${lt}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${W-m-lt}:y=${H-m-la}:w=${lt}:h=${la}:color=${accent}:t=fill`);
+    return filters;
+  }
+
+  // Solid slate border ring
+  if (slate) {
+    filters.push(`drawbox=x=0:y=0:w=${W}:h=${bw}:color=${slate}:t=fill`);
+    filters.push(`drawbox=x=0:y=${H-bw}:w=${W}:h=${bw}:color=${slate}:t=fill`);
+    filters.push(`drawbox=x=0:y=${bw}:w=${bw}:h=${H-2*bw}:color=${slate}:t=fill`);
+    filters.push(`drawbox=x=${W-bw}:y=${bw}:w=${bw}:h=${H-2*bw}:color=${slate}:t=fill`);
+  }
+
+  // Primary accent line just inside the slate
+  if (accent) {
+    filters.push(`drawbox=x=${bw}:y=${bw}:w=${W-2*bw}:h=${gl}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${bw}:y=${H-bw-gl}:w=${W-2*bw}:h=${gl}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${bw}:y=${bw+gl}:w=${gl}:h=${H-2*bw-2*gl}:color=${accent}:t=fill`);
+    filters.push(`drawbox=x=${W-bw-gl}:y=${bw+gl}:w=${gl}:h=${H-2*bw-2*gl}:color=${accent}:t=fill`);
+
+    // Optional second inner accent line
+    if (gl2 > 0) {
+      const ix = bw + gl2, iy = bw + gl2;
+      filters.push(`drawbox=x=${ix}:y=${iy}:w=${W-2*ix}:h=${gl}:color=${accent}:t=fill`);
+      filters.push(`drawbox=x=${ix}:y=${H-iy-gl}:w=${W-2*ix}:h=${gl}:color=${accent}:t=fill`);
+      filters.push(`drawbox=x=${ix}:y=${iy+gl}:w=${gl}:h=${H-2*iy-2*gl}:color=${accent}:t=fill`);
+      filters.push(`drawbox=x=${W-ix-gl}:y=${iy+gl}:w=${gl}:h=${H-2*iy-2*gl}:color=${accent}:t=fill`);
+    }
+
+    // Corner accent squares
+    if (cornerSize > 0) {
+      const cs = cornerStroke, sz = cornerSize;
+      filters.push(`drawbox=x=${bw-cs}:y=${bw-cs}:w=${sz}:h=${sz}:color=${accent}:t=${cs}`);
+      filters.push(`drawbox=x=${W-bw-sz+cs}:y=${bw-cs}:w=${sz}:h=${sz}:color=${accent}:t=${cs}`);
+      filters.push(`drawbox=x=${bw-cs}:y=${H-bw-sz+cs}:w=${sz}:h=${sz}:color=${accent}:t=${cs}`);
+      filters.push(`drawbox=x=${W-bw-sz+cs}:y=${H-bw-sz+cs}:w=${sz}:h=${sz}:color=${accent}:t=${cs}`);
+    }
+
+    // Chalk dust flecks along the border band
+    if (fleckCount > 0) {
+      let seed = fleckSeed;
+      const lcg = () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+      const band = Math.max(1, bw - gl - 6);
+      for (let i = 0; i < fleckCount; i++) {
+        const side = i % 4;
+        let x, y;
+        if (side === 0) { x = Math.floor(lcg() * W); y = gl + 6 + Math.floor(lcg() * band); }
+        else if (side === 1) { x = Math.floor(lcg() * W); y = H - bw + 6 + Math.floor(lcg() * band); }
+        else if (side === 2) { x = gl + 6 + Math.floor(lcg() * band); y = Math.floor(lcg() * H); }
+        else { x = W - bw + 6 + Math.floor(lcg() * band); y = Math.floor(lcg() * H); }
+        const fw = 1 + Math.floor(lcg() * 2);
+        const fh = 1 + Math.floor(lcg() * 2);
+        filters.push(`drawbox=x=${x}:y=${y}:w=${fw}:h=${fh}:color=${accent}:t=fill`);
+      }
+    }
+  }
+
+  return filters;
+}
+
+function renderFrame(outPath, W, H, filters) {
+  if (fileExists(outPath)) return outPath;
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  const filterScript = outPath + '.filter.txt';
+  fs.writeFileSync(filterScript,
+    `[0:v]${filters.join(',')},colorkey=0x000000:0.001:0.0,format=rgba[v]`
+  );
+  try {
+    execSync(
+      `ffmpeg -y -f lavfi -i "color=c=black:s=${W}x${H}" ` +
+      `-filter_complex_script "${filterScript}" -map "[v]" -frames:v 1 -update 1 "${outPath}"`,
+      { stdio: 'pipe', timeout: 60000 }
+    );
+  } finally {
+    try { fs.unlinkSync(filterScript); } catch {}
+  }
+  return outPath;
+}
+
+export function ensurePhilosophyFrameSet(framesDir) {
+  fs.mkdirSync(framesDir, { recursive: true });
+  const W = 1920, H = 1080;
+
+  const VARIANTS = [
+    // 01: Classic gold — slate border, burnished gold line, corner squares + flecks
+    { name: 'philosophy-frame-01.png', bw: 52, gl: 4, slate: '0x110E08@1.0', accent: '0xC8A040@1.0', cornerSize: 32, cornerStroke: 3, fleckCount: 180 },
+    // 02: Double line — two concentric gold lines, wider corners, no flecks
+    { name: 'philosophy-frame-02.png', bw: 52, gl: 3, gl2: 10, slate: '0x110E08@1.0', accent: '0xC8A040@1.0', cornerSize: 36, cornerStroke: 3, fleckCount: 0 },
+    // 03: Silver moon — cool slate, silver accent, small corners + cool flecks
+    { name: 'philosophy-frame-03.png', bw: 48, gl: 3, slate: '0x0D1015@1.0', accent: '0xB0C0D0@1.0', cornerSize: 28, cornerStroke: 3, fleckCount: 160, fleckSeed: 31337 },
+    // 04: Thin minimal — very narrow border, single 2px line, no corners, no flecks
+    { name: 'philosophy-frame-04.png', bw: 28, gl: 2, slate: '0x0E0B06@1.0', accent: '0xC8A040@1.0', cornerSize: 0, fleckCount: 0 },
+    // 05: Thick ornate — wide border, 5px gold line, large 44px corner squares
+    { name: 'philosophy-frame-05.png', bw: 68, gl: 5, slate: '0x120F0A@1.0', accent: '0xD0A840@1.0', cornerSize: 44, cornerStroke: 4, fleckCount: 220, fleckSeed: 99991 },
+    // 06: Corners only — no border ring, just L-bracket corner marks
+    { name: 'philosophy-frame-06.png', cornersOnly: true, accent: '0xC8A040@1.0' },
+    // 07: Warm amber — dark warm slate, amber gold, extra flecks
+    { name: 'philosophy-frame-07.png', bw: 52, gl: 4, slate: '0x18100A@1.0', accent: '0xE8A030@1.0', cornerSize: 36, cornerStroke: 3, fleckCount: 200, fleckSeed: 54321 },
+    // 08: Cool steel — night-sky slate, steel blue accent
+    { name: 'philosophy-frame-08.png', bw: 48, gl: 3, slate: '0x0A0E1A@1.0', accent: '0x8898CC@1.0', cornerSize: 28, cornerStroke: 3, fleckCount: 150, fleckSeed: 11111 },
+    // 09: Wide gold — broader bw, double line, generous corners
+    { name: 'philosophy-frame-09.png', bw: 62, gl: 4, gl2: 12, slate: '0x110E08@1.0', accent: '0xC8A040@1.0', cornerSize: 40, cornerStroke: 4, fleckCount: 200, fleckSeed: 77777 },
+    // 10: Rose copper — warm dark with copper accent, romantic feel
+    { name: 'philosophy-frame-10.png', bw: 52, gl: 4, slate: '0x150B0F@1.0', accent: '0xC87858@1.0', cornerSize: 32, cornerStroke: 3, fleckCount: 180, fleckSeed: 24680 },
+  ];
+
+  const paths = [];
+  for (const v of VARIANTS) {
+    const outPath = path.join(framesDir, v.name);
+    paths.push(outPath);
+    if (fileExists(outPath)) {
+      console.log(`  Frame cached: ${v.name}`);
+      continue;
+    }
+    console.log(`  Generating frame: ${v.name}...`);
+    const filters = buildFrameFilters(W, H, v);
+    renderFrame(outPath, W, H, filters);
+  }
+  return paths;
 }
 
 // ─── FULL PIPELINE COMPOSITION ──────────────────────────────────────────────
