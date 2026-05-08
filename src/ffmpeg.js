@@ -859,7 +859,7 @@ export function composeFinalVideoWithBg({
       `[${bgIdx}:v]scale=1728:972:force_original_aspect_ratio=increase,` +
       `crop=1728:972,setsar=1,fps=30,` +
       `gblur=sigma=10,` +
-      `colorchannelmixer=rr=0.3:gg=0.3:bb=0.3,` +
+      `colorchannelmixer=rr=0.55:gg=0.55:bb=0.55,` +
       `pad=1920:1080:96:54:color=black,` +
       `format=gbrp[bg_dark]`
     );

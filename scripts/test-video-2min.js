@@ -68,7 +68,7 @@ const FINAL_PATH     = path.join(OUTPUT_DIR, 'final.mp4');
 const FRAME_30S_PATH = path.join(OUTPUT_DIR, 'frame-30s.png');
 const FRAME_IMG_PATH = path.join(OUTPUT_DIR, 'verify-image-scene.png');
 
-const BG_IMAGE_PATH  = path.join(PROJECT_ROOT, 'assets', 'backgrounds', 'philosophy-bg.png');
+const BG_IMAGE_PATH  = path.join(PROJECT_ROOT, 'assets', 'backgrounds', 'philosophy-bg-1080.jpg');
 const BG_PROMPT      = 'ancient Greek philosophy library at dusk, marble columns, candlelight, ' +
                        'atmospheric, cinematic, no people, no text, soft focus, warm tones, ' +
                        'oil lamps glowing, scroll shelves, stone archways, golden hour light';
