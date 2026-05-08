@@ -21,6 +21,11 @@ export const CHATTERBOX_TIMEOUT_MS = parseInt(process.env.CHATTERBOX_TIMEOUT_MS 
 let _healthCache = null;
 let _healthCacheTs = 0;
 
+export function resetHealthCache() {
+  _healthCache = null;
+  _healthCacheTs = 0;
+}
+
 // Cached health probe — only re-checks every 60s. Fast no-op when up,
 // so we can call it before every sentence without flooding the API.
 export async function isHealthy() {

@@ -1,0 +1,217 @@
+{
+  "analyzed_at": "2026-05-09",
+  "sample_count": 15,
+  "thumbnail_patterns": [
+    {
+      "pattern_name": "icon_grid",
+      "description": "Black background with subtle star field, all-caps bold white text header, red underline swoosh arrow, 2 rows of monochrome icon cards with concept labels below each",
+      "count_of_examples": 5,
+      "composition_rules": [
+        "Header text fills top 25-30% of frame, ultra-bold, near-edge kerning",
+        "Red underline swoosh arrow under header text — key CTA visual anchor",
+        "Icon cards: equal size, slight gap, white border, dark bg, concept name below",
+        "2 rows of 5-6 cards, slightly cropped on edges to suggest infinite list",
+        "Star field background (barely visible) adds depth without distraction",
+        "No people — concept icons only (skull, brain, geometric shapes, figures)"
+      ],
+      "color_palette": ["#000000 bg", "#FFFFFF text+icons", "#CC0000 underline swoosh", "#1A1A1A card bg"],
+      "text_style": "Impact or Bebas Neue, ultra-bold, white, all-caps, fill width",
+      "emotional_tone": "encyclopedic authority, intellectual curiosity, completeness promise",
+      "best_for_title_patterns": ["N ideas/concepts", "Most X", "All of X"],
+      "view_correlation": "highest — 494K+ views observed",
+      "adaptation_for_sleep": "Use monochrome icon art matching chalk style; replace skull/gun with calmer symbols"
+    },
+    {
+      "pattern_name": "dramatic_two_tone",
+      "description": "Pure black background, single large illustration in two contrasting vivid colors (teal+red), oversized bold text in top 25%",
+      "count_of_examples": 2,
+      "composition_rules": [
+        "Single focal image takes center-bottom 70% of frame",
+        "Text at top, left-aligned, white, ultra-bold",
+        "Only two colors on the artwork — extreme contrast",
+        "Background: pure black, no stars or texture"
+      ],
+      "color_palette": ["#000000 bg", "#FFFFFF text", "#C0392B red", "#1A8FA0 teal"],
+      "text_style": "Heavy weight sans, white, left-aligned, 2 words max",
+      "emotional_tone": "visceral, intriguing, brain-twisting",
+      "best_for_title_patterns": ["single concept deep-dive", "paradox", "controversial idea"],
+      "view_correlation": "very high for paradox/psychology content"
+    },
+    {
+      "pattern_name": "flat_line_art_accent",
+      "description": "Black bg with subtle grid, center bold text in bright accent color (yellow), surrounded by white outline line-art icons in corners and edges",
+      "count_of_examples": 2,
+      "composition_rules": [
+        "Bold topic word fills center 50% of frame",
+        "Smaller subtitle above in regular weight",
+        "8 white line-art concept icons scattered around text",
+        "Grid overlay on bg at very low opacity",
+        "White curved bracket arrows pointing toward text"
+      ],
+      "color_palette": ["#000000 bg", "#F1C40F yellow accent text", "#FFFFFF line art", "subtle grid"],
+      "text_style": "Montserrat/Impact bold, bright yellow, mixed case for subtitle",
+      "emotional_tone": "energetic, life-changing, curiosity",
+      "best_for_title_patterns": ["Life Changing X", "Most Important X"]
+    },
+    {
+      "pattern_name": "dark_atmospheric",
+      "description": "Deep black with star field, white outline figure/silhouette center-bottom, glowing red text with subtle glow effect at top-center",
+      "count_of_examples": 2,
+      "composition_rules": [
+        "Figure silhouetted in center, outline only, glowing white eyes",
+        "Concentric rings below figure suggesting void/infinity",
+        "Text: 2 lines, lowercase for effect, red with glow for subject word",
+        "Star field with vignette edges"
+      ],
+      "color_palette": ["#050505 bg", "#FFFFFF outline", "#E63946 glow text", "star particles"],
+      "text_style": "Rounded sans, mixed weight, lowercase creates intimacy",
+      "emotional_tone": "mysterious, existential, hypnotic — perfect for sleep/philosophy blend",
+      "best_for_title_patterns": ["Most X Philosophy", "The Y of Z"],
+      "adaptation_for_sleep": "This style aligns best with Sleepless Philosophers aesthetic"
+    },
+    {
+      "pattern_name": "portrait_grid",
+      "description": "Black star-field bg, header text across top, 2 rows of philosopher portrait cards (colored/illustrated) with name labels",
+      "count_of_examples": 2,
+      "composition_rules": [
+        "Bold all-caps text + red underline at top",
+        "Portrait cards: warm illustrated style (terracotta/sepia), name below",
+        "6-7 portraits per row, slightly cropped at edges",
+        "Portraits feel like a 'complete roster' — completeness promise"
+      ],
+      "color_palette": ["#000000 bg", "#FFFFFF text", "#CC0000 underline", "warm portrait colors (terracotta, sepia, gold)"],
+      "text_style": "Same as icon_grid — heavy sans, all-caps",
+      "emotional_tone": "academic, authoritative, comprehensive tour",
+      "best_for_title_patterns": ["All of X", "N Philosophers Explained"],
+      "view_correlation": "high for 'overview' content"
+    }
+  ],
+  "title_patterns": [
+    {
+      "pattern_name": "encyclopedic_number",
+      "formula": "[N] [Superlative] [Category] to Fall Asleep to",
+      "examples": [
+        "100 Most Important Ideas in Philosophy to Fall Asleep to",
+        "100 Most Disturbing Philosophy Ideas to Fall Asleep to",
+        "100 Biggest Ideas in Psychology to Fall Asleep to",
+        "100 Real-Life Cheat Codes to Fall Asleep to"
+      ],
+      "avg_word_count": 9,
+      "avg_views_observed": "200K-500K",
+      "notes": "Highest observed view counts. Number creates specific promise. 'to Fall Asleep to' is the sleep-niche signal. For 1-hour video: use 30-50 as number.",
+      "duration_adaptation": "Use 30-50 as number for 1-hour video depth. Remove duration from title."
+    },
+    {
+      "pattern_name": "completeness_claim",
+      "formula": "All of [Topic] Explained in 1 Video to Fall Asleep to",
+      "examples": [
+        "All Of Philosophy Explained in 1 Video to Fall Asleep to",
+        "The Entire Game Theory Explained to Fall Asleep to"
+      ],
+      "avg_word_count": 10,
+      "notes": "Strong CTR signal — 'all' and 'complete' trigger FOMO. '1 Video' adds efficiency promise."
+    },
+    {
+      "pattern_name": "duration_list",
+      "formula": "[Duration] of [Topic/Content] to Fall Asleep to",
+      "examples": [
+        "3 Hours of Brain Fck Paradoxes to Fall Asleep to",
+        "3 Hours of Darkest Psychology Tricks to Fall Asleep to",
+        "3 Hours of Life Changing Paradox to Fall Asleep to"
+      ],
+      "avg_word_count": 9,
+      "notes": "Duration signals watch time — good for sleep. Adapt: '1 Hour' is honest for our video.",
+      "duration_adaptation": "Replace '3 Hours' with '1 Hour'. '1 Hour' tested well for sleep content."
+    },
+    {
+      "pattern_name": "superlative_quality",
+      "formula": "The Most [Adjective] [Topic] to Fall Asleep to",
+      "examples": [
+        "The Most Controversial Philosophy to Fall Asleep to",
+        "The Most Life-Changing Philosophy to Fall Asleep to",
+        "The Most Mind Fck Coincidences Explained to Fall Asleep to"
+      ],
+      "avg_word_count": 8,
+      "notes": "Clean and strong. Superlative promises best-in-class content."
+    },
+    {
+      "pattern_name": "stoic_numbered",
+      "formula": "[N] Stoic [Things/Principles/Secrets] [For/To] [Outcome]",
+      "examples": [
+        "10 Stoic Principles So That NOTHING Can AFFECT YOU",
+        "10 Stoic Principles To Build SELF DISCIPLINE",
+        "12 Stoic Principles For Immediate Life Transformation",
+        "12 Stoic Secrets for Doing Your Best"
+      ],
+      "avg_word_count": 8,
+      "notes": "High CTR for Stoic content without 'to fall asleep to' — crossover appeal. Use when topic is action-oriented Stoic wisdom."
+    },
+    {
+      "pattern_name": "transformation_imperative",
+      "formula": "Stop [Doing X] and [You'll Have/Get Y]  |  [Action] [Result]",
+      "examples": [
+        "Stop Trying to Get It And You'll Have It | STOICISM",
+        "Train Your Mind to RESPOND, Not REACT",
+        "ACT AS IF YOU ARE THE BEST"
+      ],
+      "avg_word_count": 7,
+      "notes": "High personal relevance. Works best with motivational Stoic content. Capslock on key transformation word."
+    }
+  ],
+  "script_patterns": [
+    {
+      "pattern_name": "encyclopedic_flow",
+      "hook_structure": "Brief framing sentence about the collection ('In this session, we explore...') → immediate dive into first concept",
+      "pacing_notes": "Each concept: 200-300 words, ~2 minutes. No dramatic pauses. Continuous flow. Present tense for philosophical principles.",
+      "retention_tactics": [
+        "Opening framing invites listener to 'drift off' — removes pressure",
+        "Timestamp chapters (in description) suggest organized structure",
+        "Each concept self-contained — listener can join at any chapter",
+        "No subscribe CTAs — clean, respectful of sleep intent",
+        "Medium vocabulary — academic but not excluding"
+      ],
+      "cta_placement": "Description only, not in narration",
+      "observed_in": ["100 Most Important Ideas", "100 Real-Life Cheat Codes", "All Of Philosophy"],
+      "word_count_per_minute": 130
+    },
+    {
+      "pattern_name": "single_concept_deep_dive",
+      "hook_structure": "Paradox or question to open → personal connection → historical context → philosophical exploration → quiet resolution",
+      "pacing_notes": "Much slower than encyclopedic. 600-700 words per concept. Long sentences that meander gently.",
+      "retention_tactics": [
+        "Story arc creates emotional through-line",
+        "Relatable framing ('you know that feeling when...')",
+        "Soft philosophical voice — never preachy"
+      ],
+      "cta_placement": "None in narration",
+      "observed_in": ["3 Hours of Brain F*ck Paradoxes", "Stop Trying to Get It"],
+      "word_count_per_minute": 110
+    }
+  ],
+  "cross_correlations": [
+    {
+      "thumbnail_type": "icon_grid",
+      "title_type": "encyclopedic_number",
+      "why_they_fit_together": "Both promise comprehensive coverage. Grid shows breadth visually, number confirms it in title. Red swoosh creates urgency. Highest CTR combination observed.",
+      "recommendation": "Use for: '30 Biggest Ideas in Stoic Philosophy', '50 Stoic Concepts', 'All of Stoicism'"
+    },
+    {
+      "thumbnail_type": "portrait_grid",
+      "title_type": "completeness_claim",
+      "why_they_fit_together": "Showing actual philosophers creates authority signal. 'All Of' in title matches visual completeness of the grid.",
+      "recommendation": "Use for: 'All Of Stoicism Explained', 'The Complete Stoic Philosophers'"
+    },
+    {
+      "thumbnail_type": "dark_atmospheric",
+      "title_type": "superlative_quality",
+      "why_they_fit_together": "Dark, mysterious visual matches 'most' superlative — both promise something special. Works for sleep because atmospheric visuals are calming.",
+      "recommendation": "Use for: 'The Deepest Stoic Wisdom', 'The Most Calming Philosophy'"
+    }
+  ],
+  "sleepless_philosophers_insights": {
+    "channel_differentiator": "Our chalk aesthetic is unique — none of the references use it. This is a brand identity advantage.",
+    "opportunity": "The encyclopedic format (icon_grid + N ideas title) is proven to drive 200K-500K views but no chalk/stoic channel owns it yet.",
+    "thumbnail_adaptation": "For chalk style: replace colored icons with chalk sketches. Keep the black bg + bold text + red swoosh structure. This hybridizes our aesthetic with the proven CTR formula.",
+    "ideal_first_video": "Title: '30 Biggest Ideas in Stoic Philosophy to Fall Asleep to'. Thumbnail: icon_grid with chalk-sketch concept icons. Length: 1 hour."
+  }
+}

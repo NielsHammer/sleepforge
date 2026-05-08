@@ -1,0 +1,302 @@
+[
+  {
+    "id": "stoic-30-ideas",
+    "topic": "The 30 Biggest Ideas in Stoic Philosophy",
+    "title_formula": "encyclopedic_number",
+    "thumbnail_type": "icon_grid",
+    "target_duration_min": 60,
+    "notes": "Encyclopedic format. 30 Stoic concepts × 200 words each. Proven CTR pattern.",
+    "philosophers": ["marcus-aurelius", "epictetus", "seneca", "zeno"],
+    "priority": 1
+  },
+  {
+    "id": "all-stoicism-explained",
+    "topic": "All of Stoicism Explained",
+    "title_formula": "completeness_claim",
+    "thumbnail_type": "portrait_grid",
+    "target_duration_min": 60,
+    "notes": "Complete overview format. Authority signal.",
+    "philosophers": ["zeno", "marcus-aurelius", "epictetus", "seneca"],
+    "priority": 2
+  },
+  {
+    "id": "stoic-wisdom-night",
+    "topic": "The Deepest Stoic Wisdom for Quiet Nights",
+    "title_formula": "superlative_quality",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Calm, atmospheric. Directly targets sleep audience.",
+    "philosophers": ["marcus-aurelius", "epictetus"],
+    "priority": 3
+  },
+  {
+    "id": "1hr-philosophy-sleep",
+    "topic": "1 Hour of Ancient Philosophy to Fall Asleep to",
+    "title_formula": "duration_list",
+    "thumbnail_type": "icon_grid",
+    "target_duration_min": 60,
+    "notes": "Duration-first. Honest 1-hour promise.",
+    "philosophers": ["socrates", "plato", "aristotle", "marcus-aurelius"],
+    "priority": 4
+  },
+  {
+    "id": "marcus-complete",
+    "topic": "The Complete Philosophy of Marcus Aurelius",
+    "title_formula": "completeness_claim",
+    "thumbnail_type": "portrait_grid",
+    "target_duration_min": 60,
+    "notes": "Single philosopher deep dive. Authority on most popular Stoic.",
+    "philosophers": ["marcus-aurelius"],
+    "priority": 5
+  },
+  {
+    "id": "ancient-peace",
+    "topic": "Ancient Wisdom for a Peaceful Mind",
+    "title_formula": "superlative_quality",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Broad appeal. Targets anxiety/sleep keywords.",
+    "philosophers": ["marcus-aurelius", "epictetus", "seneca", "lao-tzu"],
+    "priority": 6
+  },
+  {
+    "id": "stoic-sleep-cure",
+    "topic": "The Stoic Cure for Anxious Nights",
+    "title_formula": "transformation_imperative",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Pain-point title. High relevance for insomniacs.",
+    "philosophers": ["epictetus", "marcus-aurelius", "seneca"],
+    "priority": 7
+  },
+  {
+    "id": "30-greek-ideas",
+    "topic": "The 30 Most Important Ancient Greek Ideas",
+    "title_formula": "encyclopedic_number",
+    "thumbnail_type": "icon_grid",
+    "target_duration_min": 60,
+    "notes": "Broader than Stoicism — includes all Ancient Greek thought.",
+    "philosophers": ["socrates", "plato", "aristotle", "heraclitus"],
+    "priority": 8
+  },
+  {
+    "id": "epictetus-complete",
+    "topic": "Everything Epictetus Taught About Inner Freedom",
+    "title_formula": "completeness_claim",
+    "thumbnail_type": "portrait_grid",
+    "target_duration_min": 60,
+    "notes": "Epictetus slave-to-philosopher story is compelling. Inner Freedom keywords.",
+    "philosophers": ["epictetus"],
+    "priority": 9
+  },
+  {
+    "id": "seneca-death",
+    "topic": "Seneca on How to Live Well and Die Peacefully",
+    "title_formula": "superlative_quality",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Death + peace is strong for sleep content. Seneca's Letters are perfect.",
+    "philosophers": ["seneca"],
+    "priority": 10
+  },
+  {
+    "id": "stoic-letting-go",
+    "topic": "The Stoic Art of Letting Go",
+    "title_formula": "superlative_quality",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "High search volume. 'Letting go' is top sleep content keyword.",
+    "philosophers": ["marcus-aurelius", "epictetus"],
+    "priority": 11
+  },
+  {
+    "id": "philosophy-big-questions",
+    "topic": "The 30 Biggest Questions in Philosophy",
+    "title_formula": "encyclopedic_number",
+    "thumbnail_type": "icon_grid",
+    "target_duration_min": 60,
+    "notes": "Universal appeal — not just Stoic audience.",
+    "philosophers": ["socrates", "plato", "aristotle", "descartes"],
+    "priority": 12
+  },
+  {
+    "id": "philosophy-free-will",
+    "topic": "Philosophy of Free Will, Fate, and Control",
+    "title_formula": "superlative_quality",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Covers Stoic + existential angles. Great for sleep — contemplative.",
+    "philosophers": ["marcus-aurelius", "epictetus", "spinoza"],
+    "priority": 13
+  },
+  {
+    "id": "zeno-stoic-origins",
+    "topic": "How Zeno Built Stoicism From Nothing",
+    "title_formula": "transformation_imperative",
+    "thumbnail_type": "portrait_grid",
+    "target_duration_min": 60,
+    "notes": "Origin story of Stoicism. Engaging narrative.",
+    "philosophers": ["zeno", "chrysippus"],
+    "priority": 14
+  },
+  {
+    "id": "stoic-control",
+    "topic": "The Stoic Discipline of What You Can Control",
+    "title_formula": "stoic_numbered",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Core Stoic concept. Highest meditation + sleep relevance.",
+    "philosophers": ["epictetus", "marcus-aurelius"],
+    "priority": 15
+  },
+  {
+    "id": "philosophy-death",
+    "topic": "The Ancient Philosophy of Death and What Comes After",
+    "title_formula": "superlative_quality",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Controversial but extremely compelling for sleep/insomnia audience.",
+    "philosophers": ["socrates", "seneca", "epicurus"],
+    "priority": 16
+  },
+  {
+    "id": "30-stoic-nights",
+    "topic": "30 Stoic Nights: Ancient Wisdom for Restless Minds",
+    "title_formula": "encyclopedic_number",
+    "thumbnail_type": "icon_grid",
+    "target_duration_min": 60,
+    "notes": "Very direct sleep angle. 30-night structure could build series.",
+    "philosophers": ["marcus-aurelius", "epictetus", "seneca"],
+    "priority": 17
+  },
+  {
+    "id": "philosophy-happiness",
+    "topic": "What the Ancient Philosophers Said About Happiness",
+    "title_formula": "completeness_claim",
+    "thumbnail_type": "portrait_grid",
+    "target_duration_min": 60,
+    "notes": "Universal keyword. High search volume.",
+    "philosophers": ["aristotle", "epicurus", "marcus-aurelius", "seneca"],
+    "priority": 18
+  },
+  {
+    "id": "stoic-morning",
+    "topic": "The Stoic Morning and Evening Meditation",
+    "title_formula": "stoic_numbered",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Morning/evening ritual is strong keyword. Could be used as sleep prep.",
+    "philosophers": ["marcus-aurelius", "epictetus"],
+    "priority": 19
+  },
+  {
+    "id": "diogenes-cynics",
+    "topic": "Diogenes and the Cynics: Philosophy of Radical Freedom",
+    "title_formula": "completeness_claim",
+    "thumbnail_type": "portrait_grid",
+    "target_duration_min": 60,
+    "notes": "Diogenes is fascinating and underserved. Unique angle.",
+    "philosophers": ["diogenes"],
+    "priority": 20
+  },
+  {
+    "id": "philosophy-mind",
+    "topic": "The Philosophy of Mind: Ancient to Modern",
+    "title_formula": "encyclopedic_number",
+    "thumbnail_type": "icon_grid",
+    "target_duration_min": 60,
+    "notes": "Bridges ancient and modern. Broad audience.",
+    "philosophers": ["descartes", "plato", "aristotle"],
+    "priority": 21
+  },
+  {
+    "id": "stoic-resilience",
+    "topic": "How the Stoics Built Unbreakable Resilience",
+    "title_formula": "transformation_imperative",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Resilience is high-traffic keyword. Stoic angle is proven.",
+    "philosophers": ["marcus-aurelius", "epictetus", "seneca"],
+    "priority": 22
+  },
+  {
+    "id": "plato-cave",
+    "topic": "All of Plato's Philosophy Explained to Fall Asleep to",
+    "title_formula": "completeness_claim",
+    "thumbnail_type": "portrait_grid",
+    "target_duration_min": 60,
+    "notes": "Plato is the most searched ancient philosopher.",
+    "philosophers": ["plato"],
+    "priority": 23
+  },
+  {
+    "id": "philosophy-time",
+    "topic": "The Philosophy of Time, Impermanence, and Now",
+    "title_formula": "superlative_quality",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Contemplative. Impermanence keywords intersect with Buddhist + Stoic audiences.",
+    "philosophers": ["marcus-aurelius", "heraclitus", "seneca"],
+    "priority": 24
+  },
+  {
+    "id": "stoic-emotions",
+    "topic": "The Stoic Guide to Your Emotions",
+    "title_formula": "stoic_numbered",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Emotional regulation is the #1 reason people watch Stoic content.",
+    "philosophers": ["epictetus", "marcus-aurelius"],
+    "priority": 25
+  },
+  {
+    "id": "ancient-sleep-wisdom",
+    "topic": "What Ancient Philosophers Said About Sleep and Dreams",
+    "title_formula": "completeness_claim",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Meta — philosophy content ABOUT sleep, for sleep audience. Very targeted.",
+    "philosophers": ["aristotle", "heraclitus", "plato"],
+    "priority": 26
+  },
+  {
+    "id": "philosophy-fear",
+    "topic": "Ancient Philosophy for Fear, Anxiety, and the Dark",
+    "title_formula": "superlative_quality",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Targets anxiety + insomnia directly. High relevance.",
+    "philosophers": ["epictetus", "seneca", "marcus-aurelius"],
+    "priority": 27
+  },
+  {
+    "id": "stoic-virtue",
+    "topic": "The Four Stoic Virtues and How to Live By Them",
+    "title_formula": "stoic_numbered",
+    "thumbnail_type": "icon_grid",
+    "target_duration_min": 60,
+    "notes": "Structured — 4 virtues × 15 min each for 1 hour. Clean.",
+    "philosophers": ["marcus-aurelius", "epictetus"],
+    "priority": 28
+  },
+  {
+    "id": "meditations-complete",
+    "topic": "Marcus Aurelius Meditations: A Complete Reading for Sleep",
+    "title_formula": "completeness_claim",
+    "thumbnail_type": "portrait_grid",
+    "target_duration_min": 60,
+    "notes": "Direct meditation reading. Very calming. Marcus Aurelius is most searchable.",
+    "philosophers": ["marcus-aurelius"],
+    "priority": 29
+  },
+  {
+    "id": "philosophy-nothing",
+    "topic": "The Philosophy of Nothingness, Emptiness, and Silence",
+    "title_formula": "superlative_quality",
+    "thumbnail_type": "dark_atmospheric",
+    "target_duration_min": 60,
+    "notes": "Deeply contemplative. Perfect for falling asleep. Zen + Stoic crossover.",
+    "philosophers": ["marcus-aurelius", "epictetus"],
+    "priority": 30
+  }
+]

@@ -41,7 +41,7 @@ import {
   composeFinalVideoWithBg,
   getAudioDuration,
 } from '../src/ffmpeg.js';
-import { isHealthy, chatterboxTTS } from '../src/chatterbox.js';
+import { isHealthy, chatterboxTTS, resetHealthCache } from '../src/chatterbox.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
@@ -90,7 +90,7 @@ if (fs.existsSync(FINAL_PATH)) fs.unlinkSync(FINAL_PATH);
 // ── Step 1: Start Chatterbox server ──────────────────────────────────────────
 log('\n── Step 1: Starting Chatterbox server ──');
 const serverScript = path.join(SCRIPTS_DIR, 'chatterbox-server.py');
-const serverProc   = spawn(PYTHON_BIN, [serverScript], {
+let serverProc   = spawn(PYTHON_BIN, [serverScript], {
   stdio: ['ignore', 'pipe', 'pipe'],
   env: { ...process.env, CHATTERBOX_PORT: '4123' },
 });
@@ -145,12 +145,24 @@ if (fs.existsSync(VOICEOVER_PATH)) {
   ensureSilence(silence350, 350);
   ensureSilence(silence700, 700);
 
+  let lastHealthCheck = Date.now();
   for (let i = 0; i < sentences.length; i++) {
     const { text, paragraphEnd } = sentences[i];
     const partPath = path.join(SENTENCES_DIR, `s${String(i).padStart(3, '0')}.wav`);
+
+    // Proactive health check every 25 sentences — catches silent server crashes
+    if (i > 0 && i % 25 === 0) {
+      const healthy = await isHealthy();
+      if (!healthy) {
+        log(`  [TTS] Server unhealthy at sentence ${i} — restarting...`);
+        await restartChatterbox();
+      }
+      lastHealthCheck = Date.now();
+    }
+
     if (!fs.existsSync(partPath)) {
       const t0 = Date.now();
-      await chatterboxTTS(text, partPath);
+      await chatterboxTTSWithRetry(text, partPath, 3);
       const elapsed = (Date.now() - t0) / 1000;
       const dur     = getAudioDuration(partPath);
       ttsStats.totalAudio   += dur;
@@ -377,6 +389,50 @@ async function waitForChatterbox(timeoutSec) {
     await new Promise(r => setTimeout(r, 2000));
   }
   return false;
+}
+
+async function restartChatterbox() {
+  log('  [TTS] Restarting Chatterbox server...');
+  try { serverProc.kill('SIGKILL'); } catch {}
+  resetHealthCache();
+  await new Promise(r => setTimeout(r, 2000));
+  const serverScript = path.join(SCRIPTS_DIR, 'chatterbox-server.py');
+  serverProc = spawn(PYTHON_BIN, [serverScript], {
+    stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, CHATTERBOX_PORT: '4123' },
+  });
+  serverProc.stdout.on('data', d => process.stdout.write('[CB] ' + d));
+  serverProc.stderr.on('data', d => process.stderr.write('[CB] ' + d));
+  serverProc.on('error', err => log('Chatterbox restart error: ' + err.message));
+  const ok = await waitForChatterbox(120);
+  if (ok) log('  [TTS] Chatterbox restarted ✓');
+  else    log('  [TTS] WARNING: Chatterbox did not recover after restart');
+  return ok;
+}
+
+// 3 retries with exponential backoff. On total failure writes 2s silence so
+// the render continues — a single bad sentence shouldn't abort 600+ others.
+async function chatterboxTTSWithRetry(text, outputPath, maxAttempts = 3) {
+  const silence2s = path.join(ASSETS_DIR, '_silence-2000.wav');
+  ensureSilence(silence2s, 2000);
+  let lastErr;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      // If server appears dead, restart before retrying
+      if (attempt > 1) {
+        const healthy = await isHealthy();
+        if (!healthy) await restartChatterbox();
+        await new Promise(r => setTimeout(r, 1000 * attempt));
+      }
+      await chatterboxTTS(text, outputPath);
+      return;
+    } catch (err) {
+      lastErr = err;
+      log(`  [TTS] Attempt ${attempt}/${maxAttempts} failed: ${err.message}`);
+    }
+  }
+  log(`  [TTS] All ${maxAttempts} attempts failed — substituting 2s silence`);
+  fs.copyFileSync(silence2s, outputPath);
 }
 
 function splitSentences(text) {
