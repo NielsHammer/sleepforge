@@ -15,20 +15,18 @@
  *   ...
  */
 
-import Anthropic from "@anthropic-ai/sdk";
-import fs        from "fs";
-import path      from "path";
+import fs   from "fs";
+import path from "path";
 import { fileURLToPath } from "url";
+import { callClaudeCLI } from "../src/claude-cli.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT      = path.resolve(__dirname, "..");
 
-const MD_PATH   = path.join(ROOT, "docs", "CONTEXT", "philosopher-scenes.md");
-const OUT_PATH  = path.join(ROOT, "data", "chalk-prompts.json");
-const BATCH_SIZE = 20;
+const MD_PATH    = path.join(ROOT, "docs", "CONTEXT", "philosopher-scenes.md");
+const OUT_PATH   = path.join(ROOT, "data", "chalk-prompts.json");
+const BATCH_SIZE = 8;    // 20 timed out — 8 keeps each batch safely under 90s
 const MODEL      = "claude-haiku-4-5-20251001";
-
-const client = new Anthropic();
 
 // ─── PARSE MARKDOWN ──────────────────────────────────────────────────────────
 // Accepts two formats:
@@ -126,13 +124,11 @@ ${items}`;
 
 // ─── CLAUDE CALL ─────────────────────────────────────────────────────────────
 async function generateBatch(entries) {
-  const res = await client.messages.create({
-    model:      MODEL,
-    max_tokens: 6000,
-    messages:   [{ role: "user", content: buildBatchPrompt(entries) }],
+  const raw = await callClaudeCLI(buildBatchPrompt(entries), {
+    model:     MODEL,
+    timeoutMs: 240000,
   });
 
-  const raw   = res.content[0].text.trim();
   const match = raw.match(/\[[\s\S]*\]/);
   if (!match) throw new Error(`No JSON array in response: ${raw.slice(0, 300)}`);
 
@@ -177,8 +173,14 @@ async function main() {
       console.log(`Resuming: ${existing.length} entries already done`);
     } catch { existing = []; }
   }
-  const doneIds = new Set(existing.map((e) => e.id));
-  const todo    = raw.filter((e) => !doneIds.has(e.id));
+  // Skip entries that have real Claude-generated prompts.
+  // Fallback prompts end with "no architecture, no text" — treat as not done.
+  const doneIds = new Set(
+    existing
+      .filter((e) => !e.flux_prompt.endsWith("no architecture, no text"))
+      .map((e) => e.id)
+  );
+  const todo = raw.filter((e) => !doneIds.has(e.id));
 
   console.log(`To generate: ${todo.length} entries`);
   if (todo.length === 0) {
@@ -186,7 +188,9 @@ async function main() {
     return;
   }
 
-  const results   = [...existing];
+  // Start with only real entries — fallbacks are excluded so regenerating them
+  // produces one clean entry per ID with no duplicates.
+  const results = existing.filter((e) => doneIds.has(e.id));
   let inputTokens = 0;
   let outputTokens = 0;
   const totalBatches = Math.ceil(todo.length / BATCH_SIZE);
