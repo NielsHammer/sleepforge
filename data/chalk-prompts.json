@@ -14,7 +14,8 @@
         "draped robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/001-socrates.jpg"
   },
   {
     "id": "002",
@@ -28,7 +29,8 @@
       "action_verb": "questioning",
       "key_objects": [],
       "mood": "inquisitive"
-    }
+    },
+    "image_path": "assets/images/library-v1/002-socrates.jpg"
   },
   {
     "id": "003",
@@ -42,7 +44,8 @@
       "action_verb": "sitting",
       "key_objects": [],
       "mood": "tranquil"
-    }
+    },
+    "image_path": "assets/images/library-v1/003-socrates.jpg"
   },
   {
     "id": "004",
@@ -56,7 +59,8 @@
       "action_verb": "gazing",
       "key_objects": [],
       "mood": "dignified"
-    }
+    },
+    "image_path": "assets/images/library-v1/004-socrates.jpg"
   },
   {
     "id": "005",
@@ -73,7 +77,8 @@
         "helmet"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/005-socrates.jpg"
   },
   {
     "id": "006",
@@ -87,7 +92,8 @@
       "action_verb": "reclining",
       "key_objects": [],
       "mood": "peaceful"
-    }
+    },
+    "image_path": "assets/images/library-v1/006-socrates.jpg"
   },
   {
     "id": "007",
@@ -101,7 +107,8 @@
       "action_verb": "gesturing",
       "key_objects": [],
       "mood": "emphatic"
-    }
+    },
+    "image_path": "assets/images/library-v1/007-socrates.jpg"
   },
   {
     "id": "008",
@@ -117,7 +124,8 @@
         "bronze mirror"
       ],
       "mood": "introspective"
-    }
+    },
+    "image_path": "assets/images/library-v1/008-socrates.jpg"
   },
   {
     "id": "009",
@@ -134,7 +142,8 @@
         "beard"
       ],
       "mood": "animated"
-    }
+    },
+    "image_path": "assets/images/library-v1/009-socrates.jpg"
   },
   {
     "id": "010",
@@ -151,7 +160,8 @@
         "beard"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/010-socrates.jpg"
   },
   {
     "id": "011",
@@ -168,7 +178,8 @@
         "beard"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/011-plato.jpg"
   },
   {
     "id": "012",
@@ -185,7 +196,8 @@
         "beard"
       ],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/012-plato.jpg"
   },
   {
     "id": "013",
@@ -202,7 +214,8 @@
         "beard"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/013-plato.jpg"
   },
   {
     "id": "014",
@@ -219,7 +232,8 @@
         "beard"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/014-plato.jpg"
   },
   {
     "id": "015",
@@ -236,7 +250,8 @@
         "robes"
       ],
       "mood": "absorbed"
-    }
+    },
+    "image_path": "assets/images/library-v1/015-plato.jpg"
   },
   {
     "id": "016",
@@ -253,7 +268,8 @@
         "beard"
       ],
       "mood": "pensive"
-    }
+    },
+    "image_path": "assets/images/library-v1/016-plato.jpg"
   },
   {
     "id": "017",
@@ -270,7 +286,8 @@
         "scroll"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/017-plato.jpg"
   },
   {
     "id": "018",
@@ -286,7 +303,8 @@
         "staff"
       ],
       "mood": "commanding"
-    }
+    },
+    "image_path": "assets/images/library-v1/018-plato.jpg"
   },
   {
     "id": "019",
@@ -300,7 +318,8 @@
       "action_verb": "reaching",
       "key_objects": [],
       "mood": "yearning"
-    }
+    },
+    "image_path": "assets/images/library-v1/019-plato.jpg"
   },
   {
     "id": "020",
@@ -316,7 +335,8 @@
         "staff"
       ],
       "mood": "instructive"
-    }
+    },
+    "image_path": "assets/images/library-v1/020-plato.jpg"
   },
   {
     "id": "021",
@@ -333,7 +353,8 @@
         "staff"
       ],
       "mood": "instructive"
-    }
+    },
+    "image_path": "assets/images/library-v1/021-aristotle.jpg"
   },
   {
     "id": "022",
@@ -349,7 +370,8 @@
         "sea creature"
       ],
       "mood": "analytical"
-    }
+    },
+    "image_path": "assets/images/library-v1/022-aristotle.jpg"
   },
   {
     "id": "023",
@@ -365,7 +387,8 @@
         "feather"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/023-aristotle.jpg"
   },
   {
     "id": "024",
@@ -382,7 +405,8 @@
         "vessels"
       ],
       "mood": "scholarly"
-    }
+    },
+    "image_path": "assets/images/library-v1/024-aristotle.jpg"
   },
   {
     "id": "025",
@@ -399,7 +423,8 @@
         "robes"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/025-aristotle.jpg"
   },
   {
     "id": "026",
@@ -416,7 +441,8 @@
         "stylus"
       ],
       "mood": "methodical"
-    }
+    },
+    "image_path": "assets/images/library-v1/026-aristotle.jpg"
   },
   {
     "id": "027",
@@ -433,7 +459,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/027-aristotle.jpg"
   },
   {
     "id": "028",
@@ -449,7 +476,8 @@
         "balance scale"
       ],
       "mood": "measured"
-    }
+    },
+    "image_path": "assets/images/library-v1/028-aristotle.jpg"
   },
   {
     "id": "029",
@@ -466,7 +494,8 @@
         "bloodied hand"
       ],
       "mood": "analytical"
-    }
+    },
+    "image_path": "assets/images/library-v1/029-aristotle.jpg"
   },
   {
     "id": "030",
@@ -483,7 +512,8 @@
         "robes"
       ],
       "mood": "peaceful"
-    }
+    },
+    "image_path": "assets/images/library-v1/030-aristotle.jpg"
   },
   {
     "id": "031",
@@ -500,7 +530,8 @@
         "tattered robes"
       ],
       "mood": "content"
-    }
+    },
+    "image_path": "assets/images/library-v1/031-diogenes-of-sinope.jpg"
   },
   {
     "id": "032",
@@ -517,7 +548,8 @@
         "tattered robes"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/032-diogenes-of-sinope.jpg"
   },
   {
     "id": "033",
@@ -534,7 +566,8 @@
         "staff"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/033-diogenes-of-sinope.jpg"
   },
   {
     "id": "034",
@@ -552,7 +585,8 @@
         "ragged cloak"
       ],
       "mood": "mocking"
-    }
+    },
+    "image_path": "assets/images/library-v1/034-diogenes-of-sinope.jpg"
   },
   {
     "id": "035",
@@ -569,7 +603,8 @@
         "ragged cloak"
       ],
       "mood": "brazen"
-    }
+    },
+    "image_path": "assets/images/library-v1/035-diogenes-of-sinope.jpg"
   },
   {
     "id": "036",
@@ -586,7 +621,8 @@
         "ragged cloak"
       ],
       "mood": "liberated"
-    }
+    },
+    "image_path": "assets/images/library-v1/036-diogenes-of-sinope.jpg"
   },
   {
     "id": "037",
@@ -602,7 +638,8 @@
         "ragged cloak"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/037-diogenes-of-sinope.jpg"
   },
   {
     "id": "038",
@@ -619,7 +656,8 @@
         "ragged cloak"
       ],
       "mood": "humble"
-    }
+    },
+    "image_path": "assets/images/library-v1/038-diogenes-of-sinope.jpg"
   },
   {
     "id": "039",
@@ -636,7 +674,8 @@
         "staff"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/039-diogenes-of-sinope.jpg"
   },
   {
     "id": "040",
@@ -653,7 +692,8 @@
         "ragged cloak"
       ],
       "mood": "austere"
-    }
+    },
+    "image_path": "assets/images/library-v1/040-diogenes-of-sinope.jpg"
   },
   {
     "id": "041",
@@ -670,7 +710,8 @@
         "sandals"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/041-heraclitus.jpg"
   },
   {
     "id": "042",
@@ -687,7 +728,8 @@
         "raised palms"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/042-heraclitus.jpg"
   },
   {
     "id": "043",
@@ -704,7 +746,8 @@
         "knucklebones"
       ],
       "mood": "bemused"
-    }
+    },
+    "image_path": "assets/images/library-v1/043-heraclitus.jpg"
   },
   {
     "id": "044",
@@ -721,7 +764,8 @@
         "tears"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/044-heraclitus.jpg"
   },
   {
     "id": "045",
@@ -739,7 +783,8 @@
         "lunar crescent"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/045-heraclitus.jpg"
   },
   {
     "id": "046",
@@ -756,7 +801,8 @@
         "raised arm"
       ],
       "mood": "awestruck"
-    }
+    },
+    "image_path": "assets/images/library-v1/046-heraclitus.jpg"
   },
   {
     "id": "047",
@@ -773,7 +819,8 @@
         "hands"
       ],
       "mood": "desperate"
-    }
+    },
+    "image_path": "assets/images/library-v1/047-heraclitus.jpg"
   },
   {
     "id": "048",
@@ -790,7 +837,8 @@
         "beard"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/048-heraclitus.jpg"
   },
   {
     "id": "049",
@@ -806,7 +854,8 @@
         "bow"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/049-heraclitus.jpg"
   },
   {
     "id": "050",
@@ -820,7 +869,8 @@
       "action_verb": "striding",
       "key_objects": [],
       "mood": "aloof"
-    }
+    },
+    "image_path": "assets/images/library-v1/050-heraclitus.jpg"
   },
   {
     "id": "051",
@@ -834,7 +884,8 @@
       "action_verb": "drawing",
       "key_objects": [],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/051-pythagoras.jpg"
   },
   {
     "id": "052",
@@ -848,7 +899,8 @@
       "action_verb": "teaching",
       "key_objects": [],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/052-pythagoras.jpg"
   },
   {
     "id": "053",
@@ -864,7 +916,8 @@
         "hammer"
       ],
       "mood": "attentive"
-    }
+    },
+    "image_path": "assets/images/library-v1/053-pythagoras.jpg"
   },
   {
     "id": "054",
@@ -880,7 +933,8 @@
         "tetractys"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/054-pythagoras.jpg"
   },
   {
     "id": "055",
@@ -894,7 +948,8 @@
       "action_verb": "gazing",
       "key_objects": [],
       "mood": "awestruck"
-    }
+    },
+    "image_path": "assets/images/library-v1/055-pythagoras.jpg"
   },
   {
     "id": "056",
@@ -908,7 +963,8 @@
       "action_verb": "refusing",
       "key_objects": [],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/056-pythagoras.jpg"
   },
   {
     "id": "057",
@@ -924,7 +980,8 @@
         "geometric shapes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/057-pythagoras.jpg"
   },
   {
     "id": "058",
@@ -940,7 +997,8 @@
         "lyre"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/058-pythagoras.jpg"
   },
   {
     "id": "059",
@@ -956,7 +1014,8 @@
         "cube"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/059-pythagoras.jpg"
   },
   {
     "id": "060",
@@ -973,7 +1032,8 @@
         "coins"
       ],
       "mood": "dignified"
-    }
+    },
+    "image_path": "assets/images/library-v1/060-pythagoras.jpg"
   },
   {
     "id": "061",
@@ -991,7 +1051,8 @@
         "water"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/061-epicurus.jpg"
   },
   {
     "id": "062",
@@ -1007,7 +1068,8 @@
         "fig"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/062-epicurus.jpg"
   },
   {
     "id": "063",
@@ -1023,7 +1085,8 @@
         "scroll"
       ],
       "mood": "compassionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/063-epicurus.jpg"
   },
   {
     "id": "064",
@@ -1039,7 +1102,8 @@
         "open arms"
       ],
       "mood": "inclusive"
-    }
+    },
+    "image_path": "assets/images/library-v1/064-epicurus.jpg"
   },
   {
     "id": "065",
@@ -1056,7 +1120,8 @@
         "cloth"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/065-epicurus.jpg"
   },
   {
     "id": "066",
@@ -1073,7 +1138,8 @@
         "simple cloak"
       ],
       "mood": "animated"
-    }
+    },
+    "image_path": "assets/images/library-v1/066-epicurus.jpg"
   },
   {
     "id": "067",
@@ -1090,7 +1156,8 @@
         "open hands"
       ],
       "mood": "tranquil"
-    }
+    },
+    "image_path": "assets/images/library-v1/067-epicurus.jpg"
   },
   {
     "id": "068",
@@ -1107,7 +1174,8 @@
         "cup"
       ],
       "mood": "content"
-    }
+    },
+    "image_path": "assets/images/library-v1/068-epicurus.jpg"
   },
   {
     "id": "069",
@@ -1124,7 +1192,8 @@
         "upturned palms"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/069-epicurus.jpg"
   },
   {
     "id": "070",
@@ -1141,7 +1210,8 @@
         "simple robes"
       ],
       "mood": "tranquil"
-    }
+    },
+    "image_path": "assets/images/library-v1/070-epicurus.jpg"
   },
   {
     "id": "071",
@@ -1158,7 +1228,8 @@
         "himation"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/071-zeno-of-citium.jpg"
   },
   {
     "id": "072",
@@ -1175,7 +1246,8 @@
         "wet tunic"
       ],
       "mood": "unconquerable"
-    }
+    },
+    "image_path": "assets/images/library-v1/072-zeno-of-citium.jpg"
   },
   {
     "id": "073",
@@ -1192,7 +1264,8 @@
         "cloak"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/073-zeno-of-citium.jpg"
   },
   {
     "id": "074",
@@ -1209,7 +1282,8 @@
         "cloak"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/074-zeno-of-citium.jpg"
   },
   {
     "id": "075",
@@ -1226,7 +1300,8 @@
         "cloak"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/075-zeno-of-citium.jpg"
   },
   {
     "id": "076",
@@ -1243,7 +1318,8 @@
         "tunic"
       ],
       "mood": "austere"
-    }
+    },
+    "image_path": "assets/images/library-v1/076-zeno-of-citium.jpg"
   },
   {
     "id": "077",
@@ -1259,7 +1335,8 @@
         "tunic"
       ],
       "mood": "stoic"
-    }
+    },
+    "image_path": "assets/images/library-v1/077-zeno-of-citium.jpg"
   },
   {
     "id": "078",
@@ -1276,7 +1353,8 @@
         "cloak"
       ],
       "mood": "didactic"
-    }
+    },
+    "image_path": "assets/images/library-v1/078-zeno-of-citium.jpg"
   },
   {
     "id": "079",
@@ -1292,7 +1370,8 @@
         "cloak"
       ],
       "mood": "sympathetic"
-    }
+    },
+    "image_path": "assets/images/library-v1/079-zeno-of-citium.jpg"
   },
   {
     "id": "080",
@@ -1308,7 +1387,8 @@
         "cloak"
       ],
       "mood": "honored"
-    }
+    },
+    "image_path": "assets/images/library-v1/080-zeno-of-citium.jpg"
   },
   {
     "id": "081",
@@ -1325,7 +1405,8 @@
         "signet ring"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/081-marcus-aurelius.jpg"
   },
   {
     "id": "082",
@@ -1342,7 +1423,8 @@
         "laurel wreath"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/082-marcus-aurelius.jpg"
   },
   {
     "id": "083",
@@ -1359,7 +1441,8 @@
         "signet ring"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/083-marcus-aurelius.jpg"
   },
   {
     "id": "084",
@@ -1376,7 +1459,8 @@
         "signet ring"
       ],
       "mood": "introspective"
-    }
+    },
+    "image_path": "assets/images/library-v1/084-marcus-aurelius.jpg"
   },
   {
     "id": "085",
@@ -1393,7 +1477,8 @@
         "imperial crown"
       ],
       "mood": "dignified"
-    }
+    },
+    "image_path": "assets/images/library-v1/085-marcus-aurelius.jpg"
   },
   {
     "id": "086",
@@ -1410,7 +1495,8 @@
         "sandals"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/086-marcus-aurelius.jpg"
   },
   {
     "id": "087",
@@ -1427,7 +1513,8 @@
         "simple tunic"
       ],
       "mood": "thoughtful"
-    }
+    },
+    "image_path": "assets/images/library-v1/087-marcus-aurelius.jpg"
   },
   {
     "id": "088",
@@ -1444,7 +1531,8 @@
         "clasped hands"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/088-marcus-aurelius.jpg"
   },
   {
     "id": "089",
@@ -1461,7 +1549,8 @@
         "crossed hands"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/089-marcus-aurelius.jpg"
   },
   {
     "id": "090",
@@ -1478,7 +1567,8 @@
         "raised hand"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/090-marcus-aurelius.jpg"
   },
   {
     "id": "091",
@@ -1495,7 +1585,8 @@
         "robes"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/091-epictetus.jpg"
   },
   {
     "id": "092",
@@ -1512,7 +1603,8 @@
         "robes"
       ],
       "mood": "resilient"
-    }
+    },
+    "image_path": "assets/images/library-v1/092-epictetus.jpg"
   },
   {
     "id": "093",
@@ -1529,7 +1621,8 @@
         "raised hand"
       ],
       "mood": "instructive"
-    }
+    },
+    "image_path": "assets/images/library-v1/093-epictetus.jpg"
   },
   {
     "id": "094",
@@ -1546,7 +1639,8 @@
         "hands"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/094-epictetus.jpg"
   },
   {
     "id": "095",
@@ -1563,7 +1657,8 @@
         "robes"
       ],
       "mood": "austere"
-    }
+    },
+    "image_path": "assets/images/library-v1/095-epictetus.jpg"
   },
   {
     "id": "096",
@@ -1580,7 +1675,8 @@
         "robes"
       ],
       "mood": "instructive"
-    }
+    },
+    "image_path": "assets/images/library-v1/096-epictetus.jpg"
   },
   {
     "id": "097",
@@ -1597,7 +1693,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/097-epictetus.jpg"
   },
   {
     "id": "098",
@@ -1614,7 +1711,8 @@
         "robes"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/098-epictetus.jpg"
   },
   {
     "id": "099",
@@ -1630,7 +1728,8 @@
         "robes"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/099-epictetus.jpg"
   },
   {
     "id": "100",
@@ -1647,7 +1746,8 @@
         "straw mat"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/100-epictetus.jpg"
   },
   {
     "id": "101",
@@ -1663,7 +1763,8 @@
         "robes"
       ],
       "mood": "dignified"
-    }
+    },
+    "image_path": "assets/images/library-v1/101-seneca.jpg"
   },
   {
     "id": "102",
@@ -1679,7 +1780,8 @@
         "robes"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/102-seneca.jpg"
   },
   {
     "id": "103",
@@ -1696,7 +1798,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/103-seneca.jpg"
   },
   {
     "id": "104",
@@ -1712,7 +1815,8 @@
         "robes"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/104-seneca.jpg"
   },
   {
     "id": "105",
@@ -1729,7 +1833,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/105-seneca.jpg"
   },
   {
     "id": "106",
@@ -1746,7 +1851,8 @@
         "robes"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/106-seneca.jpg"
   },
   {
     "id": "107",
@@ -1763,7 +1869,8 @@
         "hand"
       ],
       "mood": "disgusted"
-    }
+    },
+    "image_path": "assets/images/library-v1/107-seneca.jpg"
   },
   {
     "id": "108",
@@ -1780,7 +1887,8 @@
         "robes"
       ],
       "mood": "poignant"
-    }
+    },
+    "image_path": "assets/images/library-v1/108-seneca.jpg"
   },
   {
     "id": "109",
@@ -1797,7 +1905,8 @@
         "arms"
       ],
       "mood": "compassionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/109-seneca.jpg"
   },
   {
     "id": "110",
@@ -1814,7 +1923,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/110-seneca.jpg"
   },
   {
     "id": "111",
@@ -1831,7 +1941,8 @@
         "arms"
       ],
       "mood": "visionary"
-    }
+    },
+    "image_path": "assets/images/library-v1/111-parmenides.jpg"
   },
   {
     "id": "112",
@@ -1849,7 +1960,8 @@
         "horses"
       ],
       "mood": "triumphant"
-    }
+    },
+    "image_path": "assets/images/library-v1/112-parmenides.jpg"
   },
   {
     "id": "113",
@@ -1866,7 +1978,8 @@
         "stone block"
       ],
       "mood": "determined"
-    }
+    },
+    "image_path": "assets/images/library-v1/113-parmenides.jpg"
   },
   {
     "id": "114",
@@ -1882,7 +1995,8 @@
         "sphere"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/114-parmenides.jpg"
   },
   {
     "id": "115",
@@ -1899,7 +2013,8 @@
         "staff"
       ],
       "mood": "troubled"
-    }
+    },
+    "image_path": "assets/images/library-v1/115-parmenides.jpg"
   },
   {
     "id": "116",
@@ -1916,7 +2031,8 @@
         "staff"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/116-parmenides.jpg"
   },
   {
     "id": "117",
@@ -1933,7 +2049,8 @@
         "staff"
       ],
       "mood": "wise"
-    }
+    },
+    "image_path": "assets/images/library-v1/117-parmenides.jpg"
   },
   {
     "id": "118",
@@ -1950,7 +2067,8 @@
         "robe"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/118-parmenides.jpg"
   },
   {
     "id": "119",
@@ -1966,7 +2084,8 @@
         "robe"
       ],
       "mood": "meditative"
-    }
+    },
+    "image_path": "assets/images/library-v1/119-parmenides.jpg"
   },
   {
     "id": "120",
@@ -1982,7 +2101,8 @@
         "robe"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/120-parmenides.jpg"
   },
   {
     "id": "121",
@@ -1998,7 +2118,8 @@
         "stick"
       ],
       "mood": "animated"
-    }
+    },
+    "image_path": "assets/images/library-v1/121-zeno-of-elea.jpg"
   },
   {
     "id": "122",
@@ -2014,7 +2135,8 @@
         "arrow"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/122-zeno-of-elea.jpg"
   },
   {
     "id": "123",
@@ -2031,7 +2153,8 @@
         "grain heap"
       ],
       "mood": "puzzled"
-    }
+    },
+    "image_path": "assets/images/library-v1/123-zeno-of-elea.jpg"
   },
   {
     "id": "124",
@@ -2047,7 +2170,8 @@
         "rope"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/124-zeno-of-elea.jpg"
   },
   {
     "id": "125",
@@ -2061,7 +2185,8 @@
       "action_verb": "defying",
       "key_objects": [],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/125-zeno-of-elea.jpg"
   },
   {
     "id": "126",
@@ -2075,7 +2200,8 @@
       "action_verb": "gesturing",
       "key_objects": [],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/126-zeno-of-elea.jpg"
   },
   {
     "id": "127",
@@ -2092,7 +2218,8 @@
         "stylus"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/127-zeno-of-elea.jpg"
   },
   {
     "id": "128",
@@ -2106,7 +2233,8 @@
       "action_verb": "watching",
       "key_objects": [],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/128-zeno-of-elea.jpg"
   },
   {
     "id": "129",
@@ -2123,7 +2251,8 @@
         "geometric divider"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/129-zeno-of-elea.jpg"
   },
   {
     "id": "130",
@@ -2140,7 +2269,8 @@
         "sealed lips"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/130-zeno-of-elea.jpg"
   },
   {
     "id": "131",
@@ -2157,7 +2287,8 @@
         "extended legs"
       ],
       "mood": "ecstatic"
-    }
+    },
+    "image_path": "assets/images/library-v1/131-empedocles.jpg"
   },
   {
     "id": "132",
@@ -2174,7 +2305,8 @@
         "open hands"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/132-empedocles.jpg"
   },
   {
     "id": "133",
@@ -2191,7 +2323,8 @@
         "lowered arm"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/133-empedocles.jpg"
   },
   {
     "id": "134",
@@ -2208,7 +2341,8 @@
         "purple robes"
       ],
       "mood": "dignified"
-    }
+    },
+    "image_path": "assets/images/library-v1/134-empedocles.jpg"
   },
   {
     "id": "135",
@@ -2225,7 +2359,8 @@
         "open palms"
       ],
       "mood": "compassionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/135-empedocles.jpg"
   },
   {
     "id": "136",
@@ -2242,7 +2377,8 @@
         "downward gaze"
       ],
       "mood": "shocked"
-    }
+    },
+    "image_path": "assets/images/library-v1/136-empedocles.jpg"
   },
   {
     "id": "137",
@@ -2259,7 +2395,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/137-empedocles.jpg"
   },
   {
     "id": "138",
@@ -2276,7 +2413,8 @@
         "robes"
       ],
       "mood": "triumphant"
-    }
+    },
+    "image_path": "assets/images/library-v1/138-empedocles.jpg"
   },
   {
     "id": "139",
@@ -2293,7 +2431,8 @@
         "robes"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/139-empedocles.jpg"
   },
   {
     "id": "140",
@@ -2310,7 +2449,8 @@
         "robes"
       ],
       "mood": "ecstatic"
-    }
+    },
+    "image_path": "assets/images/library-v1/140-empedocles.jpg"
   },
   {
     "id": "141",
@@ -2327,7 +2467,8 @@
         "robes"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/141-anaximander.jpg"
   },
   {
     "id": "142",
@@ -2344,7 +2485,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/142-anaximander.jpg"
   },
   {
     "id": "143",
@@ -2360,7 +2502,8 @@
         "robes"
       ],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/143-anaximander.jpg"
   },
   {
     "id": "144",
@@ -2377,7 +2520,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/144-anaximander.jpg"
   },
   {
     "id": "145",
@@ -2394,7 +2538,8 @@
         "robed garment"
       ],
       "mood": "scholarly"
-    }
+    },
+    "image_path": "assets/images/library-v1/145-anaximander.jpg"
   },
   {
     "id": "146",
@@ -2411,7 +2556,8 @@
         "outstretched hands"
       ],
       "mood": "curious"
-    }
+    },
+    "image_path": "assets/images/library-v1/146-anaximander.jpg"
   },
   {
     "id": "147",
@@ -2428,7 +2574,8 @@
         "extended arms"
       ],
       "mood": "revelatory"
-    }
+    },
+    "image_path": "assets/images/library-v1/147-anaximander.jpg"
   },
   {
     "id": "148",
@@ -2445,7 +2592,8 @@
         "teaching hand gesture"
       ],
       "mood": "instructive"
-    }
+    },
+    "image_path": "assets/images/library-v1/148-anaximander.jpg"
   },
   {
     "id": "149",
@@ -2462,7 +2610,8 @@
         "contemplative hand gesture"
       ],
       "mood": "thoughtful"
-    }
+    },
+    "image_path": "assets/images/library-v1/149-anaximander.jpg"
   },
   {
     "id": "150",
@@ -2479,7 +2628,8 @@
         "skyward-pointed arm"
       ],
       "mood": "emphatic"
-    }
+    },
+    "image_path": "assets/images/library-v1/150-anaximander.jpg"
   },
   {
     "id": "151",
@@ -2496,7 +2646,8 @@
         "meditating hands"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/151-plotinus.jpg"
   },
   {
     "id": "152",
@@ -2513,7 +2664,8 @@
         "defensive crossed arm"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/152-plotinus.jpg"
   },
   {
     "id": "153",
@@ -2530,7 +2682,8 @@
         "bare feet"
       ],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/153-plotinus.jpg"
   },
   {
     "id": "154",
@@ -2547,7 +2700,8 @@
         "bare feet"
       ],
       "mood": "wise"
-    }
+    },
+    "image_path": "assets/images/library-v1/154-plotinus.jpg"
   },
   {
     "id": "155",
@@ -2564,7 +2718,8 @@
         "child figures"
       ],
       "mood": "compassionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/155-plotinus.jpg"
   },
   {
     "id": "156",
@@ -2581,7 +2736,8 @@
         "bare feet"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/156-plotinus.jpg"
   },
   {
     "id": "157",
@@ -2598,7 +2754,8 @@
         "bare feet"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/157-plotinus.jpg"
   },
   {
     "id": "158",
@@ -2615,7 +2772,8 @@
         "bare feet"
       ],
       "mood": "peaceful"
-    }
+    },
+    "image_path": "assets/images/library-v1/158-plotinus.jpg"
   },
   {
     "id": "159",
@@ -2632,7 +2790,8 @@
         "bare feet"
       ],
       "mood": "humble"
-    }
+    },
+    "image_path": "assets/images/library-v1/159-plotinus.jpg"
   },
   {
     "id": "160",
@@ -2649,7 +2808,8 @@
         "bare feet"
       ],
       "mood": "mystical"
-    }
+    },
+    "image_path": "assets/images/library-v1/160-plotinus.jpg"
   },
   {
     "id": "161",
@@ -2666,7 +2826,8 @@
         "beard"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/161-lucretius.jpg"
   },
   {
     "id": "162",
@@ -2683,7 +2844,8 @@
         "hands"
       ],
       "mood": "wondering"
-    }
+    },
+    "image_path": "assets/images/library-v1/162-lucretius.jpg"
   },
   {
     "id": "163",
@@ -2700,7 +2862,8 @@
         "extended hand"
       ],
       "mood": "meditative"
-    }
+    },
+    "image_path": "assets/images/library-v1/163-lucretius.jpg"
   },
   {
     "id": "164",
@@ -2717,7 +2880,8 @@
         "staff"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/164-lucretius.jpg"
   },
   {
     "id": "165",
@@ -2734,7 +2898,8 @@
         "hands"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/165-lucretius.jpg"
   },
   {
     "id": "166",
@@ -2751,7 +2916,8 @@
         "cupped hands"
       ],
       "mood": "inquisitive"
-    }
+    },
+    "image_path": "assets/images/library-v1/166-lucretius.jpg"
   },
   {
     "id": "167",
@@ -2768,7 +2934,8 @@
         "extended hand"
       ],
       "mood": "solemn"
-    }
+    },
+    "image_path": "assets/images/library-v1/167-lucretius.jpg"
   },
   {
     "id": "168",
@@ -2785,7 +2952,8 @@
         "scroll"
       ],
       "mood": "welcoming"
-    }
+    },
+    "image_path": "assets/images/library-v1/168-lucretius.jpg"
   },
   {
     "id": "169",
@@ -2802,7 +2970,8 @@
         "staff"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/169-lucretius.jpg"
   },
   {
     "id": "170",
@@ -2819,7 +2988,8 @@
         "wreath"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/170-lucretius.jpg"
   },
   {
     "id": "171",
@@ -2836,7 +3006,8 @@
         "ring"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/171-cicero.jpg"
   },
   {
     "id": "172",
@@ -2853,7 +3024,8 @@
         "ring"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/172-cicero.jpg"
   },
   {
     "id": "173",
@@ -2870,7 +3042,8 @@
         "ring"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/173-cicero.jpg"
   },
   {
     "id": "174",
@@ -2886,7 +3059,8 @@
         "toga"
       ],
       "mood": "noble"
-    }
+    },
+    "image_path": "assets/images/library-v1/174-cicero.jpg"
   },
   {
     "id": "175",
@@ -2903,7 +3077,8 @@
         "ring"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/175-cicero.jpg"
   },
   {
     "id": "176",
@@ -2920,7 +3095,8 @@
         "ring"
       ],
       "mood": "warm"
-    }
+    },
+    "image_path": "assets/images/library-v1/176-cicero.jpg"
   },
   {
     "id": "177",
@@ -2936,7 +3112,8 @@
         "scroll"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/177-cicero.jpg"
   },
   {
     "id": "178",
@@ -2952,7 +3129,8 @@
         "scroll"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/178-cicero.jpg"
   },
   {
     "id": "179",
@@ -2968,7 +3146,8 @@
         "bust"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/179-cicero.jpg"
   },
   {
     "id": "180",
@@ -2985,7 +3164,8 @@
         "cloak"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/180-cicero.jpg"
   },
   {
     "id": "181",
@@ -3001,7 +3181,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/181-pyrrho-of-elis.jpg"
   },
   {
     "id": "182",
@@ -3017,7 +3198,8 @@
         "staff"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/182-pyrrho-of-elis.jpg"
   },
   {
     "id": "183",
@@ -3033,7 +3215,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/183-pyrrho-of-elis.jpg"
   },
   {
     "id": "184",
@@ -3049,7 +3232,8 @@
         "scales"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/184-pyrrho-of-elis.jpg"
   },
   {
     "id": "185",
@@ -3065,7 +3249,8 @@
         "staff"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/185-pyrrho-of-elis.jpg"
   },
   {
     "id": "186",
@@ -3079,7 +3264,8 @@
       "action_verb": "gesturing",
       "key_objects": [],
       "mood": "uncertain"
-    }
+    },
+    "image_path": "assets/images/library-v1/186-pyrrho-of-elis.jpg"
   },
   {
     "id": "187",
@@ -3095,7 +3281,8 @@
         "staff"
       ],
       "mood": "animated"
-    }
+    },
+    "image_path": "assets/images/library-v1/187-pyrrho-of-elis.jpg"
   },
   {
     "id": "188",
@@ -3111,7 +3298,8 @@
         "staff"
       ],
       "mood": "peaceful"
-    }
+    },
+    "image_path": "assets/images/library-v1/188-pyrrho-of-elis.jpg"
   },
   {
     "id": "189",
@@ -3127,7 +3315,8 @@
         "food"
       ],
       "mood": "indifferent"
-    }
+    },
+    "image_path": "assets/images/library-v1/189-pyrrho-of-elis.jpg"
   },
   {
     "id": "190",
@@ -3143,7 +3332,8 @@
         "staff"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/190-pyrrho-of-elis.jpg"
   },
   {
     "id": "191",
@@ -3159,7 +3349,8 @@
         "chains"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/191-boethius.jpg"
   },
   {
     "id": "192",
@@ -3173,7 +3364,8 @@
       "action_verb": "reaching",
       "key_objects": [],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/192-boethius.jpg"
   },
   {
     "id": "193",
@@ -3190,7 +3382,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/193-boethius.jpg"
   },
   {
     "id": "194",
@@ -3207,7 +3400,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/194-boethius.jpg"
   },
   {
     "id": "195",
@@ -3224,7 +3418,8 @@
         "tunic"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/195-boethius.jpg"
   },
   {
     "id": "196",
@@ -3241,7 +3436,8 @@
         "cloak"
       ],
       "mood": "yearning"
-    }
+    },
+    "image_path": "assets/images/library-v1/196-boethius.jpg"
   },
   {
     "id": "197",
@@ -3258,7 +3454,8 @@
         "manuscripts"
       ],
       "mood": "scholarly"
-    }
+    },
+    "image_path": "assets/images/library-v1/197-boethius.jpg"
   },
   {
     "id": "198",
@@ -3275,7 +3472,8 @@
         "tunic"
       ],
       "mood": "resigned"
-    }
+    },
+    "image_path": "assets/images/library-v1/198-boethius.jpg"
   },
   {
     "id": "199",
@@ -3292,7 +3490,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/199-boethius.jpg"
   },
   {
     "id": "200",
@@ -3309,7 +3508,8 @@
         "cloak"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/200-boethius.jpg"
   },
   {
     "id": "201",
@@ -3326,7 +3526,8 @@
         "simple cap"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/201-confucius.jpg"
   },
   {
     "id": "202",
@@ -3343,7 +3544,8 @@
         "reins"
       ],
       "mood": "determined"
-    }
+    },
+    "image_path": "assets/images/library-v1/202-confucius.jpg"
   },
   {
     "id": "203",
@@ -3360,7 +3562,8 @@
         "staff"
       ],
       "mood": "resigned"
-    }
+    },
+    "image_path": "assets/images/library-v1/203-confucius.jpg"
   },
   {
     "id": "204",
@@ -3377,7 +3580,8 @@
         "bamboo strips"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/204-confucius.jpg"
   },
   {
     "id": "205",
@@ -3395,7 +3599,8 @@
         "robes"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/205-confucius.jpg"
   },
   {
     "id": "206",
@@ -3412,7 +3617,8 @@
         "cap"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/206-confucius.jpg"
   },
   {
     "id": "207",
@@ -3429,7 +3635,8 @@
         "flowing robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/207-confucius.jpg"
   },
   {
     "id": "208",
@@ -3446,7 +3653,8 @@
         "flowing robes"
       ],
       "mood": "sorrowful"
-    }
+    },
+    "image_path": "assets/images/library-v1/208-confucius.jpg"
   },
   {
     "id": "209",
@@ -3464,7 +3672,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/209-confucius.jpg"
   },
   {
     "id": "210",
@@ -3481,7 +3690,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/210-confucius.jpg"
   },
   {
     "id": "211",
@@ -3499,7 +3709,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/211-lao-tzu.jpg"
   },
   {
     "id": "212",
@@ -3517,7 +3728,8 @@
         "robes"
       ],
       "mood": "graceful"
-    }
+    },
+    "image_path": "assets/images/library-v1/212-lao-tzu.jpg"
   },
   {
     "id": "213",
@@ -3534,7 +3746,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/213-lao-tzu.jpg"
   },
   {
     "id": "214",
@@ -3551,7 +3764,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/214-lao-tzu.jpg"
   },
   {
     "id": "215",
@@ -3568,7 +3782,8 @@
         "staff"
       ],
       "mood": "mystical"
-    }
+    },
+    "image_path": "assets/images/library-v1/215-lao-tzu.jpg"
   },
   {
     "id": "216",
@@ -3586,7 +3801,8 @@
         "robes"
       ],
       "mood": "balanced"
-    }
+    },
+    "image_path": "assets/images/library-v1/216-lao-tzu.jpg"
   },
   {
     "id": "217",
@@ -3600,7 +3816,8 @@
       "action_verb": "gesturing",
       "key_objects": [],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/217-lao-tzu.jpg"
   },
   {
     "id": "218",
@@ -3614,7 +3831,8 @@
       "action_verb": "meditating",
       "key_objects": [],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/218-lao-tzu.jpg"
   },
   {
     "id": "219",
@@ -3628,7 +3846,8 @@
       "action_verb": "gazing",
       "key_objects": [],
       "mood": "introspective"
-    }
+    },
+    "image_path": "assets/images/library-v1/219-lao-tzu.jpg"
   },
   {
     "id": "220",
@@ -3644,7 +3863,8 @@
         "walking staff"
       ],
       "mood": "peaceful"
-    }
+    },
+    "image_path": "assets/images/library-v1/220-lao-tzu.jpg"
   },
   {
     "id": "221",
@@ -3658,7 +3878,8 @@
       "action_verb": "meditating",
       "key_objects": [],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/221-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "222",
@@ -3674,7 +3895,8 @@
         "horse"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/222-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "223",
@@ -3688,7 +3910,8 @@
       "action_verb": "witnessing",
       "key_objects": [],
       "mood": "awakened"
-    }
+    },
+    "image_path": "assets/images/library-v1/223-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "224",
@@ -3702,7 +3925,8 @@
       "action_verb": "teaching",
       "key_objects": [],
       "mood": "compassionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/224-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "225",
@@ -3719,7 +3943,8 @@
         "mala beads"
       ],
       "mood": "humble"
-    }
+    },
+    "image_path": "assets/images/library-v1/225-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "226",
@@ -3735,7 +3960,8 @@
         "mala beads"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/226-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "227",
@@ -3751,7 +3977,8 @@
         "mala beads"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/227-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "228",
@@ -3767,7 +3994,8 @@
         "mala beads"
       ],
       "mood": "enlightened"
-    }
+    },
+    "image_path": "assets/images/library-v1/228-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "229",
@@ -3783,7 +4011,8 @@
         "mala beads"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/229-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "230",
@@ -3799,7 +4028,8 @@
         "mala beads"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/230-buddha-siddhartha-gautama.jpg"
   },
   {
     "id": "231",
@@ -3816,7 +4046,8 @@
         "teaching scroll"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/231-mencius.jpg"
   },
   {
     "id": "232",
@@ -3833,7 +4064,8 @@
         "travel bundle"
       ],
       "mood": "purposeful"
-    }
+    },
+    "image_path": "assets/images/library-v1/232-mencius.jpg"
   },
   {
     "id": "233",
@@ -3849,7 +4081,8 @@
         "robes"
       ],
       "mood": "instructive"
-    }
+    },
+    "image_path": "assets/images/library-v1/233-mencius.jpg"
   },
   {
     "id": "234",
@@ -3865,7 +4098,8 @@
         "robes"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/234-mencius.jpg"
   },
   {
     "id": "235",
@@ -3882,7 +4116,8 @@
         "staff"
       ],
       "mood": "benevolent"
-    }
+    },
+    "image_path": "assets/images/library-v1/235-mencius.jpg"
   },
   {
     "id": "236",
@@ -3898,7 +4133,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/236-mencius.jpg"
   },
   {
     "id": "237",
@@ -3915,7 +4151,8 @@
         "flowers"
       ],
       "mood": "reverential"
-    }
+    },
+    "image_path": "assets/images/library-v1/237-mencius.jpg"
   },
   {
     "id": "238",
@@ -3931,7 +4168,8 @@
         "robes"
       ],
       "mood": "concerned"
-    }
+    },
+    "image_path": "assets/images/library-v1/238-mencius.jpg"
   },
   {
     "id": "239",
@@ -3948,7 +4186,8 @@
         "staff"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/239-mencius.jpg"
   },
   {
     "id": "240",
@@ -3965,7 +4204,8 @@
         "millet grain"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/240-mencius.jpg"
   },
   {
     "id": "241",
@@ -3979,7 +4219,8 @@
       "action_verb": "sleeping",
       "key_objects": [],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/241-zhuangzi.jpg"
   },
   {
     "id": "242",
@@ -3995,7 +4236,8 @@
         "turtle"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/242-zhuangzi.jpg"
   },
   {
     "id": "243",
@@ -4009,7 +4251,8 @@
       "action_verb": "watching",
       "key_objects": [],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/243-zhuangzi.jpg"
   },
   {
     "id": "244",
@@ -4025,7 +4268,8 @@
         "drum"
       ],
       "mood": "ecstatic"
-    }
+    },
+    "image_path": "assets/images/library-v1/244-zhuangzi.jpg"
   },
   {
     "id": "245",
@@ -4041,7 +4285,8 @@
         "book"
       ],
       "mood": "blissful"
-    }
+    },
+    "image_path": "assets/images/library-v1/245-zhuangzi.jpg"
   },
   {
     "id": "246",
@@ -4055,7 +4300,8 @@
       "action_verb": "riding",
       "key_objects": [],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/246-zhuangzi.jpg"
   },
   {
     "id": "247",
@@ -4069,7 +4315,8 @@
       "action_verb": "sitting",
       "key_objects": [],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/247-zhuangzi.jpg"
   },
   {
     "id": "248",
@@ -4083,7 +4330,8 @@
       "action_verb": "observing",
       "key_objects": [],
       "mood": "amazed"
-    }
+    },
+    "image_path": "assets/images/library-v1/248-zhuangzi.jpg"
   },
   {
     "id": "249",
@@ -4099,7 +4347,8 @@
         "gnarled branch"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/249-zhuangzi.jpg"
   },
   {
     "id": "250",
@@ -4115,7 +4364,8 @@
         "gourd"
       ],
       "mood": "meditative"
-    }
+    },
+    "image_path": "assets/images/library-v1/250-zhuangzi.jpg"
   },
   {
     "id": "251",
@@ -4129,7 +4379,8 @@
       "action_verb": "arguing",
       "key_objects": [],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/251-adi-shankara.jpg"
   },
   {
     "id": "252",
@@ -4145,7 +4396,8 @@
         "wooden staff"
       ],
       "mood": "determined"
-    }
+    },
+    "image_path": "assets/images/library-v1/252-adi-shankara.jpg"
   },
   {
     "id": "253",
@@ -4159,7 +4411,8 @@
       "action_verb": "contemplating",
       "key_objects": [],
       "mood": "inspired"
-    }
+    },
+    "image_path": "assets/images/library-v1/253-adi-shankara.jpg"
   },
   {
     "id": "254",
@@ -4173,7 +4426,8 @@
       "action_verb": "standing",
       "key_objects": [],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/254-adi-shankara.jpg"
   },
   {
     "id": "255",
@@ -4187,7 +4441,8 @@
       "action_verb": "recognizing",
       "key_objects": [],
       "mood": "awestruck"
-    }
+    },
+    "image_path": "assets/images/library-v1/255-adi-shankara.jpg"
   },
   {
     "id": "256",
@@ -4203,7 +4458,8 @@
         "sandals"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/256-adi-shankara.jpg"
   },
   {
     "id": "257",
@@ -4220,7 +4476,8 @@
         "raised blessing hand"
       ],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/257-adi-shankara.jpg"
   },
   {
     "id": "258",
@@ -4237,7 +4494,8 @@
         "water pot"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/258-adi-shankara.jpg"
   },
   {
     "id": "259",
@@ -4254,7 +4512,8 @@
         "raised finger gesture"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/259-adi-shankara.jpg"
   },
   {
     "id": "260",
@@ -4271,7 +4530,8 @@
         "water pot"
       ],
       "mood": "ascetic"
-    }
+    },
+    "image_path": "assets/images/library-v1/260-adi-shankara.jpg"
   },
   {
     "id": "261",
@@ -4288,7 +4548,8 @@
         "serpents"
       ],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/261-nagarjuna.jpg"
   },
   {
     "id": "262",
@@ -4305,7 +4566,8 @@
         "open arms gesture"
       ],
       "mood": "triumphant"
-    }
+    },
+    "image_path": "assets/images/library-v1/262-nagarjuna.jpg"
   },
   {
     "id": "263",
@@ -4322,7 +4584,8 @@
         "dharma wheel"
       ],
       "mood": "pedagogical"
-    }
+    },
+    "image_path": "assets/images/library-v1/263-nagarjuna.jpg"
   },
   {
     "id": "264",
@@ -4339,7 +4602,8 @@
         "hand gestures"
       ],
       "mood": "intellectual"
-    }
+    },
+    "image_path": "assets/images/library-v1/264-nagarjuna.jpg"
   },
   {
     "id": "265",
@@ -4356,7 +4620,8 @@
         "prayer beads"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/265-nagarjuna.jpg"
   },
   {
     "id": "266",
@@ -4373,7 +4638,8 @@
         "prayer beads"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/266-nagarjuna.jpg"
   },
   {
     "id": "267",
@@ -4390,7 +4656,8 @@
         "prayer beads"
       ],
       "mood": "earnest"
-    }
+    },
+    "image_path": "assets/images/library-v1/267-nagarjuna.jpg"
   },
   {
     "id": "268",
@@ -4407,7 +4674,8 @@
         "walking staff"
       ],
       "mood": "purposeful"
-    }
+    },
+    "image_path": "assets/images/library-v1/268-nagarjuna.jpg"
   },
   {
     "id": "269",
@@ -4424,7 +4692,8 @@
         "prayer beads"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/269-nagarjuna.jpg"
   },
   {
     "id": "270",
@@ -4441,7 +4710,8 @@
         "walking staff"
       ],
       "mood": "balanced"
-    }
+    },
+    "image_path": "assets/images/library-v1/270-nagarjuna.jpg"
   },
   {
     "id": "271",
@@ -4458,7 +4728,8 @@
         "walking staff"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/271-mozi.jpg"
   },
   {
     "id": "272",
@@ -4475,7 +4746,8 @@
         "walking staff"
       ],
       "mood": "urgent"
-    }
+    },
+    "image_path": "assets/images/library-v1/272-mozi.jpg"
   },
   {
     "id": "273",
@@ -4492,7 +4764,8 @@
         "cup"
       ],
       "mood": "benevolent"
-    }
+    },
+    "image_path": "assets/images/library-v1/273-mozi.jpg"
   },
   {
     "id": "274",
@@ -4509,7 +4782,8 @@
         "scroll"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/274-mozi.jpg"
   },
   {
     "id": "275",
@@ -4526,7 +4800,8 @@
         "measuring tools"
       ],
       "mood": "commanding"
-    }
+    },
+    "image_path": "assets/images/library-v1/275-mozi.jpg"
   },
   {
     "id": "276",
@@ -4543,7 +4818,8 @@
         "staff"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/276-mozi.jpg"
   },
   {
     "id": "277",
@@ -4559,7 +4835,8 @@
         "scroll"
       ],
       "mood": "intense"
-    }
+    },
+    "image_path": "assets/images/library-v1/277-mozi.jpg"
   },
   {
     "id": "278",
@@ -4576,7 +4853,8 @@
         "measuring staff"
       ],
       "mood": "didactic"
-    }
+    },
+    "image_path": "assets/images/library-v1/278-mozi.jpg"
   },
   {
     "id": "279",
@@ -4593,7 +4871,8 @@
         "sack"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/279-mozi.jpg"
   },
   {
     "id": "280",
@@ -4610,7 +4889,8 @@
         "vessel"
       ],
       "mood": "compassionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/280-mozi.jpg"
   },
   {
     "id": "281",
@@ -4626,7 +4906,8 @@
         "scroll"
       ],
       "mood": "watchful"
-    }
+    },
+    "image_path": "assets/images/library-v1/281-sun-tzu.jpg"
   },
   {
     "id": "282",
@@ -4643,7 +4924,8 @@
         "brush"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/282-sun-tzu.jpg"
   },
   {
     "id": "283",
@@ -4659,7 +4941,8 @@
         "staff"
       ],
       "mood": "stern"
-    }
+    },
+    "image_path": "assets/images/library-v1/283-sun-tzu.jpg"
   },
   {
     "id": "284",
@@ -4676,7 +4959,8 @@
         "drumsticks"
       ],
       "mood": "martial"
-    }
+    },
+    "image_path": "assets/images/library-v1/284-sun-tzu.jpg"
   },
   {
     "id": "285",
@@ -4693,7 +4977,8 @@
         "scroll"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/285-sun-tzu.jpg"
   },
   {
     "id": "286",
@@ -4709,7 +4994,8 @@
         "staff"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/286-sun-tzu.jpg"
   },
   {
     "id": "287",
@@ -4725,7 +5011,8 @@
         "staff"
       ],
       "mood": "wise"
-    }
+    },
+    "image_path": "assets/images/library-v1/287-sun-tzu.jpg"
   },
   {
     "id": "288",
@@ -4741,7 +5028,8 @@
         "sword"
       ],
       "mood": "commanding"
-    }
+    },
+    "image_path": "assets/images/library-v1/288-sun-tzu.jpg"
   },
   {
     "id": "289",
@@ -4758,7 +5046,8 @@
         "robes"
       ],
       "mood": "analytical"
-    }
+    },
+    "image_path": "assets/images/library-v1/289-sun-tzu.jpg"
   },
   {
     "id": "290",
@@ -4774,7 +5063,8 @@
         "robes"
       ],
       "mood": "vigilant"
-    }
+    },
+    "image_path": "assets/images/library-v1/290-sun-tzu.jpg"
   },
   {
     "id": "291",
@@ -4788,7 +5078,8 @@
       "action_verb": "arguing",
       "key_objects": [],
       "mood": "questioning"
-    }
+    },
+    "image_path": "assets/images/library-v1/291-hui-shi.jpg"
   },
   {
     "id": "292",
@@ -4805,7 +5096,8 @@
         "robes"
       ],
       "mood": "paradoxical"
-    }
+    },
+    "image_path": "assets/images/library-v1/292-hui-shi.jpg"
   },
   {
     "id": "293",
@@ -4822,7 +5114,8 @@
         "coin"
       ],
       "mood": "inquisitive"
-    }
+    },
+    "image_path": "assets/images/library-v1/293-hui-shi.jpg"
   },
   {
     "id": "294",
@@ -4839,7 +5132,8 @@
         "brush"
       ],
       "mood": "meditative"
-    }
+    },
+    "image_path": "assets/images/library-v1/294-hui-shi.jpg"
   },
   {
     "id": "295",
@@ -4855,7 +5149,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/295-hui-shi.jpg"
   },
   {
     "id": "296",
@@ -4872,7 +5167,8 @@
         "hair"
       ],
       "mood": "precise"
-    }
+    },
+    "image_path": "assets/images/library-v1/296-hui-shi.jpg"
   },
   {
     "id": "297",
@@ -4889,7 +5185,8 @@
         "robes"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/297-hui-shi.jpg"
   },
   {
     "id": "298",
@@ -4907,7 +5204,8 @@
         "robes"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/298-hui-shi.jpg"
   },
   {
     "id": "299",
@@ -4924,7 +5222,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/299-hui-shi.jpg"
   },
   {
     "id": "300",
@@ -4941,7 +5240,8 @@
         "staff"
       ],
       "mood": "composed"
-    }
+    },
+    "image_path": "assets/images/library-v1/300-hui-shi.jpg"
   },
   {
     "id": "301",
@@ -4958,7 +5258,8 @@
         "robes"
       ],
       "mood": "absorbed"
-    }
+    },
+    "image_path": "assets/images/library-v1/301-augustine-of-hippo.jpg"
   },
   {
     "id": "302",
@@ -4975,7 +5276,8 @@
         "scroll"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/302-augustine-of-hippo.jpg"
   },
   {
     "id": "303",
@@ -4992,7 +5294,8 @@
         "staff"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/303-augustine-of-hippo.jpg"
   },
   {
     "id": "304",
@@ -5009,7 +5312,8 @@
         "robes"
       ],
       "mood": "introspective"
-    }
+    },
+    "image_path": "assets/images/library-v1/304-augustine-of-hippo.jpg"
   },
   {
     "id": "305",
@@ -5026,7 +5330,8 @@
         "gesture"
       ],
       "mood": "intense"
-    }
+    },
+    "image_path": "assets/images/library-v1/305-augustine-of-hippo.jpg"
   },
   {
     "id": "306",
@@ -5042,7 +5347,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/306-augustine-of-hippo.jpg"
   },
   {
     "id": "307",
@@ -5059,7 +5365,8 @@
         "heart"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/307-augustine-of-hippo.jpg"
   },
   {
     "id": "308",
@@ -5076,7 +5383,8 @@
         "gesture"
       ],
       "mood": "eloquent"
-    }
+    },
+    "image_path": "assets/images/library-v1/308-augustine-of-hippo.jpg"
   },
   {
     "id": "309",
@@ -5092,7 +5400,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/309-augustine-of-hippo.jpg"
   },
   {
     "id": "310",
@@ -5108,7 +5417,8 @@
         "robes"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/310-augustine-of-hippo.jpg"
   },
   {
     "id": "311",
@@ -5125,7 +5435,8 @@
         "chains"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/311-thomas-aquinas.jpg"
   },
   {
     "id": "312",
@@ -5142,7 +5453,8 @@
         "hand gestures"
       ],
       "mood": "brilliant"
-    }
+    },
+    "image_path": "assets/images/library-v1/312-thomas-aquinas.jpg"
   },
   {
     "id": "313",
@@ -5156,7 +5468,8 @@
       "action_verb": "praying",
       "key_objects": [],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/313-thomas-aquinas.jpg"
   },
   {
     "id": "314",
@@ -5172,7 +5485,8 @@
         "quill"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/314-thomas-aquinas.jpg"
   },
   {
     "id": "315",
@@ -5186,7 +5500,8 @@
       "action_verb": "resting",
       "key_objects": [],
       "mood": "peaceful"
-    }
+    },
+    "image_path": "assets/images/library-v1/315-thomas-aquinas.jpg"
   },
   {
     "id": "316",
@@ -5202,7 +5517,8 @@
         "staff"
       ],
       "mood": "purposeful"
-    }
+    },
+    "image_path": "assets/images/library-v1/316-thomas-aquinas.jpg"
   },
   {
     "id": "317",
@@ -5216,7 +5532,8 @@
       "action_verb": "transcending",
       "key_objects": [],
       "mood": "awestruck"
-    }
+    },
+    "image_path": "assets/images/library-v1/317-thomas-aquinas.jpg"
   },
   {
     "id": "318",
@@ -5230,7 +5547,8 @@
       "action_verb": "arguing",
       "key_objects": [],
       "mood": "engaged"
-    }
+    },
+    "image_path": "assets/images/library-v1/318-thomas-aquinas.jpg"
   },
   {
     "id": "319",
@@ -5246,7 +5564,8 @@
         "crucifix"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/319-thomas-aquinas.jpg"
   },
   {
     "id": "320",
@@ -5262,7 +5581,8 @@
         "reins"
       ],
       "mood": "determined"
-    }
+    },
+    "image_path": "assets/images/library-v1/320-thomas-aquinas.jpg"
   },
   {
     "id": "321",
@@ -5279,7 +5599,8 @@
         "diagnostic hands"
       ],
       "mood": "concentrated"
-    }
+    },
+    "image_path": "assets/images/library-v1/321-avicenna.jpg"
   },
   {
     "id": "322",
@@ -5296,7 +5617,8 @@
         "flowing robes"
       ],
       "mood": "purposeful"
-    }
+    },
+    "image_path": "assets/images/library-v1/322-avicenna.jpg"
   },
   {
     "id": "323",
@@ -5313,7 +5635,8 @@
         "authoritative stance"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/323-avicenna.jpg"
   },
   {
     "id": "324",
@@ -5330,7 +5653,8 @@
         "seated posture"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/324-avicenna.jpg"
   },
   {
     "id": "325",
@@ -5347,7 +5671,8 @@
         "peaceful features"
       ],
       "mood": "resigned"
-    }
+    },
+    "image_path": "assets/images/library-v1/325-avicenna.jpg"
   },
   {
     "id": "326",
@@ -5364,7 +5689,8 @@
         "elevated hands"
       ],
       "mood": "curious"
-    }
+    },
+    "image_path": "assets/images/library-v1/326-avicenna.jpg"
   },
   {
     "id": "327",
@@ -5381,7 +5707,8 @@
         "teaching gesture"
       ],
       "mood": "eloquent"
-    }
+    },
+    "image_path": "assets/images/library-v1/327-avicenna.jpg"
   },
   {
     "id": "328",
@@ -5398,7 +5725,8 @@
         "contemplative gesture"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/328-avicenna.jpg"
   },
   {
     "id": "329",
@@ -5415,7 +5743,8 @@
         "robe"
       ],
       "mood": "animated"
-    }
+    },
+    "image_path": "assets/images/library-v1/329-avicenna.jpg"
   },
   {
     "id": "330",
@@ -5432,7 +5761,8 @@
         "robe"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/330-avicenna.jpg"
   },
   {
     "id": "331",
@@ -5449,7 +5779,8 @@
         "headwrap"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/331-averroes.jpg"
   },
   {
     "id": "332",
@@ -5466,7 +5797,8 @@
         "headwrap"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/332-averroes.jpg"
   },
   {
     "id": "333",
@@ -5483,7 +5815,8 @@
         "headwrap"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/333-averroes.jpg"
   },
   {
     "id": "334",
@@ -5500,7 +5833,8 @@
         "headwrap"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/334-averroes.jpg"
   },
   {
     "id": "335",
@@ -5517,7 +5851,8 @@
         "headwrap"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/335-averroes.jpg"
   },
   {
     "id": "336",
@@ -5534,7 +5869,8 @@
         "headwrap"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/336-averroes.jpg"
   },
   {
     "id": "337",
@@ -5550,7 +5886,8 @@
         "scroll"
       ],
       "mood": "engaged"
-    }
+    },
+    "image_path": "assets/images/library-v1/337-averroes.jpg"
   },
   {
     "id": "338",
@@ -5567,7 +5904,8 @@
         "Arabic text scroll"
       ],
       "mood": "scholarly"
-    }
+    },
+    "image_path": "assets/images/library-v1/338-averroes.jpg"
   },
   {
     "id": "339",
@@ -5583,7 +5921,8 @@
         "celestial sphere"
       ],
       "mood": "wondering"
-    }
+    },
+    "image_path": "assets/images/library-v1/339-averroes.jpg"
   },
   {
     "id": "340",
@@ -5600,7 +5939,8 @@
         "robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/340-averroes.jpg"
   },
   {
     "id": "341",
@@ -5617,7 +5957,8 @@
         "robes"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/341-maimonides.jpg"
   },
   {
     "id": "342",
@@ -5634,7 +5975,8 @@
         "staff"
       ],
       "mood": "caring"
-    }
+    },
+    "image_path": "assets/images/library-v1/342-maimonides.jpg"
   },
   {
     "id": "343",
@@ -5650,7 +5992,8 @@
         "manuscript scroll"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/343-maimonides.jpg"
   },
   {
     "id": "344",
@@ -5666,7 +6009,8 @@
         "robes"
       ],
       "mood": "mournful"
-    }
+    },
+    "image_path": "assets/images/library-v1/344-maimonides.jpg"
   },
   {
     "id": "345",
@@ -5683,7 +6027,8 @@
         "staff"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/345-maimonides.jpg"
   },
   {
     "id": "346",
@@ -5700,7 +6045,8 @@
         "hands"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/346-maimonides.jpg"
   },
   {
     "id": "347",
@@ -5717,7 +6063,8 @@
         "staff"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/347-maimonides.jpg"
   },
   {
     "id": "348",
@@ -5734,7 +6081,8 @@
         "turban"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/348-maimonides.jpg"
   },
   {
     "id": "349",
@@ -5751,7 +6099,8 @@
         "hands"
       ],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/349-maimonides.jpg"
   },
   {
     "id": "350",
@@ -5768,7 +6117,8 @@
         "hands"
       ],
       "mood": "compassionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/350-maimonides.jpg"
   },
   {
     "id": "351",
@@ -5785,7 +6135,8 @@
         "turban"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/351-al-ghazali.jpg"
   },
   {
     "id": "352",
@@ -5802,7 +6153,8 @@
         "staff"
       ],
       "mood": "ascetic"
-    }
+    },
+    "image_path": "assets/images/library-v1/352-al-ghazali.jpg"
   },
   {
     "id": "353",
@@ -5819,7 +6171,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/353-al-ghazali.jpg"
   },
   {
     "id": "354",
@@ -5836,7 +6189,8 @@
         "robes"
       ],
       "mood": "concentrated"
-    }
+    },
+    "image_path": "assets/images/library-v1/354-al-ghazali.jpg"
   },
   {
     "id": "355",
@@ -5853,7 +6207,8 @@
         "folded hands"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/355-al-ghazali.jpg"
   },
   {
     "id": "356",
@@ -5870,7 +6225,8 @@
         "disciples"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/356-al-ghazali.jpg"
   },
   {
     "id": "357",
@@ -5887,7 +6243,8 @@
         "hands"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/357-al-ghazali.jpg"
   },
   {
     "id": "358",
@@ -5904,7 +6261,8 @@
         "raised hand"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/358-al-ghazali.jpg"
   },
   {
     "id": "359",
@@ -5921,7 +6279,8 @@
         "opposing philosophers"
       ],
       "mood": "intense"
-    }
+    },
+    "image_path": "assets/images/library-v1/359-al-ghazali.jpg"
   },
   {
     "id": "360",
@@ -5938,7 +6297,8 @@
         "robes"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/360-al-ghazali.jpg"
   },
   {
     "id": "361",
@@ -5955,7 +6315,8 @@
         "cross"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/361-anselm-of-canterbury.jpg"
   },
   {
     "id": "362",
@@ -5972,7 +6333,8 @@
         "prayer beads"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/362-anselm-of-canterbury.jpg"
   },
   {
     "id": "363",
@@ -5990,7 +6352,8 @@
         "prayer beads"
       ],
       "mood": "determined"
-    }
+    },
+    "image_path": "assets/images/library-v1/363-anselm-of-canterbury.jpg"
   },
   {
     "id": "364",
@@ -6008,7 +6371,8 @@
         "staff"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/364-anselm-of-canterbury.jpg"
   },
   {
     "id": "365",
@@ -6026,7 +6390,8 @@
         "prayer beads"
       ],
       "mood": "resigned"
-    }
+    },
+    "image_path": "assets/images/library-v1/365-anselm-of-canterbury.jpg"
   },
   {
     "id": "366",
@@ -6043,7 +6408,8 @@
         "cross"
       ],
       "mood": "absorbed"
-    }
+    },
+    "image_path": "assets/images/library-v1/366-anselm-of-canterbury.jpg"
   },
   {
     "id": "367",
@@ -6061,7 +6427,8 @@
         "cross"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/367-anselm-of-canterbury.jpg"
   },
   {
     "id": "368",
@@ -6079,7 +6446,8 @@
         "prayer beads"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/368-anselm-of-canterbury.jpg"
   },
   {
     "id": "369",
@@ -6097,7 +6465,8 @@
         "prayer beads"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/369-anselm-of-canterbury.jpg"
   },
   {
     "id": "370",
@@ -6114,7 +6483,8 @@
         "closed scroll"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/370-anselm-of-canterbury.jpg"
   },
   {
     "id": "371",
@@ -6131,7 +6501,8 @@
         "rolled parchment"
       ],
       "mood": "intense"
-    }
+    },
+    "image_path": "assets/images/library-v1/371-niccola-machiavelli.jpg"
   },
   {
     "id": "372",
@@ -6148,7 +6519,8 @@
         "cup"
       ],
       "mood": "solitary"
-    }
+    },
+    "image_path": "assets/images/library-v1/372-niccola-machiavelli.jpg"
   },
   {
     "id": "373",
@@ -6165,7 +6537,8 @@
         "staff"
       ],
       "mood": "commanding"
-    }
+    },
+    "image_path": "assets/images/library-v1/373-niccola-machiavelli.jpg"
   },
   {
     "id": "374",
@@ -6182,7 +6555,8 @@
         "chains"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/374-niccola-machiavelli.jpg"
   },
   {
     "id": "375",
@@ -6199,7 +6573,8 @@
         "cloak"
       ],
       "mood": "calculating"
-    }
+    },
+    "image_path": "assets/images/library-v1/375-niccola-machiavelli.jpg"
   },
   {
     "id": "376",
@@ -6216,7 +6591,8 @@
         "billowing cloak"
       ],
       "mood": "purposeful"
-    }
+    },
+    "image_path": "assets/images/library-v1/376-niccola-machiavelli.jpg"
   },
   {
     "id": "377",
@@ -6233,7 +6609,8 @@
         "lion figurine"
       ],
       "mood": "calculating"
-    }
+    },
+    "image_path": "assets/images/library-v1/377-niccola-machiavelli.jpg"
   },
   {
     "id": "378",
@@ -6247,7 +6624,8 @@
       "action_verb": "kneeling",
       "key_objects": [],
       "mood": "resigned"
-    }
+    },
+    "image_path": "assets/images/library-v1/378-niccola-machiavelli.jpg"
   },
   {
     "id": "379",
@@ -6261,7 +6639,8 @@
       "action_verb": "reclining",
       "key_objects": [],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/379-niccola-machiavelli.jpg"
   },
   {
     "id": "380",
@@ -6278,7 +6657,8 @@
         "parchment"
       ],
       "mood": "absorbed"
-    }
+    },
+    "image_path": "assets/images/library-v1/380-niccola-machiavelli.jpg"
   },
   {
     "id": "381",
@@ -6292,7 +6672,8 @@
       "action_verb": "collapsing",
       "key_objects": [],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/381-francis-bacon.jpg"
   },
   {
     "id": "382",
@@ -6306,7 +6687,8 @@
       "action_verb": "kneeling",
       "key_objects": [],
       "mood": "shamed"
-    }
+    },
+    "image_path": "assets/images/library-v1/382-francis-bacon.jpg"
   },
   {
     "id": "383",
@@ -6322,7 +6704,8 @@
         "scroll"
       ],
       "mood": "triumphant"
-    }
+    },
+    "image_path": "assets/images/library-v1/383-francis-bacon.jpg"
   },
   {
     "id": "384",
@@ -6340,7 +6723,8 @@
         "glass bottle"
       ],
       "mood": "investigative"
-    }
+    },
+    "image_path": "assets/images/library-v1/384-francis-bacon.jpg"
   },
   {
     "id": "385",
@@ -6357,7 +6741,8 @@
         "specimen"
       ],
       "mood": "curious"
-    }
+    },
+    "image_path": "assets/images/library-v1/385-francis-bacon.jpg"
   },
   {
     "id": "386",
@@ -6374,7 +6759,8 @@
         "formal robes"
       ],
       "mood": "ambitious"
-    }
+    },
+    "image_path": "assets/images/library-v1/386-francis-bacon.jpg"
   },
   {
     "id": "387",
@@ -6391,7 +6777,8 @@
         "flowing robes"
       ],
       "mood": "visionary"
-    }
+    },
+    "image_path": "assets/images/library-v1/387-francis-bacon.jpg"
   },
   {
     "id": "388",
@@ -6408,7 +6795,8 @@
         "gesturing hands"
       ],
       "mood": "fervent"
-    }
+    },
+    "image_path": "assets/images/library-v1/388-francis-bacon.jpg"
   },
   {
     "id": "389",
@@ -6425,7 +6813,8 @@
         "insignia"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/389-francis-bacon.jpg"
   },
   {
     "id": "390",
@@ -6442,7 +6831,8 @@
         "specimen"
       ],
       "mood": "analytical"
-    }
+    },
+    "image_path": "assets/images/library-v1/390-francis-bacon.jpg"
   },
   {
     "id": "391",
@@ -6459,7 +6849,8 @@
         "contemplative hands"
       ],
       "mood": "introspective"
-    }
+    },
+    "image_path": "assets/images/library-v1/391-rena-descartes.jpg"
   },
   {
     "id": "392",
@@ -6476,7 +6867,8 @@
         "focused hands"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/392-rena-descartes.jpg"
   },
   {
     "id": "393",
@@ -6493,7 +6885,8 @@
         "sealed scroll"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/393-rena-descartes.jpg"
   },
   {
     "id": "394",
@@ -6510,7 +6903,8 @@
         "worn boots"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/394-rena-descartes.jpg"
   },
   {
     "id": "395",
@@ -6527,7 +6921,8 @@
         "trembling hand"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/395-rena-descartes.jpg"
   },
   {
     "id": "396",
@@ -6544,7 +6939,8 @@
         "protective arms"
       ],
       "mood": "apprehensive"
-    }
+    },
+    "image_path": "assets/images/library-v1/396-rena-descartes.jpg"
   },
   {
     "id": "397",
@@ -6561,7 +6957,8 @@
         "wax"
       ],
       "mood": "analytical"
-    }
+    },
+    "image_path": "assets/images/library-v1/397-rena-descartes.jpg"
   },
   {
     "id": "398",
@@ -6578,7 +6975,8 @@
         "reins"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/398-rena-descartes.jpg"
   },
   {
     "id": "399",
@@ -6595,7 +6993,8 @@
         "shield"
       ],
       "mood": "fierce"
-    }
+    },
+    "image_path": "assets/images/library-v1/399-rena-descartes.jpg"
   },
   {
     "id": "400",
@@ -6612,7 +7011,8 @@
         "arms"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/400-rena-descartes.jpg"
   },
   {
     "id": "401",
@@ -6629,7 +7029,8 @@
         "tools"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/401-spinoza.jpg"
   },
   {
     "id": "402",
@@ -6643,7 +7044,8 @@
       "action_verb": "standing",
       "key_objects": [],
       "mood": "dignified"
-    }
+    },
+    "image_path": "assets/images/library-v1/402-spinoza.jpg"
   },
   {
     "id": "403",
@@ -6657,7 +7059,8 @@
       "action_verb": "composing",
       "key_objects": [],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/403-spinoza.jpg"
   },
   {
     "id": "404",
@@ -6671,7 +7074,8 @@
       "action_verb": "refusing",
       "key_objects": [],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/404-spinoza.jpg"
   },
   {
     "id": "405",
@@ -6685,7 +7089,8 @@
       "action_verb": "accepting",
       "key_objects": [],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/405-spinoza.jpg"
   },
   {
     "id": "406",
@@ -6699,7 +7104,8 @@
       "action_verb": "walking",
       "key_objects": [],
       "mood": "solitary"
-    }
+    },
+    "image_path": "assets/images/library-v1/406-spinoza.jpg"
   },
   {
     "id": "407",
@@ -6713,7 +7119,8 @@
       "action_verb": "gesturing",
       "key_objects": [],
       "mood": "convivial"
-    }
+    },
+    "image_path": "assets/images/library-v1/407-spinoza.jpg"
   },
   {
     "id": "408",
@@ -6729,7 +7136,8 @@
         "lens"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/408-spinoza.jpg"
   },
   {
     "id": "409",
@@ -6746,7 +7154,8 @@
         "drapery"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/409-spinoza.jpg"
   },
   {
     "id": "410",
@@ -6762,7 +7171,8 @@
         "spider"
       ],
       "mood": "curious"
-    }
+    },
+    "image_path": "assets/images/library-v1/410-spinoza.jpg"
   },
   {
     "id": "411",
@@ -6779,7 +7189,8 @@
         "calculating machine"
       ],
       "mood": "focused"
-    }
+    },
+    "image_path": "assets/images/library-v1/411-leibniz.jpg"
   },
   {
     "id": "412",
@@ -6795,7 +7206,8 @@
         "hand gesture"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/412-leibniz.jpg"
   },
   {
     "id": "413",
@@ -6811,7 +7223,8 @@
         "blank parchment"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/413-leibniz.jpg"
   },
   {
     "id": "414",
@@ -6828,7 +7241,8 @@
         "formal robes"
       ],
       "mood": "dignified"
-    }
+    },
+    "image_path": "assets/images/library-v1/414-leibniz.jpg"
   },
   {
     "id": "415",
@@ -6846,7 +7260,8 @@
         "books"
       ],
       "mood": "industrious"
-    }
+    },
+    "image_path": "assets/images/library-v1/415-leibniz.jpg"
   },
   {
     "id": "416",
@@ -6863,7 +7278,8 @@
         "geometric patterns"
       ],
       "mood": "inspired"
-    }
+    },
+    "image_path": "assets/images/library-v1/416-leibniz.jpg"
   },
   {
     "id": "417",
@@ -6880,7 +7296,8 @@
         "delicate timepiece"
       ],
       "mood": "balanced"
-    }
+    },
+    "image_path": "assets/images/library-v1/417-leibniz.jpg"
   },
   {
     "id": "418",
@@ -6897,7 +7314,8 @@
         "robe"
       ],
       "mood": "engaged"
-    }
+    },
+    "image_path": "assets/images/library-v1/418-leibniz.jpg"
   },
   {
     "id": "419",
@@ -6914,7 +7332,8 @@
         "ornate ring"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/419-leibniz.jpg"
   },
   {
     "id": "420",
@@ -6931,7 +7350,8 @@
         "draped robes"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/420-leibniz.jpg"
   },
   {
     "id": "421",
@@ -6948,7 +7368,8 @@
         "signet ring"
       ],
       "mood": "concentrated"
-    }
+    },
+    "image_path": "assets/images/library-v1/421-john-locke.jpg"
   },
   {
     "id": "422",
@@ -6965,7 +7386,8 @@
         "satchel"
       ],
       "mood": "vigilant"
-    }
+    },
+    "image_path": "assets/images/library-v1/422-john-locke.jpg"
   },
   {
     "id": "423",
@@ -6982,7 +7404,8 @@
         "flowing robe"
       ],
       "mood": "dignified"
-    }
+    },
+    "image_path": "assets/images/library-v1/423-john-locke.jpg"
   },
   {
     "id": "424",
@@ -6999,7 +7422,8 @@
         "signet ring"
       ],
       "mood": "determined"
-    }
+    },
+    "image_path": "assets/images/library-v1/424-john-locke.jpg"
   },
   {
     "id": "425",
@@ -7015,7 +7439,8 @@
         "plant leaf"
       ],
       "mood": "curious"
-    }
+    },
+    "image_path": "assets/images/library-v1/425-john-locke.jpg"
   },
   {
     "id": "426",
@@ -7031,7 +7456,8 @@
         "blank tablet"
       ],
       "mood": "meditative"
-    }
+    },
+    "image_path": "assets/images/library-v1/426-john-locke.jpg"
   },
   {
     "id": "427",
@@ -7047,7 +7473,8 @@
         "apple"
       ],
       "mood": "analytical"
-    }
+    },
+    "image_path": "assets/images/library-v1/427-john-locke.jpg"
   },
   {
     "id": "428",
@@ -7061,7 +7488,8 @@
       "action_verb": "thinking",
       "key_objects": [],
       "mood": "grave"
-    }
+    },
+    "image_path": "assets/images/library-v1/428-john-locke.jpg"
   },
   {
     "id": "429",
@@ -7075,7 +7503,8 @@
       "action_verb": "walking",
       "key_objects": [],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/429-john-locke.jpg"
   },
   {
     "id": "430",
@@ -7089,7 +7518,8 @@
       "action_verb": "resting",
       "key_objects": [],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/430-john-locke.jpg"
   },
   {
     "id": "431",
@@ -7103,7 +7533,8 @@
       "action_verb": "laughing",
       "key_objects": [],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/431-voltaire.jpg"
   },
   {
     "id": "432",
@@ -7117,7 +7548,8 @@
       "action_verb": "gesturing",
       "key_objects": [],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/432-voltaire.jpg"
   },
   {
     "id": "433",
@@ -7134,7 +7566,8 @@
         "spade"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/433-voltaire.jpg"
   },
   {
     "id": "434",
@@ -7151,7 +7584,8 @@
         "torn garments"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/434-voltaire.jpg"
   },
   {
     "id": "435",
@@ -7168,7 +7602,8 @@
         "robe"
       ],
       "mood": "curious"
-    }
+    },
+    "image_path": "assets/images/library-v1/435-voltaire.jpg"
   },
   {
     "id": "436",
@@ -7185,7 +7620,8 @@
         "robe"
       ],
       "mood": "righteous"
-    }
+    },
+    "image_path": "assets/images/library-v1/436-voltaire.jpg"
   },
   {
     "id": "437",
@@ -7202,7 +7638,8 @@
         "robe"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/437-voltaire.jpg"
   },
   {
     "id": "438",
@@ -7219,7 +7656,8 @@
         "robe"
       ],
       "mood": "satisfied"
-    }
+    },
+    "image_path": "assets/images/library-v1/438-voltaire.jpg"
   },
   {
     "id": "439",
@@ -7236,7 +7674,8 @@
         "robe"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/439-voltaire.jpg"
   },
   {
     "id": "440",
@@ -7253,7 +7692,8 @@
         "arms"
       ],
       "mood": "triumphant"
-    }
+    },
+    "image_path": "assets/images/library-v1/440-voltaire.jpg"
   },
   {
     "id": "441",
@@ -7270,7 +7710,8 @@
         "staff"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/441-jean-jacques-rousseau.jpg"
   },
   {
     "id": "442",
@@ -7286,7 +7727,8 @@
         "cup"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/442-jean-jacques-rousseau.jpg"
   },
   {
     "id": "443",
@@ -7303,7 +7745,8 @@
         "turban"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/443-jean-jacques-rousseau.jpg"
   },
   {
     "id": "444",
@@ -7319,7 +7762,8 @@
         "cloak"
       ],
       "mood": "paranoid"
-    }
+    },
+    "image_path": "assets/images/library-v1/444-jean-jacques-rousseau.jpg"
   },
   {
     "id": "445",
@@ -7336,7 +7780,8 @@
         "staff"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/445-jean-jacques-rousseau.jpg"
   },
   {
     "id": "446",
@@ -7352,7 +7797,8 @@
         "staff"
       ],
       "mood": "passionate"
-    }
+    },
+    "image_path": "assets/images/library-v1/446-jean-jacques-rousseau.jpg"
   },
   {
     "id": "447",
@@ -7368,7 +7814,8 @@
         "staff"
       ],
       "mood": "reverent"
-    }
+    },
+    "image_path": "assets/images/library-v1/447-jean-jacques-rousseau.jpg"
   },
   {
     "id": "448",
@@ -7384,7 +7831,8 @@
         "cloak"
       ],
       "mood": "inspired"
-    }
+    },
+    "image_path": "assets/images/library-v1/448-jean-jacques-rousseau.jpg"
   },
   {
     "id": "449",
@@ -7401,7 +7849,8 @@
         "staff"
       ],
       "mood": "desperate"
-    }
+    },
+    "image_path": "assets/images/library-v1/449-jean-jacques-rousseau.jpg"
   },
   {
     "id": "450",
@@ -7417,7 +7866,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/450-jean-jacques-rousseau.jpg"
   },
   {
     "id": "451",
@@ -7434,7 +7884,8 @@
         "walking stick"
       ],
       "mood": "methodical"
-    }
+    },
+    "image_path": "assets/images/library-v1/451-immanuel-kant.jpg"
   },
   {
     "id": "452",
@@ -7448,7 +7899,8 @@
       "action_verb": "composing",
       "key_objects": [],
       "mood": "concentrated"
-    }
+    },
+    "image_path": "assets/images/library-v1/452-immanuel-kant.jpg"
   },
   {
     "id": "453",
@@ -7462,7 +7914,8 @@
       "action_verb": "gesturing",
       "key_objects": [],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/453-immanuel-kant.jpg"
   },
   {
     "id": "454",
@@ -7476,7 +7929,8 @@
       "action_verb": "reaching",
       "key_objects": [],
       "mood": "transcendent"
-    }
+    },
+    "image_path": "assets/images/library-v1/454-immanuel-kant.jpg"
   },
   {
     "id": "455",
@@ -7490,7 +7944,8 @@
       "action_verb": "standing",
       "key_objects": [],
       "mood": "composed"
-    }
+    },
+    "image_path": "assets/images/library-v1/455-immanuel-kant.jpg"
   },
   {
     "id": "456",
@@ -7504,7 +7959,8 @@
       "action_verb": "gazing",
       "key_objects": [],
       "mood": "absorbed"
-    }
+    },
+    "image_path": "assets/images/library-v1/456-immanuel-kant.jpg"
   },
   {
     "id": "457",
@@ -7522,7 +7978,8 @@
         "plate"
       ],
       "mood": "composed"
-    }
+    },
+    "image_path": "assets/images/library-v1/457-immanuel-kant.jpg"
   },
   {
     "id": "458",
@@ -7539,7 +7996,8 @@
         "walking posture"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/458-immanuel-kant.jpg"
   },
   {
     "id": "459",
@@ -7557,7 +8015,8 @@
         "raised hand"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/459-immanuel-kant.jpg"
   },
   {
     "id": "460",
@@ -7574,7 +8033,8 @@
         "reading hand"
       ],
       "mood": "curious"
-    }
+    },
+    "image_path": "assets/images/library-v1/460-immanuel-kant.jpg"
   },
   {
     "id": "461",
@@ -7591,7 +8051,8 @@
         "embracing arms"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/461-friedrich-nietzsche.jpg"
   },
   {
     "id": "462",
@@ -7608,7 +8069,8 @@
         "raised hand"
       ],
       "mood": "visionary"
-    }
+    },
+    "image_path": "assets/images/library-v1/462-friedrich-nietzsche.jpg"
   },
   {
     "id": "463",
@@ -7625,7 +8087,8 @@
         "traveling coat"
       ],
       "mood": "determined"
-    }
+    },
+    "image_path": "assets/images/library-v1/463-friedrich-nietzsche.jpg"
   },
   {
     "id": "464",
@@ -7642,7 +8105,8 @@
         "flowing hair"
       ],
       "mood": "commanding"
-    }
+    },
+    "image_path": "assets/images/library-v1/464-friedrich-nietzsche.jpg"
   },
   {
     "id": "465",
@@ -7659,7 +8123,8 @@
         "coat"
       ],
       "mood": "resolute"
-    }
+    },
+    "image_path": "assets/images/library-v1/465-friedrich-nietzsche.jpg"
   },
   {
     "id": "466",
@@ -7676,7 +8141,8 @@
         "robes"
       ],
       "mood": "triumphant"
-    }
+    },
+    "image_path": "assets/images/library-v1/466-friedrich-nietzsche.jpg"
   },
   {
     "id": "467",
@@ -7692,7 +8158,8 @@
         "coat"
       ],
       "mood": "introspective"
-    }
+    },
+    "image_path": "assets/images/library-v1/467-friedrich-nietzsche.jpg"
   },
   {
     "id": "468",
@@ -7708,7 +8175,8 @@
         "robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/468-friedrich-nietzsche.jpg"
   },
   {
     "id": "469",
@@ -7724,7 +8192,8 @@
         "coat"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/469-friedrich-nietzsche.jpg"
   },
   {
     "id": "470",
@@ -7740,7 +8209,8 @@
         "coat"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/470-friedrich-nietzsche.jpg"
   },
   {
     "id": "471",
@@ -7757,7 +8227,8 @@
         "hat"
       ],
       "mood": "withdrawn"
-    }
+    },
+    "image_path": "assets/images/library-v1/471-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "472",
@@ -7773,7 +8244,8 @@
         "coat"
       ],
       "mood": "despairing"
-    }
+    },
+    "image_path": "assets/images/library-v1/472-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "473",
@@ -7790,7 +8262,8 @@
         "contemplative hand"
       ],
       "mood": "introspective"
-    }
+    },
+    "image_path": "assets/images/library-v1/473-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "474",
@@ -7807,7 +8280,8 @@
         "raised fist"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/474-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "475",
@@ -7824,7 +8298,8 @@
         "reaching arm"
       ],
       "mood": "determined"
-    }
+    },
+    "image_path": "assets/images/library-v1/475-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "476",
@@ -7841,7 +8316,8 @@
         "hands"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/476-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "477",
@@ -7858,7 +8334,8 @@
         "flowers"
       ],
       "mood": "delicate"
-    }
+    },
+    "image_path": "assets/images/library-v1/477-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "478",
@@ -7875,7 +8352,8 @@
         "coat"
       ],
       "mood": "melancholic"
-    }
+    },
+    "image_path": "assets/images/library-v1/478-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "479",
@@ -7892,7 +8370,8 @@
         "coat"
       ],
       "mood": "pensive"
-    }
+    },
+    "image_path": "assets/images/library-v1/479-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "480",
@@ -7909,7 +8388,8 @@
         "hand"
       ],
       "mood": "wistful"
-    }
+    },
+    "image_path": "assets/images/library-v1/480-sa-ren-kierkegaard.jpg"
   },
   {
     "id": "481",
@@ -7927,7 +8407,8 @@
         "staff"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/481-karl-marx.jpg"
   },
   {
     "id": "482",
@@ -7945,7 +8426,8 @@
         "staff"
       ],
       "mood": "anguished"
-    }
+    },
+    "image_path": "assets/images/library-v1/482-karl-marx.jpg"
   },
   {
     "id": "483",
@@ -7963,7 +8445,8 @@
         "staff"
       ],
       "mood": "sorrowful"
-    }
+    },
+    "image_path": "assets/images/library-v1/483-karl-marx.jpg"
   },
   {
     "id": "484",
@@ -7980,7 +8463,8 @@
         "staff"
       ],
       "mood": "authoritative"
-    }
+    },
+    "image_path": "assets/images/library-v1/484-karl-marx.jpg"
   },
   {
     "id": "485",
@@ -7997,7 +8481,8 @@
         "staff"
       ],
       "mood": "triumphant"
-    }
+    },
+    "image_path": "assets/images/library-v1/485-karl-marx.jpg"
   },
   {
     "id": "486",
@@ -8014,7 +8499,8 @@
         "staff"
       ],
       "mood": "defiant"
-    }
+    },
+    "image_path": "assets/images/library-v1/486-karl-marx.jpg"
   },
   {
     "id": "487",
@@ -8031,7 +8517,8 @@
         "cloak"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/487-karl-marx.jpg"
   },
   {
     "id": "488",
@@ -8048,7 +8535,8 @@
         "staff"
       ],
       "mood": "peaceful"
-    }
+    },
+    "image_path": "assets/images/library-v1/488-karl-marx.jpg"
   },
   {
     "id": "489",
@@ -8066,7 +8554,8 @@
         "weathered face"
       ],
       "mood": "contemplative"
-    }
+    },
+    "image_path": "assets/images/library-v1/489-karl-marx.jpg"
   },
   {
     "id": "490",
@@ -8084,7 +8573,8 @@
         "bristling beard"
       ],
       "mood": "intense"
-    }
+    },
+    "image_path": "assets/images/library-v1/490-karl-marx.jpg"
   },
   {
     "id": "491",
@@ -8102,7 +8592,8 @@
         "hunched posture"
       ],
       "mood": "austere"
-    }
+    },
+    "image_path": "assets/images/library-v1/491-ludwig-wittgenstein.jpg"
   },
   {
     "id": "492",
@@ -8120,7 +8611,8 @@
         "focused face"
       ],
       "mood": "rigorous"
-    }
+    },
+    "image_path": "assets/images/library-v1/492-ludwig-wittgenstein.jpg"
   },
   {
     "id": "493",
@@ -8138,7 +8630,8 @@
         "humble frame"
       ],
       "mood": "devoted"
-    }
+    },
+    "image_path": "assets/images/library-v1/493-ludwig-wittgenstein.jpg"
   },
   {
     "id": "494",
@@ -8156,7 +8649,8 @@
         "upright posture"
       ],
       "mood": "thoughtful"
-    }
+    },
+    "image_path": "assets/images/library-v1/494-ludwig-wittgenstein.jpg"
   },
   {
     "id": "495",
@@ -8174,7 +8668,8 @@
         "animated face"
       ],
       "mood": "engaged"
-    }
+    },
+    "image_path": "assets/images/library-v1/495-ludwig-wittgenstein.jpg"
   },
   {
     "id": "496",
@@ -8192,7 +8687,8 @@
         "still posture"
       ],
       "mood": "meditative"
-    }
+    },
+    "image_path": "assets/images/library-v1/496-ludwig-wittgenstein.jpg"
   },
   {
     "id": "497",
@@ -8209,7 +8705,8 @@
         "simple shirt"
       ],
       "mood": "peaceful"
-    }
+    },
+    "image_path": "assets/images/library-v1/497-ludwig-wittgenstein.jpg"
   },
   {
     "id": "498",
@@ -8226,7 +8723,8 @@
         "open mouth"
       ],
       "mood": "intense"
-    }
+    },
+    "image_path": "assets/images/library-v1/498-ludwig-wittgenstein.jpg"
   },
   {
     "id": "499",
@@ -8243,7 +8741,8 @@
         "simple robes"
       ],
       "mood": "serene"
-    }
+    },
+    "image_path": "assets/images/library-v1/499-ludwig-wittgenstein.jpg"
   },
   {
     "id": "500",
@@ -8260,6 +8759,7 @@
         "concentrated face"
       ],
       "mood": "concentrated"
-    }
+    },
+    "image_path": "assets/images/library-v1/500-ludwig-wittgenstein.jpg"
   }
 ]
