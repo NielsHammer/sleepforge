@@ -6,6 +6,8 @@
 .env.local
 .env.*.local
 secrets/
+.youtube-credentials.json
+assets/youtube-tokens/
 
 # Build outputs
 output/

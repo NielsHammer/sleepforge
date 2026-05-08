@@ -48,9 +48,9 @@ const PROJECT_ROOT = path.resolve(__dirname, '..');
 const PYTHON_BIN   = process.env.PYTHON_BIN
   || path.join(PROJECT_ROOT, '.venv', 'Scripts', 'python.exe');
 
-const TOPIC        = 'Marcus Aurelius on Letting Go of What You Cannot Control';
-const DURATION_MIN = 2;
-const SLUG         = 'marcus-aurelius-2min';
+const TOPIC        = process.env.SLEEPFORGE_TOPIC || 'Marcus Aurelius on Letting Go of What You Cannot Control';
+const DURATION_MIN = parseInt(process.env.SLEEPFORGE_DURATION || '2', 10);
+const SLUG         = process.env.SLEEPFORGE_SLUG  || 'marcus-aurelius-2min';
 const OUTPUT_DIR   = path.join(PROJECT_ROOT, 'output', SLUG);
 const ASSETS_DIR   = path.join(OUTPUT_DIR, 'assets');
 const SENTENCES_DIR = path.join(ASSETS_DIR, 'sentences');
