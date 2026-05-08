@@ -89,11 +89,14 @@ function slugify(text) {
 // ─── DISK SPACE CHECK ────────────────────────────────────────────────────────
 function checkDiskSpace() {
   try {
-    // Windows: use wmic to check free space on C:
-    const out = execSync('wmic logicaldisk where DeviceID="C:" get FreeSpace /value', { encoding: 'utf-8' });
-    const match = out.match(/FreeSpace=(\d+)/);
-    if (match) {
-      const freeGb = parseInt(match[1]) / (1024 ** 3);
+    // wmic is removed in Windows 11 22H2+ — use PowerShell Get-PSDrive
+    const out = execSync(
+      'powershell -NoProfile -Command "(Get-PSDrive C).Free"',
+      { encoding: 'utf-8', timeout: 10000 }
+    );
+    const freeBytes = parseInt(out.trim(), 10);
+    if (!isNaN(freeBytes)) {
+      const freeGb = freeBytes / (1024 ** 3);
       log(`Disk space: ${freeGb.toFixed(1)} GB free on C:`);
       if (freeGb < 5) {
         log('WARNING: Less than 5GB free. Cleaning oldest outputs...');
@@ -117,9 +120,9 @@ function cleanOldOutputs(targetGb) {
       .sort((a, b) => a.mtime - b.mtime); // oldest first
 
     for (const dir of dirs) {
-      const out = execSync('wmic logicaldisk where DeviceID="C:" get FreeSpace /value', { encoding: 'utf-8' });
-      const match = out.match(/FreeSpace=(\d+)/);
-      if (match && parseInt(match[1]) / (1024 ** 3) >= targetGb) break;
+      const out = execSync('powershell -NoProfile -Command "(Get-PSDrive C).Free"', { encoding: 'utf-8', timeout: 10000 });
+      const freeBytes = parseInt(out.trim(), 10);
+      if (!isNaN(freeBytes) && freeBytes / (1024 ** 3) >= targetGb) break;
       log(`  Removing old output: ${dir.name}`);
       fs.rmSync(dir.path, { recursive: true, force: true });
     }
