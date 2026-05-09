@@ -410,6 +410,60 @@ app.post('/api/queue/add', (req,res) => {
   res.json(job);
 });
 
+// ─── ANALYTICS API ───────────────────────────────────────────────────────────
+
+const BENCHMARK_FILE  = path.join(ROOT, 'data', 'channel-benchmark.json');
+const PRINCIPLES_FILE = path.join(ROOT, 'data', 'principle-scores.json');
+const OWN_HISTORY_F   = path.join(ROOT, 'data', 'own-channel-history.json');
+
+app.get('/api/analytics/benchmark', (_req, res) => {
+  if (!fs.existsSync(BENCHMARK_FILE)) return res.json(null);
+  res.json(JSON.parse(fs.readFileSync(BENCHMARK_FILE, 'utf-8')));
+});
+
+app.get('/api/analytics/principles', (_req, res) => {
+  if (!fs.existsSync(PRINCIPLES_FILE)) return res.json(null);
+  res.json(JSON.parse(fs.readFileSync(PRINCIPLES_FILE, 'utf-8')));
+});
+
+app.get('/api/analytics/thumbnails', (_req, res) => {
+  if (!fs.existsSync(OWN_HISTORY_F)) return res.json([]);
+  const records = JSON.parse(fs.readFileSync(OWN_HISTORY_F, 'utf-8'));
+  res.json(
+    records
+      .filter(r => r.ctr !== null && r.thumbnail_url)
+      .sort((a, b) => (b.ctr || 0) - (a.ctr || 0))
+      .slice(0, 10)
+      .map(r => ({ video_id: r.video_id, title: r.title, thumbnail_url: r.thumbnail_url, ctr: r.ctr, views: r.views, was_made_by_sleepforge: r.was_made_by_sleepforge }))
+  );
+});
+
+app.get('/api/analytics/insights', async (_req, res) => {
+  let context = '';
+  if (fs.existsSync(BENCHMARK_FILE)) {
+    const b = JSON.parse(fs.readFileSync(BENCHMARK_FILE, 'utf-8'));
+    context += `Channel median CTR: ${b.ctr_baseline?.median?.toFixed(2) ?? 'n/a'}%. `;
+    context += `Channel median retention: ${b.retention_baseline?.median?.toFixed(1) ?? 'n/a'}%. `;
+    const sf = b.sleepforge_videos?.[0];
+    if (sf) context += `SleepForge latest video CTR: ${sf.ctr?.toFixed(2) ?? 'pending'}% (rank: ${sf.ctr_rank ?? 'n/a'}). `;
+  }
+  if (fs.existsSync(PRINCIPLES_FILE)) {
+    const p = JSON.parse(fs.readFileSync(PRINCIPLES_FILE, 'utf-8'));
+    const top3 = (p.principles || []).filter(x => x.ctr_lift_pct !== null).slice(0, 3);
+    if (top3.length) context += `Top principles by CTR: ${top3.map(x => `${x.name} (+${x.ctr_lift_pct}%)`).join(', ')}.`;
+  }
+  if (!context) return res.json({ insights: ['No analytics data yet — run ingest-own-channel.js and refresh-analytics.js first.'] });
+
+  const prompt = `YouTube analytics consultant for a philosophy sleep channel.\n\nDATA: ${context}\n\nGenerate 3-5 short actionable insights (1 sentence each).\nReturn ONLY a JSON array: ["insight 1", "insight 2", ...]`;
+  try {
+    const raw = await callClaudeCLI(prompt, { model: 'claude-haiku-4-5-20251001', timeoutMs: 30000 });
+    const m = raw.match(/\[[\s\S]*\]/);
+    res.json({ insights: m ? JSON.parse(m[0]) : ['Analysis complete — check benchmark data above.'] });
+  } catch (err) {
+    res.json({ insights: [`Pending: ${err.message}`] });
+  }
+});
+
 // ─── METRICS BROADCAST ───────────────────────────────────────────────────────
 
 setInterval(async () => {

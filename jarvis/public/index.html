@@ -154,17 +154,45 @@
     <!-- ANALYTICS -->
     <section id="panel-analytics" class="panel">
       <div class="panel-title">PERFORMANCE ANALYTICS</div>
-      <div class="chart-grid">
-        <div class="chart-card">
-          <div class="chart-lbl">CTR TREND — LAST 30 DAYS</div>
-          <canvas id="chart-ctr" height="180"></canvas>
+
+      <!-- Benchmark row -->
+      <div class="stat-row" id="benchmark-row">
+        <div class="stat-card" id="bc-sf-ctr">
+          <div class="stat-glyph">▲</div>
+          <div class="stat-num" id="bc-sf-ctr-val">—</div>
+          <div class="stat-lbl">SleepForge Avg CTR</div>
         </div>
-        <div class="chart-card">
-          <div class="chart-lbl">VIEWS TREND — LAST 30 DAYS</div>
-          <canvas id="chart-views" height="180"></canvas>
+        <div class="stat-card" id="bc-ch-ctr">
+          <div class="stat-glyph">◉</div>
+          <div class="stat-num" id="bc-ch-ctr-val">—</div>
+          <div class="stat-lbl">Channel Baseline CTR</div>
+        </div>
+        <div class="stat-card" id="bc-sf-ret">
+          <div class="stat-glyph">⧖</div>
+          <div class="stat-num" id="bc-sf-ret-val">—</div>
+          <div class="stat-lbl">SleepForge Avg Retention</div>
+        </div>
+        <div class="stat-card" id="bc-ch-ret">
+          <div class="stat-glyph">◈</div>
+          <div class="stat-num" id="bc-ch-ret-val">—</div>
+          <div class="stat-lbl">Channel Baseline Retention</div>
         </div>
       </div>
-      <div class="block-title mt-20">TOP VIDEOS BY CTR</div>
+
+      <!-- Insights -->
+      <div class="block-title mt-20">WHAT'S WORKING THIS MONTH</div>
+      <div id="analytics-insights" class="insights-list">Loading intelligence…</div>
+
+      <!-- Principle scores -->
+      <div class="block-title mt-20">PRINCIPLE PERFORMANCE (CTR LIFT)</div>
+      <div id="principle-table" class="analytics-table"></div>
+
+      <!-- Top thumbnails -->
+      <div class="block-title mt-20">TOP 10 THUMBNAILS BY CTR</div>
+      <div id="thumb-grid" class="thumb-perf-grid"></div>
+
+      <!-- Top titles -->
+      <div class="block-title mt-20">TOP TITLES BY CTR</div>
       <div id="analytics-table" class="analytics-table"></div>
     </section>
 
