@@ -114,8 +114,8 @@ export async function uploadVideo({
 
   // Scheduled upload: privacyStatus must be "private" with a publishAt date
   const status = scheduledAt
-    ? { privacyStatus: "private", publishAt: new Date(scheduledAt).toISOString() }
-    : { privacyStatus };
+    ? { privacyStatus: "private", publishAt: new Date(scheduledAt).toISOString(), selfDeclaredMadeForKids: false }
+    : { privacyStatus, selfDeclaredMadeForKids: false };
 
   let lastPct = -1;
   const res = await youtube.videos.insert(
@@ -179,6 +179,28 @@ export async function uploadThumbnail(videoId, thumbnailPath, channelName) {
     },
   });
   console.log(`  Thumbnail uploaded: ${path.basename(thumbnailPath)}`);
+}
+
+// ─── getVideoProcessingStatus ────────────────────────────────────────────────
+// Returns { uploadStatus, privacyStatus, publishAt, processingStatus } or null.
+// uploadStatus values: 'deleted' | 'failed' | 'processed' | 'rejected' | 'uploaded'
+// processingStatus values: 'processing' | 'succeeded' | 'failed' | 'terminated'
+
+export async function getVideoProcessingStatus(videoId, channelName) {
+  const auth    = await authenticate(channelName);
+  const youtube = google.youtube({ version: "v3", auth });
+  const res = await youtube.videos.list({
+    part: ["status", "processingDetails"],
+    id:   [videoId],
+  });
+  const item = res.data.items?.[0];
+  if (!item) return null;
+  return {
+    uploadStatus:      item.status?.uploadStatus,
+    privacyStatus:     item.status?.privacyStatus,
+    publishAt:         item.status?.publishAt || null,
+    processingStatus:  item.processingDetails?.processingStatus || null,
+  };
 }
 
 // ─── getVideoStats ────────────────────────────────────────────────────────────

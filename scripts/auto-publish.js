@@ -47,7 +47,7 @@ dotenv.config({ path: path.join(ROOT, ".env") });
 
 // Dynamic imports after dotenv
 const { generateMetadata }    = await import("../src/youtube-metadata-generator.js");
-const { uploadVideo, uploadThumbnail } = await import("../src/youtube.js");
+const { uploadVideo, uploadThumbnail, getVideoProcessingStatus } = await import("../src/youtube.js");
 const { generateThumbnailV3 } = await import("../src/thumbnail-v3.js");
 
 // ─── ARG PARSING ─────────────────────────────────────────────────────────────
@@ -63,6 +63,7 @@ function parseArgs() {
     privacy:     "private",
     thumbnail:   true,
     dryRun:      false,
+    keepFiles:   false,         // --keep-files: skip post-upload cleanup (for debugging)
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -75,6 +76,7 @@ function parseArgs() {
       case "--privacy":     opts.privacy   = args[++i]; break;
       case "--no-thumbnail":opts.thumbnail = false;     break;
       case "--dry-run":     opts.dryRun    = true;      break;
+      case "--keep-files":  opts.keepFiles = true;      break;
     }
   }
   return opts;
@@ -118,6 +120,98 @@ function runScript(scriptPath, env = {}) {
     });
     child.on("error", reject);
   });
+}
+
+// ─── POST-UPLOAD: ARCHIVE + CLEANUP ──────────────────────────────────────────
+// Waits for YouTube to confirm upload, copies key files to archive, deletes render folder.
+// Never called if upload failed. Skipped entirely with --keep-files.
+
+const ARCHIVE_DIR = path.join(ROOT, "data", "uploaded-archive");
+
+async function archiveAndCleanup(videoId, slug, outputDir, channelName, scheduledAt) {
+  const archiveVideoDir = path.join(ARCHIVE_DIR, videoId);
+  fs.mkdirSync(archiveVideoDir, { recursive: true });
+
+  // ── Poll YouTube until upload is confirmed (max 3 minutes, 15s intervals) ──
+  log("\n── Post-upload: waiting for YouTube to confirm upload ──");
+  log("  (polling videos.list — up to 3 minutes)");
+  let confirmed = false;
+  for (let attempt = 0; attempt < 12; attempt++) {
+    await new Promise(r => setTimeout(r, attempt === 0 ? 60000 : 15000));
+    try {
+      const s = await getVideoProcessingStatus(videoId, channelName);
+      const ok = s && (s.uploadStatus === "processed" || s.uploadStatus === "uploaded");
+      log(`  Attempt ${attempt + 1}/12: uploadStatus=${s?.uploadStatus || "unknown"}`);
+      if (ok) { confirmed = true; break; }
+    } catch (e) {
+      log(`  Attempt ${attempt + 1}/12: poll error — ${e.message}`);
+    }
+  }
+
+  if (!confirmed) {
+    log("  ⚠ Could not confirm upload status after 3 min — skipping cleanup to be safe.");
+    log(`  Render folder kept: ${outputDir}`);
+    return;
+  }
+  log("  ✓ Upload confirmed.");
+
+  // ── Copy archive files ──
+  const filesToKeep = [
+    { src: path.join(outputDir, "thumbnail", "thumbnail-final.png"), name: "thumbnail-final.png" },
+    { src: path.join(outputDir, "youtube-metadata.json"),            name: "youtube-metadata.json" },
+    { src: path.join(outputDir, "log.txt"),                          name: "log.txt" },
+  ];
+
+  let archived = 0;
+  for (const { src, name } of filesToKeep) {
+    if (fs.existsSync(src)) {
+      fs.copyFileSync(src, path.join(archiveVideoDir, name));
+      archived++;
+    }
+  }
+
+  // Write a manifest so cleanup-published.js can find the render folder
+  fs.writeFileSync(path.join(archiveVideoDir, "manifest.json"), JSON.stringify({
+    videoId,
+    slug,
+    outputDir,
+    channelName,
+    scheduledAt:  scheduledAt || null,
+    uploadedAt:   new Date().toISOString(),
+    archivedFiles: archived,
+    cleanedUp:    false,
+  }, null, 2));
+
+  log(`  ✓ Archived ${archived} files → ${archiveVideoDir}`);
+
+  // ── Delete render folder ──
+  try {
+    const sizeMb = dirSizeMb(outputDir);
+    fs.rmSync(outputDir, { recursive: true, force: true });
+    log(`  ✓ Deleted render folder (freed ~${sizeMb} MB): ${outputDir}`);
+    // Mark manifest as cleaned up
+    const manifest = JSON.parse(fs.readFileSync(path.join(archiveVideoDir, "manifest.json"), "utf-8"));
+    manifest.cleanedUp = true;
+    manifest.cleanedUpAt = new Date().toISOString();
+    fs.writeFileSync(path.join(archiveVideoDir, "manifest.json"), JSON.stringify(manifest, null, 2));
+  } catch (e) {
+    log(`  ⚠ Could not delete render folder: ${e.message}`);
+  }
+}
+
+function dirSizeMb(dir) {
+  try {
+    let total = 0;
+    const walk = (d) => {
+      for (const entry of fs.readdirSync(d, { withFileTypes: true })) {
+        const p = path.join(d, entry.name);
+        if (entry.isDirectory()) walk(p);
+        else try { total += fs.statSync(p).size; } catch {}
+      }
+    };
+    walk(dir);
+    return (total / 1024 / 1024).toFixed(0);
+  } catch { return "?"; }
 }
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
@@ -251,8 +345,15 @@ async function main() {
   log(`  Video ID:  ${videoId}`);
   log(`  URL:       https://www.youtube.com/watch?v=${videoId}`);
   log(`  Studio:    https://studio.youtube.com/video/${videoId}/edit`);
-  log(`  Scheduled: ${new Date(scheduledAt).toLocaleString()}`);
+  if (scheduledAt) log(`  Scheduled: ${new Date(scheduledAt).toLocaleString()}`);
   log(`  Channel:   ${opts.channel}`);
+
+  // ── Post-upload cleanup (skip with --keep-files) ──
+  if (opts.keepFiles) {
+    log("\n  --keep-files set — skipping render folder cleanup.");
+  } else {
+    await archiveAndCleanup(videoId, slug, outputDir, opts.channel, scheduledAt);
+  }
 }
 
 main().catch((err) => {
