@@ -17,7 +17,8 @@
     "samples": "node scripts/generate-samples.js",
     "preview": "node scripts/generate-single-sample.js",
     "schedule": "node scripts/schedule-month.js",
-    "cleanup": "node scripts/cleanup-published.js"
+    "cleanup": "node scripts/cleanup-published.js",
+    "autopilot": "node scripts/run-autopilot-3.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.95.1",

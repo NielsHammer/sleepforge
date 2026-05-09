@@ -166,10 +166,17 @@ async function downloadToFile(url, dest) {
   return dest;
 }
 
+const PERSON_KEYWORDS = /\b(philosopher|bust|portrait|figure|man|woman|person|face|human|statue|sculpture|painting|aurelius|seneca|plato|aristotle|socrates|jung|nietzsche|descartes|kant|hegel|buddha|confucius|stoic|ancient|roman|greek|medieval|renaissance)\b/i;
+
 async function resolveImageRequest(req, label, outDir) {
-  const prompt = req.prompt || req.query || '';
+  let prompt = req.prompt || req.query || '';
   if (!prompt) return null;
   const isReal = req.source_hint === 'real' || req.use_real_photo === true;
+
+  // Safety net: for AI images that depict historical/philosophical figures, enforce period authenticity
+  if (!isReal && PERSON_KEYWORDS.test(prompt)) {
+    prompt = prompt + ', period-authentic depiction only (marble bust OR oil painting OR classical sculpture), NO modern human face, NO contemporary makeup or grooming, NOT a photograph';
+  }
 
   console.log(`  [${label}] ${isReal ? 'REAL' : 'AI'}: "${prompt.substring(0, 80)}${prompt.length > 80 ? '...' : ''}"`);
 
@@ -348,6 +355,11 @@ TONE MATCHING — for PHILOSOPHICAL or INTELLECTUAL topics:
   - NEVER use violence, death, gore, blood, war scenes, or crime imagery.
   - Use intellectual-mystery metaphors: locked doors, infinite hallways, missing puzzle pieces, frozen moments, light breaking through darkness.
 
+PERIOD AUTHENTICITY — when the topic involves historical figures or philosophers:
+  - NEVER suggest an image_prompt that depicts modern human faces, contemporary makeup, plucked eyebrows, or 21st-century grooming.
+  - Acceptable representations: marble bust, classical oil painting, ancient sculpture, fresco, stylized classical art, bronze statue, engraving.
+  - Every image_prompt that depicts a person MUST specify the period-authentic format explicitly (e.g., "Roman marble bust of Marcus Aurelius, dramatic chiaroscuro lighting", "oil painting portrait Rembrandt style 1640s", "ancient Greek bronze sculpture, museum quality").
+
 Score each candidate 1-10 on:
   - surprise: would a senior designer say "oh, that's clever"?
   - emotional_impact: does the image make the viewer FEEL the hook before reading text?
@@ -492,6 +504,15 @@ TEXT CRAFT:
 - Never negative letter-spacing.
 - Give the hook breathing room — at least 40px from any edge.
 - The hook is ONE color — never split across two colors.
+
+═══ PERIOD AUTHENTICITY — HARD CONSTRAINT, ALL CHANNELS ═══
+
+Any human figure in this thumbnail MUST be period-appropriate to the philosopher or era being depicted.
+
+  - NEVER request modern human faces, contemporary makeup, plucked eyebrows, or 21st-century photography aesthetic.
+  - Acceptable: marble bust, oil painting portrait, classical sculpture, fresco, stylized ancient art, bronze statue, illuminated manuscript figure.
+  - In every image_requests[].prompt that depicts a person: explicitly state the period-authentic format ("Roman marble bust", "Baroque oil painting", "ancient Greek terracotta relief") — NEVER just "a philosopher" or "a man".
+  - Photorealistic modern faces are forbidden. The image must look like a museum artifact or classical artwork, not a stock photo.
 
 ═══ RETURN FORMAT — JSON ONLY ═══
 
