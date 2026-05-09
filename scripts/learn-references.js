@@ -32,6 +32,7 @@ const { callClaudeCLI } = await import('../src/claude-cli.js');
 
 const DONE_DIR        = process.env.REFERENCE_DIR
   || 'C:\\Users\\niels\\Desktop\\Sleepforge references\\Done';
+const HARVESTED_DIR   = 'C:\\Users\\niels\\Desktop\\References\\by-niche';
 const PRINCIPLES_FILE = path.join(ROOT, 'data', 'reference-principles.json');
 const FORCE           = process.argv.includes('--force');
 
@@ -52,40 +53,57 @@ function loadPrinciples() {
 // ─── DISCOVER SOURCES ────────────────────────────────────────────────────────
 
 function discoverSources(doneDir) {
-  if (!fs.existsSync(doneDir)) {
-    log(`References folder not found: ${doneDir}`);
-    log('Create it and drop reference video folders (from import-reference.js) inside.');
-    return [];
-  }
-
   const sources = [];
 
-  // Walk up to 2 levels deep looking for video folders with metadata.json
-  for (const entry of fs.readdirSync(doneDir, { withFileTypes: true })) {
-    if (entry.isDirectory()) {
-      const channelDir = path.join(doneDir, entry.name);
-      for (const sub of fs.readdirSync(channelDir, { withFileTypes: true })) {
-        if (sub.isDirectory()) {
-          const videoDir = path.join(channelDir, sub.name);
-          const metaPath = path.join(videoDir, 'metadata.json');
-          if (fs.existsSync(metaPath)) {
-            sources.push({ type: 'video_folder', id: sub.name, dir: videoDir, metaPath });
+  // ── Done folder (manually curated, flat files + video folders) ─────────────
+  if (fs.existsSync(doneDir)) {
+    for (const entry of fs.readdirSync(doneDir, { withFileTypes: true })) {
+      if (entry.isDirectory()) {
+        const channelDir = path.join(doneDir, entry.name);
+        for (const sub of fs.readdirSync(channelDir, { withFileTypes: true })) {
+          if (sub.isDirectory()) {
+            const videoDir = path.join(channelDir, sub.name);
+            const metaPath = path.join(videoDir, 'metadata.json');
+            if (fs.existsSync(metaPath)) {
+              sources.push({ type: 'video_folder', id: sub.name, dir: videoDir, metaPath, niche: 'manual' });
+            }
           }
         }
-      }
-      // Also handle if the entry IS a video folder directly (no channel nesting)
-      const directMeta = path.join(channelDir, 'metadata.json');
-      if (fs.existsSync(directMeta)) {
-        sources.push({ type: 'video_folder', id: entry.name, dir: channelDir, metaPath: directMeta });
+        const directMeta = path.join(channelDir, 'metadata.json');
+        if (fs.existsSync(directMeta)) {
+          sources.push({ type: 'video_folder', id: entry.name, dir: channelDir, metaPath: directMeta, niche: 'manual' });
+        }
       }
     }
+    // Flat text/json/md files directly in Done/
+    for (const entry of fs.readdirSync(doneDir, { withFileTypes: true })) {
+      if (entry.isFile() && /\.(txt|json|md)$/i.test(entry.name)) {
+        sources.push({ type: 'flat_file', id: entry.name, filePath: path.join(doneDir, entry.name), niche: 'manual' });
+      }
+    }
+  } else {
+    log(`Done folder not found: ${doneDir} (skipping)`);
   }
 
-  // Flat text/json/md files directly in Done/
-  for (const entry of fs.readdirSync(doneDir, { withFileTypes: true })) {
-    if (entry.isFile() && /\.(txt|json|md)$/i.test(entry.name)) {
-      sources.push({ type: 'flat_file', id: entry.name, filePath: path.join(doneDir, entry.name) });
+  // ── Harvested References (by-niche/<niche>/<videoId>/metadata.json) ─────────
+  if (fs.existsSync(HARVESTED_DIR)) {
+    for (const nicheEntry of fs.readdirSync(HARVESTED_DIR, { withFileTypes: true })) {
+      if (!nicheEntry.isDirectory()) continue;
+      const nicheId = nicheEntry.name;
+      const nicheDir = path.join(HARVESTED_DIR, nicheId);
+      for (const vidEntry of fs.readdirSync(nicheDir, { withFileTypes: true })) {
+        if (!vidEntry.isDirectory()) continue;
+        const videoDir = path.join(nicheDir, vidEntry.name);
+        const metaPath = path.join(videoDir, 'metadata.json');
+        if (fs.existsSync(metaPath)) {
+          // Prefix with "harvested::" to distinguish from manually curated sources
+          sources.push({ type: 'video_folder', id: `harvested::${vidEntry.name}`, dir: videoDir, metaPath, niche: nicheId });
+        }
+      }
     }
+    log(`Harvested References: found ${sources.filter(s => s.id.startsWith('harvested::')).length} videos in ${HARVESTED_DIR}`);
+  } else {
+    log(`Harvested folder not found: ${HARVESTED_DIR} (run harvest-references.js first)`);
   }
 
   return sources;
@@ -123,9 +141,13 @@ async function extractSignals(source) {
 
   if (!content.trim()) return null;
 
+  const nicheContext = source.niche && source.niche !== 'manual'
+    ? `\nNICHE: ${source.niche} (use this to tag patterns as niche-specific)`
+    : '';
+
   const prompt = `You are a YouTube content analyst for a philosophy sleep channel called "Sleepless Philosophers".
 
-Analyze this reference video data and extract actionable patterns for improving CTR and watch time.
+Analyze this reference video data and extract actionable patterns for improving CTR and watch time.${nicheContext}
 
 REFERENCE DATA:
 ${content}
@@ -137,7 +159,8 @@ Extract patterns in this exact JSON format:
   "script_pacing": "fast/slow/medium and what makes it work",
   "hook_pattern": "how the video hooks the viewer in the first 30 seconds",
   "ctr_factors": ["specific element that likely drives CTR", ...],
-  "views_tier": "low (<10k) / medium (10k-100k) / high (100k-500k) / viral (500k+)"
+  "views_tier": "low (<10k) / medium (10k-100k) / high (100k-500k) / viral (500k+)",
+  "niche_applicability": "which of our niches this pattern applies to best"
 }
 
 Be specific and actionable. Focus on what's replicable.`;
@@ -223,8 +246,11 @@ async function main() {
   const processedIds = FORCE ? new Set() : new Set(principles.sources.map(s => s.id));
 
   log(`Done folder: ${DONE_DIR}`);
+  log(`Harvested folder: ${HARVESTED_DIR}`);
   const allSources = discoverSources(DONE_DIR);
-  log(`Sources found: ${allSources.length} total`);
+  const manualCount    = allSources.filter(s => s.niche === 'manual').length;
+  const harvestedCount = allSources.filter(s => s.id.startsWith('harvested::')).length;
+  log(`Sources found: ${allSources.length} total (${manualCount} manual, ${harvestedCount} harvested)`);
 
   const newSources = allSources.filter(s => !processedIds.has(s.id));
   log(`New (unprocessed): ${newSources.length}`);

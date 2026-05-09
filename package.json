@@ -7,7 +7,10 @@
     "dashboard": "node dashboard/server.js",
     "jarvis": "node jarvis/server.js",
     "learn": "node scripts/learn-references.js",
-    "analytics": "node scripts/refresh-analytics.js"
+    "analytics": "node scripts/refresh-analytics.js",
+    "harvest": "node scripts/harvest-references.js",
+    "harvest:transcripts": "node scripts/harvest-transcripts.js",
+    "harvest:status": "node scripts/harvest-status.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.95.1",
