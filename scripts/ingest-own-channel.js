@@ -110,24 +110,24 @@ async function fetchAnalyticsForVideos(auth, videoIds, minAgeFilter = 7) {
 
   for (const vid of videoIds) {
     try {
+      // impressions/impressionClickThroughRate not available per-video in Analytics API v2
       const res = await analytics.reports.query({
         ids:        'channel==MINE',
         startDate:  epoch,
         endDate:    today,
-        metrics:    'views,estimatedMinutesWatched,impressionClickThroughRate,averageViewPercentage,likes,comments,impressions',
+        metrics:    'views,estimatedMinutesWatched,averageViewPercentage,likes,comments',
         dimensions: 'video',
         filters:    `video==${vid}`,
       });
       const row = res.data.rows?.[0];
       if (row) {
         results[vid] = {
-          views_analytics:      row[1] || null,
-          watch_time_min:       row[2] || null,
-          ctr:                  row[3] || null,
-          retention_avg:        row[4] || null,
-          likes_analytics:      row[5] || null,
-          comments_analytics:   row[6] || null,
-          impressions:          row[7] || null,
+          views_analytics:    row[1] || null,
+          watch_time_min:     row[2] || null,
+          ctr:                null,   // unavailable via Analytics API v2 per-video
+          retention_avg:      row[3] || null,
+          likes_analytics:    row[4] || null,
+          comments_analytics: row[5] || null,
         };
       }
     } catch (e) {

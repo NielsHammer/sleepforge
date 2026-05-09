@@ -37,14 +37,15 @@ function readJson(f, fb) { try { return JSON.parse(fs.readFileSync(f, 'utf-8'));
 async function fetchAnalytics(auth, videoId) {
   const analytics = google.youtubeAnalytics({ version: 'v2', auth });
   const today = new Date().toISOString().split('T')[0];
+  // impressions/impressionClickThroughRate not available per-video in Analytics API v2
   const res = await analytics.reports.query({
     ids: 'channel==MINE', startDate: '2020-01-01', endDate: today,
-    metrics: 'views,estimatedMinutesWatched,impressionClickThroughRate,averageViewPercentage,likes,comments,impressions',
+    metrics: 'views,estimatedMinutesWatched,averageViewPercentage,likes,comments',
     dimensions: 'video', filters: `video==${videoId}`,
   });
   const row = res.data.rows?.[0];
   if (!row) return null;
-  return { views_analytics: row[1], watch_time_min: row[2], ctr: row[3], retention_avg: row[4], likes_analytics: row[5], comments_analytics: row[6], impressions: row[7] };
+  return { views_analytics: row[1], watch_time_min: row[2], ctr: null, retention_avg: row[3], likes_analytics: row[4], comments_analytics: row[5] };
 }
 
 async function fetchBasicStats(youtube, videoId) {
@@ -93,12 +94,11 @@ async function main() {
       entry.views_total    = basic.views;
       entry.likes          = basic.likes;
       entry.comments       = basic.comments;
-      entry.ctr            = analy?.ctr           ?? null;
+      entry.ctr            = null;  // unavailable via Analytics API v2 per-video
       entry.retention_avg  = analy?.retention_avg ?? null;
       entry.watch_time_min = analy?.watch_time_min ?? null;
-      entry.impressions    = analy?.impressions    ?? null;
       entry.refreshed_at   = new Date().toISOString();
-      log(`    views=${basic.views} ctr=${analy?.ctr ?? 'pending'} ret=${analy?.retention_avg ?? 'pending'}%`);
+      log(`    views=${basic.views} ret=${analy?.retention_avg ?? 'pending'}%`);
       updated++;
     } catch (err) { log(`    Failed: ${err.message}`); failed++; }
     await new Promise(r => setTimeout(r, 400));
