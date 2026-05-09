@@ -39,7 +39,7 @@ async function fetchAnalytics(auth, videoId) {
   const today = new Date().toISOString().split('T')[0];
   const res = await analytics.reports.query({
     ids: 'channel==MINE', startDate: '2020-01-01', endDate: today,
-    metrics: 'views,estimatedMinutesWatched,cardClickRate,averageViewPercentage,likes,comments,impressions',
+    metrics: 'views,estimatedMinutesWatched,impressionClickThroughRate,averageViewPercentage,likes,comments,impressions',
     dimensions: 'video', filters: `video==${videoId}`,
   });
   const row = res.data.rows?.[0];

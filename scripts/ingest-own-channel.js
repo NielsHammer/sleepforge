@@ -106,6 +106,7 @@ async function fetchAnalyticsForVideos(auth, videoIds, minAgeFilter = 7) {
   const cutoff  = new Date(Date.now() - minAgeFilter * 86400000).toISOString().split('T')[0];
   const today   = new Date().toISOString().split('T')[0];
   const epoch   = '2020-01-01';
+  let _analyticsErrLogged = false;
 
   for (const vid of videoIds) {
     try {
@@ -113,7 +114,7 @@ async function fetchAnalyticsForVideos(auth, videoIds, minAgeFilter = 7) {
         ids:        'channel==MINE',
         startDate:  epoch,
         endDate:    today,
-        metrics:    'views,estimatedMinutesWatched,cardClickRate,averageViewPercentage,likes,comments,impressions',
+        metrics:    'views,estimatedMinutesWatched,impressionClickThroughRate,averageViewPercentage,likes,comments,impressions',
         dimensions: 'video',
         filters:    `video==${vid}`,
       });
@@ -129,8 +130,11 @@ async function fetchAnalyticsForVideos(auth, videoIds, minAgeFilter = 7) {
           impressions:          row[7] || null,
         };
       }
-    } catch {
-      // Analytics not available (video too new or API not enabled)
+    } catch (e) {
+      if (!_analyticsErrLogged) {
+        log(`  [analytics] ${e.message.slice(0, 120)}`);
+        _analyticsErrLogged = true;
+      }
     }
     await new Promise(r => setTimeout(r, 200));
   }
