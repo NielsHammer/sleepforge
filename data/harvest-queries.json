@@ -1,0 +1,77 @@
+{
+  "niches": [
+    {
+      "id": "sleep_philosophy",
+      "label": "Sleep Philosophy",
+      "queries": [
+        "philosophy sleep story",
+        "stoic sleep",
+        "marcus aurelius sleep",
+        "epictetus sleep",
+        "stoicism bedtime",
+        "meditation philosophy sleep",
+        "calming philosophy story"
+      ]
+    },
+    {
+      "id": "sleep_history",
+      "label": "Sleep History",
+      "queries": [
+        "ancient rome sleep story",
+        "greek mythology sleep",
+        "history sleep story",
+        "ancient history bedtime",
+        "egyptian mythology sleep",
+        "norse mythology sleep"
+      ]
+    },
+    {
+      "id": "sleep_lit",
+      "label": "Sleep Literature",
+      "queries": [
+        "calming bedtime stories adults",
+        "dark academia sleep",
+        "literature sleep story",
+        "classic novel sleep",
+        "shakespeare bedtime"
+      ]
+    },
+    {
+      "id": "sleep_ambient",
+      "label": "Sleep Ambient",
+      "queries": [
+        "fireplace sleep stories",
+        "rain philosophy meditation",
+        "bob ross style sleep",
+        "reading by the fire",
+        "candlelight sleep story"
+      ]
+    },
+    {
+      "id": "spoken_word_calm",
+      "label": "Spoken Word Calm",
+      "queries": [
+        "stoic wisdom for sleep",
+        "ancient wisdom calming",
+        "philosophical reflections sleep",
+        "meditative storytelling"
+      ]
+    }
+  ],
+  "filters": {
+    "order": "viewCount",
+    "videoDuration": "long",
+    "relevanceLanguage": "en",
+    "type": "video",
+    "maxResultsPerPage": 50,
+    "maxPagesPerQuery": 4,
+    "minViews": 100000,
+    "publishedAfterMonths": 12
+  },
+  "quota": {
+    "dailyBudget": 8500,
+    "appReserve": 1500,
+    "searchCostPerPage": 100,
+    "videoCostEach": 1
+  }
+}
