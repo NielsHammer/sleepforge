@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execSync, spawnSync } from "child_process";
 import fs from "fs";
 import path from "path";
 
@@ -423,6 +423,61 @@ function makeSeamlessLoop(srcPath) {
   }
 }
 
+// ─── INTRO STING ────────────────────────────────────────────────────────────
+// Generates a 2-second cinematic intro sting entirely with FFmpeg:
+//   50-60Hz sub-bass swell, 220Hz atmospheric pad, 660Hz soft chime at ~1.65s.
+// All three tones fade in naturally via amplitude envelopes, then fade out.
+
+export function generateIntroSting(outputPath, durationSec = 2) {
+  if (fileExists(outputPath)) return outputPath;
+  const d = String(durationSec);
+  const fadeOutSt = String((durationSec - 0.3).toFixed(2));
+
+  // Three layered sine tones — passed as array to spawnSync to avoid Windows
+  // shell double-quote escaping (cmd.exe eats quotes inside filter_complex strings).
+  // 60Hz sub-bass swell + 220Hz atmospheric pad + 660Hz soft chime at ~1.65s.
+  const filterComplex = [
+    `sine=frequency=60:sample_rate=44100:duration=${d}[s0]`,
+    `sine=frequency=220:sample_rate=44100:duration=${d}[s1]`,
+    `sine=frequency=660:sample_rate=44100:duration=${d}[s2]`,
+    `[s0]volume=0.35,afade=t=in:st=0:d=0.6[sub]`,
+    `[s1]volume=0.20,afade=t=in:st=0:d=0.4[pad]`,
+    `[s2]volume=0.12,adelay=1650|1650[chime]`,
+    `[sub][pad][chime]amix=inputs=3:duration=longest,afade=t=out:st=${fadeOutSt}:d=0.3,alimiter=limit=0.85:level=true[out]`,
+  ].join(';');
+
+  const result = spawnSync('ffmpeg', [
+    '-y',
+    '-filter_complex', filterComplex,
+    '-map', '[out]',
+    '-c:a', 'pcm_s16le',
+    outputPath,
+  ], { stdio: 'pipe', timeout: 15000 });
+
+  if (result.status !== 0) {
+    const errMsg = result.stderr?.toString().slice(-500) || 'unknown error';
+    throw new Error(`generateIntroSting failed: ${errMsg}`);
+  }
+  return outputPath;
+}
+
+// Prepend intro sting to a voiceover: sting.wav + voiceover.wav → output.wav
+export function prependIntroSting(stingPath, voicePath, outputPath) {
+  const concatList = path.join(path.dirname(outputPath), '_sting_concat.txt');
+  fs.writeFileSync(concatList,
+    `file '${stingPath.replace(/\\/g, '/')}'\nfile '${voicePath.replace(/\\/g, '/')}'`
+  );
+  const result = spawnSync('ffmpeg', [
+    '-y', '-f', 'concat', '-safe', '0', '-i', concatList, '-c:a', 'copy', outputPath,
+  ], { stdio: 'pipe', timeout: 30000 });
+  fs.unlinkSync(concatList);
+  if (result.status !== 0) {
+    const errMsg = result.stderr?.toString().slice(-300) || 'unknown error';
+    throw new Error(`prependIntroSting failed: ${errMsg}`);
+  }
+  return outputPath;
+}
+
 // ─── AUDIO MIX ──────────────────────────────────────────────────────────────
 
 export function mixAudio(voiceoverPath, duration, outputPath, options = {}) {
@@ -809,12 +864,14 @@ export function composeFinalVideoWithBg({
   smokePath,
   assPath,
   voiceAudioPath,
-  bgMusicPath,   // ignored — mix music into voiceAudioPath via mixAudio() instead
-  framePath,     // optional: philosophy-frame.png (RGBA, transparent centre)
+  bgMusicPath,    // ignored — mix music into voiceAudioPath via mixAudio() instead
+  framePath,      // optional: philosophy-frame.png (RGBA, transparent centre)
   outputPath,
   duration,
+  introDuration,  // seconds of black + fade-in before video content (default 0)
 }) {
-  const d = Math.ceil(duration);
+  const intro = introDuration || 0;
+  const d = Math.ceil(duration) + intro;
   const escapedAss = assPath
     ? assPath.replace(/\\/g, "/").replace(/:/g, "\\:")
     : null;
@@ -909,9 +966,23 @@ export function composeFinalVideoWithBg({
 
   // ASS subtitles (optional)
   if (escapedAss) {
-    filters.push(`[with_parts]ass='${escapedAss}'[v]`);
+    filters.push(`[with_parts]ass='${escapedAss}'[v_subs]`);
   } else {
-    filters.push(`[with_parts]null[v]`);
+    filters.push(`[with_parts]null[v_subs]`);
+  }
+
+  // Intro black padding + fade-in (optional)
+  let videoOutLabel = 'v_subs';
+  if (intro > 0) {
+    const fadeDur = Math.min(intro, 1.0).toFixed(2);
+    filters.push(
+      `[v_subs]tpad=start_duration=${intro}:start_mode=add:color=black,` +
+      `fade=t=in:st=0:d=${fadeDur}[v]`
+    );
+    videoOutLabel = 'v';
+  } else {
+    filters.push(`[v_subs]null[v]`);
+    videoOutLabel = 'v';
   }
 
   // Single audio output — music is already mixed into voiceAudioPath via mixAudio()

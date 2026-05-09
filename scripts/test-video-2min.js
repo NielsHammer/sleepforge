@@ -40,6 +40,8 @@ import {
   ensurePhilosophyFrameSet,
   composeFinalVideoWithBg,
   getAudioDuration,
+  generateIntroSting,
+  prependIntroSting,
 } from '../src/ffmpeg.js';
 import { isHealthy, chatterboxTTS, resetHealthCache } from '../src/chatterbox.js';
 
@@ -66,6 +68,10 @@ const FINAL_PATH     = path.join(OUTPUT_DIR, 'final.mp4');
 const FRAME_30S_PATH = path.join(OUTPUT_DIR, 'frame-30s.png');
 const FRAME_IMG_PATH = path.join(OUTPUT_DIR, 'verify-image-scene.png');
 
+const STING_PATH     = path.join(ASSETS_DIR, 'intro-sting.wav');
+const STING_VOICE_PATH = path.join(ASSETS_DIR, 'voiceover-with-sting.wav');
+const INTRO_DURATION   = 2; // seconds of black fade-in + sting before narration
+
 const BG_IMAGE_PATH  = path.join(PROJECT_ROOT, 'assets', 'backgrounds', 'philosophy-bg-1080.jpg');
 const BG_PROMPT      = 'ancient Greek philosophy library at dusk, marble columns, candlelight, ' +
                        'atmospheric, cinematic, no people, no text, soft focus, warm tones, ' +
@@ -83,9 +89,10 @@ log('Output: ' + OUTPUT_DIR);
 log('═══════════════════════════════════════════');
 
 // Force re-render of slideshow/audio on each pass (lightweight; particles-loop is kept)
-if (fs.existsSync(SLIDESHOW_PATH)) fs.unlinkSync(SLIDESHOW_PATH);
-if (fs.existsSync(VOICE_MIX_PATH)) fs.unlinkSync(VOICE_MIX_PATH);
-if (fs.existsSync(FINAL_PATH)) fs.unlinkSync(FINAL_PATH);
+if (fs.existsSync(SLIDESHOW_PATH))   fs.unlinkSync(SLIDESHOW_PATH);
+if (fs.existsSync(VOICE_MIX_PATH))   fs.unlinkSync(VOICE_MIX_PATH);
+if (fs.existsSync(STING_VOICE_PATH)) fs.unlinkSync(STING_VOICE_PATH);
+if (fs.existsSync(FINAL_PATH))       fs.unlinkSync(FINAL_PATH);
 
 // ── Step 1: Start Chatterbox server ──────────────────────────────────────────
 log('\n── Step 1: Starting Chatterbox server ──');
@@ -192,6 +199,7 @@ if (fs.existsSync(VOICEOVER_PATH)) {
   log(`  Voiceover: ${getAudioDuration(VOICEOVER_PATH).toFixed(1)}s`);
 }
 const audioDuration = getAudioDuration(VOICEOVER_PATH);
+const totalDuration = audioDuration + INTRO_DURATION;
 
 // ── Step 4: Whisper ───────────────────────────────────────────────────────────
 log('\n── Step 4: Whisper word timestamps ──');
@@ -257,8 +265,8 @@ log('\n── Step 9: ASS karaoke subtitles ──');
 // Always regenerate — 2-min script has different word timestamps
 if (fs.existsSync(ASS_PATH)) fs.unlinkSync(ASS_PATH);
 if (wordTimestamps.length > 0) {
-  generateASS(wordTimestamps, ASS_PATH);
-  log(`  Generated: ${ASS_PATH}`);
+  generateASS(wordTimestamps, ASS_PATH, { timeOffsetSec: INTRO_DURATION });
+  log(`  Generated: ${ASS_PATH} (+${INTRO_DURATION}s offset for intro sting)`);
 } else {
   log('  No timestamps — skipping subtitles');
 }
@@ -285,17 +293,22 @@ log('\n── Step 12: FFmpeg composition ──');
 log('  Building clip slideshow (image scenes, 1.5s xfade)...');
 createClipSlideshow(clips, Math.ceil(audioDuration), SLIDESHOW_PATH, { fadeTime: 1.5 });
 
-// 12b: Single mixed audio track — voice (100%) + fire (8%) + bgmusic (25%), no sidechain
-log('  Mixing single audio track (voice + fire + bgmusic, no sidechain)...');
-mixAudio(VOICEOVER_PATH, Math.ceil(audioDuration), VOICE_MIX_PATH, {
+// 12b: Intro sting — 2s cinematic swell (60Hz bass + 220Hz pad + 660Hz chime)
+log('  Generating intro sting (2s cinematic swell)...');
+generateIntroSting(STING_PATH, INTRO_DURATION);
+prependIntroSting(STING_PATH, VOICEOVER_PATH, STING_VOICE_PATH);
+
+// 12c: Single mixed audio track — sting + voice (100%) + fire (8%) + bgmusic (25%)
+log('  Mixing single audio track (sting + voice + fire + bgmusic, no sidechain)...');
+mixAudio(STING_VOICE_PATH, Math.ceil(totalDuration), VOICE_MIX_PATH, {
   includeBgMusic:  true,
   bgMusicVolume:   '0.25',
   fireplaceVolume: '0.08',
 });
 
-// 12c: Final compose — bg(hidden by 100% chalk) + chalk + particles + smoke + frame + subs
-// Single audio track in the output (music already mixed in 12b)
-log('  Composing final video (single audio track, frame overlay, animation visible)...');
+// 12d: Final compose — bg + chalk + particles + smoke + frame + subs + intro black
+// introDuration tells compose to pad 2s of black + fade-in at start of video
+log('  Composing final video (single audio track, frame overlay, intro sting)...');
 composeFinalVideoWithBg({
   bgImagePath:    BG_IMAGE_PATH,
   slideshowPath:  SLIDESHOW_PATH,
@@ -307,6 +320,7 @@ composeFinalVideoWithBg({
   framePath:      selectedFramePath,
   outputPath:     FINAL_PATH,
   duration:       audioDuration,
+  introDuration:  INTRO_DURATION,
 });
 
 // ── Step 13: Verify with ffprobe + extract verification frames ───────────────
@@ -366,7 +380,7 @@ const elapsed   = Math.round((Date.now() - t_pipeline) / 1000);
 log('\n═══════════════════════════════════════════');
 log('✅ DONE');
 log(`   Video:         ${FINAL_PATH}`);
-log(`   Duration:      ${audioDuration.toFixed(1)}s (${(audioDuration/60).toFixed(2)} min)`);
+log(`   Duration:      ${totalDuration.toFixed(1)}s (${(totalDuration/60).toFixed(2)} min) [incl. ${INTRO_DURATION}s intro sting]`);
 log(`   Clips:         ${clips.length} @ ~4s each (all image scenes)`);
 log(`   Audio streams: ${audioStreams} (target: 1 — single mixed track)`);
 log(`   File size:     ${finalSize} MB`);

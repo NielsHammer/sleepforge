@@ -66,7 +66,7 @@ TITLE rules:
 DESCRIPTION rules:
 - Line 1-2: compelling hook (visible before "Show more") — what wisdom the viewer will absorb
 - Blank line, then 3-4 benefit bullets starting with ✦
-- Blank line, then CTA: "Subscribe and hit 🔔 for new sleep stories every week."
+- Blank line, then CTA: "Subscribe and hit 🔔 for new sleep stories every day."
 - Blank line, then a note about the ambient audio/atmosphere
 - Blank line, then exactly 10 hashtags on their own lines (e.g. #SleepStory)
 - Total: 400-600 characters

@@ -5,7 +5,9 @@
   "scripts": {
     "worker": "node src/worker.js",
     "dashboard": "node dashboard/server.js",
-    "jarvis": "node jarvis/server.js"
+    "jarvis": "node jarvis/server.js",
+    "learn": "node scripts/learn-references.js",
+    "analytics": "node scripts/refresh-analytics.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.95.1",

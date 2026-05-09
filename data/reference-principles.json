@@ -14,10 +14,19 @@
         "Star field background (barely visible) adds depth without distraction",
         "No people — concept icons only (skull, brain, geometric shapes, figures)"
       ],
-      "color_palette": ["#000000 bg", "#FFFFFF text+icons", "#CC0000 underline swoosh", "#1A1A1A card bg"],
+      "color_palette": [
+        "#000000 bg",
+        "#FFFFFF text+icons",
+        "#CC0000 underline swoosh",
+        "#1A1A1A card bg"
+      ],
       "text_style": "Impact or Bebas Neue, ultra-bold, white, all-caps, fill width",
       "emotional_tone": "encyclopedic authority, intellectual curiosity, completeness promise",
-      "best_for_title_patterns": ["N ideas/concepts", "Most X", "All of X"],
+      "best_for_title_patterns": [
+        "N ideas/concepts",
+        "Most X",
+        "All of X"
+      ],
       "view_correlation": "highest — 494K+ views observed",
       "adaptation_for_sleep": "Use monochrome icon art matching chalk style; replace skull/gun with calmer symbols"
     },
@@ -31,10 +40,19 @@
         "Only two colors on the artwork — extreme contrast",
         "Background: pure black, no stars or texture"
       ],
-      "color_palette": ["#000000 bg", "#FFFFFF text", "#C0392B red", "#1A8FA0 teal"],
+      "color_palette": [
+        "#000000 bg",
+        "#FFFFFF text",
+        "#C0392B red",
+        "#1A8FA0 teal"
+      ],
       "text_style": "Heavy weight sans, white, left-aligned, 2 words max",
       "emotional_tone": "visceral, intriguing, brain-twisting",
-      "best_for_title_patterns": ["single concept deep-dive", "paradox", "controversial idea"],
+      "best_for_title_patterns": [
+        "single concept deep-dive",
+        "paradox",
+        "controversial idea"
+      ],
       "view_correlation": "very high for paradox/psychology content"
     },
     {
@@ -48,10 +66,18 @@
         "Grid overlay on bg at very low opacity",
         "White curved bracket arrows pointing toward text"
       ],
-      "color_palette": ["#000000 bg", "#F1C40F yellow accent text", "#FFFFFF line art", "subtle grid"],
+      "color_palette": [
+        "#000000 bg",
+        "#F1C40F yellow accent text",
+        "#FFFFFF line art",
+        "subtle grid"
+      ],
       "text_style": "Montserrat/Impact bold, bright yellow, mixed case for subtitle",
       "emotional_tone": "energetic, life-changing, curiosity",
-      "best_for_title_patterns": ["Life Changing X", "Most Important X"]
+      "best_for_title_patterns": [
+        "Life Changing X",
+        "Most Important X"
+      ]
     },
     {
       "pattern_name": "dark_atmospheric",
@@ -63,10 +89,18 @@
         "Text: 2 lines, lowercase for effect, red with glow for subject word",
         "Star field with vignette edges"
       ],
-      "color_palette": ["#050505 bg", "#FFFFFF outline", "#E63946 glow text", "star particles"],
+      "color_palette": [
+        "#050505 bg",
+        "#FFFFFF outline",
+        "#E63946 glow text",
+        "star particles"
+      ],
       "text_style": "Rounded sans, mixed weight, lowercase creates intimacy",
       "emotional_tone": "mysterious, existential, hypnotic — perfect for sleep/philosophy blend",
-      "best_for_title_patterns": ["Most X Philosophy", "The Y of Z"],
+      "best_for_title_patterns": [
+        "Most X Philosophy",
+        "The Y of Z"
+      ],
       "adaptation_for_sleep": "This style aligns best with Sleepless Philosophers aesthetic"
     },
     {
@@ -79,10 +113,18 @@
         "6-7 portraits per row, slightly cropped at edges",
         "Portraits feel like a 'complete roster' — completeness promise"
       ],
-      "color_palette": ["#000000 bg", "#FFFFFF text", "#CC0000 underline", "warm portrait colors (terracotta, sepia, gold)"],
+      "color_palette": [
+        "#000000 bg",
+        "#FFFFFF text",
+        "#CC0000 underline",
+        "warm portrait colors (terracotta, sepia, gold)"
+      ],
       "text_style": "Same as icon_grid — heavy sans, all-caps",
       "emotional_tone": "academic, authoritative, comprehensive tour",
-      "best_for_title_patterns": ["All of X", "N Philosophers Explained"],
+      "best_for_title_patterns": [
+        "All of X",
+        "N Philosophers Explained"
+      ],
       "view_correlation": "high for 'overview' content"
     }
   ],
@@ -171,7 +213,11 @@
         "Medium vocabulary — academic but not excluding"
       ],
       "cta_placement": "Description only, not in narration",
-      "observed_in": ["100 Most Important Ideas", "100 Real-Life Cheat Codes", "All Of Philosophy"],
+      "observed_in": [
+        "100 Most Important Ideas",
+        "100 Real-Life Cheat Codes",
+        "All Of Philosophy"
+      ],
       "word_count_per_minute": 130
     },
     {
@@ -184,7 +230,10 @@
         "Soft philosophical voice — never preachy"
       ],
       "cta_placement": "None in narration",
-      "observed_in": ["3 Hours of Brain F*ck Paradoxes", "Stop Trying to Get It"],
+      "observed_in": [
+        "3 Hours of Brain F*ck Paradoxes",
+        "Stop Trying to Get It"
+      ],
       "word_count_per_minute": 110
     }
   ],
@@ -213,5 +262,99 @@
     "opportunity": "The encyclopedic format (icon_grid + N ideas title) is proven to drive 200K-500K views but no chalk/stoic channel owns it yet.",
     "thumbnail_adaptation": "For chalk style: replace colored icons with chalk sketches. Keep the black bg + bold text + red swoosh structure. This hybridizes our aesthetic with the proven CTR formula.",
     "ideal_first_video": "Title: '30 Biggest Ideas in Stoic Philosophy to Fall Asleep to'. Thumbnail: icon_grid with chalk-sketch concept icons. Length: 1 hour."
-  }
+  },
+  "sources": [
+    {
+      "id": "100 Biggest Ideas in Psychology to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.729Z"
+    },
+    {
+      "id": "100 Most Disturbing Philosophy Ideas to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "100 Most Important Ideas in Philosophy to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "100 Real-Life Cheat Codes to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "100 Unwritten Rules Of Life Explained to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "3 Hours of Brain Fck Paradoxes to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "3 Hours of Darkest Psychology Tricks to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "3 Hours of Life Changing Paradox to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "3 Hours of Mind Fck Thought Experiments to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "All Of Philosophy Explained in 1 Video to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "Stop Trying to Get It And You'll Have It  STOICISM.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "The Entire Game Theory Explained to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "The Most Controversial Philosophy to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "The Most Life-Changing Philosophy to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    },
+    {
+      "id": "The Most Mind Fck Coincidences Explained to Fall Asleep to.txt",
+      "type": "flat_file",
+      "processed_at": "2026-05-09T05:31:06.730Z"
+    }
+  ],
+  "last_updated": "2026-05-09T05:31:30.836Z",
+  "top_emerging_patterns": [
+    "Number anchors ('100', '3 Hours') paired with superlatives are the single strongest CTR combination across high-view videos, signaling both comprehensiveness and binge-worthiness simultaneously",
+    "'Fall Asleep to' suffix acts as a dual-purpose filter—attracting insomnia/ASMR audiences while differentiating from standard educational channels, creating a defensible niche identity",
+    "Forbidden/danger framing ('Darkest', 'Most Disturbing', 'Mind F*ck', 'information hazard') generates compulsive clicks by making philosophical content feel like prohibited knowledge rather than passive learning"
+  ],
+  "high_ctr_keywords": [
+    "100",
+    "Fall Asleep To",
+    "Paradox",
+    "Darkest",
+    "Most Disturbing",
+    "Mind F*ck",
+    "Life-Changing",
+    "Explained"
+  ],
+  "script_insight": "High-view scripts consistently open within the first 30 seconds with an immersive first-person scenario or visceral thought experiment—never a formal intro—immediately putting the listener inside a high-stakes situation before any channel or format context is established."
 }

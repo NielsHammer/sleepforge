@@ -1,1 +1,41 @@
-[]
+[
+  {
+    "video_id": "_EJ1oGNKdcs",
+    "topic_id": "stoic-30-ideas",
+    "topic": "The 30 Biggest Ideas in Stoic Philosophy",
+    "channel": "sleepless-philosophers",
+    "uploaded_at": "2026-05-08T23:34:05.097Z",
+    "title_chosen": "30 Stoic Principles for Inner Peace | Sleep Story",
+    "title_alternatives": [
+      "30 Greatest Ideas in Stoic Philosophy to Fall Asleep to",
+      "All of Stoic Philosophy Explained in 1 Hour to Fall Asleep to",
+      "1 Hour of the 30 Biggest Stoic Ideas to Fall Asleep to",
+      "The Most Profound Stoic Philosophy to Fall Asleep to"
+    ],
+    "title_scores": [
+      8,
+      7,
+      6,
+      7,
+      9
+    ],
+    "thumbnail_chosen": "C:\\dev\\sleepforge\\output\\30-stoic-principles-for-inner-peace-sleep-story\\thumbnails\\v1-icon-grid\\thumbnail.png",
+    "thumbnail_alternatives": [
+      "C:\\dev\\sleepforge\\output\\30-stoic-principles-for-inner-peace-sleep-story\\thumbnails\\v2-atmospheric\\thumbnail.png",
+      "C:\\dev\\sleepforge\\output\\30-stoic-principles-for-inner-peace-sleep-story\\thumbnails\\v3-portrait\\thumbnail.png"
+    ],
+    "principles_used": [
+      "encyclopedic_number",
+      "icon_grid"
+    ],
+    "slug": "30-stoic-principles-for-inner-peace-sleep-story",
+    "ctr": null,
+    "retention_avg": null,
+    "views_24h": 0,
+    "views_total": 0,
+    "fallback": false,
+    "watch_time_min": null,
+    "likes": 0,
+    "refreshed_at": "2026-05-08T23:35:35.890Z"
+  }
+]

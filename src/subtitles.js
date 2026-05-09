@@ -53,8 +53,10 @@ function cleanWord(w) {
  * @param {string} outputPath - Where to write the .ass file
  * @returns {string|null} Path to generated .ass file, or null if no timestamps
  */
-export function generateASS(wordTimestamps, outputPath) {
+export function generateASS(wordTimestamps, outputPath, opts = {}) {
   if (!wordTimestamps || wordTimestamps.length === 0) return null;
+
+  const timeOffset = opts.timeOffsetSec || 0;
 
   // Group words into natural phrases. A phrase ends at:
   //   1. Natural punctuation boundary (comma, semicolon, colon, sentence end)
@@ -62,7 +64,7 @@ export function generateASS(wordTimestamps, outputPath) {
   //   3. Char overflow (PHRASE_MAX_CHARS) — prevents text running off screen
   //   4. Hard word cap (PHRASE_MAX_WORDS) — absolute safety net
   const cleaned = wordTimestamps
-    .map((raw) => ({ ...raw, word: cleanWord(raw.word) }))
+    .map((raw) => ({ ...raw, word: cleanWord(raw.word), start: raw.start + timeOffset, end: raw.end + timeOffset }))
     .filter((w) => w.word);
 
   const phraseChars = (buf) => buf.reduce((n, w) => n + w.word.length, 0) + Math.max(0, buf.length - 1);

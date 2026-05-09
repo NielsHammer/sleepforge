@@ -1,6 +1,56 @@
 {
-  "renders": [],
+  "renders": [
+    {
+      "id": "bded452a-9fd6-4f05-86f5-25c7e66cb95e",
+      "topic": "30 Stoic Principles for Inner Peace | Sleep Story",
+      "channel": "sleepless-philosophers",
+      "status": "done",
+      "progress": 100,
+      "step": "Published",
+      "videoId": "_EJ1oGNKdcs",
+      "videoUrl": "https://youtube.com/watch?v=_EJ1oGNKdcs",
+      "createdAt": "2026-05-08T18:34:09.180Z",
+      "updatedAt": "2026-05-08T23:34:05.098Z",
+      "scheduledAt": null,
+      "slug": "30-stoic-principles-for-inner-peace-sleep-story"
+    },
+    {
+      "id": "0f799625-37bb-46ea-b235-cbd65988f15e",
+      "topic": "30 Greatest Ideas in Stoic Philosophy to Fall Asleep to",
+      "channel": "sleepless-philosophers",
+      "status": "failed",
+      "progress": 0,
+      "step": "Fatal: Both render and fallback failed: Render exited 1. Last output:   Composing final video (single audio track, frame overlay, animation visible)... | Fallback: claude CLI timed out after 60000ms",
+      "videoId": null,
+      "videoUrl": null,
+      "createdAt": "2026-05-08T18:33:52.545Z",
+      "updatedAt": "2026-05-08T21:37:48.924Z",
+      "scheduledAt": null,
+      "slug": "30-greatest-ideas-in-stoic-philosophy-to-fall-asleep-to"
+    }
+  ],
   "publishes": [],
-  "analytics_cache": {},
-  "last_updated": null
+  "analytics_cache": {
+    "_EJ1oGNKdcs": {
+      "title": "30 Stoic Principles for Inner Peace | Sleep Story",
+      "ctr": null,
+      "retention_avg": null,
+      "views_24h": 0,
+      "views_total": 0,
+      "refreshed_at": "2026-05-08T23:35:35.890Z"
+    }
+  },
+  "last_updated": "2026-05-08T23:35:36.405Z",
+  "unused_thumbnails": [
+    {
+      "videoId": "_EJ1oGNKdcs",
+      "thumbPath": "C:\\dev\\sleepforge\\output\\30-stoic-principles-for-inner-peace-sleep-story\\thumbnails\\v2-atmospheric\\thumbnail.png",
+      "createdAt": "2026-05-08T23:34:05.099Z"
+    },
+    {
+      "videoId": "_EJ1oGNKdcs",
+      "thumbPath": "C:\\dev\\sleepforge\\output\\30-stoic-principles-for-inner-peace-sleep-story\\thumbnails\\v3-portrait\\thumbnail.png",
+      "createdAt": "2026-05-08T23:34:05.099Z"
+    }
+  ]
 }
