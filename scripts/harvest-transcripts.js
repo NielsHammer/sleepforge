@@ -25,6 +25,25 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
+// On Windows, winget installs yt-dlp to a path not always in the inherited
+// PATH of non-interactive shells. Resolve it at startup.
+function resolveYtDlp() {
+  // 1. Try PATH first
+  try { execSync('yt-dlp --version', { stdio: 'ignore' }); return 'yt-dlp'; } catch {}
+  // 2. Common winget location
+  const winget = path.join(process.env.LOCALAPPDATA || '', 'Microsoft', 'WinGet', 'Packages');
+  if (fs.existsSync(winget)) {
+    for (const pkg of fs.readdirSync(winget)) {
+      if (pkg.startsWith('yt-dlp.yt-dlp')) {
+        const exe = path.join(winget, pkg, 'yt-dlp.exe');
+        if (fs.existsSync(exe)) return exe;
+      }
+    }
+  }
+  return 'yt-dlp'; // fallback, will fail with clear error
+}
+const YTDLP = resolveYtDlp();
+
 const REFS_DIR   = 'C:\\Users\\niels\\Desktop\\References';
 const INDEX_FILE = path.join(REFS_DIR, 'index.json');
 const STATE_FILE = path.join(REFS_DIR, 'harvest-state.json');
@@ -88,7 +107,7 @@ function vttToTimestamped(vttContent) {
 
 async function healthCheck(videoId) {
   const start = Date.now();
-  const result = spawnSync('yt-dlp', [
+  const result = spawnSync(YTDLP, [
     '--dump-json', '--no-playlist',
     `https://www.youtube.com/watch?v=${videoId}`,
   ], { timeout: 10000, encoding: 'utf-8' });
@@ -109,7 +128,7 @@ function fetchTranscript(videoId, outDir) {
   const vttDir = path.join(outDir, '_vtt_tmp');
   fs.mkdirSync(vttDir, { recursive: true });
 
-  const result = spawnSync('yt-dlp', [
+  const result = spawnSync(YTDLP, [
     '--write-auto-sub', '--sub-lang', 'en', '--sub-format', 'vtt',
     '--skip-download', '--no-playlist',
     '-o', path.join(vttDir, 'sub'),
@@ -149,7 +168,7 @@ async function main() {
   log('══════════════════════════════════════════════════');
 
   // Check yt-dlp
-  const ytdlpCheck = spawnSync('yt-dlp', ['--version'], { encoding: 'utf-8' });
+  const ytdlpCheck = spawnSync(YTDLP, ['--version'], { encoding: 'utf-8' });
   if (ytdlpCheck.status !== 0) {
     log('');
     log('ERROR: yt-dlp is not installed or not in PATH.');
