@@ -6,7 +6,7 @@
 import express        from 'express';
 import { createServer } from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
-import { exec, spawn } from 'child_process';
+import { exec, spawn, spawnSync } from 'child_process';
 import fs             from 'fs';
 import path           from 'path';
 import os             from 'os';
@@ -93,48 +93,36 @@ async function getGpu() {
   });
 }
 
-// ─── EDGE TTS (direct WebSocket — no npm dep needed) ─────────────────────────
+// ─── EDGE TTS (Python edge-tts CLI — dynamically fetches fresh tokens) ──────────
 
-const TTS_TOKEN = '6A5AA1D4EAFF4E9FB37E23D68491D6F4';
-const TTS_URL   = `wss://speech.platform.bing.com/consumer/speech/synthesize/realtimeaudio/edge/v1?TrustedClientToken=${TTS_TOKEN}`;
+const PYTHON_BIN = process.env.PYTHON_BIN || 'python';
 
 async function synthesize(text, voice = 'en-GB-RyanNeural', rate = '+5%') {
+  const tmpFile = path.join(os.tmpdir(), `tts_${crypto.randomUUID()}.mp3`);
   return new Promise((resolve, reject) => {
-    const ws = new WebSocket(TTS_URL, {
-      headers: {
-        'User-Agent':      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Origin':          'chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold',
-        'Pragma':          'no-cache',
-        'Cache-Control':   'no-cache',
+    const proc = spawn(PYTHON_BIN, [
+      '-m', 'edge_tts',
+      '--text', text,
+      '--voice', voice,
+      '--rate', rate,
+      '--write-media', tmpFile,
+    ], { timeout: 30000 });
+    let stderr = '';
+    proc.stderr.on('data', d => { stderr += d.toString(); });
+    proc.on('close', code => {
+      if (code !== 0) {
+        reject(new Error(`edge_tts failed (${code}): ${stderr.slice(-300)}`));
+        return;
+      }
+      try {
+        const buf = fs.readFileSync(tmpFile);
+        fs.rmSync(tmpFile, { force: true });
+        resolve(buf);
+      } catch (err) {
+        reject(err);
       }
     });
-
-    const chunks = [];
-    const reqId  = crypto.randomUUID().replace(/-/g,'');
-    const ts     = new Date().toISOString().replace(/T/,' ').replace(/\.\d+Z/,'');
-    const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-
-    ws.on('open', () => {
-      ws.send(
-        `X-Timestamp:${ts}\r\nContent-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n` +
-        `{"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":"false","wordBoundaryEnabled":"true"},"outputFormat":"audio-24khz-48kbitrate-mono-mp3"}}}}`
-      );
-      const ssml = `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'><voice name='${voice}'><prosody rate='${rate}'>${escaped}</prosody></voice></speak>`;
-      ws.send(`X-RequestId:${reqId}\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:${ts}Z\r\nPath:ssml\r\n\r\n${ssml}`);
-    });
-
-    ws.on('message', (data) => {
-      if (typeof data === 'string') {
-        if (data.includes('Path:turn.end')) { ws.close(); resolve(Buffer.concat(chunks)); }
-      } else if (data.length > 2) {
-        const hlen = data.readUInt16BE(0);
-        if (data.length > 2 + hlen) chunks.push(data.slice(2 + hlen));
-      }
-    });
-
-    const t = setTimeout(() => { ws.close(); reject(new Error('TTS timeout')); }, 15000);
-    ws.on('error', e => { clearTimeout(t); reject(e); });
-    ws.on('close', ()  => clearTimeout(t));
+    proc.on('error', reject);
   });
 }
 

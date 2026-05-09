@@ -24,6 +24,7 @@
     "@remotion/renderer": "^4.0.451",
     "axios": "^1.15.2",
     "dotenv": "^16.4.5",
+    "edge-tts": "^1.0.1",
     "express": "^4.18.3",
     "googleapis": "^171.4.0",
     "node-fetch": "^3.3.2",
