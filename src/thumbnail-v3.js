@@ -44,6 +44,42 @@ const CANVAS_H = 720;
 const MAX_ATTEMPTS = 3;
 const PASS_THRESHOLD = 7;
 
+// ─── PRINCIPLE SCORES ─────────────────────────────────────────────────────────
+
+let _principleScores = null;
+let _principleScoresTs = 0;
+const SCORES_TTL = 3600000;
+
+function loadPrincipleScores() {
+  if (_principleScores && Date.now() - _principleScoresTs < SCORES_TTL) return _principleScores;
+  try {
+    const f = path.join(PROJECT_ROOT, 'data', 'principle-scores.json');
+    if (fs.existsSync(f)) {
+      _principleScores = JSON.parse(fs.readFileSync(f, 'utf-8'));
+      _principleScoresTs = Date.now();
+    }
+  } catch {}
+  return _principleScores;
+}
+
+function buildThumbnailPrincipleContext() {
+  const scores = loadPrincipleScores();
+  if (!scores?.principles?.length) return '';
+  const medHigh  = scores.principles.filter(p => ['medium', 'high'].includes(p.confidence));
+  const positive = medHigh.filter(p => (p.ctr_lift_pct ?? 0) > 0).sort((a, b) => b.ctr_lift_pct - a.ctr_lift_pct).slice(0, 4);
+  const negative = medHigh.filter(p => (p.ctr_lift_pct ?? 0) < -5).sort((a, b) => a.ctr_lift_pct - b.ctr_lift_pct).slice(0, 2);
+  if (!positive.length && !negative.length) return '';
+  const lines = ['\n═══ PERFORMANCE DATA FROM OWN CHANNEL ═══'];
+  lines.push('These thumbnail principles have measured CTR lift on our actual videos:');
+  for (const p of positive) lines.push(`  ✓ ${p.name}: CTR lift +${p.ctr_lift_pct}% (n=${p.n}, ${p.confidence} confidence)`);
+  if (negative.length) {
+    lines.push('These have shown negative CTR impact — avoid:');
+    for (const p of negative) lines.push(`  ✗ ${p.name}: CTR lift ${p.ctr_lift_pct}% (n=${p.n})`);
+  }
+  lines.push('═══════════════════════════════════════════════');
+  return lines.join('\n');
+}
+
 // ─── IMAGE FETCHING ──────────────────────────────────────────────────────────
 
 async function fetchRecraftImage(prompt, style = 'realistic_image') {
@@ -353,6 +389,7 @@ Return ONLY this JSON:
 function buildPlannerPrompt({ title, scriptText, niche, tone, priorAttempt, visionRefs = [], poolWinners = [], poolLosers = [], lockedHook = null, lockedMetaphor = null }) {
   const scriptExcerpt = scriptText ? scriptText.substring(0, 6000) : 'No script available — design from title alone.';
   const totalImages = visionRefs.length + poolWinners.length + poolLosers.length;
+  const principleCtx = buildThumbnailPrincipleContext();
 
   const visionBlock = totalImages > 0
     ? `
@@ -410,7 +447,7 @@ source_hint: "${lockedMetaphor.winner.source_hint || 'ai'}"
     : '';
 
   return `You are a senior YouTube thumbnail designer who charges $500/thumbnail. You design freely. You are not given templates, layouts, or composition rules — you decide every pixel based on what the SPECIFIC video needs.
-${visionBlock}${lockedHookBlock}${lockedMetaphorBlock}
+${principleCtx}${visionBlock}${lockedHookBlock}${lockedMetaphorBlock}
 ═══ THE VIDEO ═══
 
 TITLE: "${title}"
@@ -770,6 +807,8 @@ export async function generateThumbnailV3({
   _priorAttempt = null,
   _lockedHook = null,
   _lockedMetaphor = null,
+  _skipCritic = false,
+  _maxAttempts = MAX_ATTEMPTS,
 }) {
   console.log('============================================================');
   console.log('SleepForge Thumbnail v3 (HTML/CSS)' + (_attempt > 1 ? ` — RETRY ${_attempt}/${MAX_ATTEMPTS}` : ''));
@@ -878,7 +917,12 @@ export async function generateThumbnailV3({
     throw e;
   }
 
-  // Step 5: Critic
+  // Step 5: Critic (skipped in sample/fast mode)
+  if (_skipCritic) {
+    console.log('\n--- Step 5: Critic skipped (fast mode) ---');
+    fs.writeFileSync(path.join(outputDir, 'thumbnail-v3-review.json'), JSON.stringify({ rating: 8, skipped: true }, null, 2));
+    return pngPath;
+  }
   console.log('\n--- Step 5: Harsh designer critic ---');
   const review = await reviewThumbnail(pngPath, title);
   console.log('  Critic rating: ' + review.rating + '/10');
@@ -910,14 +954,14 @@ export async function generateThumbnailV3({
     return pngPath;
   }
 
-  if (_attempt < MAX_ATTEMPTS) {
+  if (_attempt < _maxAttempts) {
     console.log('\n⚠️  Below threshold (' + review.rating + '/10). Retrying...');
     const archDir = path.join(outputDir, `attempt-${_attempt}`);
     fs.mkdirSync(archDir, { recursive: true });
     fs.copyFileSync(pngPath, path.join(archDir, 'thumbnail.png'));
     fs.copyFileSync(path.join(outputDir, 'thumbnail-v3-plan.json'), path.join(archDir, 'thumbnail-v3-plan.json'));
     fs.copyFileSync(path.join(outputDir, 'thumbnail-v3-review.json'), path.join(archDir, 'thumbnail-v3-review.json'));
-    return generateThumbnailV3({ outputDir, title, scriptText, niche, tone, _attempt: _attempt + 1, _priorAttempt: review, _lockedHook: lockedHook, _lockedMetaphor: lockedMetaphor });
+    return generateThumbnailV3({ outputDir, title, scriptText, niche, tone, _attempt: _attempt + 1, _priorAttempt: review, _lockedHook: lockedHook, _lockedMetaphor: lockedMetaphor, _skipCritic, _maxAttempts });
   }
 
   console.log('\n⚠️  Out of retries. Promoting best of attempts.');

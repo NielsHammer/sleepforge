@@ -8,9 +8,13 @@
     "jarvis": "node jarvis/server.js",
     "learn": "node scripts/learn-references.js",
     "analytics": "node scripts/refresh-analytics.js",
+    "ingest": "node scripts/ingest-own-channel.js",
+    "score": "node scripts/score-principles.js",
+    "benchmark": "node scripts/channel-benchmark.js",
     "harvest": "node scripts/harvest-references.js",
     "harvest:transcripts": "node scripts/harvest-transcripts.js",
-    "harvest:status": "node scripts/harvest-status.js"
+    "harvest:status": "node scripts/harvest-status.js",
+    "samples": "node scripts/generate-samples.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.95.1",

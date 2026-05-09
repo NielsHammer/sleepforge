@@ -428,90 +428,103 @@ async function submitQueue() {
 
 // ─── ANALYTICS ───────────────────────────────────────────────────────────────
 async function loadAnalytics() {
-  const videos = await apiFetch('/api/videos');
+  // Load all 4 data sources in parallel
+  const [bench, principles, thumbs, insights] = await Promise.allSettled([
+    apiFetch('/api/analytics/benchmark'),
+    apiFetch('/api/analytics/principles'),
+    apiFetch('/api/analytics/thumbnails'),
+    apiFetch('/api/analytics/insights'),
+  ]);
 
-  // Generate mock trend data (30 days)
-  const labels = Array.from({length:30}, (_,i) => {
-    const d = new Date(); d.setDate(d.getDate()-29+i);
-    return d.toLocaleDateString('en-GB',{month:'short',day:'numeric'});
-  });
+  // ── Benchmark stat cards ──
+  const b = bench.status === 'fulfilled' ? bench.value : null;
+  const sfVideos = b?.sleepforge_videos || [];
+  const sfCtr    = sfVideos.filter(v => v.ctr !== null);
+  const sfAvgCtr = sfCtr.length ? (sfCtr.reduce((s, v) => s + v.ctr, 0) / sfCtr.length).toFixed(2) : null;
+  const sfRet    = sfVideos.filter(v => v.retention_avg !== null);
+  const sfAvgRet = sfRet.length ? (sfRet.reduce((s, v) => s + v.retention_avg, 0) / sfRet.length).toFixed(1) : null;
 
-  // Mock CTR data growing over time
-  const ctrData   = labels.map((_,i) => +(2.5 + i*0.12 + Math.sin(i*0.7)*0.8).toFixed(2));
-  const viewsData = labels.map((_,i) => Math.round(20 + i*8 + Math.sin(i*0.5)*15));
+  document.getElementById('bc-sf-ctr-val').textContent  = sfAvgCtr  ? sfAvgCtr + '%'  : '—';
+  document.getElementById('bc-ch-ctr-val').textContent  = b?.ctr_baseline?.median       != null ? b.ctr_baseline.median.toFixed(2) + '%'  : '—';
+  document.getElementById('bc-sf-ret-val').textContent  = sfAvgRet  ? sfAvgRet + '%'  : '—';
+  document.getElementById('bc-ch-ret-val').textContent  = b?.retention_baseline?.median != null ? b.retention_baseline.median.toFixed(1) + '%' : '—';
 
-  renderChart('chart-ctr',   ctrData,   labels, 'CTR %', '#00d4ff', 0, 20);
-  renderChart('chart-views', viewsData, labels, 'Views', '#ffb300', 0, null);
+  // Colour cards: green if SleepForge beats channel baseline
+  if (sfAvgCtr && b?.ctr_baseline?.median) {
+    document.getElementById('bc-sf-ctr').classList.toggle('amber', parseFloat(sfAvgCtr) >= b.ctr_baseline.median);
+  }
+  if (sfAvgRet && b?.retention_baseline?.median) {
+    document.getElementById('bc-sf-ret').classList.toggle('amber', parseFloat(sfAvgRet) >= b.retention_baseline.median);
+  }
 
-  // Top videos table
-  const tableEl = document.getElementById('analytics-table');
-  const topVids = videos.slice(0,10).map((v, i) => ({
-    ...v,
-    ctr:       +(4 + Math.random()*8).toFixed(1),
-    views:     Math.round(50+Math.random()*500),
-    retention: Math.round(35+Math.random()*40),
-  }));
-
-  tableEl.innerHTML = `
-    <div class="at-header">
-      <span>TITLE</span><span>CHANNEL</span><span>CTR</span><span>VIEWS</span><span>RETENTION</span>
-    </div>
-    ${topVids.map(v => `
-      <div class="at-row">
-        <div class="at-title">${esc(v.title)}</div>
-        <div class="at-channel">${esc(v.channel||'—')}</div>
-        <div class="at-ctr">
-          <div class="ctr-bar-wrap">
-            <div class="ctr-bar" style="width:${Math.min(v.ctr*4,100)}px"></div>
-            <span>${v.ctr}%</span>
-          </div>
+  // ── Claude insights ──
+  const insightsEl = document.getElementById('analytics-insights');
+  if (insights.status === 'fulfilled' && Array.isArray(insights.value)) {
+    insightsEl.innerHTML = insights.value.map(ins => `
+      <div class="insight-row">
+        <span class="insight-icon">${ins.type === 'positive' ? '▲' : ins.type === 'negative' ? '▼' : '◆'}</span>
+        <div>
+          <div class="insight-title">${esc(ins.title || '')}</div>
+          <div class="insight-body">${esc(ins.body || '')}</div>
         </div>
-        <div class="at-views">${v.views.toLocaleString()}</div>
-        <div class="at-ret">${v.retention}%</div>
-      </div>`).join('')}`;
-}
+      </div>`).join('');
+  } else {
+    insightsEl.textContent = b ? 'Run refresh-analytics.js to populate performance data.' : 'No analytics data yet — run ingest-own-channel.js first.';
+  }
 
-function renderChart(id, data, labels, label, color, min, max) {
-  const canvas = document.getElementById(id);
-  if (!canvas) return;
-  if (id === 'chart-ctr' && ctrChart)    { ctrChart.destroy();   ctrChart   = null; }
-  if (id === 'chart-views' && viewsChart){ viewsChart.destroy(); viewsChart = null; }
+  // ── Principle performance table ──
+  const principleEl = document.getElementById('principle-table');
+  const pr = principles.status === 'fulfilled' ? principles.value : null;
+  if (pr?.principles?.length) {
+    principleEl.innerHTML = `
+      <div class="at-header"><span>PRINCIPLE</span><span>CTR LIFT</span><span>RET LIFT</span><span>VIDEOS</span><span>CONFIDENCE</span></div>
+      ${pr.principles.slice(0, 12).map(p => {
+        const liftClass = (p.ctr_lift_pct ?? 0) > 0 ? 'lift-pos' : (p.ctr_lift_pct ?? 0) < -2 ? 'lift-neg' : '';
+        return `<div class="at-row">
+          <div class="at-title">${esc(p.name || p.id)}</div>
+          <div class="at-ctr ${liftClass}">${p.ctr_lift_pct != null ? (p.ctr_lift_pct > 0 ? '+' : '') + p.ctr_lift_pct.toFixed(1) + '%' : '—'}</div>
+          <div class="at-ret">${p.retention_lift_pct != null ? (p.retention_lift_pct > 0 ? '+' : '') + p.retention_lift_pct.toFixed(1) + '%' : '—'}</div>
+          <div class="at-views">${p.n}</div>
+          <div class="at-channel conf-${p.confidence}">${p.confidence.toUpperCase()}</div>
+        </div>`;
+      }).join('')}`;
+  } else {
+    principleEl.textContent = 'No principle scores yet — run score-principles.js after analytics refresh.';
+  }
 
-  const chart = new Chart(canvas, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label,
-        data,
-        borderColor:     color,
-        backgroundColor: color.replace(')',',0.08)').replace('rgb','rgba'),
-        borderWidth:     2,
-        pointRadius:     0,
-        pointHoverRadius:4,
-        tension:         0.4,
-        fill:            true,
-      }],
-    },
-    options: {
-      responsive:true, maintainAspectRatio:true,
-      plugins: { legend:{ display:false }, tooltip:{ mode:'index', intersect:false } },
-      scales: {
-        x: {
-          grid:{ color:'rgba(0,212,255,0.06)' },
-          ticks:{ color:'#3d6a8a', font:{ family:'Share Tech Mono', size:9 }, maxRotation:0,
-                  maxTicksLimit:8 },
-        },
-        y: {
-          min, max,
-          grid:{ color:'rgba(0,212,255,0.06)' },
-          ticks:{ color:'#3d6a8a', font:{ family:'Share Tech Mono', size:9 } },
-        },
-      },
-    },
-  });
-  if (id === 'chart-ctr')   ctrChart   = chart;
-  if (id === 'chart-views') viewsChart = chart;
+  // ── Top 10 thumbnails by CTR ──
+  const thumbEl = document.getElementById('thumb-grid');
+  const th = thumbs.status === 'fulfilled' ? thumbs.value : [];
+  if (th.length) {
+    thumbEl.innerHTML = th.slice(0, 10).map(v => `
+      <div class="thumb-card">
+        ${v.thumbnail_url ? `<img src="${esc(v.thumbnail_url)}" alt="" loading="lazy">` : '<div class="thumb-placeholder">NO IMG</div>'}
+        <div class="thumb-meta">
+          <div class="thumb-ctr">${v.ctr != null ? v.ctr.toFixed(2) + '%' : '—'} CTR</div>
+          <div class="thumb-title">${esc((v.title || '').slice(0, 55))}</div>
+        </div>
+      </div>`).join('');
+  } else {
+    thumbEl.textContent = 'No thumbnail data yet.';
+  }
+
+  // ── Top titles by CTR ──
+  const tableEl = document.getElementById('analytics-table');
+  const sfByCtR = sfVideos.filter(v => v.ctr !== null).sort((a, b) => b.ctr - a.ctr).slice(0, 10);
+  if (sfByCtR.length) {
+    tableEl.innerHTML = `
+      <div class="at-header"><span>TITLE</span><span>CTR</span><span>RETENTION</span><span>VIEWS</span><span>RANK</span></div>
+      ${sfByCtR.map(v => `
+        <div class="at-row">
+          <div class="at-title">${esc((v.title || '').slice(0, 60))}</div>
+          <div class="at-ctr lift-pos">${v.ctr.toFixed(2)}%</div>
+          <div class="at-ret">${v.retention_avg != null ? v.retention_avg.toFixed(1) + '%' : '—'}</div>
+          <div class="at-views">${(v.views || 0).toLocaleString()}</div>
+          <div class="at-channel">${esc(v.ctr_rank || '—')}</div>
+        </div>`).join('')}`;
+  } else {
+    tableEl.innerHTML = `<div class="at-row" style="padding:20px;color:#3d6a8a">No ranked videos yet — run ingest-own-channel.js then channel-benchmark.js.</div>`;
+  }
 }
 
 // ─── LIBRARY ──────────────────────────────────────────────────────────────────
