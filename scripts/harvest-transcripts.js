@@ -249,13 +249,13 @@ async function main() {
     if (!ok) {
       log(`  Health check failed — skipping`);
       consecutiveErrors++;
-    } else if (hcElapsed > 3000) {
-      log(`  Health check slow (${hcElapsed}ms > 3s) — pausing 4 hours`);
+    } else if (hcElapsed > 6000) {
+      log(`  Health check slow (${hcElapsed}ms > 6s threshold) — pausing 4 hours`);
       await new Promise(r => setTimeout(r, 4 * 3_600_000));
       consecutiveErrors = 0;
       continue;
     } else {
-      log(`  Health check OK (${hcElapsed}ms)`);
+      log(`  Health check OK (${hcElapsed}ms)${hcElapsed > 3000 ? ' ⚠ slow but under 6s threshold' : ''}`);
     }
 
     if (consecutiveErrors >= BLOCK_ERRORS) {
