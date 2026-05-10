@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Ancient Egyptian incubation temple interior",
+  "subject_is_person": false,
+  "hook_text": "GODS SPOKE HERE",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Ancient Egyptian temple interior at deep night, long sacred colonnade of massive stone columns carved with hieroglyphs receding into darkness, warm amber and orange torchlight from bronze wall sconces casting dramatic pools of firelight on polished stone floors, sacred altar with golden glow visible in far background, thin wisps of incense smoke drifting through shafts of warm light, god-like atmosphere, cinematic 16:9 wide angle composition, photorealistic 3D render, extreme detail on carved reliefs and hieroglyphic panels, stone floor softly reflecting torch glow, sacred stillness, deep black shadows between columns",
+      "source_hint": "ai",
+      "purpose": "Full-frame hero background — the temple IS the subject. The warm torch pools and column depth do all the visual storytelling."
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap\" rel=\"stylesheet\"><style>* { margin: 0; padding: 0; box-sizing: border-box; } html, body { width: 1280px; height: 720px; overflow: hidden; background: #060402; } .scene { position: relative; width: 1280px; height: 720px; overflow: hidden; background: #060402; } .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 22%; } .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 78% 68% at 50% 34%, transparent 8%, rgba(4,2,1,0.42) 58%, rgba(3,1,0,0.84) 100%); } .bottom-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 340px; background: linear-gradient(to top, rgba(3,1,0,0.96) 0%, rgba(3,1,0,0.72) 28%, rgba(3,1,0,0.20) 60%, transparent 100%); } .top-dim { position: absolute; top: 0; left: 0; right: 0; height: 100px; background: linear-gradient(to bottom, rgba(0,0,0,0.64) 0%, transparent 100%); } .hook { position: absolute; bottom: 62px; left: 0; right: 0; text-align: center; font-family: 'Cinzel', Georgia, 'Times New Roman', serif; font-weight: 900; font-size: 108px; color: #F1BF3A; letter-spacing: 0.055em; word-spacing: 0.18em; line-height: 1; white-space: nowrap; text-shadow: 0 0 18px rgba(255,188,48,1), 0 0 50px rgba(255,140,18,0.82), 0 0 100px rgba(210,85,0,0.48), 0 0 160px rgba(160,50,0,0.25), 0 5px 42px rgba(0,0,0,1), 2px 2px 8px rgba(0,0,0,0.9); }</style></head><body><div class=\"scene\"><img class=\"bg\" src=\"{{IMG:1}}\" alt=\"Ancient Egyptian temple interior\"><div class=\"top-dim\"></div><div class=\"vignette\"></div><div class=\"bottom-fade\"></div><div class=\"hook\">GODS SPOKE HERE</div></div></body></html>",
+  "why": "The temple image fills every pixel — there is no border, no frame, no distraction — because the architecture itself is the revelation; the viewer should feel they're standing inside it. 'GODS SPOKE HERE' anchors in the lower third so the full depth of columns, firelight, and altar breathes in the upper two-thirds, giving the text something sacred to point at. Warm gold (#F1BF3A) was chosen because it mirrors the torch flame already burning in the image — it doesn't feel overlaid, it feels lit by the scene — and the layered glow text-shadow (three radii of amber, orange, and deep red) makes the lettering appear to flicker like firelight. Cinzel at 900 weight carries the gravitas of carved stone inscriptions while remaining legible as bold geometry at 168×94 thumbnail scale.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "Fall Asleep Inside an Ancient Egyptian Dream Temple — 1-Hour Sleep Story",
+  "niche": "history",
+  "_attempt": 1
+}

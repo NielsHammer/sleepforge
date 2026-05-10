@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "Marcus Aurelius wrote the Meditations as private notes never intended for anyone else to read — yet 1,900 years later, his secret inner voice is being read aloud to help you sleep.",
+  "likely_image": "A dramatic, dimly lit bust or painted portrait of Marcus Aurelius against a dark, starry, or foggy background — classical and serene.",
+  "candidates": [
+    {
+      "hook": "NEVER PUBLISHED",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 8,
+      "total": 24
+    },
+    {
+      "hook": "WROTE FOR NO ONE",
+      "clarity": 8,
+      "promise": 7,
+      "emotion": 8,
+      "total": 23
+    },
+    {
+      "hook": "STILL CALMS",
+      "clarity": 6,
+      "promise": 7,
+      "emotion": 8,
+      "total": 21
+    },
+    {
+      "hook": "HIS PRIVATE CALM",
+      "clarity": 7,
+      "promise": 7,
+      "emotion": 6,
+      "total": 20
+    },
+    {
+      "hook": "SLEEP LIKE MARCUS",
+      "clarity": 8,
+      "promise": 7,
+      "emotion": 5,
+      "total": 20
+    }
+  ],
+  "winner": "NEVER PUBLISHED",
+  "winner_reasoning": "Paired with Marcus Aurelius's face, 'NEVER PUBLISHED' creates instant forbidden-knowledge curiosity — you feel like you're about to hear something private and ancient that was never meant for you, which is exactly the intimate, secret-access feeling that makes a sleep-seeker click."
+}

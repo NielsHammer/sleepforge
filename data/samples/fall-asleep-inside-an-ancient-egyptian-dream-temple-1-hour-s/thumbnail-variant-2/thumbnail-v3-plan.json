@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Ancient Egyptian incubation dream temple",
+  "subject_is_person": false,
+  "hook_text": "GODS SPOKE HERE",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Ancient Egyptian temple interior at deep night, long colonnade of enormous stone columns carved with hieroglyphs, warm amber flickering torchlight casting golden glow from wall sconces, dramatic deep shadows pooling between columns, distant sacred altar glowing softly at the far end of the corridor, atmospheric haze and incense mist, photorealistic cinematic render, hyper-detailed, sacred and mysterious atmosphere, perspective looking straight down the central axis of the colonnade, 16:9 wide aspect ratio",
+      "source_hint": "ai",
+      "purpose": "Full-frame hero background: the sacred temple space the viewer is invited to enter and sleep inside"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap\" rel=\"stylesheet\"><style>*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html,body{width:1280px;height:720px;overflow:hidden;background:#060300;}.frame{position:relative;width:1280px;height:720px;overflow:hidden;}.hero{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;}.vignette{position:absolute;inset:0;background:radial-gradient(ellipse 82% 72% at 50% 34%,transparent 8%,rgba(5,2,0,0.22) 45%,rgba(5,2,0,0.60) 76%,rgba(3,1,0,0.86) 100%);}.top-veil{position:absolute;top:0;left:0;right:0;height:140px;background:linear-gradient(to bottom,rgba(4,2,0,0.60) 0%,transparent 100%);}.bottom-veil{position:absolute;bottom:0;left:0;right:0;height:290px;background:linear-gradient(to top,rgba(4,2,0,0.97) 0%,rgba(4,2,0,0.78) 28%,rgba(4,2,0,0.38) 58%,transparent 100%);}.hook{position:absolute;bottom:46px;left:0;right:0;text-align:center;font-family:'Cinzel','Times New Roman',serif;font-weight:900;font-size:120px;line-height:1;letter-spacing:0.04em;white-space:nowrap;color:#FFFFFF;text-shadow:0 0 130px rgba(255,148,22,0.20),0 0 65px rgba(255,118,0,0.12),0 6px 32px rgba(0,0,0,0.99),0 2px 8px rgba(0,0,0,0.99);}</style></head><body><div class=\"frame\"><img class=\"hero\" src=\"{{IMG:1}}\" alt=\"Ancient Egyptian dream temple\"><div class=\"vignette\"></div><div class=\"top-veil\"></div><div class=\"bottom-veil\"></div><div class=\"hook\">GODS SPOKE HERE</div></div></body></html>",
+  "why": "Cinzel's Roman inscriptional letterforms — the closest Google Fonts gets to stone-carved ancient glyphs — make 'GODS SPOKE HERE' feel permanently carved into the threshold of this temple rather than typeset, which is exactly right for an invocation of divine presence. The image is framed with a radial vignette that keeps the colonnade corridor luminous at its center, so the viewer's eye is pulled deep into the sacred space before landing on the text — they enter, then they read. The bottom veil is deep but graduated, ensuring the white text reads at zero effort even at 168×94, while the subtle amber glow in the text-shadow echoes the torch warmth without technically changing the hook's single white color. No secondary text, no badges, no description — just one room and three words that make it feel alive.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "Fall Asleep Inside an Ancient Egyptian Dream Temple — 1-Hour Sleep Story",
+  "niche": "history",
+  "_attempt": 1
+}

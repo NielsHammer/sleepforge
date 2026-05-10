@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Ruins of the Indus Valley Civilization — Mohenjo-daro",
+  "subject_is_person": false,
+  "hook_text": "JUST VANISHED",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Mohenjo-daro ancient archaeological site ruins, crumbling terracotta brick walls and platforms receding into dusty horizon, warm amber golden haze atmosphere, eerie stillness, low wide cinematic angle, late afternoon raking light, no people, desaturated warm earth tones, dramatic sky",
+      "source_hint": "ai",
+      "purpose": "Full-bleed hero background — the silent abandoned city is the entire visual story: civilization at its peak, now rubble"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap\" rel=\"stylesheet\"><style>*{margin:0;padding:0;box-sizing:border-box;}body{width:1280px;height:720px;overflow:hidden;background:#07040c;position:relative;}.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;filter:saturate(0.48) sepia(0.52) brightness(0.68) contrast(1.08);}.dark-top{position:absolute;top:0;left:0;right:0;height:30%;background:linear-gradient(to bottom,rgba(4,2,10,0.78) 0%,transparent 100%);}.dark-bottom{position:absolute;bottom:0;left:0;right:0;height:58%;background:linear-gradient(to top,rgba(4,2,10,0.98) 0%,rgba(4,2,10,0.82) 35%,rgba(4,2,10,0.3) 70%,transparent 100%);}.vignette{position:absolute;inset:0;background:radial-gradient(ellipse 84% 70% at 50% 40%,transparent 18%,rgba(0,0,0,0.52) 100%);}.dust{position:absolute;inset:0;background:radial-gradient(ellipse 62% 42% at 50% 36%,rgba(205,118,32,0.10) 0%,transparent 100%);}.text-wrap{position:absolute;bottom:52px;left:0;right:0;text-align:center;padding:0 48px;}.hook{display:inline-block;font-family:'Cinzel','Times New Roman',serif;font-weight:900;font-size:118px;color:#ffffff;letter-spacing:0.055em;word-spacing:0.14em;line-height:1;white-space:nowrap;text-shadow:0 0 90px rgba(215,135,40,0.28),0 3px 28px rgba(0,0,0,1),0 0 5px rgba(0,0,0,1);}</style></head><body><img class=\"bg\" src=\"{{IMG:1}}\" alt=\"\"><div class=\"dark-top\"></div><div class=\"dark-bottom\"></div><div class=\"vignette\"></div><div class=\"dust\"></div><div class=\"text-wrap\"><div class=\"hook\">JUST VANISHED</div></div></body></html>",
+  "why": "The ruins fill the entire 1280×720 frame without decoration — there is no graphic UI, no badge, no border. The crumbling brick structures of Mohenjo-daro do all the visual heavy lifting: they signal ancient, they signal scale, they signal something gone. Cinzel was chosen deliberately: its letterforms descend from Roman inscriptions carved centuries *after* the Indus Valley collapsed, which is a quiet irony perfectly matched to the philosophical sleep-channel tone. The gradient blacks out the bottom 58% of the frame to carve a pure dark platform so JUST VANISHED sits in pure white against near-black — guaranteed legible even when compressed to 168×94 on a phone screen. The amber dust haze layer is a whisper, not a shout: just enough warmth to give the image that dreamlike, soft archaeological stillness without fighting the text contrast.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "Boring History for Sleep: The Mystery of the Indus Valley Civilization",
+  "niche": "history",
+  "_attempt": 1
+}

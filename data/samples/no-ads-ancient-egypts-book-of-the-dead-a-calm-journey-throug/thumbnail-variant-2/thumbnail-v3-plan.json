@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Anubis weighing the heart on the scales of Ma'at",
+  "subject_is_person": false,
+  "hook_text": "CHEAT DEATH",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Anubis jackal-headed Egyptian god of death standing before a massive ornate golden balance scale, one pan cradling a luminous glowing human heart the other holding a pristine white feather of Maat, warm amber candlelight flickering upward from below casting dramatic chiaroscuro shadows, ancient Egyptian tomb interior with softly glowing golden hieroglyphs carved into dark stone walls, wisps of incense smoke, rich deep blacks and molten gold color palette, cinematic digital oil painting ultra detailed atmospheric masterpiece",
+      "source_hint": "ai",
+      "purpose": "Full-bleed hero image — Anubis and scales occupy the right 55% of the frame, leaving the dark left zone clear for the hook text"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link href=\"https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap\" rel=\"stylesheet\"><style>* { margin: 0; padding: 0; box-sizing: border-box; } body { width: 1280px; height: 720px; overflow: hidden; background: #050200; } .scene { position: relative; width: 1280px; height: 720px; } .hero { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 65% 50%; } .ol { position: absolute; inset: 0; background: linear-gradient(to right, rgba(3,1,0,0.97) 0%, rgba(3,1,0,0.91) 24%, rgba(3,1,0,0.62) 46%, rgba(3,1,0,0.16) 66%, transparent 85%); } .ov { position: absolute; inset: 0; background: radial-gradient(ellipse 130% 90% at 50% 50%, transparent 34%, rgba(0,0,0,0.58) 100%); } .og { position: absolute; bottom: 0; left: 0; width: 720px; height: 340px; background: radial-gradient(ellipse 100% 100% at 14% 100%, rgba(185,112,0,0.22) 0%, transparent 70%); } .hook { position: absolute; left: 58px; top: 50%; transform: translateY(-50%); } .word { display: block; font-family: 'Cinzel', 'Georgia', serif; font-weight: 900; font-size: 200px; line-height: 0.87; letter-spacing: 0.05em; color: #FFFFFF; text-shadow: 0 0 90px rgba(215,150,0,0.52), 0 0 36px rgba(210,140,0,0.36), 0 3px 3px rgba(0,0,0,1), 0 7px 20px rgba(0,0,0,0.95), 0 16px 55px rgba(0,0,0,0.78); } .sep { display: block; width: 365px; height: 2px; margin: 16px 0; background: linear-gradient(to right, rgba(205,155,0,0.88) 0%, rgba(205,155,0,0.32) 58%, transparent 100%); }</style></head><body><div class=\"scene\"><img class=\"hero\" src=\"{{IMG:1}}\" alt=\"\"><div class=\"ol\"></div><div class=\"ov\"></div><div class=\"og\"></div><div class=\"hook\"><span class=\"word\">CHEAT</span><span class=\"sep\"></span><span class=\"word\">DEATH</span></div></div></body></html>",
+  "why": "Anubis standing over the scales of Ma'at is the single most universally recognizable Egyptian afterlife image — a viewer glancing for 0.05 seconds reads 'Egypt + judgment + death' before their brain registers a single word. The hook 'CHEAT DEATH' is set in 200px Cinzel Black — the most authoritative serif legible at phone thumbnail scale — white with a warm gold glow that ties typographically to the candlelit Egyptian gold without splitting the hook into two colors. A heavy left-to-right dark gradient carves out a clean text zone so the words hit pure contrast against near-black, while Anubis and the glowing heart-on-scales remain fully visible in the right half of the frame. The thin gold separator between the two words adds a micro-pause that makes the phrase read as a two-beat dare — CHEAT / DEATH — amplifying the audacity of the premise without adding a single extra word.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "(NO ADS) Ancient Egypt's Book of the Dead | A Calm Journey Through the Afterlife | 1 Hour Sleep Story",
+  "niche": "history",
+  "_attempt": 1
+}

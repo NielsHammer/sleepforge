@@ -1,0 +1,66 @@
+{
+  "candidates": [
+    {
+      "metaphor": "A marble bust of Marcus Aurelius casts a shadow on the stone wall behind it — but the shadow shows a humble hunched figure writing in a private journal, not the emperor's silhouette.",
+      "image_prompt": "Cinematic close-up of a white marble Roman bust of Marcus Aurelius resting on an ancient stone pedestal, dramatically side-lit by a single flickering candle flame just out of frame left. Warm amber candlelight casts a long shadow on the rough stone wall behind the bust. The shadow does not mirror the bust — it forms the silhouette of a smaller, humble figure, hand raised as if pressing a quill to parchment. Deep indigo-black background. Ultra-low key chiaroscuro lighting. Color palette: ivory marble, warm amber, deep midnight indigo. Mood: intimate, revelatory, subtly surreal. Photorealistic, 8K, cinematic shallow depth of field, film grain.",
+      "source_hint": "ai",
+      "surprise": 9,
+      "emotional_impact": 8,
+      "specificity": 9,
+      "hook_coherence": 9,
+      "total": 35
+    },
+    {
+      "metaphor": "An ancient Roman quill presses golden ink directly onto the surface of a dark obsidian mirror — words written not to paper, but to the reflection staring back.",
+      "image_prompt": "Extreme macro close-up of a weathered hand holding a goose quill, tip pressed gently against the smooth surface of a large dark obsidian mirror. Liquid amber-gold ink spreads across the mirror's glassy surface in elegant flowing script, the wet ink catching the light. The mirror partially reflects the writer's own shadowed, blurred face back at them. Pure black background. The only light source is a faint warm amber glow from below illuminating the hand, the quill tip, and the glowing ink. Color palette: obsidian black, liquid gold, ivory skin tones, shadow. Mood: confessional, dream-like, still, intimate. Ultra-shallow depth of field, photorealistic 8K, cinematic macro lens.",
+      "source_hint": "ai",
+      "surprise": 8,
+      "emotional_impact": 9,
+      "specificity": 10,
+      "hook_coherence": 10,
+      "total": 37
+    },
+    {
+      "metaphor": "An ancient papyrus scroll unfurled in candlelight where the handwritten text spirals inward concentrically like a labyrinth — words written not outward to the world, but collapsing inward toward the self.",
+      "image_prompt": "Top-down bird's-eye flat lay of a wide unfurled ancient Roman papyrus scroll resting on dark aged stone, illuminated by warm amber candlelight in total surrounding darkness. The handwritten Latin text in deep sepia ink does not run in horizontal lines — it spirals inward concentrically toward the scroll's center, like a cosmic galaxy or labyrinth pulling inward. The center of the spiral glows fractionally brighter than the edges, as if the innermost thought is the most luminous truth. Color palette: aged parchment gold, sepia brown, warm amber flame light, deep shadow. Mood: meditative, hypnotic, introspective, sleep-inducing. Cinematic overhead shot, soft vignette edges, photorealistic 8K.",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 8,
+      "specificity": 8,
+      "hook_coherence": 8,
+      "total": 31
+    },
+    {
+      "metaphor": "A thick ancient leather journal sealed shut in near-total darkness, with molten golden light bleeding intensely through every seam and crack — private wisdom too luminous to be contained.",
+      "image_prompt": "Cinematic close-up of a thick ancient leather-bound journal resting on cold dark stone in near-total darkness. The book is fully sealed shut — no hands, no text visible — but intense warm molten gold light bleeds through the spine, through the top and bottom edges, through every stitched seam, as if the words inside are quietly burning. The light spills onto the stone surface below in a warm halo. Color palette: deep charcoal black, cracked aged brown leather, molten amber gold. Mood: mysterious, intimate, reverent, sleep-inducing. Shallow depth of field, soft atmospheric haze, strong chiaroscuro, photorealistic 8K, cinematic.",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 9,
+      "specificity": 8,
+      "hook_coherence": 6,
+      "total": 30
+    },
+    {
+      "metaphor": "A towering ancient Roman stone door left barely ajar in total darkness — a single stripe of warm candlelight falls through the gap onto dark marble floors, and through the crack a solitary silhouette writes alone at a small desk.",
+      "image_prompt": "Wide cinematic shot looking down a pitch-black ancient Roman stone corridor toward a massive arched stone door standing slightly ajar. A single razor-thin vertical stripe of warm amber candlelight spills through the narrow gap and falls across aged dark marble floor tiles. Through the gap — barely visible, just a suggestion — the silhouette of one solitary figure hunched over a small wooden writing desk, candlelight wavering. The viewer feels like an accidental, privileged witness to something not meant to be seen. Color palette: deep charcoal stone, cold grey marble, warm amber single-source light, near-total black shadow. Mood: reverent, hushed, intimate, privileged. Cinematic wide-angle, dramatic chiaroscuro, photorealistic 8K, film grain.",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 8,
+      "specificity": 7,
+      "hook_coherence": 7,
+      "total": 29
+    }
+  ],
+  "winner_index": 1,
+  "winner_reasoning": "The quill writing on a mirror is the single most elegant visual translation of 'WROTE TO HIMSELF' — a mirror is literally a surface that reflects you back to yourself, so writing on it makes the intimate-confessional concept viscerally, immediately legible in one glance, before a single word of text is read.",
+  "winner": {
+    "metaphor": "An ancient Roman quill presses golden ink directly onto the surface of a dark obsidian mirror — words written not to paper, but to the reflection staring back.",
+    "image_prompt": "Extreme macro close-up of a weathered hand holding a goose quill, tip pressed gently against the smooth surface of a large dark obsidian mirror. Liquid amber-gold ink spreads across the mirror's glassy surface in elegant flowing script, the wet ink catching the light. The mirror partially reflects the writer's own shadowed, blurred face back at them. Pure black background. The only light source is a faint warm amber glow from below illuminating the hand, the quill tip, and the glowing ink. Color palette: obsidian black, liquid gold, ivory skin tones, shadow. Mood: confessional, dream-like, still, intimate. Ultra-shallow depth of field, photorealistic 8K, cinematic macro lens.",
+    "source_hint": "ai",
+    "surprise": 8,
+    "emotional_impact": 9,
+    "specificity": 10,
+    "hook_coherence": 10,
+    "total": 37
+  }
+}

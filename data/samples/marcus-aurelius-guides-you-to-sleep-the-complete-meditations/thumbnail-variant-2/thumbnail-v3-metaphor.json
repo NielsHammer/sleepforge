@@ -1,0 +1,66 @@
+{
+  "candidates": [
+    {
+      "metaphor": "You are sneaking into Marcus Aurelius's private chamber at night, watching over his shoulder as he writes words never meant for any other eyes — the viewer becomes the forbidden witness.",
+      "image_prompt": "Cinematic extreme close-up shot from behind and slightly above the right shoulder of a Roman emperor in dark wool robes, his hand gripping a feather quill mid-stroke on aged parchment, a single oil lamp flame casting warm amber light across the writing hand and page, dense handwritten Greek text filling the parchment with the ink still glistening wet, the far edge of his face barely visible in soft profile showing serene focused calm, absolute darkness consuming every corner beyond the lamp radius, hard chiaroscuro lighting with one warm amber-gold source, hyper-realistic textures on linen robe and parchment fiber, cinematic anamorphic grain, 8K, deep blue-black shadows, mood: intimate forbidden intrusion into a private midnight confession, no text overlay",
+      "source_hint": "ai",
+      "surprise": 8,
+      "emotional_impact": 9,
+      "specificity": 9,
+      "hook_coherence": 9,
+      "total": 35
+    },
+    {
+      "metaphor": "A golden laurel crown lies abandoned on dark stone beside an open ink-stained journal — the emperor stepped away from all public power to write his most private truths for no one.",
+      "image_prompt": "Cinematic still-life shot on ancient dark grey stone surface, a golden Roman laurel wreath crown resting on its side in the left third of frame slightly out of focus, an aged leather-bound journal lying open in the center-right with dense handwritten Greek text visible on warped yellowed parchment pages, a single beeswax candle in the deep background casting the only warm amber-gold light across the scene, a small ink bottle with a dark wet ring beneath it nearby, absolute atmospheric darkness dissolving everything beyond the candle radius, moody chiaroscuro with rich shadow detail, hyper-detailed textures on hammered gold leaves and cracked leather spine, cinematic composition rule-of-thirds, 8K, dark academia tone, mood: private revelation from a man who chose the pen over the crown, no text overlay",
+      "source_hint": "ai",
+      "surprise": 9,
+      "emotional_impact": 8,
+      "specificity": 9,
+      "hook_coherence": 8,
+      "total": 34
+    },
+    {
+      "metaphor": "A deep crimson wax seal embossed with Marcus Aurelius's profile is frozen mid-crack — the exact instant of forbidden access, the moment the private becomes visible.",
+      "image_prompt": "Extreme macro close-up of a deep crimson wax seal on the cover of an ancient dark leather journal, the seal embossed with a Roman emperor's profile in sharp relief, captured mid-crack with hairline fractures radiating outward from center like a frozen spiderweb, a single candle flame reflection shimmering in the glossy unbroken wax surface, warm amber rim lighting catching the raised leather texture of the journal cover, absolute black background with fine dust particles suspended in the candlelight beam, cinematic macro photography style, hyper-detailed wax crystal texture, 8K, color palette deep crimson and warm amber against pure black, mood: the threshold of forbidden knowledge being crossed in a single irreversible moment, no text overlay",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 8,
+      "specificity": 8,
+      "hook_coherence": 9,
+      "total": 32
+    },
+    {
+      "metaphor": "Marcus Aurelius's face exists exactly half in warm candlelight and half in pure darkness — eyes half-closed, lips barely parted, caught at the precise threshold between revealing and concealing.",
+      "image_prompt": "Cinematic portrait of Marcus Aurelius in dark Roman robes, face in perfect dramatic split chiaroscuro — exactly one vertical half illuminated by warm amber candlelight revealing serene calm weathered features, the other half dissolving seamlessly into absolute black, eyes half-closed in deep meditation, lips fractionally parted as if mid-whisper, subtle marble-like luminosity to skin suggesting ancient timeless wisdom, slight atmospheric haze around the lit side, hard single-source candlelight technique shot on vintage anamorphic lens with oval bokeh, cinematic grain, 8K, color palette: pure black and single warm amber-gold, no mid-tones, mood: a secret poised at the edge of being revealed after two thousand years of silence, no text overlay",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 9,
+      "specificity": 7,
+      "hook_coherence": 8,
+      "total": 31
+    },
+    {
+      "metaphor": "A bird's-eye macro of candlelit ancient parchment filled with private handwriting — one single line glows faintly gold as if the viewer has just found the secret passage hidden inside the text.",
+      "image_prompt": "Extreme macro cinematic overhead shot of aged parchment with dense handwritten ancient Greek text filling the entire frame, the parchment surface warm amber-gold in the glow of a single candle positioned at the top edge of frame with visible flame, one horizontal line of text in the center of the page emitting a faint golden self-luminescence as if charged with hidden significance, surrounding lines rendered in warm candlelit amber-brown tones, burnt frayed parchment edges curling at corners, wet ink on the glowing line catching tiny specular light points, absolute darkness beyond all four parchment edges, shot directly from above with tilt-shift lens effect blurring outer edges, hyper-detailed paper fiber and varied ink opacity visible, 8K, cinematic grain, mood: stumbling alone in the dark upon a private secret that was never meant to survive, no text overlay",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 8,
+      "specificity": 8,
+      "hook_coherence": 8,
+      "total": 31
+    }
+  ],
+  "winner_index": 0,
+  "winner_reasoning": "The over-the-shoulder shot physically installs the viewer as the forbidden witness — you are literally watching Marcus Aurelius write the words he never published, making 'NEVER PUBLISHED' feel viscerally true the instant the thumbnail loads, before a single word of text is read.",
+  "winner": {
+    "metaphor": "You are sneaking into Marcus Aurelius's private chamber at night, watching over his shoulder as he writes words never meant for any other eyes — the viewer becomes the forbidden witness.",
+    "image_prompt": "Cinematic extreme close-up shot from behind and slightly above the right shoulder of a Roman emperor in dark wool robes, his hand gripping a feather quill mid-stroke on aged parchment, a single oil lamp flame casting warm amber light across the writing hand and page, dense handwritten Greek text filling the parchment with the ink still glistening wet, the far edge of his face barely visible in soft profile showing serene focused calm, absolute darkness consuming every corner beyond the lamp radius, hard chiaroscuro lighting with one warm amber-gold source, hyper-realistic textures on linen robe and parchment fiber, cinematic anamorphic grain, 8K, deep blue-black shadows, mood: intimate forbidden intrusion into a private midnight confession, no text overlay",
+    "source_hint": "ai",
+    "surprise": 8,
+    "emotional_impact": 9,
+    "specificity": 9,
+    "hook_coherence": 9,
+    "total": 35
+  }
+}

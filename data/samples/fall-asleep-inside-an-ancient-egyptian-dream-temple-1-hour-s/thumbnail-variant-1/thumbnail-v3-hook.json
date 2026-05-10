@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "Ancient Egyptians built actual physical temples — called incubation temples — where people would sleep overnight so the gods could speak to them through healing dreams, and priests would interpret those dreams as divine medicine.",
+  "likely_image": "A dimly lit, atmospheric render of an ancient Egyptian temple interior — stone columns, hieroglyphs, warm torchlight, evoking sacred stillness and deep night.",
+  "candidates": [
+    {
+      "hook": "GODS SPOKE HERE",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 9,
+      "total": 25
+    },
+    {
+      "hook": "BUILT TO DREAM",
+      "clarity": 9,
+      "promise": 7,
+      "emotion": 6,
+      "total": 22
+    },
+    {
+      "hook": "SLEEP WAS SACRED",
+      "clarity": 7,
+      "promise": 7,
+      "emotion": 7,
+      "total": 21
+    },
+    {
+      "hook": "DREAM PRESCRIBED",
+      "clarity": 7,
+      "promise": 8,
+      "emotion": 7,
+      "total": 22
+    },
+    {
+      "hook": "HEALED BY DREAMS",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 7,
+      "total": 23
+    }
+  ],
+  "winner": "GODS SPOKE HERE",
+  "winner_reasoning": "Paired with the torch-lit temple image, 'GODS SPOKE HERE' makes the ancient space feel alive and sacred — it doesn't describe the video, it makes the viewer feel the eerie weight of divine presence and immediately want to enter that room."
+}

@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "A 2,000-year-old Roman emperor's private journal — written to conquer the mind, not the world — has become one of the most powerful modern sleep aids, because true Stoic stillness is indistinguishable from surrender to sleep.",
+  "likely_image": "A marble bust or dramatic portrait of Marcus Aurelius against a dark, starry, or candlelit background suggesting night and calm.",
+  "candidates": [
+    {
+      "hook": "FINALLY QUIET",
+      "clarity": 8,
+      "promise": 9,
+      "emotion": 9,
+      "total": 26
+    },
+    {
+      "hook": "MIND GOES STILL",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 8,
+      "total": 24
+    },
+    {
+      "hook": "FINALLY SLEEP",
+      "clarity": 9,
+      "promise": 9,
+      "emotion": 7,
+      "total": 25
+    },
+    {
+      "hook": "THOUGHTS STOP",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 8,
+      "total": 24
+    },
+    {
+      "hook": "WORLD FADES",
+      "clarity": 7,
+      "promise": 7,
+      "emotion": 8,
+      "total": 22
+    }
+  ],
+  "winner": "FINALLY QUIET",
+  "winner_reasoning": "When a sleep-deprived viewer sees Marcus Aurelius's stoic face beside 'FINALLY QUIET,' it lands as a direct promise of relief — this ancient emperor will silence the racing mind that's been keeping you awake, and that emotional payoff makes clicking feel urgent."
+}

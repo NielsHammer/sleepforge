@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Marcus Aurelius",
+  "subject_is_person": true,
+  "hook_text": "HIS SECRET",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Dramatic marble bust portrait of Roman Emperor Marcus Aurelius, extreme close-up, single warm candle flame lighting from lower-left casting deep chiaroscuro shadows, ancient stone texture visible, pitch black background, cinematic dramatic lighting, photorealistic hyper-detailed, stoic expression",
+      "source_hint": "ai",
+      "purpose": "Full-bleed hero — the stoic candlelit stone face of the most powerful man in antiquity dominates the entire frame"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link href=\"https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap\" rel=\"stylesheet\"><style>*{margin:0;padding:0;box-sizing:border-box;}body{width:1280px;height:720px;overflow:hidden;background:#050301;}.scene{width:1280px;height:720px;position:relative;overflow:hidden;}.bust{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center 18%;filter:saturate(0.60) brightness(0.78);}.warm-glow{position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 780px 520px at 50% 28%, rgba(210,115,22,0.20) 0%, rgba(185,90,12,0.09) 45%, transparent 70%);mix-blend-mode:screen;pointer-events:none;}.vignette{position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 108% 102% at 50% 36%, transparent 28%, rgba(3,2,1,0.62) 100%);pointer-events:none;}.bottom-shadow{position:absolute;left:0;right:0;bottom:0;height:400px;background:linear-gradient(to bottom, transparent 0%, rgba(3,2,1,0.68) 50%, rgba(3,2,1,0.96) 100%);pointer-events:none;}.hook{position:absolute;bottom:46px;left:0;right:0;text-align:center;font-family:'Cinzel',Georgia,serif;font-weight:900;font-size:126px;color:#ffffff;letter-spacing:0.10em;word-spacing:0.22em;line-height:1;text-shadow:0 0 90px rgba(240,148,38,0.28), 0 3px 14px rgba(0,0,0,0.97), 0 0 220px rgba(225,125,28,0.11);}</style></head><body><div class=\"scene\"><img class=\"bust\" src=\"{{IMG:1}}\" alt=\"\"><div class=\"warm-glow\"></div><div class=\"vignette\"></div><div class=\"bottom-shadow\"></div><div class=\"hook\">HIS SECRET</div></div></body></html>",
+  "why": "The Cinzel typeface is literally modeled on Roman stone inscriptions — it is the only font on earth that belongs inside this image, and it makes 'HIS SECRET' feel carved rather than typed. The bust fills 100% of the frame: at 168×94 pixels on a phone, a stone face emerging from near-black darkness is one of the most visually arresting things a human eye can encounter while scrolling. Three overlays work in concert — a radial warm-amber screen-blend simulates candlelight without adding any literal element, a corner vignette pushes the eye inward to the face, and a bottom gradient ensures the white text is always legible regardless of how bright the generated image renders. The composition is deliberately monolithic: one face, two words, absolute darkness — because the whole premise of the video is that this man's most private thoughts survived in secret, and the thumbnail should feel like you just found them.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "40 Private Thoughts Marcus Aurelius Never Meant to Publish to Fall Asleep to",
+  "niche": "philosophy",
+  "_attempt": 1
+}

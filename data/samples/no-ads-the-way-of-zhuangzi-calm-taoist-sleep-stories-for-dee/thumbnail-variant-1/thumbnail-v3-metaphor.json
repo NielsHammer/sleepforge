@@ -1,0 +1,66 @@
+{
+  "candidates": [
+    {
+      "metaphor": "A human hand reaches down to touch a moonlit pond — but its reflection is a butterfly wing, not a hand.",
+      "image_prompt": "Extreme close-up of a single human hand descending toward the surface of a perfectly still midnight pond, moonlight silver on black water, bamboo shadows framing the edges. The reflection in the water is not a hand but a single luminous butterfly wing, pale gold and translucent, as if the dreaming version of the hand has already transformed. The ripple point where skin meets water is razor-sharp. Color palette: deep indigo, obsidian black, warm amber glow at the reflection. Cinematic macro photography style, ultra shallow depth of field, mist wisping at the water's edge, no faces, no text. Mood: suspended between two realities, profoundly still.",
+      "source_hint": "ai",
+      "surprise": 9,
+      "emotional_impact": 9,
+      "specificity": 9,
+      "hook_coherence": 9,
+      "total": 36
+    },
+    {
+      "metaphor": "A robed sage seated in meditation whose silhouette bleeds at the edges into dozens of luminous butterflies dissolving upward into moonlit mist — the boundary between man and butterfly perfectly unresolved.",
+      "image_prompt": "Wide cinematic shot of a lone robed Taoist figure seated cross-legged on a misty mountain cliff at deep night, full moon directly behind casting a cold blue halo. The figure's silhouette is solid at the core but at every edge — shoulders, sleeves, the crown of the head — the form disintegrates into 40–60 small luminous butterflies drifting upward like embers, warm amber against the cold blue fog. The transition from flesh to butterfly is seamless, ambiguous. No hard line between the two. Ink-wash painting aesthetic blended with photorealistic atmospheric fog. Color palette: moonlit cobalt, deep charcoal, ember gold. Utterly quiet. No violence, no drama — pure dissolution.",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 9,
+      "specificity": 8,
+      "hook_coherence": 9,
+      "total": 33
+    },
+    {
+      "metaphor": "A single paper lantern floating on a black still lake casts a shadow on the mist above it — and the shadow is the perfect silhouette of a butterfly in flight.",
+      "image_prompt": "Overhead-angled cinematic shot of a solitary glowing paper lantern adrift on an obsidian-black lake at night, mist hovering two feet above the water surface. The warm amber light from the lantern projects upward into the mist, and the shadow it casts — impossibly, beautifully — is the unmistakable outline of a butterfly in flight, wings spread wide, sharp and clear in the vapor. Everything else is absolute stillness. The lake has zero ripple. Mountains are ghost-shapes in the far distance. Color palette: warm lantern amber, ice-white mist, pitch black water. Minimal composition — one object, one impossible shadow. Ultra-cinematic, dreamlike realism. No people, no text.",
+      "source_hint": "ai",
+      "surprise": 9,
+      "emotional_impact": 8,
+      "specificity": 9,
+      "hook_coherence": 8,
+      "total": 34
+    },
+    {
+      "metaphor": "An ancient stone Taoist gate stands in blue moonlit mist: through the archway, the world is warm and blossoming as if mid-dream — a single butterfly hovers precisely in the threshold, belonging to neither side.",
+      "image_prompt": "Symmetrical cinematic shot looking straight through a weathered circular moon gate (yuanmen) set into an ancient moss-covered stone wall, deep night. On the viewer's side of the gate: cool blue moonlight, bare gnarled pine branches, cold mist. Through the gate: warm amber light, soft blossoms drifting, the suggestion of a luminous garden. Dead center in the circular opening, hovering perfectly still, one single butterfly — wings half-open, caught between the two worlds. The composition is mathematically centered. Color palette: ice blue on the near side, golden amber on the far side, the butterfly split between both. Mood: the precise moment between waking and sleep. Ultra-detailed atmospheric realism.",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 8,
+      "specificity": 8,
+      "hook_coherence": 8,
+      "total": 31
+    },
+    {
+      "metaphor": "Extreme close-up of a sleeping sage's profile, utterly at peace — a single butterfly rests on their eyelid, wings slowly opening, as if reading the dream from the inside.",
+      "image_prompt": "Extreme intimate close-up portrait of an elderly Taoist sage sleeping in absolute serenity, face in three-quarter profile, skin lit by soft silver moonlight filtering through thin paper screens. A single large moth-like butterfly — pale cream and gold, translucent wings veined like jade — rests delicately on the closed eyelid, wings in mid-open position, impossibly still. The eyelid beneath it is smooth, untroubled. Background is soft bokeh of dark indigo and faint candlelight. The butterfly fills the eye socket the way a dream fills sleep — it belongs there. Shallow focus, the butterfly pin-sharp, the rest gossamer. Color palette: silver, cream, warm amber, deep indigo. Mood: the most peaceful image imaginable, charged with philosophical weight.",
+      "source_hint": "ai",
+      "surprise": 8,
+      "emotional_impact": 10,
+      "specificity": 9,
+      "hook_coherence": 9,
+      "total": 36
+    }
+  ],
+  "winner_index": 4,
+  "winner_reasoning": "The butterfly resting on the sleeping eyelid is the only candidate that physically fuses the dreamer and the dream into one inseparable image — the viewer literally cannot tell if the butterfly is inside the dream or outside it, making 'STILL DREAMING' feel not like a title but like a diagnosis the image is delivering directly to them.",
+  "winner": {
+    "metaphor": "Extreme close-up of a sleeping sage's profile, utterly at peace — a single butterfly rests on their eyelid, wings slowly opening, as if reading the dream from the inside.",
+    "image_prompt": "Extreme intimate close-up portrait of an elderly Taoist sage sleeping in absolute serenity, face in three-quarter profile, skin lit by soft silver moonlight filtering through thin paper screens. A single large moth-like butterfly — pale cream and gold, translucent wings veined like jade — rests delicately on the closed eyelid, wings in mid-open position, impossibly still. The eyelid beneath it is smooth, untroubled. Background is soft bokeh of dark indigo and faint candlelight. The butterfly fills the eye socket the way a dream fills sleep — it belongs there. Shallow focus, the butterfly pin-sharp, the rest gossamer. Color palette: silver, cream, warm amber, deep indigo. Mood: the most peaceful image imaginable, charged with philosophical weight.",
+    "source_hint": "ai",
+    "surprise": 8,
+    "emotional_impact": 10,
+    "specificity": 9,
+    "hook_coherence": 9,
+    "total": 36
+  }
+}

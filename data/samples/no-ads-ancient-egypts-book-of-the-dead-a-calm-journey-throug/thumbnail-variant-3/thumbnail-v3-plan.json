@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Anubis",
+  "subject_is_person": false,
+  "hook_text": "CHEAT DEATH",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Ancient Egyptian god Anubis jackal-headed deity in profile standing before ornate golden balance scales weighing a glowing human heart against a pristine white feather of Ma'at, dramatic warm amber candlelight glowing from below, rich deep blacks and antique burnished gold color palette, dark stone chamber with carved hieroglyphs on pillars, drifting incense smoke, papyrus scrolls, rays of golden light cutting through darkness, cinematic photorealistic digital painting, ultra detailed, subject occupying center-top of frame, 16:9 wide format",
+      "source_hint": "ai",
+      "purpose": "Full-bleed hero — Anubis and the weighing of the heart ritual fills the upper two-thirds of the frame, establishing ancient Egypt and divine judgment instantly"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap\" rel=\"stylesheet\"><style>*{margin:0;padding:0;box-sizing:border-box}html,body{width:1280px;height:720px;overflow:hidden;background:#060200}.scene{position:relative;width:1280px;height:720px}.hero{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 18%;filter:brightness(0.72) saturate(1.18)}.vignette{position:absolute;inset:0;background:radial-gradient(ellipse 78% 72% at 50% 30%,transparent 8%,rgba(0,0,0,0.48) 58%,rgba(0,0,0,0.88) 100%)}.scrim{position:absolute;bottom:0;left:0;right:0;height:460px;background:linear-gradient(to top,rgba(4,1,0,0.99) 0%,rgba(4,1,0,0.94) 18%,rgba(4,1,0,0.72) 38%,rgba(4,1,0,0.32) 62%,rgba(4,1,0,0.05) 80%,transparent 100%)}.gold-ambient{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:1000px;height:520px;background:radial-gradient(ellipse at 50% 90%,rgba(195,138,18,0.18) 0%,rgba(180,110,10,0.08) 40%,transparent 70%);pointer-events:none}.hook{position:absolute;bottom:34px;left:0;right:0;text-align:center;font-family:'Cinzel',Georgia,serif;font-weight:900;font-size:192px;line-height:0.87;color:#CDA01C;letter-spacing:0.09em;text-shadow:0 0 50px rgba(215,160,22,0.96),0 0 110px rgba(185,118,12,0.58),0 0 230px rgba(145,82,4,0.28),2px 5px 24px rgba(0,0,0,1),0 1px 4px rgba(0,0,0,1)}</style></head><body><div class=\"scene\"><img class=\"hero\" src=\"{{IMG:1}}\" alt=\"Anubis weighing of the heart\"><div class=\"vignette\"></div><div class=\"scrim\"></div><div class=\"gold-ambient\"></div><div class=\"hook\">CHEAT<br>DEATH</div></div></body></html>",
+  "why": "Anubis mid-ritual — scales raised, candles burning — is THE visual shorthand for the Book of the Dead and communicates 'ancient Egypt + divine judgment' to any viewer in under a second, even at 168×94px. Stacking CHEAT and DEATH on two lines at 192px means each word occupies its own visual beat; at thumbnail scale the bold Cinzel serifs and high-contrast antique gold on near-black read as two short, punchy shapes before the viewer even processes letters. Antique gold (#CDA01C) was chosen over bright yellow because it matches real Egyptian artifact gold — warm, aged, credible — reinforcing the meditative calm of the video rather than screaming action. The scrim gradient reserves the lower 40% of the frame as a pure dark stage for text while the vignette pushes all attention toward Anubis in the luminous center, giving the composition a single focal path: face → scales → hook.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "(NO ADS) Ancient Egypt's Book of the Dead | A Calm Journey Through the Afterlife | 1 Hour Sleep Story",
+  "niche": "history",
+  "_attempt": 1
+}

@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "The Indus Valley Civilization was larger than Egypt and Mesopotamia combined at its peak — and it vanished completely, leaving a script no one has ever decoded, so we still don't know what they called themselves or why they disappeared.",
+  "likely_image": "Ancient ruins of Mohenjo-daro or Harappa — crumbling brick structures, dusty and still, possibly with a hazy or dreamlike color grade to match the sleep-channel aesthetic.",
+  "candidates": [
+    {
+      "hook": "JUST VANISHED",
+      "clarity": 8,
+      "promise": 9,
+      "emotion": 9,
+      "total": 26
+    },
+    {
+      "hook": "NEVER DECODED",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 8,
+      "total": 24
+    },
+    {
+      "hook": "STILL SILENT",
+      "clarity": 6,
+      "promise": 7,
+      "emotion": 8,
+      "total": 21
+    },
+    {
+      "hook": "NO ONE KNOWS",
+      "clarity": 7,
+      "promise": 7,
+      "emotion": 6,
+      "total": 20
+    },
+    {
+      "hook": "GONE FOREVER",
+      "clarity": 7,
+      "promise": 7,
+      "emotion": 7,
+      "total": 21
+    }
+  ],
+  "winner": "JUST VANISHED",
+  "winner_reasoning": "Paired with ruins imagery, 'JUST VANISHED' creates instant eerie dread — the viewer looks at a once-great civilization reduced to rubble and those two words promise: 'you are about to find out what happened to millions of people, and the answer is unsettling.'"
+}

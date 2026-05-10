@@ -1,0 +1,66 @@
+{
+  "candidates": [
+    {
+      "metaphor": "A marble bust of Marcus Aurelius sits on a modern nightstand, glowing with warm amber candlelight like a nightlight — ancient wisdom as the ultimate comfort for sleep.",
+      "image_prompt": "Cinematic close-up, warm amber candlelight, a perfectly sculpted white marble bust of Marcus Aurelius placed on a dark walnut nightstand, the marble itself catching and radiating a soft warm glow as if the stone is alive, shallow depth of field, a sleeping figure's slightly blurred pillow and closed eye visible in background bokeh, modern minimalist bedroom at midnight, deep midnight-blue shadows, single candle as only light source, ultra-detailed marble texture, golden highlights sculpting the emperor's cheekbones and brow ridge, cold stone contrasting with warm inviting atmosphere, intimate and meditative, fine art photography style, 16:9 cinematic ratio, no overlaid text",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 9,
+      "specificity": 9,
+      "hook_coherence": 9,
+      "total": 34
+    },
+    {
+      "metaphor": "An extreme close-up of a peacefully closed human eye, where ancient white marble veining bleeds in softly from the outer corner of the eyelid — Marcus Aurelius's thoughts literally becoming part of the modern sleeping mind.",
+      "image_prompt": "Ultra-macro cinematic close-up, a single closed human eye in deep peaceful sleep, soft warm skin lit gently by a distant off-frame candle creating amber-gold shadows, at the outer corner of the eyelid the skin texture transitions dreamlike and seamlessly into ancient white Carrara marble with fine grey veining — the boundary is gradual and organic not harsh, extremely shallow depth of field, background is pure velvety deep indigo darkness, mood is meditative intimate and profoundly still, painterly realism, the marble veining continues slightly onto the temple, no blood no violence only quiet beauty, 16:9 ratio, fine art photography aesthetic",
+      "source_hint": "ai",
+      "surprise": 9,
+      "emotional_impact": 9,
+      "specificity": 9,
+      "hook_coherence": 8,
+      "total": 35
+    },
+    {
+      "metaphor": "A Roman stone tablet rests on the floor of a dark basin of water, and the last faint ripples from its drop are just now fading — the entire surface returning to perfect mirror stillness, reflecting a single candle flame above.",
+      "image_prompt": "Top-down aerial cinematic macro shot, a shallow dark stone basin filled with perfectly still black water, a small ancient Roman stone tablet with faintly carved Latin text rests visible on the basin floor through glassy water, the water is in the very final moment of returning to stillness — only the ghost of a concentric ring at the far edge of frame, the water's surface reflects a single candle flame directly above like a distant star, extreme contrast between deep obsidian blacks and warm liquid gold reflections, meditative and timeless mood, no motion blur only absolute calm, fine art photography, 16:9 cinematic ratio",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 8,
+      "specificity": 8,
+      "hook_coherence": 9,
+      "total": 32
+    },
+    {
+      "metaphor": "A towering marble bust of Marcus Aurelius lit from below by a single candle casts an enormous sweeping shadow across a vast dark floor — and inside that shadow, tiny modern silhouettes sit cross-legged in perfect meditation, sheltered within his calm.",
+      "image_prompt": "Wide cinematic shot, dramatic extreme low-angle perspective looking up, an imposing marble bust of Marcus Aurelius on a stone plinth, single candle flame directly below the chin carving deep baroque shadows across his stoic face, the shadow stretches impossibly far across a polished dark marble floor receding into pure darkness, within the shadow three tiny silhouetted human figures sit in meditation lotus pose — their scale dwarfed by the emperor's presence, warm amber single-source candlelight, midnight blue and black background, the figures are in peace not fear, old masters Dutch Golden Age lighting quality, 16:9 ratio, cinematic and majestic",
+      "source_hint": "ai",
+      "surprise": 8,
+      "emotional_impact": 8,
+      "specificity": 8,
+      "hook_coherence": 9,
+      "total": 33
+    },
+    {
+      "metaphor": "A single beeswax candle burns on an ancient stone surface beside an open weathered journal — but inside the candle flame itself, barely perceptible, floats the ghostly silhouette of a seated Roman emperor in quiet contemplation, as if his thoughts ARE the source of the light.",
+      "image_prompt": "Cinematic macro close-up, a tall beeswax candle burning on aged dark stone, its elongated amber flame contains the subtle dreamy translucent silhouette of a seated Roman figure in meditation — visible only if the eye lingers, ethereal not literal, beside the candle a partially open ancient leather journal with softly blurred cursive script, pure velvety darkness as background, candle is the sole light source casting warm gold pools on the stone, a thin thread of smoke rises and dissipates into the darkness above, painterly and atmospheric mood, deep amber and charcoal palette, fine art photography, 16:9 cinematic",
+      "source_hint": "ai",
+      "surprise": 8,
+      "emotional_impact": 8,
+      "specificity": 8,
+      "hook_coherence": 8,
+      "total": 32
+    }
+  ],
+  "winner_index": 1,
+  "winner_reasoning": "The closed eye with marble veining bleeding in wins because it collapses 'STILL CALMS' into a single intimate image the viewer viscerally feels before reading — their own sleeping eye being touched by 2,000-year-old stone, making the hook's double meaning (timeless continuity + physical stillness) land as a body sensation, not a concept.",
+  "winner": {
+    "metaphor": "An extreme close-up of a peacefully closed human eye, where ancient white marble veining bleeds in softly from the outer corner of the eyelid — Marcus Aurelius's thoughts literally becoming part of the modern sleeping mind.",
+    "image_prompt": "Ultra-macro cinematic close-up, a single closed human eye in deep peaceful sleep, soft warm skin lit gently by a distant off-frame candle creating amber-gold shadows, at the outer corner of the eyelid the skin texture transitions dreamlike and seamlessly into ancient white Carrara marble with fine grey veining — the boundary is gradual and organic not harsh, extremely shallow depth of field, background is pure velvety deep indigo darkness, mood is meditative intimate and profoundly still, painterly realism, the marble veining continues slightly onto the temple, no blood no violence only quiet beauty, 16:9 ratio, fine art photography aesthetic",
+    "source_hint": "ai",
+    "surprise": 9,
+    "emotional_impact": 9,
+    "specificity": 9,
+    "hook_coherence": 8,
+    "total": 35
+  }
+}

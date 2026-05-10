@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Zhuangzi",
+  "subject_is_person": false,
+  "hook_text": "STILL DREAMING",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Wide cinematic shot of a lone robed Taoist figure seated cross-legged on a misty mountain cliff at deep night, full moon directly behind casting a cold blue halo. The figure's silhouette is solid at the core but at every edge — shoulders, sleeves, the crown of the head — the form disintegrates into 40–60 small luminous butterflies drifting upward like embers, warm amber against the cold blue fog. The transition from flesh to butterfly is seamless, ambiguous. No hard line between the two. Ink-wash painting aesthetic blended with photorealistic atmospheric fog. Color palette: moonlit cobalt, deep charcoal, ember gold. Utterly quiet. No violence, no drama — pure dissolution.",
+      "source_hint": "ai",
+      "purpose": "Full-bleed hero image — the visual paradox of man becoming butterfly is the entire emotional argument of the thumbnail"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@1,300&display=swap\" rel=\"stylesheet\"><style>*{margin:0;padding:0;box-sizing:border-box;}body{width:1280px;height:720px;overflow:hidden;background:#050c1a;position:relative;}.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block;}.vignette{position:absolute;inset:0;background:radial-gradient(ellipse 78% 72% at 50% 40%, transparent 18%, rgba(4,7,20,0.54) 100%);}.top-fade{position:absolute;top:0;left:0;right:0;height:140px;background:linear-gradient(to bottom, rgba(4,7,20,0.60) 0%, transparent 100%);}.bottom-fade{position:absolute;bottom:0;left:0;right:0;height:380px;background:linear-gradient(to top, rgba(4,7,20,0.98) 0%, rgba(4,7,20,0.82) 22%, rgba(4,7,20,0.45) 52%, transparent 100%);}.hook{position:absolute;bottom:46px;left:0;right:0;display:flex;flex-direction:column;align-items:center;}.still{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:68px;letter-spacing:0.54em;padding-left:0.54em;color:rgba(255,252,242,0.70);text-transform:uppercase;line-height:1.05;margin-bottom:-6px;}.dreaming{font-family:'Cinzel',serif;font-weight:400;font-size:156px;letter-spacing:0.07em;padding-left:0.07em;color:#ffffff;text-transform:uppercase;line-height:0.90;text-shadow:0 0 130px rgba(208,155,48,0.65), 0 0 55px rgba(208,155,48,0.38), 0 3px 32px rgba(0,0,0,1.0);}</style></head><body><img class=\"bg\" src=\"{{IMG:1}}\" alt=\"\"><div class=\"vignette\"></div><div class=\"top-fade\"></div><div class=\"bottom-fade\"></div><div class=\"hook\"><div class=\"still\">STILL</div><div class=\"dreaming\">DREAMING</div></div></body></html>",
+  "why": "The full-bleed image carries 80% of the emotional weight — a meditating sage dissolving into butterflies is the Zhuangzi paradox made visual without a single word. The two-tier typography mirrors the paradox itself: 'STILL' is breathed in Cormorant Garamond italic at low opacity — a whisper, the uncertain half of the question — while 'DREAMING' detonates beneath it in Cinzel, white and absolute, the word that swallows everything. The warm amber glow on 'DREAMING' is calibrated to the exact ember-gold of the butterflies in the image, so text and visual feel like one continuous thing. At thumbnail scale the figure-against-moon silhouette reads instantly as 'ancient / calm / sleep,' and 'DREAMING' in Cinzel survives compression at any size — the viewer feels the video before they can name it.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "(NO ADS) The Way of Zhuangzi — Calm Taoist Sleep Stories for Deep Rest",
+  "niche": "philosophy",
+  "_attempt": 1
+}

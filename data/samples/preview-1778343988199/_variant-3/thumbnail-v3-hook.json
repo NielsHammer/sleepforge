@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "Marcus Aurelius wrote the Meditations as private notes never intended for publication — you are reading the secret inner thoughts of a Roman emperor, not a philosophy book written for an audience.",
+  "likely_image": "A marble bust or painted portrait of Marcus Aurelius against a dark, soft-lit or starry background evoking night and rest.",
+  "candidates": [
+    {
+      "hook": "WROTE TO HIMSELF",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 8,
+      "total": 24
+    },
+    {
+      "hook": "NEVER PUBLISHED",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 6,
+      "total": 22
+    },
+    {
+      "hook": "WAR MADE THIS",
+      "clarity": 6,
+      "promise": 8,
+      "emotion": 8,
+      "total": 22
+    },
+    {
+      "hook": "STILL SOOTHES",
+      "clarity": 7,
+      "promise": 7,
+      "emotion": 7,
+      "total": 21
+    },
+    {
+      "hook": "FOR NO ONE",
+      "clarity": 6,
+      "promise": 7,
+      "emotion": 7,
+      "total": 20
+    }
+  ],
+  "winner": "WROTE TO HIMSELF",
+  "winner_reasoning": "The bust of Marcus Aurelius tells you WHO — 'WROTE TO HIMSELF' tells you the surprising WHY YOU CARE: these weren't lectures or philosophy for the public, they were a Roman emperor's private confessions, making every idea feel intimate, unguarded, and earned — exactly the calm, privileged feeling that pulls someone into a sleep video."
+}

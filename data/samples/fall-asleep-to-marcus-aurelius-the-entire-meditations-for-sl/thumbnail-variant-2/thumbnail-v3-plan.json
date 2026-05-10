@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Marcus Aurelius marble bust",
+  "subject_is_person": false,
+  "hook_text": "STILL WHISPERING",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "A Marcus Aurelius marble bust lit from directly below by a single warm amber candle glow, dramatic upward shadows carving his stone face, lips slightly parted. From those lips, a slow rolling white mist breathes outward into the dark — and within the mist, barely discernible, the peaceful outline of a sleeping human figure in white linens. The mist and figure dissolve into absolute black at the frame's edges. Color palette: deep charcoal black, ivory marble, warm amber, luminous white mist. Mood: ancient and tender, the voice as breath, a gentle haunting. Painterly cinematic realism, wide-to-mid composition, 8K, no text.",
+      "source_hint": "ai",
+      "purpose": "Full-bleed hero — the Marcus Aurelius bust exhaling amber-lit mist that carries the faint silhouette of a sleeping figure, dissolving into near-total darkness at the frame edges"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><style>@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap');*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html,body{width:1280px;height:720px;overflow:hidden;background:#060402;}.frame{position:relative;width:1280px;height:720px;overflow:hidden;}.hero{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 28%;}.vignette{position:absolute;inset:0;background:radial-gradient(ellipse 86% 74% at 50% 38%,transparent 16%,rgba(4,2,1,0.36) 66%,rgba(4,2,1,0.80) 100%);}.bottom-dark{position:absolute;bottom:0;left:0;right:0;height:330px;background:linear-gradient(to bottom,transparent 0%,rgba(4,2,1,0.55) 30%,rgba(4,2,1,0.87) 62%,rgba(4,2,1,0.98) 100%);}.hook{position:absolute;bottom:44px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:0px;}.hook-word{display:block;font-family:'Cinzel','Georgia',serif;font-weight:900;font-size:116px;line-height:0.92;color:#ede5d2;letter-spacing:0.07em;word-spacing:0.20em;text-shadow:0 0 100px rgba(218,148,46,0.28),0 0 50px rgba(218,148,46,0.18),0 4px 26px rgba(0,0,0,1),0 1px 7px rgba(0,0,0,1);}</style></head><body><div class=\"frame\"><img class=\"hero\" src=\"{{IMG:1}}\" alt=\"Marcus Aurelius marble bust\"><div class=\"vignette\"></div><div class=\"bottom-dark\"></div><div class=\"hook\"><span class=\"hook-word\">STILL</span><span class=\"hook-word\">WHISPERING</span></div></div></body></html>",
+  "why": "The full-bleed AI image carries the entire concept in one frame: a candlelit Roman marble bust breathing mist that secretly holds a sleeping figure — no explainer text needed, because the metaphor is the story. Cinzel 900 was chosen because it is literally descended from Roman monumental lapidary inscriptions — the same letterforms cut into column bases and triumphal arches in Marcus Aurelius's lifetime, so the font itself becomes part of the 2,000-year thread. 'STILL WHISPERING' stacks in the zone where the mist dissolves to absolute black, where contrast is naturally maximum, and the faint amber glow in the text shadow echoes the single candle lighting the bust, binding type and image into one warm-dark palette rather than a paste-job. At 168×94px scroll speed, 'STILL' registers first as a jolt-word and 'WHISPERING' fills the line below it — the two-beat rhythm lands before the brain consciously reads either word.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "Fall Asleep to Marcus Aurelius — The ENTIRE Meditations for Sleep",
+  "niche": "philosophy",
+  "_attempt": 1
+}

@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "Marcus Aurelius wrote the Meditations as private, unguarded notes to himself — never meant for anyone else — and 2,000 years later, those intimate thoughts of a Roman emperor are the most effective tool for quieting the modern, anxious mind to sleep.",
+  "likely_image": "A marble bust or statue of Marcus Aurelius against a dark, starlit or candlelit background — calm, ancient, slightly ethereal.",
+  "candidates": [
+    {
+      "hook": "STILL WHISPERING",
+      "clarity": 7,
+      "promise": 7,
+      "emotion": 9,
+      "total": 23
+    },
+    {
+      "hook": "SLEEPS TONIGHT",
+      "clarity": 8,
+      "promise": 9,
+      "emotion": 6,
+      "total": 23
+    },
+    {
+      "hook": "MIND LETS GO",
+      "clarity": 7,
+      "promise": 8,
+      "emotion": 8,
+      "total": 23
+    },
+    {
+      "hook": "OUTLIVED ROME",
+      "clarity": 8,
+      "promise": 6,
+      "emotion": 7,
+      "total": 21
+    },
+    {
+      "hook": "NEVER STOPPED",
+      "clarity": 5,
+      "promise": 6,
+      "emotion": 7,
+      "total": 18
+    }
+  ],
+  "winner": "STILL WHISPERING",
+  "winner_reasoning": "With a Marcus Aurelius bust staring out of the dark, 'STILL WHISPERING' triggers the same present-tense dread-and-wonder as 'STILL KILLING' — his voice is 2,000 years dead and yet it reaches you tonight, in the dark, right now, making the viewer feel the strange intimacy of ancient words designed to put a modern mind to sleep."
+}

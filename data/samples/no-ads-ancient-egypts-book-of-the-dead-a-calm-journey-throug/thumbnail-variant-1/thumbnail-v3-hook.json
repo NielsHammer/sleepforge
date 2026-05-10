@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "Ancient Egyptians created a literal instruction manual — with spells, passwords, and a map — that the dead were supposed to follow in order to survive divine judgment and reach paradise.",
+  "likely_image": "A golden, mystical Egyptian scene — Anubis, a soul's heart being weighed against a feather, or sacred papyrus hieroglyphics glowing in candlelight.",
+  "candidates": [
+    {
+      "hook": "CHEAT DEATH",
+      "clarity": 8,
+      "promise": 9,
+      "emotion": 8,
+      "total": 25
+    },
+    {
+      "hook": "DEATH MAPPED",
+      "clarity": 8,
+      "promise": 7,
+      "emotion": 7,
+      "total": 22
+    },
+    {
+      "hook": "THEY KNEW",
+      "clarity": 7,
+      "promise": 7,
+      "emotion": 8,
+      "total": 22
+    },
+    {
+      "hook": "HEART JUDGED",
+      "clarity": 7,
+      "promise": 6,
+      "emotion": 7,
+      "total": 20
+    },
+    {
+      "hook": "STILL SPEAKS",
+      "clarity": 5,
+      "promise": 6,
+      "emotion": 7,
+      "total": 18
+    }
+  ],
+  "winner": "CHEAT DEATH",
+  "winner_reasoning": "Paired with Egyptian afterlife imagery — Anubis, scales, gold — 'CHEAT DEATH' instantly reframes the Book of the Dead as something audacious and universal: a 3,000-year-old manual that promised you could outwit death itself, making any viewer feel 'I have to know if it worked.'"
+}

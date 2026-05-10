@@ -1,0 +1,23 @@
+[
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching the dichotomy of control to his students at Nicopolis",
+    "action": "Standing with one hand raised, palm open, as he speaks to students seated before him",
+    "setting": "His small school at Nicopolis, with stone columns, evening light",
+    "narration": "In a quiet room at Nicopolis, an old teacher stands before his students. Epictetus speaks slowly, his words falling like seeds.\n\n'You cannot control whether the storm comes,' he says, 'but you can control how you meet it. The events that befall you—these are not in your power. Yet your judgment, your response, your will—these are entirely yours.' He pauses. The students breathe. The truth settles."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Standing unmoved while receiving news of a battle lost on the Danube frontier",
+    "action": "Receiving a wax tablet from a general, his face unchanged by the report",
+    "setting": "The commander's tent at the frontier fortress overlooking the Danube",
+    "narration": "Far from Rome, at the frontier fortress, an emperor stands in his tent. A general enters with news—a battle lost, soldiers fallen.\n\nMarcus Aurelius doesn't flinch. He understands: these things were never in his control. The river flows as it will. The battle ends as it ends. What remains in his power is this—his acceptance. His steady mind. He breathes, and the weight settles within him, not upon him."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Sitting calmly while a storm rages outside, embodying his teaching of internal freedom",
+    "action": "Sitting with his back straight, palms resting on his knees, unmoved by the storm",
+    "setting": "His simple room at Nicopolis, stone walls bare, the shutters rattling with wind and rain",
+    "narration": "Night falls. A storm shakes the world outside—wind tears at the shutters, rain pounds the stone.\n\nBut in his small room, Epictetus sits without moving. His body is still. His mind is free. This is what he's learned, what he's lived: you cannot still the storm, but you can still yourself. In that stillness lies freedom. Not freedom from pain or loss, but freedom within it. He breathes. He remains."
+  }
+]

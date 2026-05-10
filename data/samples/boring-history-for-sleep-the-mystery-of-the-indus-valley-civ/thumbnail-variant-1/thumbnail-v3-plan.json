@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Mohenjo-daro ruins, Indus Valley Civilization",
+  "subject_is_person": false,
+  "hook_text": "JUST VANISHED",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Ancient ruins of Mohenjo-daro Indus Valley civilization, wide cinematic establishing shot, crumbling weathered ochre brick walls and platforms spreading across a dusty arid plain, overcast or hazy golden-hour diffused light, atmospheric dust haze on the horizon, no people, desolate and ancient, dreamlike quality, photorealistic, 16:9 landscape format",
+      "source_hint": "ai",
+      "purpose": "Full-bleed hero background — the visual subject of the thumbnail, communicating 'ancient lost civilization' the instant the viewer's eye lands on the frame"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link href=\"https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap\" rel=\"stylesheet\"><style>*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html,body{width:1280px;height:720px;overflow:hidden;background:#07050e;}.frame{position:relative;width:1280px;height:720px;overflow:hidden;}.bg-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;filter:saturate(0.52) brightness(0.88) contrast(1.1);}.layer-tint{position:absolute;inset:0;background:rgba(16,10,52,0.30);}.layer-warm-accent{position:absolute;top:0;left:0;right:0;height:58%;background:radial-gradient(ellipse 80% 80% at 50% 55%, rgba(190,110,35,0.13) 0%, transparent 72%);}.layer-gradient{position:absolute;inset:0;background:linear-gradient(to top, rgba(4,3,16,0.97) 0%, rgba(4,3,16,0.84) 18%, rgba(4,3,16,0.50) 36%, rgba(4,3,16,0.16) 50%, rgba(4,3,16,0.00) 64%);}.layer-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 135% 105% at 50% 48%, transparent 33%, rgba(2,1,12,0.48) 100%);}.text-block{position:absolute;bottom:42px;left:0;right:0;text-align:center;font-family:'Bebas Neue',sans-serif;color:#ffffff;}.hook-just{display:block;font-size:292px;letter-spacing:0.08em;line-height:0.86;text-shadow:0 0 100px rgba(0,0,0,1),0 0 50px rgba(0,0,0,1),0 0 24px rgba(0,0,0,0.98),0 6px 32px rgba(0,0,0,0.92);}.hook-vanished{display:block;font-size:187px;letter-spacing:0.06em;line-height:0.90;text-shadow:0 0 80px rgba(0,0,0,1),0 0 40px rgba(0,0,0,1),0 0 20px rgba(0,0,0,0.98),0 5px 24px rgba(0,0,0,0.92);}</style></head><body><div class=\"frame\"><img class=\"bg-image\" src=\"{{IMG:1}}\" alt=\"Mohenjo-daro ruins\"><div class=\"layer-tint\"></div><div class=\"layer-warm-accent\"></div><div class=\"layer-gradient\"></div><div class=\"layer-vignette\"></div><div class=\"text-block\"><span class=\"hook-just\">JUST</span><span class=\"hook-vanished\">VANISHED</span></div></div></body></html>",
+  "why": "The two-line typographic split is the core decision: 'JUST' at 292px hits the viewer first like a blunt statement, then 'VANISHED' at 187px lands as the gut-punch completion — together they scale to 37px and 24px at 168px thumbnail width, both readable on a phone screen. The ruins image is desaturated to ~52% and tinted with a cool indigo wash to feel ancient and dreamlike rather than documentary, while a faint warm amber radial glow at the center lets the ochre brick bleed through — the civilization still glows faintly, as if memory hasn't fully faded. The bottom-rising gradient creates a stage of darkness for the text without obscuring the ruins in the upper two-thirds of the frame, so the viewer sees crumbling brick city above and two haunting words below — topic and emotion decoded in under a second.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "Boring History for Sleep: The Mystery of the Indus Valley Civilization",
+  "niche": "history",
+  "_attempt": 1
+}

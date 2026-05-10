@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Ruins of Mohenjo-daro, Indus Valley Civilization",
+  "subject_is_person": false,
+  "hook_text": "JUST VANISHED",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Wide cinematic establishing shot of ancient Mohenjo-daro archaeological ruins, crumbling brown fired-brick walls and multi-level platforms stretching across a dry dusty plain, warm amber golden-hour light casting long low shadows, hazy atmospheric depth, intricate brick grid patterns visible on ground level, empty and completely silent, no people, muted earthy warm ochre tones, historical documentary photography style, slight film grain, shallow depth of field on horizon",
+      "source_hint": "ai",
+      "purpose": "Full-frame hero background — the crumbling Indus Valley ruins fill every pixel, letting the image answer the question posed by JUST VANISHED before the viewer finishes reading it"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap\" rel=\"stylesheet\"><style>*{margin:0;padding:0;box-sizing:border-box;}body{width:1280px;height:720px;overflow:hidden;background:#0c0501;}.frame{position:relative;width:1280px;height:720px;overflow:hidden;}.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;filter:sepia(0.38) saturate(0.8) brightness(0.72) contrast(1.1);}.tint{position:absolute;inset:0;background:rgba(175,88,10,0.13);mix-blend-mode:screen;pointer-events:none;}.vignette{position:absolute;inset:0;background:radial-gradient(ellipse 88% 72% at 60% 36%, transparent 20%, rgba(7,3,0,0.74) 100%);pointer-events:none;}.bottom-fade{position:absolute;bottom:0;left:0;right:0;height:440px;background:linear-gradient(to bottom, transparent 0%, rgba(5,2,0,0.9) 100%);pointer-events:none;}.top-fade{position:absolute;top:0;left:0;right:0;height:155px;background:linear-gradient(to bottom, rgba(5,2,0,0.54) 0%, transparent 100%);pointer-events:none;}.hook{position:absolute;bottom:44px;left:58px;}.just{display:block;font-family:'Oswald','Arial Narrow',sans-serif;font-weight:700;font-size:82px;color:#FFFFFF;letter-spacing:0.13em;text-transform:uppercase;line-height:1;text-shadow:0 0 44px rgba(235,165,48,0.40), 0 2px 8px rgba(0,0,0,1);}.vanished{display:block;font-family:'Oswald','Arial Narrow',sans-serif;font-weight:700;font-size:224px;color:#FFFFFF;letter-spacing:0.024em;text-transform:uppercase;line-height:0.92;text-shadow:0 0 90px rgba(235,165,48,0.26), 0 4px 18px rgba(0,0,0,1), 0 0 160px rgba(215,130,22,0.11);}</style></head><body><div class=\"frame\"><img class=\"bg\" src=\"{{IMG:1}}\" alt=\"\"><div class=\"tint\"></div><div class=\"vignette\"></div><div class=\"top-fade\"></div><div class=\"bottom-fade\"></div><div class=\"hook\"><span class=\"just\">JUST</span><span class=\"vanished\">VANISHED</span></div></div></body></html>",
+  "why": "The entire frame is surrendered to the ruins because the image does the narrative work before a single word registers — crumbling brick at scale communicates 'ancient, dead civilization' in 0.05 seconds. The text is split intentionally: JUST sits small and intimate above, VANISHED towers at 224px, architectural and massive, its physical scale rhyming with the ruined city beneath it. A sepia-amber color grade and deep bottom gradient make the treatment feel like a faded archaeological photograph rather than a horror graphic, which keeps the sleep-channel's meditative tone intact while JUST VANISHED delivers the eerie dread. At phone thumbnail size, VANISHED in condensed Oswald bold is the only word that needs to land — the ruins answer what it refers to the instant the eye lands on the image.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "Boring History for Sleep: The Mystery of the Indus Valley Civilization",
+  "niche": "history",
+  "_attempt": 1
+}

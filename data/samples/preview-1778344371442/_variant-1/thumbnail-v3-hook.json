@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "Marcus Aurelius's Meditations were a private journal written entirely for himself — the most powerful man in the ancient world talking to no one but himself — and we were never supposed to read a single word of it.",
+  "likely_image": "A dramatic bust or portrait of Marcus Aurelius in candlelit, shadowy Roman-era lighting — stoic, ancient, powerful.",
+  "candidates": [
+    {
+      "hook": "HIS SECRET",
+      "clarity": 7,
+      "promise": 9,
+      "emotion": 8,
+      "total": 24
+    },
+    {
+      "hook": "FOR HIM ALONE",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 8,
+      "total": 24
+    },
+    {
+      "hook": "NEVER MEANT",
+      "clarity": 6,
+      "promise": 8,
+      "emotion": 7,
+      "total": 21
+    },
+    {
+      "hook": "FORBIDDEN WORDS",
+      "clarity": 6,
+      "promise": 8,
+      "emotion": 8,
+      "total": 22
+    },
+    {
+      "hook": "ONLY FOR HIM",
+      "clarity": 8,
+      "promise": 7,
+      "emotion": 7,
+      "total": 22
+    }
+  ],
+  "winner": "HIS SECRET",
+  "winner_reasoning": "A viewer sees Marcus Aurelius's stoic stone face + 'HIS SECRET' and feels an irresistible pull — the most powerful man in the ancient world had private thoughts he never shared with anyone, and you're about to hear them."
+}

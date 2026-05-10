@@ -13,7 +13,7 @@ let libTotal = 0;
 let activePanel = 'overview';
 let ctrChart = null;
 let viewsChart = null;
-const PANELS = ['overview','channels','queue','analytics','library','settings'];
+const PANELS = ['overview','channels','queue','analytics','library','approval','settings'];
 
 // ─── BOOT ANIMATION ───────────────────────────────────────────────────────────
 const BOOT_LINES = [
@@ -147,6 +147,9 @@ function initWebSocket() {
       addChatMsg('jarvis', `Render complete, sir. Video ID: ${msg.job?.videoId || 'pending'}. Check the queue for the link.`);
       speakText('Render complete, sir.');
     }
+    if (msg.type === 'content_gen_progress') handleContentGenProgress(msg);
+    if (msg.type === 'content_gen_done')     handleContentGenDone(msg);
+    if (msg.type === 'content_reroll_done')  handleContentRerollDone(msg);
   };
 
   ws.onclose  = () => setTimeout(initWebSocket, 3000);
@@ -221,6 +224,7 @@ function loadPanel(name) {
     case 'queue':     loadQueue();      break;
     case 'analytics': loadAnalytics();  break;
     case 'library':   resetLibrary();   break;
+    case 'approval':  loadApprovalQueue(); break;
     case 'settings':  loadSettings();   break;
   }
 }
@@ -716,6 +720,207 @@ async function apiFetch(url, method='GET', body=null) {
 function debounce(fn, ms) {
   let t;
   return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+// ─── CONTENT APPROVAL QUEUE ──────────────────────────────────────────────────
+
+let _approvalSets = [];   // in-memory cache
+let _genRunning   = false;
+
+function handleContentGenProgress(msg) {
+  const el = document.getElementById('gen-status');
+  if (!el) return;
+  el.classList.remove('hidden');
+  el.textContent = msg.msg || 'Generating…';
+}
+
+function handleContentGenDone(msg) {
+  _genRunning = false;
+  const btn = document.getElementById('gen-btn');
+  if (btn) { btn.disabled = false; btn.textContent = '+ GENERATE 5 SETS'; }
+  const el = document.getElementById('gen-status');
+  if (el) { el.textContent = msg.error || 'Generation complete.'; setTimeout(() => el.classList.add('hidden'), 4000); }
+  if (activePanel === 'approval') loadApprovalQueue();
+}
+
+function handleContentRerollDone(msg) {
+  if (activePanel === 'approval') loadApprovalQueue();
+}
+
+async function loadApprovalQueue() {
+  const grid  = document.getElementById('approval-grid');
+  const empty = document.getElementById('approval-empty');
+  if (!grid) return;
+
+  grid.innerHTML = '<div style="color:var(--text-dim);font-size:11px;padding:20px;letter-spacing:1px;">LOADING…</div>';
+
+  try {
+    const sets = await apiFetch('/api/content/queue');
+    _approvalSets = sets;
+
+    if (!sets.length) {
+      grid.innerHTML = '';
+      empty.classList.remove('hidden');
+      return;
+    }
+    empty.classList.add('hidden');
+
+    const pending = sets.filter(s => s.status !== 'approved' && s.status !== 'rejected');
+    const approved = sets.filter(s => s.status === 'approved');
+
+    grid.innerHTML = '';
+    for (const set of [...pending, ...approved]) {
+      grid.appendChild(buildApprovalCard(set));
+    }
+  } catch (err) {
+    grid.innerHTML = `<div style="color:var(--red);font-size:11px;padding:20px">${err.message}</div>`;
+  }
+}
+
+function buildApprovalCard(set) {
+  const card = document.createElement('div');
+  card.className = `approval-card status-${set.status || 'pending'}`;
+  card.dataset.id = set.id;
+
+  const isApproved = set.status === 'approved';
+  const isRejected = set.status === 'rejected';
+
+  const tags = (set.tags || []).slice(0, 8).map(t =>
+    `<span class="ac-tag">${esc(t)}</span>`
+  ).join('');
+
+  const alts = (set.alternatives || []).map(a =>
+    `<div class="ac-alt" title="Click to use as primary" onclick="swapTitle('${set.id}', this)">${esc(a)}</div>`
+  ).join('');
+
+  const statusBadge = isApproved
+    ? '<span class="ac-status-badge approved">APPROVED</span>'
+    : isRejected ? '<span class="ac-status-badge rejected">REJECTED</span>' : '';
+
+  card.innerHTML = `
+    <div class="ac-thumb">
+      <img src="/api/content/thumbnail/${set.id}" alt="thumbnail preview"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="ac-thumb-placeholder" style="display:none">NO PREVIEW</div>
+      <span class="ac-tradition-tag">${esc(set.tradition || 'Philosophy')}</span>
+      ${statusBadge}
+    </div>
+    <div class="ac-body">
+      <div class="ac-topic">◈ ${esc(set.topic || '')}</div>
+      <div class="ac-title" id="act-${set.id}">${esc(set.title || '')}</div>
+      ${set.hook ? `<div class="ac-hook">"${esc(set.hook)}"</div>` : ''}
+      ${alts ? `
+        <div>
+          <button class="ac-alts-toggle" onclick="toggleAlts('${set.id}')">▸ SHOW ALTERNATIVE TITLES</button>
+          <div class="ac-alts" id="acalts-${set.id}">${alts}</div>
+        </div>` : ''}
+      ${set.description ? `<div class="ac-desc">${esc(set.description)}</div>` : ''}
+      ${tags ? `<div class="ac-tags">${tags}</div>` : ''}
+      <textarea class="ac-notes" id="acnotes-${set.id}" placeholder="Notes (optional — used to learn your preferences)…">${esc(set.notes || '')}</textarea>
+    </div>
+    <div class="ac-actions">
+      <button class="btn-approve" ${isApproved ? 'disabled' : ''} onclick="approveSet('${set.id}')">✓ APPROVE</button>
+      <button class="btn-reject"  ${isRejected ? 'disabled' : ''} onclick="rejectSet('${set.id}')">✕ REJECT</button>
+      <button class="btn-reroll"  ${isApproved||isRejected ? 'disabled' : ''} onclick="rerollSet('${set.id}')">↺ RE-ROLL</button>
+    </div>`;
+
+  return card;
+}
+
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function toggleAlts(id) {
+  const el  = document.getElementById(`acalts-${id}`);
+  const btn = el?.previousElementSibling;
+  if (!el) return;
+  el.classList.toggle('open');
+  if (btn) btn.textContent = el.classList.contains('open') ? '▾ HIDE ALTERNATIVES' : '▸ SHOW ALTERNATIVE TITLES';
+}
+
+function swapTitle(id, altEl) {
+  const titleEl = document.getElementById(`act-${id}`);
+  if (!titleEl) return;
+  const old = titleEl.textContent;
+  titleEl.textContent = altEl.textContent;
+  altEl.textContent = old;
+}
+
+async function generateContentSets() {
+  if (_genRunning) return;
+  _genRunning = true;
+  const btn = document.getElementById('gen-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'GENERATING…'; }
+  const el = document.getElementById('gen-status');
+  if (el) { el.classList.remove('hidden'); el.textContent = 'Requesting content generation…'; }
+  try {
+    await apiFetch('/api/content/generate', 'POST', { count: 5 });
+  } catch (err) {
+    if (el) el.textContent = `Error: ${err.message}`;
+    _genRunning = false;
+    if (btn) { btn.disabled = false; btn.textContent = '+ GENERATE 5 SETS'; }
+  }
+}
+
+async function approveSet(id) {
+  const notes = document.getElementById(`acnotes-${id}`)?.value || '';
+  const card  = document.querySelector(`.approval-card[data-id="${id}"]`);
+  if (card) { card.style.opacity = '0.5'; }
+  try {
+    await apiFetch(`/api/content/approve/${id}`, 'POST', { notes, channel: 'sleepless-philosophers' });
+    if (card) {
+      card.className = 'approval-card status-approved';
+      card.style.opacity = '';
+      card.querySelector('.btn-approve').disabled = true;
+      card.querySelector('.btn-reroll').disabled  = true;
+      const badge = card.querySelector('.ac-status-badge,.ac-tradition-tag~*');
+      if (!card.querySelector('.ac-status-badge.approved')) {
+        const img = card.querySelector('.ac-thumb');
+        const b = document.createElement('span');
+        b.className = 'ac-status-badge approved'; b.textContent = 'APPROVED';
+        img.appendChild(b);
+      }
+    }
+  } catch (err) {
+    if (card) card.style.opacity = '';
+    alert(`Approve failed: ${err.message}`);
+  }
+}
+
+async function rejectSet(id) {
+  const notes = document.getElementById(`acnotes-${id}`)?.value || '';
+  const card  = document.querySelector(`.approval-card[data-id="${id}"]`);
+  if (!confirm('Reject and delete this content set?')) return;
+  try {
+    await apiFetch(`/api/content/reject/${id}`, 'POST', { notes });
+    if (card) card.remove();
+    const grid = document.getElementById('approval-grid');
+    if (!grid?.children.length) document.getElementById('approval-empty')?.classList.remove('hidden');
+  } catch (err) {
+    alert(`Reject failed: ${err.message}`);
+  }
+}
+
+async function rerollSet(id) {
+  const card = document.querySelector(`.approval-card[data-id="${id}"]`);
+  if (card) {
+    const thumb = card.querySelector('.ac-thumb');
+    if (thumb) {
+      const loading = document.createElement('div');
+      loading.className = 'ac-thumb-loading'; loading.textContent = 'RE-ROLLING…';
+      thumb.appendChild(loading);
+    }
+    card.querySelectorAll('.btn-approve,.btn-reject,.btn-reroll').forEach(b => b.disabled = true);
+  }
+  try {
+    await apiFetch(`/api/content/reroll/${id}`, 'POST');
+  } catch (err) {
+    if (card) card.querySelectorAll('button').forEach(b => b.disabled = false);
+    alert(`Re-roll failed: ${err.message}`);
+  }
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────

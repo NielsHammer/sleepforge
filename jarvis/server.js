@@ -452,6 +452,166 @@ app.get('/api/analytics/insights', async (_req, res) => {
   }
 });
 
+// ─── CONTENT APPROVAL QUEUE ──────────────────────────────────────────────────
+
+const CONTENT_SETS_DIR  = path.join(ROOT, 'data', 'content-sets');
+const APPROVAL_QUEUE_F  = path.join(ROOT, 'data', 'approval-queue.json');
+const APPROVED_QUEUE_F  = path.join(ROOT, 'data', 'approved-queue.json');
+const FEEDBACK_FILE     = path.join(ROOT, 'data', 'approval-feedback.json');
+
+function readApprovalQueue() {
+  try { return JSON.parse(fs.readFileSync(APPROVAL_QUEUE_F,'utf-8')); } catch { return []; }
+}
+function writeApprovalQueue(items) {
+  fs.mkdirSync(path.dirname(APPROVAL_QUEUE_F), { recursive: true });
+  fs.writeFileSync(APPROVAL_QUEUE_F, JSON.stringify(items, null, 2));
+}
+function readApprovedQueue() {
+  try { return JSON.parse(fs.readFileSync(APPROVED_QUEUE_F,'utf-8')); } catch { return []; }
+}
+function readFeedback() {
+  try { return JSON.parse(fs.readFileSync(FEEDBACK_FILE,'utf-8')); }
+  catch { return { approved: [], rejected: [], notes: [] }; }
+}
+function writeFeedback(fb) {
+  fs.mkdirSync(path.dirname(FEEDBACK_FILE), { recursive: true });
+  fs.writeFileSync(FEEDBACK_FILE, JSON.stringify(fb, null, 2));
+}
+function readContentSet(id) {
+  const p = path.join(CONTENT_SETS_DIR, id, 'content.json');
+  try { return JSON.parse(fs.readFileSync(p,'utf-8')); } catch { return null; }
+}
+
+// GET /api/content/queue
+app.get('/api/content/queue', (req, res) => {
+  const queue = readApprovalQueue();
+  // Enrich with full content.json data
+  const enriched = queue.map(item => {
+    const full = readContentSet(item.id);
+    return full || item;
+  });
+  res.json(enriched);
+});
+
+// GET /api/content/thumbnail/:id — serve thumbnail image
+app.get('/api/content/thumbnail/:id', (req, res) => {
+  const thumbPath = path.join(CONTENT_SETS_DIR, req.params.id, 'thumbnail.png');
+  if (!fs.existsSync(thumbPath)) return res.status(404).end();
+  res.sendFile(thumbPath);
+});
+
+// POST /api/content/generate — spawn generate-content-set.js, stream progress
+app.post('/api/content/generate', (req, res) => {
+  const count = parseInt(req.body?.count) || 5;
+  res.json({ ok: true, msg: `Generating ${count} content sets…` });
+
+  broadcast({ type: 'content_gen_start', count });
+
+  const child = spawn(process.execPath, [
+    path.join(ROOT,'scripts','generate-content-set.js'),
+    '--count', String(count),
+  ], { cwd: ROOT, stdio: ['ignore','pipe','pipe'], env: process.env });
+
+  let buf = '';
+  function parseLine(line) {
+    if (!line.trim()) return;
+    try {
+      const obj = JSON.parse(line);
+      broadcast({ type: 'content_gen_progress', ...obj });
+      if (obj.status === 'done') {
+        broadcast({ type: 'content_gen_done', sets: obj.sets || [] });
+      }
+    } catch {}
+  }
+  child.stdout.on('data', d => { buf += d.toString(); const lines = buf.split('\n'); buf = lines.pop(); lines.forEach(parseLine); });
+  child.stderr.on('data', d => { /* suppress */ });
+  child.on('close', code => {
+    if (code !== 0) broadcast({ type: 'content_gen_done', error: 'Generation script exited with error' });
+  });
+});
+
+// POST /api/content/approve/:id
+app.post('/api/content/approve/:id', (req, res) => {
+  const { id } = req.params;
+  const { notes, channel, scheduledAt } = req.body || {};
+
+  const content = readContentSet(id);
+  if (!content) return res.status(404).json({ error: 'Content set not found' });
+
+  // Move to approved queue
+  const approved = readApprovedQueue();
+  approved.unshift({ ...content, notes: notes || '', channel: channel || 'sleepless-philosophers', scheduledAt: scheduledAt || null, approvedAt: new Date().toISOString() });
+  fs.mkdirSync(path.dirname(APPROVED_QUEUE_F), { recursive: true });
+  fs.writeFileSync(APPROVED_QUEUE_F, JSON.stringify(approved, null, 2));
+
+  // Update content.json status
+  content.status = 'approved';
+  content.notes  = notes || '';
+  fs.writeFileSync(path.join(CONTENT_SETS_DIR, id, 'content.json'), JSON.stringify(content, null, 2));
+
+  // Update approval queue status
+  const queue = readApprovalQueue().map(q => q.id === id ? { ...q, status: 'approved' } : q);
+  writeApprovalQueue(queue);
+
+  // Log to feedback
+  const fb = readFeedback();
+  fb.approved.push({ id, topic: content.topic, title: content.title, tradition: content.tradition, notes: notes || '', approvedAt: new Date().toISOString() });
+  if (notes) fb.notes.push(notes);
+  writeFeedback(fb);
+
+  res.json({ ok: true });
+});
+
+// POST /api/content/reject/:id
+app.post('/api/content/reject/:id', (req, res) => {
+  const { id } = req.params;
+  const { notes } = req.body || {};
+
+  const content = readContentSet(id);
+
+  // Remove from approval queue
+  const queue = readApprovalQueue().filter(q => q.id !== id);
+  writeApprovalQueue(queue);
+
+  // Log to feedback before deleting
+  if (content) {
+    const fb = readFeedback();
+    fb.rejected.push({ id, topic: content.topic, title: content.title, tradition: content.tradition, notes: notes || '', rejectedAt: new Date().toISOString() });
+    if (notes) fb.notes.push(notes);
+    writeFeedback(fb);
+  }
+
+  // Delete content set folder
+  const setDir = path.join(CONTENT_SETS_DIR, id);
+  if (fs.existsSync(setDir)) fs.rmSync(setDir, { recursive: true, force: true });
+
+  res.json({ ok: true });
+});
+
+// POST /api/content/reroll/:id — regenerate this content set in-place
+app.post('/api/content/reroll/:id', (req, res) => {
+  const { id } = req.params;
+  res.json({ ok: true, msg: 'Re-rolling content set…' });
+  broadcast({ type: 'content_reroll_start', id });
+
+  const child = spawn(process.execPath, [
+    path.join(ROOT,'scripts','generate-content-set.js'),
+    '--count', '1', '--replace-id', id,
+  ], { cwd: ROOT, stdio: ['ignore','pipe','pipe'], env: process.env });
+
+  let buf = '';
+  function parseLine(line) {
+    if (!line.trim()) return;
+    try {
+      const obj = JSON.parse(line);
+      if (obj.status === 'done') broadcast({ type: 'content_reroll_done', id, set: obj.sets?.[0] });
+    } catch {}
+  }
+  child.stdout.on('data', d => { buf += d.toString(); const lines = buf.split('\n'); buf = lines.pop(); lines.forEach(parseLine); });
+  child.stderr.on('data', () => {});
+  child.on('close', () => {});
+});
+
 // ─── METRICS BROADCAST ───────────────────────────────────────────────────────
 
 setInterval(async () => {

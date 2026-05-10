@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Ancient Egyptian Dream Temple interior",
+  "subject_is_person": false,
+  "hook_text": "GODS SPOKE HERE",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Ancient Egyptian temple interior at deep night, long colonnade of massive stone columns densely carved with hieroglyphs, warm amber and orange torchlight from wall-mounted torches casting long dramatic shadows across the stone floor, thin veils of incense smoke drifting through the air, polished limestone floor reflecting firelight, far end of hall dissolving into sacred darkness, extreme cinematic depth, rich deep shadows, golden warm firelight, no people, photorealistic render, 16:9 aspect ratio",
+      "source_hint": "ai",
+      "purpose": "Full-bleed hero image — the physical temple space that the hook text inhabits; the warm torchlight justifies the golden text color"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><style>@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&display=swap');*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}body{width:1280px;height:720px;overflow:hidden;background:#040200;position:relative;}.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;display:block;}.vignette{position:absolute;inset:0;background:radial-gradient(ellipse 82% 74% at 50% 35%,transparent 26%,rgba(2,1,0,0.26) 56%,rgba(2,1,0,0.72) 100%);}.bottom-fade{position:absolute;bottom:0;left:0;right:0;height:320px;background:linear-gradient(to bottom,transparent 0%,rgba(4,2,0,0.54) 44%,rgba(4,2,0,0.82) 100%);}.hook{position:absolute;bottom:52px;left:0;right:0;text-align:center;font-family:'Cinzel Decorative','Georgia',serif;font-weight:900;font-size:104px;color:#EDBA48;letter-spacing:0.07em;word-spacing:0.22em;line-height:1;text-shadow:0 0 130px rgba(255,162,28,0.68),0 0 65px rgba(240,145,18,0.52),0 0 22px rgba(200,118,10,0.38),0 3px 5px rgba(0,0,0,1),0 7px 20px rgba(0,0,0,0.92);}</style></head><body><img class=\"bg\" src=\"{{IMG:1}}\" alt=\"\"><div class=\"vignette\"></div><div class=\"bottom-fade\"></div><div class=\"hook\">GODS SPOKE HERE</div></body></html>",
+  "why": "The full-bleed temple image does all the world-building — stone columns, torchlight, hieroglyphs — so the text needs zero supporting context. 'GODS SPOKE HERE' sits at the bottom in Cinzel Decorative at 104px: it's the most legible ancient-authority typeface on Google Fonts, and at this size it forms a solid golden band that survives scaling to 168px thumbnail width. The amber-gold color (#EDBA48) was chosen deliberately to match the torchlight already in the image — the text looks like it was literally lit by the same fire, making the whole composition feel unified rather than layered. The triple-layer text-shadow (wide glow, tight glow, hard black) ensures maximum contrast against any variation in the background image at small render sizes.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "Fall Asleep Inside an Ancient Egyptian Dream Temple — 1-Hour Sleep Story",
+  "niche": "history",
+  "_attempt": 1
+}

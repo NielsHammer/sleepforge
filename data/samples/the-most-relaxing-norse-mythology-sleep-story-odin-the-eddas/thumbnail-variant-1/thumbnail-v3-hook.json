@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "Odin — who sacrificed his eye and hung on Yggdrasil for nine sleepless nights to gain cosmic wisdom — is now the figure whose ancient stories carry modern listeners into sleep, a beautiful paradox at the heart of this video.",
+  "likely_image": "A cloaked, bearded Odin figure against a dark, starlit Norse sky, possibly with ravens or the silhouette of Yggdrasil, rendered in deep blues and golds.",
+  "candidates": [
+    {
+      "hook": "ODIN SLEEPS",
+      "clarity": 8,
+      "promise": 9,
+      "emotion": 9,
+      "total": 26
+    },
+    {
+      "hook": "NINE NIGHTS",
+      "clarity": 7,
+      "promise": 8,
+      "emotion": 7,
+      "total": 22
+    },
+    {
+      "hook": "GODS DREAM",
+      "clarity": 7,
+      "promise": 7,
+      "emotion": 8,
+      "total": 22
+    },
+    {
+      "hook": "STILL SPEAKS",
+      "clarity": 6,
+      "promise": 7,
+      "emotion": 7,
+      "total": 20
+    },
+    {
+      "hook": "WORLDS SLEEP",
+      "clarity": 5,
+      "promise": 6,
+      "emotion": 6,
+      "total": 17
+    }
+  ],
+  "winner": "ODIN SLEEPS",
+  "winner_reasoning": "The god who sacrificed his eye and endured nine sleepless nights for wisdom now puts YOU to sleep — the paradox is instant, emotionally surprising, and combined with the image of Odin, makes a viewer think 'wait… how does that work?' and click."
+}

@@ -1,0 +1,66 @@
+{
+  "candidates": [
+    {
+      "metaphor": "An ancient marble Roman bust's slightly parted lips pressed millimeters from a soft, warm, living human ear — cold stone meeting living flesh, a wisp of impossible breath-fog hanging between them.",
+      "image_prompt": "Extreme macro close-up, ancient white marble Roman bust lips — cracked, textured, cold — positioned just millimeters from a warm living human ear, soft peach skin tones. A thin veil of condensation or breath-mist floats in the gap between stone and flesh as if the marble can still exhale. Single warm amber backlight from the right raking across the marble's surface, catching every crack and chip. Absolute black background. Shallow depth of field f/1.4, the ear sharp, the marble lips sharp, everything else darkness. Color palette: ivory marble, warm amber gold, peach skin, absolute black. Mood: impossible intimacy, 2000-year dread-wonder, a ghost story told tenderly. Cinematic hyper-realism, 8K, no text, no blood, no violence.",
+      "source_hint": "ai",
+      "surprise": 9,
+      "emotional_impact": 9,
+      "specificity": 10,
+      "hook_coherence": 10,
+      "total": 38
+    },
+    {
+      "metaphor": "A Marcus Aurelius marble bust in near-total darkness exhales a slow rolling mist — and within that mist, the faint silhouette of a person sleeping in white bedding is visible, as if the whisper itself carries them to sleep.",
+      "image_prompt": "A Marcus Aurelius marble bust lit from directly below by a single warm amber candle glow, dramatic upward shadows carving his stone face, lips slightly parted. From those lips, a slow rolling white mist breathes outward into the dark — and within the mist, barely discernible, the peaceful outline of a sleeping human figure in white linens. The mist and figure dissolve into absolute black at the frame's edges. Color palette: deep charcoal black, ivory marble, warm amber, luminous white mist. Mood: ancient and tender, the voice as breath, a gentle haunting. Painterly cinematic realism, wide-to-mid composition, 8K, no text.",
+      "source_hint": "ai",
+      "surprise": 9,
+      "emotional_impact": 8,
+      "specificity": 8,
+      "hook_coherence": 9,
+      "total": 34
+    },
+    {
+      "metaphor": "A sleeping person's closed eye and ear, with faint Roman Latin script glowing just beneath the surface of their skin like a watermark — ancient words absorbed invisibly through sleep.",
+      "image_prompt": "Extreme close-up macro shot of a person's closed eye and ear, deeply asleep, soft warm peach skin. Just beneath the skin surface, barely perceptible, the impression of ancient Roman cursive script glows with a very faint warm gold light — as if the words are written inside the flesh, absorbed through dreaming. The text is translucent, ghostly, internal. Absolute black background. Single rim light from above, warm amber. Shallow depth of field f/1.4. Color palette: warm peach skin, faint gold glow, absolute black. Mood: words entering the unconscious mind, ancient and intimate, the body as a vessel for old wisdom. Cinematic, hyper-detailed, 8K, no violence, no text overlay.",
+      "source_hint": "ai",
+      "surprise": 9,
+      "emotional_impact": 8,
+      "specificity": 9,
+      "hook_coherence": 8,
+      "total": 34
+    },
+    {
+      "metaphor": "A person sleeping in crisp white linens, face serene and unaware, with the dramatic shadows of tall Roman columns and stone arches projected impossibly across their body — as if ancient Rome has materialized in their bedroom.",
+      "image_prompt": "Medium close-up of a peaceful sleeping face in crisp white linens, eyes closed, expression utterly calm. Projected across their face, neck, and pillow: the dramatic architectural shadows of Roman columns, arched stonework, and pediment details — as if an entire Roman building is casting its presence from an unseen ancient light source. The shadow edges are sharp and monumental against the soft white fabric. Color palette: deep indigo blue, warm gold shadow lines, ivory white linens. Mood: the ancient haunting the present tenderly, the sleeper sheltered by history they cannot see. Cinematic film photography style, 8K, moody low-key lighting, no text.",
+      "source_hint": "ai",
+      "surprise": 8,
+      "emotional_impact": 8,
+      "specificity": 7,
+      "hook_coherence": 7,
+      "total": 30
+    },
+    {
+      "metaphor": "A single ancient Roman terracotta oil lamp burning on a modern wooden nightstand — the only warm light in the room — beside a soft out-of-focus sleeping face, the flame trembling as if the breath of 2,000 years is still moving through the air.",
+      "image_prompt": "Close-up composition. A small ancient Roman terracotta oil lamp with a live orange flame sits on a contemporary wooden nightstand. The lamp is aged, chipped, unmistakably ancient — deeply out of place. Beside it, gently out of focus, the soft silhouette of a sleeping face in white linens. The lamp is the sole light source: everything beyond its warm amber radius dissolves into deep indigo darkness. The flame flickers, casting tiny dancing shadows on the wood grain. Color palette: deep indigo, warm amber-orange, ivory. Mood: vigil across centuries, something ancient keeping watch, intimate and timeless. Cinematic, f/2.0, 8K, painterly light, no text.",
+      "source_hint": "ai",
+      "surprise": 7,
+      "emotional_impact": 8,
+      "specificity": 8,
+      "hook_coherence": 7,
+      "total": 30
+    }
+  ],
+  "winner_index": 0,
+  "winner_reasoning": "The marble lips pressed to a living ear physically enacts 'STILL WHISPERING' in a single frame — cold ancient stone exhaling impossibly into warm modern flesh collapses 2,000 years of time into one unbearable inch of intimacy, making the hook feel literally true before a single word of text is read.",
+  "winner": {
+    "metaphor": "An ancient marble Roman bust's slightly parted lips pressed millimeters from a soft, warm, living human ear — cold stone meeting living flesh, a wisp of impossible breath-fog hanging between them.",
+    "image_prompt": "Extreme macro close-up, ancient white marble Roman bust lips — cracked, textured, cold — positioned just millimeters from a warm living human ear, soft peach skin tones. A thin veil of condensation or breath-mist floats in the gap between stone and flesh as if the marble can still exhale. Single warm amber backlight from the right raking across the marble's surface, catching every crack and chip. Absolute black background. Shallow depth of field f/1.4, the ear sharp, the marble lips sharp, everything else darkness. Color palette: ivory marble, warm amber gold, peach skin, absolute black. Mood: impossible intimacy, 2000-year dread-wonder, a ghost story told tenderly. Cinematic hyper-realism, 8K, no text, no blood, no violence.",
+    "source_hint": "ai",
+    "surprise": 9,
+    "emotional_impact": 9,
+    "specificity": 10,
+    "hook_coherence": 10,
+    "total": 38
+  }
+}

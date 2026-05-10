@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "Marcus Aurelius wrote these meditations as private notes to quiet his own anxious emperor's mind — and 2,000 years later, those same words are still powerful enough to put a modern listener to sleep.",
+  "likely_image": "A marble bust or portrait of Marcus Aurelius against a deep, dark background — candlelight, stars, or a Roman night sky — evoking ancient calm and solitude.",
+  "candidates": [
+    {
+      "hook": "STILL CALMS",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 9,
+      "total": 25
+    },
+    {
+      "hook": "FINALLY REST",
+      "clarity": 7,
+      "promise": 9,
+      "emotion": 8,
+      "total": 24
+    },
+    {
+      "hook": "STILL SPEAKS",
+      "clarity": 6,
+      "promise": 7,
+      "emotion": 8,
+      "total": 21
+    },
+    {
+      "hook": "LET GO",
+      "clarity": 5,
+      "promise": 7,
+      "emotion": 7,
+      "total": 19
+    },
+    {
+      "hook": "MIND QUIET",
+      "clarity": 7,
+      "promise": 6,
+      "emotion": 6,
+      "total": 19
+    }
+  ],
+  "winner": "STILL CALMS",
+  "winner_reasoning": "'STILL CALMS' works on two levels simultaneously — it means 'continues to calm minds today' (timeless power) AND evokes the word 'still' as in quietness and stillness, so paired with a Marcus Aurelius bust in candlelight, the viewer instantly feels: this 2,000-year-old emperor's private thoughts are still doing something to people right now, and I want that."
+}

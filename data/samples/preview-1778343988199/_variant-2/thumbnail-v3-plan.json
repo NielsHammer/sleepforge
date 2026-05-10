@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Marcus Aurelius",
+  "subject_is_person": true,
+  "hook_text": "Still Calms",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Ultra-macro cinematic close-up, a single closed human eye in deep peaceful sleep, soft warm skin lit gently by a distant off-frame candle creating amber-gold shadows, at the outer corner of the eyelid the skin texture transitions dreamlike and seamlessly into ancient white Carrara marble with fine grey veining — the boundary is gradual and organic not harsh, extremely shallow depth of field, background is pure velvety deep indigo darkness, mood is meditative intimate and profoundly still, painterly realism, the marble veining continues slightly onto the temple, no blood no violence only quiet beauty, 16:9 ratio, fine art photography aesthetic",
+      "source_hint": "ai",
+      "purpose": "Full-frame hero. The peacefully closed eye communicates sleep in 0.05 seconds; the marble veining bleeding in from the outer corner collapses 2,000 years of Stoic thought into a single intimate image — ancient stone touching the modern resting mind."
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><style>@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');*{margin:0;padding:0;box-sizing:border-box;}body{width:1280px;height:720px;overflow:hidden;background:#05031A;position:relative;}.hero{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;}.ov-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 100% 90% at 55% 42%, transparent 12%, rgba(4,2,16,0.42) 58%, rgba(3,1,13,0.82) 100%);}.ov-left{position:absolute;top:0;bottom:0;left:0;width:260px;background:linear-gradient(to right, rgba(5,3,18,0.72), transparent);}.ov-bottom{position:absolute;bottom:0;left:0;right:0;height:360px;background:linear-gradient(to bottom, transparent 0%, rgba(5,3,18,0.58) 28%, rgba(5,3,18,0.91) 62%, #050318 100%);}.ov-top{position:absolute;top:0;left:0;right:0;height:110px;background:linear-gradient(to bottom, rgba(4,2,16,0.52), transparent);}.text{position:absolute;left:58px;bottom:46px;}.attr{font-family:'Cinzel',serif;font-weight:300;font-size:19px;color:rgba(198,164,104,0.88);letter-spacing:0.42em;word-spacing:0.2em;text-transform:uppercase;margin-bottom:12px;}.rule{width:150px;height:1px;background:linear-gradient(90deg, rgba(198,164,104,0.55) 0%, rgba(198,164,104,0.0) 100%);margin-bottom:12px;}.hook{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:128px;color:#FFFFFF;letter-spacing:0.045em;line-height:0.86;text-shadow:0 0 90px rgba(0,0,0,0.55), 0 3px 22px rgba(0,0,0,0.88);}</style></head><body><img class=\"hero\" src=\"{{IMG:1}}\" alt=\"\" /><div class=\"ov-vignette\"></div><div class=\"ov-left\"></div><div class=\"ov-top\"></div><div class=\"ov-bottom\"></div><div class=\"text\"><div class=\"attr\">Marcus Aurelius</div><div class=\"rule\"></div><div class=\"hook\">Still<br>Calms</div></div></body></html>",
+  "why": "The extreme macro close-up of a sleeping eye with marble veining bleeding in from the outer corner is the only image that makes 'Still Calms' a body sensation — viewers feel their own eye closing before a single word registers, which is exactly what this video promises. Cormorant Garamond italic in title case keeps the emotional register meditative and intimate rather than aggressive, matching the sleep-philosophy niche where earned calm converts better than loud caps. The 'Marcus Aurelius' attribution in Cinzel — a typeface literally traced from Roman stone inscriptions — quietly anchors the content to antiquity without competing for hierarchy with the hook. Deep indigo-to-near-black at the base gives the white italic text absolute contrast while the warm amber glow at the eye preserves the candlelit, ancient-night-sky atmosphere the image was generated to carry.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "40 Most Powerful Ideas from Marcus Aurelius to Fall Asleep to",
+  "niche": "philosophy",
+  "_attempt": 1
+}

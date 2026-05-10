@@ -1,0 +1,20 @@
+{
+  "primary_subject": "Marcus Aurelius marble bust",
+  "subject_is_person": false,
+  "hook_text": "STILL WHISPERING",
+  "image_requests": [
+    {
+      "id": 1,
+      "prompt": "Extreme macro close-up, ancient white marble Roman bust lips — cracked, textured, cold — positioned just millimeters from a warm living human ear, soft peach skin tones. A thin veil of condensation or breath-mist floats in the gap between stone and flesh as if the marble can still exhale. Single warm amber backlight from the right raking across the marble's surface, catching every crack and chip. Absolute black background. Shallow depth of field f/1.4, the ear sharp, the marble lips sharp, everything else darkness. Color palette: ivory marble, warm amber gold, peach skin, absolute black. Mood: impossible intimacy, 2000-year dread-wonder, a ghost story told tenderly. Cinematic hyper-realism, 8K, no text, no blood, no violence.",
+      "source_hint": "ai",
+      "purpose": "Full-bleed hero — marble lips pressed millimeters from a living ear physically enacts the hook before a single word is read; the impossible breath-mist between cold stone and warm skin IS the thumbnail's entire argument"
+    }
+  ],
+  "html": "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><style>@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;900&display=swap');*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}html,body{width:1280px;height:720px;overflow:hidden;background:#000;}.canvas{position:relative;width:1280px;height:720px;overflow:hidden;background:#000;}.hero{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;}.vignette{position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 52% 48%, transparent 28%, rgba(0,0,0,0.38) 68%, rgba(0,0,0,0.72) 100%);pointer-events:none;}.bottom-fade{position:absolute;bottom:0;left:0;right:0;height:380px;background:linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.78) 28%, rgba(0,0,0,0.42) 55%, rgba(0,0,0,0.10) 78%, transparent 100%);pointer-events:none;}.hook{position:absolute;bottom:48px;left:66px;line-height:1;}.still{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:82px;color:#C8913A;letter-spacing:0.32em;word-spacing:0.2em;text-transform:uppercase;line-height:1;margin-bottom:2px;}.whispering{display:block;font-family:'Cinzel',serif;font-weight:900;font-size:124px;color:#FFFFFF;letter-spacing:0.055em;word-spacing:0.2em;text-transform:uppercase;line-height:0.88;text-shadow:0 0 70px rgba(0,0,0,1), 0 0 30px rgba(0,0,0,0.95), 0 3px 8px rgba(0,0,0,0.9);}</style></head><body><div class='canvas'><img class='hero' src='{{IMG:1}}' alt='' /><div class='vignette'></div><div class='bottom-fade'></div><div class='hook'><span class='still'>STILL</span><span class='whispering'>WHISPERING</span></div></div></body></html>",
+  "why": "The locked visual metaphor — cold marble lips pressed millimeters from warm living skin — does the entire narrative job before a word is read: it is 'STILL WHISPERING' made literally true in one image, collapsing 2,000 years into a single unbearable inch of intimacy. The hook splits across two lines so both words survive the 168px mobile thumbnail without shrinking below readability: 'STILL' in Cinzel Regular at 82px with wide amber-gold letter-spacing carries the existential weight quietly, referencing the warm amber raking light already in the image; 'WHISPERING' in Cinzel Black at 124px punches white against the dark bottom vignette as the visual payload that stops the scroll. No secondary text, no decorative frame, no badge — the macro image and two words are the entire story.",
+  "_pool_winners_used": 0,
+  "_pool_losers_used": 0,
+  "title": "Fall Asleep to Marcus Aurelius — The ENTIRE Meditations for Sleep",
+  "niche": "philosophy",
+  "_attempt": 1
+}

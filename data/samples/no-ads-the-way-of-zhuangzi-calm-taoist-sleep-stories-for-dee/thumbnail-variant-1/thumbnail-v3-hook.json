@@ -1,0 +1,43 @@
+{
+  "what_is_interesting": "Zhuangzi's most famous paradox — he dreamed he was a butterfly and upon waking could not tell if he was a man who had dreamed of being a butterfly, or a butterfly now dreaming of being a man — makes him the perfect guide to dissolve the boundary between waking and sleep.",
+  "likely_image": "A lone robed figure on a misty mountain path or beneath a gnarled tree, lit by moonlight, in a dark dreamlike ink-wash or atmospheric Asian landscape.",
+  "candidates": [
+    {
+      "hook": "STILL DREAMING",
+      "clarity": 8,
+      "promise": 8,
+      "emotion": 9,
+      "total": 25
+    },
+    {
+      "hook": "WAKE OR DREAM",
+      "clarity": 9,
+      "promise": 7,
+      "emotion": 7,
+      "total": 23
+    },
+    {
+      "hook": "NEVER WOKE",
+      "clarity": 6,
+      "promise": 7,
+      "emotion": 8,
+      "total": 21
+    },
+    {
+      "hook": "DRIFT FOREVER",
+      "clarity": 7,
+      "promise": 8,
+      "emotion": 6,
+      "total": 21
+    },
+    {
+      "hook": "ALREADY GONE",
+      "clarity": 5,
+      "promise": 6,
+      "emotion": 7,
+      "total": 18
+    }
+  ],
+  "winner": "STILL DREAMING",
+  "winner_reasoning": "Against a misty moonlit Taoist figure, 'STILL DREAMING' conjures Zhuangzi's butterfly paradox in present tense — are you already asleep? are you ever truly awake? — making the viewer feel the philosophy before they click, and promising exactly the dissolving drift the video delivers."
+}

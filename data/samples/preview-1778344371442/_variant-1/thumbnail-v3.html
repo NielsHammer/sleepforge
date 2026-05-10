@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+  background: #050403;
+  position: relative;
+}
+
+.bg-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 80% at 66% 47%,
+    #1e0d03 0%,
+    #0c0602 40%,
+    #050403 68%
+  );
+}
+
+.bust-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 860px;
+  height: 720px;
+}
+
+.bust-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  filter: sepia(0.22) contrast(1.12) brightness(0.70) saturate(0.82);
+}
+
+.bust-fade-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    #050403 0%,
+    rgba(5,4,3,0.90) 13%,
+    rgba(5,4,3,0.58) 28%,
+    rgba(5,4,3,0.14) 50%,
+    transparent 68%
+  );
+}
+
+.bust-fade-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 160px;
+  background: linear-gradient(to top, #050403 0%, transparent 100%);
+}
+
+.bust-fade-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, #050403 0%, transparent 100%);
+}
+
+.candle-bloom {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 860px;
+  height: 720px;
+  background: radial-gradient(
+    ellipse 48% 52% at 42% 34%,
+    rgba(255,168,55,0.07) 0%,
+    transparent 58%
+  );
+  pointer-events: none;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 63% 44%,
+    transparent 18%,
+    rgba(0,0,0,0.54) 100%
+  );
+  pointer-events: none;
+}
+
+.text-block {
+  position: absolute;
+  left: 68px;
+  top: 50%;
+  transform: translateY(-52%);
+  white-space: nowrap;
+}
+
+.text-his {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+  font-size: 80px;
+  letter-spacing: 0.46em;
+  color: #C4A028;
+  line-height: 1;
+  text-shadow:
+    0 2px 14px rgba(0,0,0,0.97),
+    0 0 36px rgba(0,0,0,0.65);
+}
+
+.divider {
+  display: block;
+  height: 1px;
+  width: 596px;
+  background: linear-gradient(
+    to right,
+    rgba(196,160,40,0.62),
+    rgba(196,160,40,0.07)
+  );
+  margin: 20px 0 21px 1px;
+}
+
+.text-secret {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 158px;
+  letter-spacing: 0.04em;
+  color: #C4A028;
+  line-height: 0.84;
+  text-shadow:
+    0 0 65px rgba(196,160,40,0.08),
+    0 4px 22px rgba(0,0,0,0.98),
+    0 0 90px rgba(0,0,0,0.55);
+}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="bust-container">
+  <img src="file:///C:/dev/sleepforge/data/samples/preview-1778344371442/_variant-1/img-1.png" alt="Marcus Aurelius marble bust">
+  <div class="bust-fade-left"></div>
+  <div class="bust-fade-bottom"></div>
+  <div class="bust-fade-top"></div>
+</div>
+
+<div class="candle-bloom"></div>
+<div class="vignette"></div>
+
+<div class="text-block">
+  <span class="text-his">HIS</span>
+  <span class="divider"></span>
+  <span class="text-secret">SECRET</span>
+</div>
+
+</body>
+</html>

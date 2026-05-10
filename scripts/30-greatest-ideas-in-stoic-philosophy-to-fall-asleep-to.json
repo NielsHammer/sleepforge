@@ -1,0 +1,674 @@
+[
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Beginning Meditations in his tent on the Danube frontier",
+    "action": "Dipping a stylus into ink above wax tablets",
+    "setting": "A Roman military tent at the edge of the Danube frontier, fire in brazier dying to coals",
+    "narration": "The fire in the brazier is dying to coals. Marcus Aurelius sits alone in his tent, far from Rome, far from the empire's demands. He's been awake all night, thinking. Now, as dawn breaks over the frozen river, he reaches for his tablet and stylus. He begins to write—not for others, but for himself. These thoughts, this practice, it's how he'll survive."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching the dichotomy of control to enslaved students",
+    "action": "Kneeling beside a young enslaved student, meeting their eyes",
+    "setting": "A simple schoolroom at Nicopolis with worn stone benches",
+    "narration": "Epictetus kneels beside a young enslaved student. His own leg is scarred from his master's cruelty. 'You are not enslaved by these chains,' he says quietly. 'Freedom isn't about your circumstances. It's about your will. Your judgments, your choices, your desires—no one owns these. That's where your freedom lives. That's what no one can take.'"
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Writing to Lucilius about suffering in imagination",
+    "action": "Pressing his finger near a glowing oil lamp flame",
+    "setting": "A stone study overlooking the Mediterranean, one oil lamp burning",
+    "narration": "Seneca sits by his lamp, quill in hand. He tests his finger near the flame—not into it, just close. The heat is small. He withdraws. 'We suffer more in imagination than in reality,' he writes to Lucilius. Most pain we fear never comes. We create it with our minds, suffering twice—once in our thoughts, once in dread.'"
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Standing unmoved while generals bring news of military defeat",
+    "action": "Closing his eyes slowly, then opening them unchanged",
+    "setting": "The war tent with maps of territories on wooden tables",
+    "narration": "The general's voice rises with urgency in the dim tent. The northern border has been attacked. Many soldiers are lost. Marcus closes his eyes slowly. When he opens them, his face is unchanged, calm as still water. 'I cannot control whether this happened,' he says softly. 'I can only control my response. That choice is always mine.'"
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Breaking down the dichotomy of control in the dust",
+    "action": "Drawing a line in the dust with his foot",
+    "setting": "Outside his school at Nicopolis, the ground bare and sandy",
+    "narration": "Epictetus draws a line in the dust with his sandal. 'On this side,' he says, 'what's within your control—your judgments, desires, choices, effort. On that side, everything else. Your body. Your reputation. Health. Wealth. All outside your power. Stop fighting the boundary. Work only where you have power. There you'll find freedom.'"
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Watching a ship disappear over the horizon, metaphor for life",
+    "action": "Extending his arm toward the disappearing vessel as if to grasp it",
+    "setting": "A cliff overlooking the Mediterranean at dusk, vast water below",
+    "narration": "Seneca stands at the cliff's edge, watching a merchant ship disappear beyond the horizon. He extends his arm as if he could grasp it back. 'Time is like that ship,' he whispers. 'It moves beyond our reach every moment. We waste what we cannot get back. We squander our most precious possession on things that do not matter.'"
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Reflecting that all things are impermanent, even emperors return to dust",
+    "action": "Watching clouds move and dissolve across the sky",
+    "setting": "The roof of the palace at dawn, endless sky above",
+    "narration": "Marcus watches clouds drift and dissolve into nothing. The Danube flows. The sun rises and sets. Everything changes constantly. And what we call real—our judgments about what happens—these are the only things within our control. 'The universe transforms,' he writes. 'My body transforms. But my faculty of choice remains. That's my kingdom.'"
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Sitting calmly while a violent storm rages outside",
+    "action": "Sitting upright with hands folded on his lap, breathing steady",
+    "setting": "His school during a storm, walls trembling, students cowering",
+    "narration": "Thunder shakes the walls. Students cower. Epictetus sits perfectly still, his hands folded, his breath steady. When the storm passes, a student asks, 'Were you not afraid?' Epictetus smiles. 'The storm does not disturb me. Your fear of the storm does. But fear itself is a choice. I chose something different.'"
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Explaining that anger is temporary madness to a grieving student",
+    "action": "Spreading his hands open, as if releasing something held tight",
+    "setting": "A marble courtyard, afternoon light falling in columns",
+    "narration": "Anger is temporary madness, Seneca says, spreading his hands. A student brings news of betrayal, expecting rage. Instead, Seneca's face remains serene. 'When you're angry, you're not yourself. You've surrendered your reason to something wild. Master your anger as you'd master a wild horse. Let it pass. Don't ride it. Your peace is more precious.'"
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Retreating to his inner fortress of mind during the sounds of war",
+    "action": "Placing both hands over his heart while chaos surrounds him",
+    "setting": "The noise of battle raging nearby, dust and shouts all around",
+    "narration": "The sounds of war surround him—swords, shouts, the crash of shields. But Marcus places his hands over his heart and closes his eyes. Inside, in the fortress of his mind, all is quiet. 'You cannot control the chaos around you,' he reminds himself. 'But the citadel within—that remains yours. Always.'"
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Comparing life to a banquet where you accept what is offered",
+    "action": "Reaching out his palm as if accepting bread from a servant",
+    "setting": "A humble dining room with terracotta dishes and worn benches",
+    "narration": "Epictetus places his palm out as if accepting bread from a servant. 'Life is a banquet,' he says. 'The host passes things to you. Some you like. Some you don't. But you don't complain to the host. You accept what's offered. If you want to keep eating, you eat what comes. That's freedom—accepting what you cannot choose.'"
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Writing to a grieving friend that all things are borrowed from time",
+    "action": "Dipping his quill into ink and writing slowly, deliberately",
+    "setting": "His study, scrolls and wax tablets scattered about, evening light",
+    "narration": "Seneca writes to a grieving friend, his quill moving across parchment. 'Everything is borrowed,' he writes. 'Your child was never yours to keep. You borrowed her from the universe for a time. Now she's returned. Don't rage against time's nature. That's like asking the river not to flow. Death is the price of life. Accept it.'"
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Walking the Roman forum before dawn, practicing duty and discipline",
+    "action": "Placing one foot in front of the other with steady purpose",
+    "setting": "The empty forum, marble columns dark against the sky",
+    "narration": "Marcus walks the forum before the city wakes, his footsteps echoing off marble. Duty. Discipline. These aren't burdens to him—they're the way forward. Every moment offers a choice to act with virtue or without it. He's chosen. Each step is his answer. 'This is what I'm here for,' he whispers. 'To do what's right.'"
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Walking through his school, insisting philosophy is daily practice, not theory",
+    "action": "Walking slowly through the school, gesturing to his students",
+    "setting": "The simple school at Nicopolis, worn wooden benches, students listening",
+    "narration": "Epictetus walks through his school, gesturing to his students. 'Philosophy is not learned from books,' he says. 'It's lived. Every moment is practice. You argue with someone—practice patience. You fail—practice acceptance. You fear something—practice courage. Don't study virtue in theory. Go out and practice it. That's how you become free.'"
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Living in deliberate poverty to test whether he needs luxury",
+    "action": "Removing his fine purple tunic and putting on rough cloth",
+    "setting": "His modest room, luxury items set aside, simple things remaining",
+    "narration": "Seneca removes his fine purple tunic and puts on rough cloth instead. His servants watch in confusion. 'I do this to test whether I truly need luxury or if I'm enslaved to it,' he explains. 'If I can live simply and remain calm, then I know—it's not the silk that makes me happy. It's my character.'"
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Sprinkling earth over a soldier's body at a frontier cemetery",
+    "action": "Sprinkling earth over the wrapped body with deliberate care",
+    "setting": "A military cemetery on the frontier, wind moving through trees",
+    "narration": "Marcus sprinkles earth over a soldier's wrapped body. The man who stood beside him yesterday is now dust returning to dust. Emperor and soldier—the same end awaits us all. This isn't tragic. It's the nature of all things. 'Your time will come too,' Marcus reminds himself. 'Use what you have now. Accept what you cannot change.'"
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching that hardship builds character and inner strength",
+    "action": "Pressing his hand to his chest firmly, with conviction",
+    "setting": "His school, students gathered in a circle around him",
+    "narration": "Epictetus presses his hand to his chest. 'When you face hardship, don't wish it away,' he says. 'That's where you strengthen yourself. Hardship is the weight that builds the muscle of your character. Without it, you'd be soft. Your struggle is your opportunity. Thank it. Learn from it. It makes you who you need to become.'"
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Watching the tides at the shore, learning to accept change",
+    "action": "Stepping back and forth with the rhythm of the waves",
+    "setting": "A rocky Mediterranean shore, waves crashing and retreating",
+    "narration": "Seneca stands at the shore, stepping back as waves advance, stepping forward as they retreat. The rhythm is endless and unchanging in its change. 'This is how to live,' he says aloud. 'Accept the rhythm of life. Advance. Retreat. Loss. Gain. Don't cling to any moment. Move with what comes. The wave that rises will fall.'"
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Recognizing that thoughts shape the world, not external events",
+    "action": "Touching his forehead gently with one finger, thoughtfully",
+    "setting": "Alone in his tent at nighttime, a single oil lamp burning",
+    "narration": "Marcus touches his forehead. 'This is where the battle is,' he writes. 'Not on the battlefield outside. In here. My thoughts create my suffering or my peace. A slanderous remark doesn't hurt me—only my thought about it does. Master your mind, and you master everything. That's the kingdom no one can take from you.'"
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Releasing his students into the world, having taught them freedom",
+    "action": "Releasing his hands open to the sides, as if setting something free",
+    "setting": "The school at sunset, the walls turning golden, day's end",
+    "narration": "The sun sets on Epictetus's school. His hands open, releasing his students into the world. 'You came here enslaved in spirit,' he says quietly. 'Go now knowing you're free. Not because your master released you, but because you've learned to choose. Your freedom was always here. I've only helped you see it. Now live it. Go.'"
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Counting days remaining, approaching death with acceptance and peace",
+    "action": "Making marks on a wax tablet with deliberate slowness",
+    "setting": "His final home in quiet afternoon light, life winding down",
+    "narration": "Seneca makes marks on his tablet, counting. Not days of pleasure to come, but days spent. Time is the thing we most take for granted, yet it's the only thing we truly possess. He's lived well. Now he accepts what comes. 'Every day I've had is a gift I've already received,' he says. 'I ask for nothing more.'"
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Letting sand drift through his fingers by the river at dawn",
+    "action": "Scooping sand into his palm and letting it drift through his fingers",
+    "setting": "The banks of the Danube at dawn, morning mist rising slowly",
+    "narration": "Marcus Aurelius stands by the river at dawn, the world still quiet. He scoops sand into his palm and lets it drift through his fingers. Emperor. Slave. Philosopher. Beggar. All the same sand, all returning to dust. To accept this is to be free. 'Everything flows like a river,' he thinks. 'Nothing remains. Even I will become dust.'"
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Placing his hand on a student's shoulder, giving final blessing",
+    "action": "Placing a weathered hand on a student's shoulder with gentle weight",
+    "setting": "The doorway of his school, student preparing to leave",
+    "narration": "Epictetus places his hand on a student's shoulder. 'Remember,' he says, 'freedom is not something outside you waiting to be found. It's inside you, waiting to be chosen. Every moment you choose your judgment, you choose your freedom. That's all the philosophy you need. The rest is just remembering this truth.'"
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Night falls, all voices silent, all ideas settling into peace",
+    "action": "Lying down to rest, hand placed gently over his heart",
+    "setting": "The Roman frontier at night, stars appearing in the darkness",
+    "narration": "The day ends. The philosophers rest. Their thoughts—about control, duty, freedom, acceptance, time—these settle into you like dust falling in still air. You've heard their voices. Now let them fade. Everything changes. Everything passes. And in accepting this, in choosing what you can choose, you're free. Sleep now. You're safe. The world is turning, and you are held."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Writing Meditations alone in a campaign tent",
+    "action": "Dipping his stylus in ink over a wax tablet, hand steady and deliberate",
+    "setting": "Campaign tent on the frontier, canvas walls, the night beyond",
+    "narration": "The tent is quiet. Marcus holds his stylus over the wax, moving slowly. There are no witnesses here, no one waiting for his words. The night is vast around him.\n\nHe writes what he already knows. Each time, the words settle something in him. Each time, they make it real again. This is the practice. This is what he does, over and over, in the darkness and alone."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching students in his school at Nicopolis",
+    "action": "Leaning slightly forward on a stone bench, speaking directly to a student's eyes",
+    "setting": "A simple room in Nicopolis with stone benches, tiled floor, walls plain and bare",
+    "narration": "A student sits across from Epictetus. The young man looks troubled. Epictetus leans forward slightly.\n\nYour master may chain your body, he says quietly, but he cannot touch what is within. The inner fortress remains your own, always. This is where true freedom lives—not in your circumstances, but in what you choose to think about them."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Writing letters to Lucilius by candlelight",
+    "action": "Holding a stylus over wax tablets, writing steadily and with purpose",
+    "setting": "His study in Rome, late evening, marble shelves along the walls, scrolls arranged carefully",
+    "narration": "Seneca writes to his friend Lucilius. The room is quiet. A candle casts shadows as his hand moves across the wax.\n\nHe's not writing philosophy for the world. He's writing truth to a friend, and that makes all the difference. Time is precious, Lucilius. Don't waste it on what doesn't matter. This is what his letters say, over and over."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Standing unmoved while generals deliver terrible news",
+    "action": "Standing still while a general speaks, his face unchanged, his body at rest",
+    "setting": "A war tent with wooden table and maps, torches flickering in holders along the walls",
+    "narration": "A general enters with terrible news. The army has suffered great losses. Many soldiers are dead. Marcus stands. He listens.\n\nHis face does not change. His body does not tense. The news is bad, yes. But it is what it is. What is in his control? His response. His composure. His choice to accept what he cannot change."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Explaining that a slave can be freer than his master",
+    "action": "Holding his hands together, then slowly spreading them apart as if opening a door",
+    "setting": "Stone benches in the school, afternoon light streaming through an opening, dust dancing in the rays",
+    "narration": "You believe the slave is not free, Epictetus tells a student. But consider. The master may own the slave's body. Does he own his thoughts? His judgments? His will?\n\nNo. The slave's mind is a kingdom the master cannot enter. Meanwhile, the master may be enslaved to his own desires, his anger, his endless wanting. Who is truly free?"
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Standing calm before Nero's death sentence",
+    "action": "Standing before the emperor, hands at his sides, meeting his gaze without fear",
+    "setting": "The palace in Rome, marble columns rising overhead, the emperor's throne elevated above on a dais",
+    "narration": "Seneca stands before Nero. The emperor has decided. Death.\n\nSeneca's face is calm. His hands are steady. He's known this might come. He chose his principles over safety long ago. Now the choice is made for him. But his acceptance? That is still his own. Nero can take his life. Seneca will not give him his composure, his dignity, his inner peace."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Reminding himself that even emperors return to dust",
+    "action": "Touching a marble column with his palm, fingers tracing the grooves worn by time",
+    "setting": "The Roman forum in early morning, marble columns stretching into shadow, stone paths worn smooth by countless feet",
+    "narration": "Marcus walks through the forum in the morning. The stone is cool beneath his feet. He touches a marble column. It is solid, eternal-seeming.\n\nYet even this will crumble. Everything will. He will die. Emperors before him became dust. Emperors after him will become dust. If death takes everything, then nothing truly matters except how you treat people and how you act with virtue."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Calmly enduring his master breaking his leg",
+    "action": "Lying still on a mat, his leg bent at an unnatural angle, his face serene and undisturbed",
+    "setting": "A simple room with stone walls, a single straw mat for sleeping, shadows in the corners",
+    "narration": "His master twists his leg in anger. The bone breaks. Epictetus does not cry out.\n\nIf you expect that your leg might break, and you've already decided that breaking is not a tragedy, then what power does the breaking have? Epictetus lies still. His body breaks. His will remains intact. The master has bent his body but not his spirit. And the spirit is all that matters."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Explaining that anger is temporary madness",
+    "action": "Holding up one hand slowly, palm forward, voice level and measured as he speaks",
+    "setting": "His home, sitting on a simple wooden bench, a younger man listening across from him, courtyard beyond",
+    "narration": "Anger, Seneca tells a younger man, is a brief form of madness. When you're angry, you're not yourself. You're possessed. You do and say things you'll regret.\n\nSo when anger rises in you, pause. That moment of pause is everything. In that breath, you're choosing reason over madness. You're choosing who you want to be. This is where your freedom lies."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Watching the Danube river at dawn from the frontier",
+    "action": "Standing at the riverbank, arms hanging loosely at his sides, watching the water flow",
+    "setting": "The Danube frontier at dawn, the river wide and cold, stone fortress walls in the distance, mountains beyond",
+    "narration": "Marcus stands at the Danube at dawn. The river flows. It has flowed since before he was born. It will flow after he dies.\n\nEverything flows. Everything changes. The river does not grieve that it will become a sea, then vapor, then rain again. It simply moves. Marcus watches. He understands. To accept change is to accept peace."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Breaking down the dichotomy of control for the first time",
+    "action": "Extending both hands forward, palms up, as if weighing two invisible things before his students",
+    "setting": "The school, late afternoon, students sitting very still on stone benches, the air growing cool",
+    "narration": "Here, Epictetus says, holding out both hands. Things you control. Your desire. Your aversion. Your judgment. Your will.\n\nAnd here, he turns one palm down, things you do not control. Your body. Your property. Your reputation. You suffer because you want to control the second list. Stop. Attend only to the first. Do this, and nothing can disturb you."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Watching a ship disappear over the horizon—metaphor for life",
+    "action": "Watching from the shore as a vessel sails away, eyes fixed on the horizon until it vanishes",
+    "setting": "The coast, sand and stone, the sea stretching out, a merchant ship under sail moving away",
+    "narration": "Seneca stands on the shore. A merchant ship sails away. It grows smaller and smaller until it disappears beyond the horizon.\n\nPeople think the ship is gone. But it still exists. It's only beyond their seeing. So too with death. We disappear from the sight of others. We cease to suffer. We return to the place we came from before birth."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Choosing mercy for a defeated enemy against advisors' wishes",
+    "action": "Raising one hand in a stopping gesture to a general who is speaking urgently",
+    "setting": "The war tent, generals gathered around a wooden table with maps, a kneeling prisoner before the emperor",
+    "narration": "A general urges Marcus to execute a defeated enemy. The tent is quiet. Marcus raises his hand.\n\nNo. He sees a man like himself, subject to the same forces, the same fate. Mercy costs nothing he needs to keep. The defeated general leaves with his life. Later, some advisors question this. But Marcus knows—cruelty creates enemies. Mercy creates the possibility of peace."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Telling a student that suffering is a choice of perception",
+    "action": "Leaning back slightly, letting a student's words settle into a long, patient silence",
+    "setting": "The school, one student and the teacher alone, the sun moving lower, shadows lengthening on the stone floor",
+    "narration": "A student tells Epictetus he suffers from poverty. Epictetus waits. The silence is long and full.\n\nYou suffer from poverty? Or do you suffer from your judgment that poverty is shameful? He lets this question sit. The suffering is not in the poverty itself. It's in the story you tell yourself. Change the story. The circumstance remains, but the suffering vanishes."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Choosing exile over compromising his principles",
+    "action": "Walking away from the center of Rome, his back to the city, moving steadily toward the harbor",
+    "setting": "The streets of Rome, the Forum behind him receding, the road leading to the sea and the ships",
+    "narration": "Seneca could remain in Rome. The price is small—just agree with Nero sometimes. Just nod.\n\nBut a life without principle is already dead. So Seneca walks toward exile. His possessions left behind. His position gone. His conscience intact. He chooses the hard thing because it's the right thing. The world thinks him foolish. But he sleeps peacefully."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Reflecting that the universe is change and life is opinion",
+    "action": "Turning a small stone over in his palm again and again, watching it with quiet attention",
+    "setting": "A garden in Rome, herbs growing in earthenware vessels, stone paths, the evening cool on his skin",
+    "narration": "Marcus turns a stone over in his hand. The stone seems solid. Fixed. Real.\n\nYet even this will crumble. Everything flows. Everything changes. What is called a tragedy? That's just an opinion. The event itself is neutral. Your judgment makes it suffering or not. Master the judgment, and you've mastered the universe. Everything else is dust already."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Comparing life to a banquet where you take what is offered",
+    "action": "Gesturing as if taking a plate at a table, then gently passing over another with his hand",
+    "setting": "The school, students gathered for a simple meal, bread and olives on wooden platters, stone benches",
+    "narration": "Life is like a banquet, Epictetus tells them. The master brings certain dishes. You take what's offered. When it comes to you, you take it. When it passes, you let it go.\n\nYou don't scream for fish instead of bread. You don't cling to the wine cup after it's removed. The universe is the master. Whatever comes, you accept. Whatever leaves, you release."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Reminding a grieving friend that all things are borrowed",
+    "action": "Placing one hand briefly on the friend's shoulder, then stepping back with quiet presence",
+    "setting": "A garden, two friends standing near a marble bench, shadows lengthening in the late afternoon",
+    "narration": "A friend grieves. Seneca stands with him.\n\nYour child is gone. But did you ever own her? You borrowed her from the universe for a time. The universe has taken back what was always its own. Your grief is love, and that's good. But don't rage against the natural law. Everything comes from the earth. Everything returns to it. Your child is not lost. She's returned."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Walking the Roman forum before the city wakes",
+    "action": "Walking slowly, placing one foot in front of the other, hands clasped loosely behind his back",
+    "setting": "The forum before dawn, columns casting long shadows, the stones worn smooth by countless feet over centuries",
+    "narration": "Marcus walks the forum before anyone else wakes. The stone is cool beneath his feet. He passes columns worn by generations.\n\nHow many people have walked this path? How many are gone now? How many more will come after him? He walks, and he is part of this flow. Not separate from it. Not greater than it. Just another man, awake briefly, then gone."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Explaining that philosophy is not theory but daily practice",
+    "action": "Holding up a scroll, then setting it down gently, gesturing as if to dismiss it with kindness",
+    "setting": "The school, students sitting on stone benches, the afternoon quiet, light beginning to fade",
+    "narration": "You read the books, Epictetus tells them, holding up a scroll. You memorize the arguments. But philosophy is not these words.\n\nIt's what you do when anger rises. It's how you breathe when pain comes. It's the choices you make when no one is watching. You practice virtue the way you practice the lyre—every single day. Slowly, it becomes part of you."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Describing how most people waste their lives on things that do not matter",
+    "action": "Sweeping one arm across as if to dismiss a vast crowd, then letting it fall slowly to his side",
+    "setting": "His study overlooking the city from a marble portico, Rome spread out below, people moving in the streets",
+    "narration": "People below, Seneca thinks, looking down. They rush. They gather. They fight for things that don't matter.\n\nPosition. Status. Money they can't take with them. They're so busy being busy that they forget they're going to die. Life is short, astonishingly short, and most of it is wasted on things that turn to dust. How many will realize this only when it's too late?"
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Accepting the plague that ravaged his legions without complaint",
+    "action": "Sitting in his tent, hands resting on his knees, his face at peace despite the news arriving",
+    "setting": "The frontier, an epidemic spreading through the camps, soldiers dying, the tent quiet and dimly lit",
+    "narration": "The plague has come. Thousands of his soldiers are dead. Many more will die.\n\nMarcus sits. He accepts this. Not with resignation—with understanding. The universe contains illness and death. He didn't create these. He can't control them. What he controls is whether he'll rage against them uselessly or accept and move forward with wisdom. Anger changes nothing. Acceptance brings strength."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Sitting quietly while a storm rages outside his window",
+    "action": "Sitting on his bench, hands folded loosely in his lap, completely still, listening",
+    "setting": "His school, the opening to the outside dark and loud with wind, rain and thunder outside the walls",
+    "narration": "A storm rages outside. Wind shakes the school. Thunder cracks so loudly it seems to split the world. Students are frightened.\n\nEpictetus sits still. His hands are folded. His breath is steady. He listens to the storm without fear. Nature is doing what nature does. If you don't take it personally, if you don't fight it inside your mind, it can't hurt you. Sit with it. Let it pass."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "His final bath—opening his veins with philosophical composure",
+    "action": "Leaning back in warm water, eyes closed peacefully, breathing slowly and deeply",
+    "setting": "His bath chamber, the water warm and still, the light softening as the day ends",
+    "narration": "Seneca's time has come. Nero has ordered it. He takes a warm bath. He closes his eyes.\n\nHis life is ending. But what he's lived—what he's written, how he's treated people, the principles he's stood for—this remains. Death is not a failure. It's the natural end to a life well-lived. He breathes deeply. He lets go. He becomes part of the earth again, where all things return."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Writing Meditations in a campaign tent at the frontier",
+    "action": "Dipping a stylus into dark ink, holding it above a wax tablet",
+    "setting": "A simple tent on the Danube frontier, a stone hearth growing cool",
+    "narration": "Marcus Aurelius dips his stylus into ink. His fingers are worn from duty. In this tent far from Rome, he writes for himself, not for an audience. The wax tablet waits. He knows he cannot control the war outside or the illness spreading through his legions. He can only control his own thinking. His own judgment about what happens. That is the beginning of peace."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching the dichotomy of control to his students",
+    "action": "Opening both palms outward toward a circle of students",
+    "setting": "A simple school at Nicopolis, afternoon light slanting across marble",
+    "narration": "Epictetus opens his hands to his students. Look here, he might say. Within your power: your judgment, your desire, your will. Outside: your body, your possessions, your reputation, your health. Most suffer because they try to control the uncontrollable. They chase what they cannot hold. He asks them to separate these truths. Inside the line, freedom. Outside, acceptance. That's where all peace begins."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Writing letters to Lucilius about suffering and imagination",
+    "action": "Holding a rolled papyrus scroll, fingers tracing its edge thoughtfully",
+    "setting": "A study with wooden shelves, starlight visible through a window",
+    "narration": "Seneca holds a scroll he has written to Lucilius, a younger friend far away. He writes letters as others speak to themselves. On the page, he asks: do you suffer more in imagination than reality? The mind creates futures that never arrive. Only this breath exists now. When you breathe, you're not suffering tomorrow's pain. You're breathing. You're alive. That's where you are."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Watching the Danube river at dawn, reflecting on impermanence",
+    "action": "Standing still at the river's edge, watching water flow eastward",
+    "setting": "The Danube frontier at dawn, mist rising from dark water, a wooden garrison wall behind",
+    "narration": "The Danube flows. It has flowed for countless generations before Marcus was born and will flow long after he returns to earth. He watches without turning away. This is how he sees everything now—as part of a river of change. Empires rise and fall. People are born and die. He is the emperor of Rome, but the river doesn't know his name. That knowledge is restful."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Breaking down the dichotomy of control for his students",
+    "action": "Drawing a line in the dust of the courtyard with a wooden stick",
+    "setting": "The school at Nicopolis, afternoon shadows lengthening across stone",
+    "narration": "Epictetus marks a line in the dust. On this side, the things that are yours alone. Your intentions. Your preferences. On the other side, everything else. Your position, wealth, reputation. All outside the line. You cannot own any of it. Your body will fail. But inside this line, no one can touch your will. That's freedom. Not the absence of chains, but refusing to be enslaved by desires."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Explaining how we suffer more in imagination than in reality",
+    "action": "Pressing one hand to his forehead, breathing deeply and slowly",
+    "setting": "A room overlooking the Forum, columns casting shadows at sunset",
+    "narration": "Seneca presses his fingers to his forehead. You torture yourself more with worry than affliction. The body suffers only what is happening now. But the mind anticipates. It rehearses disasters. It relives failures. It imagines tomorrow's pain as though it's already here. Stop, he might say. Stop adding suffering to suffering. The real hardship hasn't come yet. And if it does, you'll meet it when it arrives, not now."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Contemplating mortality and his ultimate insignificance",
+    "action": "Holding a stone from the road gently in both palms",
+    "setting": "The forum before dawn, empty marble columns standing silent",
+    "narration": "Marcus holds a stone. It felt warm from yesterday's sun. Emperors before him walked this forum and died. Their names are nearly forgotten. The stone will outlast him. Rome will outlast him. And this is meant to free him. If you matter so little to the cosmos, why carry the weight of what others think? Your reputation will dust away. Your worry will dust away. The stone remains."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Using the banquet metaphor to teach acceptance",
+    "action": "Reaching toward bread and olives on a simple wooden table",
+    "setting": "The school dining area, oil lamps casting soft shadows",
+    "narration": "Epictetus reaches for bread. At life's banquet, he teaches, you don't choose everything on the table. Some dishes pass you by. Others arrive unwanted. The question isn't whether the menu pleases you, but whether you'll accept with grace. Take the bread. Don't demand the fish. If wine doesn't come, don't mourn it. This acceptance is practice. A discipline. And in that discipline lives a freedom no banquet can touch."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Explaining that anger is temporary madness",
+    "action": "Releasing a clenched fist, palm opening outward",
+    "setting": "A stone courtyard, late afternoon, a fountain nearby running silent",
+    "narration": "Seneca was prone to anger. Anger is temporary madness, he wrote. It makes no sense. You rage at what you cannot change. The injury, the delay, the rudeness—none are improved by fury. The anger burns you, not the thing that angered you. So he teaches: pause. Breathe. Whatever triggered you will seem smaller in an hour. And you'll be intact, not scorched by your own fire."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Observing that the universe is constant change",
+    "action": "Watching clouds drift across an open sky, his eyes tracking their motion",
+    "setting": "The rooftop of his residence in Rome, a marble parapet at its edge",
+    "narration": "From the rooftop, Marcus watches clouds. Each one shifts. Some dissolve. Others darken. Still others scatter. Nothing holds its shape. The universe is in constant change. Matter rearranges. Empires crumble. People die. Your body ages. Your mind changes. To demand that anything stay the same is to suffer needlessly. This very moment will become the past. You cannot hold it. That's the point. Let go. Accept the river."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching that a slave can be freer than his master",
+    "action": "Standing upright with shoulders back, face serene despite chains around his ankles",
+    "setting": "A simple cell, stone walls undecorated, a single narrow window",
+    "narration": "Epictetus was enslaved. His master broke his leg once, and he accepted it without complaint. The leg would heal or it wouldn't. His master had not broken his will. A slave can be freer than a king, he insisted. A slave, if wise, is enslaved to nothing. This is why he could sit in a cell with more peace than a tyrant on a throne."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Reminding a grieving friend that all things are borrowed",
+    "action": "Offering a cup of water with both hands, palms upward",
+    "setting": "A modest room with whitewashed walls, a single table",
+    "narration": "Seneca holds a cup. Everything you have is borrowed. Your health. Your relationships. Your years. Life gives and life takes away. Most people pretend the taking won't happen. They cling. They demand promises the world cannot keep. But if you accept from the beginning that all things are temporary, loss becomes less bitter. You'll hold what you have gently. When it's taken, you won't rage."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Walking the Roman forum before the city wakes",
+    "action": "Walking barefoot across cool marble, his footsteps quiet and deliberate",
+    "setting": "The Roman Forum before dawn, columns rising from shadow",
+    "narration": "Marcus walks the Forum before the city wakes. The empty space belongs to him alone. Soon senators will come. Then merchants. Soldiers. Gossip. Noise. But now—silence. He can think clearly. What matters? Not opinions in the Forum. Not endless chatter. His duty is clear. His thoughts are his own. The Forum will be loud by midday, but his mind doesn't have to follow the noise."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching that philosophy is practice, not theory",
+    "action": "Leaning close to a single young student, speaking softly and earnestly",
+    "setting": "A corner of the school, away from others, a stone bench worn smooth",
+    "narration": "Epictetus speaks to a young student alone. Philosophy isn't theory, he says. You can't read it and change. You must live it. Practice it. When insulted, practice not taking offense. When delayed, practice acceptance. When denied something, practice indifference. These are exercises like training the body. Each day you strengthen your will. That's how you become a philosopher—not by understanding, but by doing it daily until wisdom is natural."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Watching a ship disappear—metaphor for the journey of life",
+    "action": "Watching a merchant vessel grow smaller, disappearing into the shimmering distance",
+    "setting": "A harbor with wooden docks, fishing boats and larger ships beyond",
+    "narration": "Seneca watches a ship disappear toward the horizon. Life moves like that vessel—growing steadily smaller. Youth passes. Strength fades. The moment you're born, the ship has already begun. Every moment carries you further toward the end. Most people pretend it's not moving. They forget they're aging. But seeing it clearly brings clarity. You don't waste time on trivial things when you know your voyage is finite. You hold what matters close."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Standing unmoved while his generals deliver bad news",
+    "action": "Sitting absolutely still while a general delivers news of military defeat, his face unchanged",
+    "setting": "A command tent with a map table, shadows cast on canvas",
+    "narration": "A general brings bad news. The battle was lost. Marcus doesn't flinch. His face remains composed. He understands that the external event has no power over his inner state unless he gives it permission. Yes, the loss is real. Yes, consequences follow. But his peace is his own. He can mourn the soldiers and remain unmoved. These aren't contradictions. They're wisdom. The general waits. Marcus breathes."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Sitting quietly while a storm rages outside his window",
+    "action": "Listening intently as thunder rolls, his posture relaxed despite the noise",
+    "setting": "A simple room at the school, wind rattling the shutters",
+    "narration": "A storm rages outside. The wind shakes the school. A student is frightened. Epictetus sits calmly. The storm is not in your power, he observes. But your fear of it is. You're choosing to let the noise terrify you. You could accept that storms happen. This one will pass. Your body might be frightened, but your will doesn't have to be. Listen to the wind. Acknowledge it."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Choosing exile over compromising his principles",
+    "action": "Walking away from Rome with a small bag, not looking back at the city",
+    "setting": "The road beyond the city gate, early morning mist on fields",
+    "narration": "Seneca was exiled from Rome. He lost his wealth, his position, his home. In exile, he found something unexpected—freedom. Away from endless demands, political intrigues, desperate scrambling for status. He lived simply. Philosophy isn't a luxury for comfort. It's most useful when everything's been taken. He could have despaired. Instead, he remained faithful to his principles. He chose them over position. That choice made exile not punishment but gift."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Accepting the plague that ravaged his legions without complaint",
+    "action": "Kneeling beside the body of a soldier ravaged by illness, placing his hand on the man's forehead",
+    "setting": "A medical tent with rows of the sick and dying, the air heavy",
+    "narration": "The plague swept through Marcus's legions. Thousands died. He could have hidden. Instead, he moved among the sick. He accepted the risk. He would likely be infected himself. He could have despaired at the loss of soldiers he needed. Instead, he accepted nature's course. Death comes when it comes. It's not personal. It's not punishment. It's the universe doing what it does. He remained at peace."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Finding freedom in solitude and acceptance",
+    "action": "Sitting alone in his small quarters, breathing slowly and deeply",
+    "setting": "A simple room, a single stool, stone walls, complete silence",
+    "narration": "Epictetus sits alone in his small room. He's not waiting for anything external to make him happy. No wealth will arrive. No honor will be granted. He's empty and wants nothing, and in that emptiness, he's complete. This is stoicism's paradox. You don't find peace by chasing pleasure. You find peace by releasing the chase entirely. You sit. You breathe. You accept that you need nothing but this moment."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Corresponding with Lucilius on friendship and wisdom",
+    "action": "Rolling a scroll closed with both hands, holding it to his chest",
+    "setting": "Seneca's study, night falling, a servant approaching with an oil lamp",
+    "narration": "Seneca concludes a letter to Lucilius. He's shared struggles and insights with this distant friend. In writing, Seneca clarified his own thinking. In reading, Lucilius wasn't alone. True friendship means helping someone see their own wisdom. We're all stumbling in the dark. A real friend holds up light. And that light is sometimes just one person saying: I understand. Your suffering makes sense. You're not alone."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Reminding himself that even emperors return to dust",
+    "action": "Opening his hand and watching dust particles drift from his palm, catching the last light of day",
+    "setting": "An open courtyard, the sky turning amber and rose",
+    "narration": "Marcus holds dust. He reminds himself that he too will become dust. In a hundred years he won't exist. In two hundred, Rome might be ruins. The people who fear him will be forgotten. The people who love him will be gone. He's not troubled. It's simply true. And if none of it lasts, if all returns to dust, then pride and shame are equally empty. You can let them go."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching that suffering is a choice of perception",
+    "action": "Closing his eyes slowly while a student rages, his face serene",
+    "setting": "The school at midday, light streaming through the open colonnade",
+    "narration": "A student angrily complains. Epictetus listens without defending himself. The student is suffering, but not because of anything Epictetus did. The student is suffering because of what the student believes about what happened. The external event is neutral. It becomes painful only in the mind. Epictetus teaches that suffering is a choice. Not easy to unmake, but still a choice. And if it's a choice, you can choose differently. Freedom lives there."
+  },
+  {
+    "philosopher": "Marcus Aurelius, Epictetus, and Seneca",
+    "moment": "The eternal principles of Stoic wisdom settling into the listener's rest",
+    "action": "Sitting together in silence, at peace, as if watching the same stars",
+    "setting": "A place beyond time, quiet and still, the universe vast above",
+    "narration": "Somewhere beyond the centuries, three philosophers sit in silence. They lived in different eras but taught the same peace. Control your judgment. Accept what you cannot change. You suffer in imagination more than reality. Your time is finite. Your reputation is dust. Your will is free. These truths are constant as stars. Now, as you drift toward sleep, they settle into you. Your breathing slows. The weight lifts. You rest."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Meditating in his campaign tent, recognizing his inner fortress",
+    "action": "Placing one hand over his heart, breathing steadily",
+    "setting": "his tent at the frontier, walls of rough linen, the night outside",
+    "narration": "Your mind is a fortress. Not made of stone, but of something stronger. An emperor understands this. When the world falls into chaos — when generals bring bad news, when legions fail — he returns to what cannot be shaken. This fortress stands inside you. Right now, as you listen, it's already there. Your thoughts are your last true possession. Everything else can be taken. But this... this remains."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching the dichotomy of control for the first time",
+    "action": "Extending both hands, one palm up, one palm down",
+    "setting": "his humble school at Nicopolis, students sitting on a stone floor",
+    "narration": "Some things rest in your control. Your judgment. Your desire. Your will. The rest — your body, your wealth, your reputation — belong to the world. When you stop fighting for things outside your power, something breaks open. You become free. A slave with this knowledge is freer than any king who doesn't understand. Tonight, you're already practicing. You're here. That's all you control."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Reflecting on time as the most precious resource",
+    "action": "Watching his hand move slowly across a wax tablet, stylus barely touching",
+    "setting": "his study, scrolls stacked on a wooden table, the sea visible through an opening",
+    "narration": "Time is the one thing you cannot earn again. Not with gold. Not with power. Rich men waste their lives on things that crumble. A merchant chases profit. A soldier chases glory. And time just passes. Drops like water through your fingers. Every moment you spend on what doesn't matter is stolen from your life. Tonight, you're not stealing from yourself. You're here. You're resting."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Standing at the Danube frontier at dawn, observing the river",
+    "action": "Standing with arms lowered to his sides, watching the current without moving",
+    "setting": "the Danube frontier, dawn light on water, the Roman military camp beyond",
+    "narration": "The river moves. It's always moving. An emperor watches and understands something most people take a lifetime to learn. Everything changes. You change. Your body will return to dust. Your thoughts pass like clouds. The people you love will age. The power you hold will pass to others. This isn't sad. It's peaceful. When you stop fighting change, you float like the river. You flow without resistance. You're safe here."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Comparing life to a banquet where you accept what is offered",
+    "action": "Gesturing slowly with both hands as if offering invisible gifts",
+    "setting": "his school, students sitting on worn cushions and wooden benches",
+    "narration": "Imagine you're at a banquet. The wine server approaches with two cups — one bitter, one sweet. You reach for the sweet. He passes by. You reach for the bitter cup instead. Do you complain? Do you say the banquet failed? No. You're a guest. You take what's offered. Life works the same way. Some days bring sweetness. Some days, bitter wine. You're the guest. Accept what comes."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Understanding that suffering comes from imagination, not reality",
+    "action": "Placing his fingers gently against his temple, then lowering his hand to rest",
+    "setting": "his chamber at evening, shadows growing longer, a window opening to a courtyard",
+    "narration": "Most of your suffering comes from imagination, not what's happening. A friend is late — you imagine anger. She doesn't write — you imagine betrayal. None of this is real yet. You're creating it in your mind. When you strip away the story, what remains? Often just a neutral fact. The mind suffers. The body is usually fine. Tonight, let your mind grow quiet. Rest here."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Accepting the plague that ravaged his legions without complaint",
+    "action": "Standing alone, hands at his sides, face tilted slightly downward but not in defeat",
+    "setting": "the camp, bodies wrapped in linen, soldiers moving slowly with duty in their eyes",
+    "narration": "A plague comes through the legions. Thousands die. An emperor could collapse. Instead, he teaches duty. Soldiers carry their brothers to rest without complaint because they've seen their general do the same. Marcus Aurelius understood: fate comes for everyone. We all return to earth. The plague teaches this more clearly than any book. Accepting death isn't weakness. It's the strongest thing a human can do. You know this now."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching that perception, not circumstances, disturbs the mind",
+    "action": "Sitting with spine straight but shoulders relaxed, eyes half-closed, listening",
+    "setting": "his small school, a storm raging beyond the thick wooden door",
+    "narration": "A storm breaks. Wind shakes the door. Rain pours. Inside the school, he sits and teaches as if nothing is happening. His students are troubled by the noise. Doesn't the chaos distract him? No. What disturbs you isn't the storm itself. It's your judgment that the storm is bad. The wind blows as nature intends. The rain falls as it must. Your mind can remain untouched. Undisturbed. Like his."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Writing letters to Lucilius by wax tablet, speaking to eternity",
+    "action": "Dipping his stylus slowly into wax, pressing words that will survive him",
+    "setting": "his study at evening, wax tablets stacked, stylus worn smooth from use",
+    "narration": "A man writes letters to his friend Lucilius. He writes philosophy as a teacher speaks to a student he cares for. Each letter holds a thought meant to heal or strengthen. Seneca knew that written words last longer than the body. He wrote to a friend across the years. These words still reach you now, two thousand years later. His voice still calms. His hand still guides. Let yourself slow."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Choosing mercy for a defeated enemy against his generals' wishes",
+    "action": "Raising his hand slowly, palm open, signaling the prisoner to be released",
+    "setting": "the emperor's tent, a defeated enemy brought forward, generals waiting for judgment",
+    "narration": "His generals want blood. A defeated enemy — why spare him? But Marcus understands something they don't. Cruelty is a choice. So is mercy. A man is brought before him, fear in his eyes. The emperor doesn't need his death. He raises his hand and signals mercy. His generals learn something without words: strength isn't about domination. It's about choosing what's right instead of what's easy."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching a student that judgment, not words, creates shame",
+    "action": "Turning his palm upward, showing his own hand as if teaching from his own body",
+    "setting": "his school, afternoon light casting long shadows on the stone floor",
+    "narration": "A student comes to him upset — someone insulted him, and he feels small. Epictetus looks at him calmly. The words were just air. Vibrations. They landed in your ears, and your mind created the meaning. The other person spoke. Your mind decided to feel shame. You made it and wore it. This hand I hold up — I could call it ugly, beautiful, useless, perfect. You decide. You're the judge."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Watching a ship disappear over the horizon as metaphor for life",
+    "action": "Standing still, watching the vessel disappear, hand resting against stone railing",
+    "setting": "a harbor, stone dock, a ship disappearing slowly into mist",
+    "narration": "A ship moves away from shore. Smaller and smaller. Until it vanishes. To someone watching, it's gone. But it still exists. Your life is like that ship. You'll vanish from the sight of those who knew you. They'll say you're gone. But your life was real. It mattered. You existed. And then the horizon takes you. This isn't something to fear. It's the shape of all life."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Walking through the Roman forum before the city wakes",
+    "action": "Walking barefoot across cool stone, each step slow and deliberate",
+    "setting": "the Roman forum, empty and silent, marble columns barely visible in early light",
+    "narration": "Before the city wakes, an emperor walks the forum alone. His feet touch stone that's cold and smooth from centuries of footsteps. He's one of thousands who've walked here. Senators, slaves, merchants, philosophers. All gone. All returned to dust. He's walking where they walked. Soon he'll be gone too. Someone else will walk here after. This knowledge doesn't make him sad. It makes him present. It makes this moment real."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching that a slave can be freer than his master",
+    "action": "Resting his hand gently on the student's shoulder, a gesture of recognition",
+    "setting": "his school, a former slave sitting among students, face calm",
+    "narration": "A man was born a slave. But no master could own his mind. Now he sits in school, freer than any emperor. Why? Because he understands what freedom truly is. It's not the absence of chains. It's the absence of fear. It's knowing your will belongs only to you. His former master might own his body — but his choice? His judgment? His character? These belong only to him. He's already free."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Reminding a grieving friend that all things are borrowed from time",
+    "action": "Sitting beside the friend, both hands resting palms up in acceptance",
+    "setting": "his home, a friend grieving the loss of a loved one, evening settling",
+    "narration": "A friend grieves deeply. Someone he loved is gone. Seneca sits with him and speaks gently: everything you have is borrowed. Your children are given to you, not owned. They're borrowed from time. Your wealth, your health, your youth — all borrowed. One day you return everything. This isn't cold. It's tender. Knowing something is borrowed makes you hold it lighter. You appreciate it more. You hurt less when you release it."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Reflecting that the universe is change and life is opinion",
+    "action": "Raising his hands before him, fingers opening slowly like a flower blooming and closing",
+    "setting": "his chamber at night, coming darkness, a single window opening to stillness",
+    "narration": "The universe is change. The moment you understand this, you stop fighting. You stop asking why. The universe doesn't care about your plans. Change happens. A river flows downhill. A leaf falls in autumn. A body ages. You're part of nature. When you stop resisting change, you become like water — flowing around obstacles. You're peaceful. You're like the universe itself: always moving, always changing, never broken."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching that philosophy is not theory but daily practice",
+    "action": "Standing still, both arms relaxed at his sides, looking directly at no one",
+    "setting": "his school, dusk settling, students preparing to leave",
+    "narration": "Philosophy isn't ideas you read in a book and forget. It's practice. Daily practice. When a student asks him, \"Will this make me wise?\" he smiles. Wisdom isn't something you achieve and then keep. It's something you practice every single day. You practice choosing what's in your control. You practice releasing what isn't. You'll practice again tomorrow. The practice itself is the life. You're practicing right now by listening."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Choosing exile over compromising his principles with Nero",
+    "action": "Standing with feet apart, planted firmly on earth, face toward the sea",
+    "setting": "a rocky shore far from Rome, waves moving slowly, exile accepted",
+    "narration": "He was exiled. Sent away from Rome, from power, from everything he built. He could have compromised his principles to return. But some things matter more than comfort. He stayed in exile because staying true to himself was worth everything else. From exile, he wrote. From exile, he taught. The physical distance didn't matter. His mind was free. Your principles matter more than circumstances. You're no longer trapped anywhere."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Contemplating that four hundred years hence, he will be dust",
+    "action": "Opening his palms toward an invisible sky, fingers relaxing, shoulders dropping",
+    "setting": "all of Rome seen as if from distance, dust in afternoon light",
+    "narration": "Four hundred years from now, you'll be dust. So will everyone reading these words. So was Marcus Aurelius, though he didn't know it when he wrote this. He understood: everything crumbles. Every name, every achievement, every empire. Dust. This isn't bleak. It's freeing. What you accomplish matters less than how you live right now. Whether you're remembered matters less than whether you're kind today. You control only this breath."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Teaching that no one can hurt you without your permission",
+    "action": "Drawing his arms inward, crossing them gently over his heart, eyes closing briefly",
+    "setting": "his small room, bare walls, simple furniture, complete peace in emptiness",
+    "narration": "No one can hurt you without your permission. This is the teaching he returns to again and again. Your body can be broken — it was — but your character remains untouched. Your will remains free. Your choice remains yours. This isn't harsh strength. It's tender. Knowing you're unbreakable inside means you can be gentle outside. You don't need to fight the world. You don't need to prove anything."
+  },
+  {
+    "philosopher": "Seneca",
+    "moment": "Recognizing that anger is temporary madness",
+    "action": "Pressing his fingers gently against his eyelids, breathing slowly until the trembling stops",
+    "setting": "his study, scrolls on the table, his hand trembling slightly — then growing still",
+    "narration": "Anger is temporary madness. The moment you recognize this, it loses power. You feel rage rising — at an insult, an injustice — and you can watch it. Notice it like a cloud passing. You don't have to become it. Seneca knew anger from the inside. He felt it. But he chose clarity. When anger comes, slow your breath. Close your eyes. Let the cloud pass. You're not the anger."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Standing among soldiers in winter, accepting duty without complaint",
+    "action": "Standing among them, bare-headed, receiving the cold on his face without flinching",
+    "setting": "the frontier, winter, soldiers huddled in a camp that's cold and sparse",
+    "narration": "An emperor is chosen to lead. He doesn't choose the hardship that comes with it. Winter at the frontier, plague among the legions, battles that drain everything. He could complain. Instead, he accepts. This is what duty looks like. Not excitement. Not glory. Just acceptance. You were born. You'll die. In between, there's work. Duty is simply doing what comes before you, when it comes, without complaint. That's how to live well."
+  },
+  {
+    "philosopher": "Epictetus",
+    "moment": "Sitting in quiet acceptance after all students have left",
+    "action": "Sitting on a bench worn smooth by centuries of feet, hands folded loosely",
+    "setting": "his school at evening, all students have left, silence settling",
+    "narration": "The day is over. The students have gone. He sits in the gathering dark. In accepting what he cannot change — his exile, his poverty, his suffering — he found something unshakeable. Not happiness exactly. Something deeper. A kind of rest that doesn't depend on anything external. Everything outside him is uncertain. Inside, he's quiet. You can be too. You're learning. There's nothing left to prove. Just breath."
+  },
+  {
+    "philosopher": "Marcus Aurelius",
+    "moment": "Returning to dust, at peace with impermanence and dissolution",
+    "action": "Lying with his back against cool marble, one hand resting on his chest, eyes closing",
+    "setting": "marble, cool and eternal, stone smooth from ages, the night deepening",
+    "narration": "The emperor closes his eyes. His hand rises and falls with each breath. Slower. Slower. He thinks: I will return to dust. My body. My thoughts. My empire. All dust. He's at peace with this. Not because he wants to die, but because he understands. Nothing holds on. Everything flows back into the earth. You're not separate from this. You're already dust learning to rest. Let yourself settle. Sleep now."
+  }
+]

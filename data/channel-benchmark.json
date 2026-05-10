@@ -1,0 +1,36 @@
+{
+  "ctr_baseline": {
+    "n": 0,
+    "median": null,
+    "p10": null,
+    "p25": null,
+    "p75": null,
+    "p90": null
+  },
+  "retention_baseline": {
+    "n": 331,
+    "median": 14.06,
+    "p10": 8.5,
+    "p25": 11.045,
+    "p75": 17.575,
+    "p90": 24.14
+  },
+  "sleepforge_videos": [
+    {
+      "video_id": "_EJ1oGNKdcs",
+      "title": "30 Stoic Principles for Inner Peace | Sleep Story",
+      "published_at": "2026-05-08T23:35:58Z",
+      "ctr": null,
+      "ctr_rank": null,
+      "retention_avg": null,
+      "retention_rank": null,
+      "views": 24,
+      "principles_used": [
+        "encyclopedic_number",
+        "icon_grid"
+      ]
+    }
+  ],
+  "all_video_count": 333,
+  "last_updated": "2026-05-09T13:53:50.888Z"
+}
