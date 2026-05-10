@@ -68,7 +68,7 @@ Write a JSON object with these fields:
 Return ONLY valid JSON, no markdown fences, no commentary.`;
 
   try {
-    let text = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 60000 });
+    let text = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 120000 });
     text = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "");
     const parsed = JSON.parse(text);
     return {

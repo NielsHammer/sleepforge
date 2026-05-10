@@ -206,17 +206,42 @@ function slugify(text) {
     .slice(0, 60);
 }
 
+// ─── TRADITION → PHILOSOPHERS ─────────────────────────────────────────────────
+// Maps autopilot tradition names to philosopher keys in script-generator.js PHILOSOPHERS dict.
+// These determine which historical figures appear in the narration scenes.
+
+const TRADITION_PHILOSOPHERS = {
+  'Taoism':                    ['lao-tzu', 'zhuangzi'],
+  'Ancient Greek (non-Stoic)': ['socrates', 'plato', 'aristotle', 'diogenes', 'heraclitus'],
+  'Epicureanism':              ['epicurus'],
+  'Pre-Socratic':              ['heraclitus', 'socrates'],
+  'Neoplatonism':              ['plotinus'],
+  'Confucianism':              ['confucius', 'zhuangzi'],
+  'Zen':                       ['confucius'],   // Zen masters not in dict yet — Confucius closest
+  'Existentialism':            ['socrates', 'plato'],
+  'Medieval Scholasticism':    ['aristotle', 'plato'],
+  'Hindu philosophy':          ['socrates', 'plato'],  // fallback — no Vedic entries yet
+  'Mythology':                 ['socrates', 'plato', 'aristotle'],
+};
+
+function philosophersForTradition(tradition) {
+  return TRADITION_PHILOSOPHERS[tradition]
+    || ['socrates', 'plato', 'aristotle'];
+}
+
 // ─── VIDEO RENDER ─────────────────────────────────────────────────────────────
 
-function renderVideo(topic, slug, durationMins) {
+function renderVideo(topic, slug, durationMins, tradition) {
+  const philosophers = philosophersForTradition(tradition).join(',');
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [path.join(ROOT, 'scripts', 'test-video-2min.js')], {
       stdio: ['ignore', 'inherit', 'inherit'],
       env: {
         ...process.env,
-        SLEEPFORGE_TOPIC:    topic,
-        SLEEPFORGE_SLUG:     slug,
-        SLEEPFORGE_DURATION: String(durationMins),
+        SLEEPFORGE_TOPIC:        topic,
+        SLEEPFORGE_SLUG:         slug,
+        SLEEPFORGE_DURATION:     String(durationMins),
+        SLEEPFORGE_PHILOSOPHERS: philosophers,
       },
       cwd: ROOT,
     });
@@ -509,8 +534,9 @@ async function main() {
         jarvisUpdateJob(jobId, { step: 'Video cached', progress: 40 });
       } else if (!opts.skipRender) {
         log('\n── Step 1: Rendering 60-min video ──');
+        log(`  Philosophers: ${philosophersForTradition(t.tradition).join(', ')}`);
         jarvisUpdateJob(jobId, { step: 'Rendering video', progress: 10 });
-        await renderVideo(t.topic, slug, 60);
+        await renderVideo(t.topic, slug, 60, t.tradition);
         if (!fs.existsSync(videoPath)) throw new Error(`Render completed but ${videoPath} not found`);
         log(`  ✓ ${videoPath}`);
         jarvisUpdateJob(jobId, { step: 'Render complete', progress: 40 });

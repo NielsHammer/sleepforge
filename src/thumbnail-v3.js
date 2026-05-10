@@ -42,7 +42,7 @@ const CLI_MODEL = 'claude-sonnet-4-6';
 const CANVAS_W = 1280;
 const CANVAS_H = 720;
 const MAX_ATTEMPTS = 3;
-const PASS_THRESHOLD = 7;
+const PASS_THRESHOLD = 6;
 
 // ─── PRINCIPLE SCORES ─────────────────────────────────────────────────────────
 

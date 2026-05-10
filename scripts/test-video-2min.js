@@ -53,6 +53,9 @@ const PYTHON_BIN   = process.env.PYTHON_BIN
 const TOPIC        = process.env.SLEEPFORGE_TOPIC || 'Marcus Aurelius on Letting Go of What You Cannot Control';
 const DURATION_MIN = parseInt(process.env.SLEEPFORGE_DURATION || '2', 10);
 const SLUG         = process.env.SLEEPFORGE_SLUG  || 'marcus-aurelius-2min';
+const PHILOSOPHERS = process.env.SLEEPFORGE_PHILOSOPHERS
+  ? process.env.SLEEPFORGE_PHILOSOPHERS.split(',').map(s => s.trim()).filter(Boolean)
+  : ['marcus-aurelius', 'epictetus', 'seneca'];
 const OUTPUT_DIR   = path.join(PROJECT_ROOT, 'output', SLUG);
 const ASSETS_DIR   = path.join(OUTPUT_DIR, 'assets');
 const SENTENCES_DIR = path.join(ASSETS_DIR, 'sentences');
@@ -118,7 +121,7 @@ if (fs.existsSync(scriptJsonPath)) {
 } else {
   const result = await generateScript(TOPIC, {
     duration: DURATION_MIN,
-    philosophers: ['marcus-aurelius', 'epictetus', 'seneca'],
+    philosophers: PHILOSOPHERS,
     output: SCRIPTS_DIR,
   });
   scenes = result.scenes;
