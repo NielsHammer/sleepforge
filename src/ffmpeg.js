@@ -993,10 +993,13 @@ export function composeFinalVideoWithBg({
   const mapArgs   = `-map "[v]" -map ${voiceIdx}:a`;
   const codecArgs = `-c:v libx264 -preset fast -crf 22 -c:a copy`;
 
+  // Timeout scales with output duration — libx264 fast on 60-min video needs ~90min.
+  // Use 2s of timeout per second of content, minimum 10 minutes.
+  const composeTimeoutMs = Math.max(600000, d * 2000);
   execSync(
     `ffmpeg -y ${inputs.join(" ")} -filter_complex "${filters.join(";")}" ` +
     `${mapArgs} ${codecArgs} -t ${d} -movflags +faststart "${path.resolve(outputPath)}"`,
-    { stdio: "pipe", timeout: 1800000 }
+    { stdio: "pipe", timeout: composeTimeoutMs }
   );
 
   console.log(`  Composed: ${outputPath}`);
