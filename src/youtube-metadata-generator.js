@@ -79,7 +79,7 @@ export async function generateMetadata(topic, scenes = []) {
     .slice(0, 2000);
 
   const prompt = buildPrompt(topic, scriptExcerpt);
-  const raw    = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 60000 });
+  const raw    = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 120000 });
 
   const match = raw.match(/\{[\s\S]*\}/);
   if (!match) throw new Error(`No JSON in metadata response: ${raw.slice(0, 200)}`);
