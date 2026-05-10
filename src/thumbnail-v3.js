@@ -500,7 +500,9 @@ Strong hook patterns: impossible-sounding specifics, personal challenges, forbid
 TEXT CRAFT:
 - Text must be readable at 168x94. Below 36px it vanishes.
 - Never grey text — use white, near-black, or saturated color.
-- Set explicit letter-spacing (0.02-0.08em) and word-spacing (minimum 0.15em).
+- MANDATORY on ALL text elements: set both letter-spacing AND word-spacing explicitly.
+  Example: style="font-size:96px; letter-spacing:0.05em; word-spacing:0.2em;"
+  word-spacing MUST be >= 0.15em. This is not optional — the legibility checker will fail your design without it.
 - Never negative letter-spacing.
 - Give the hook breathing room — at least 40px from any edge.
 - The hook is ONE color — never split across two colors.
