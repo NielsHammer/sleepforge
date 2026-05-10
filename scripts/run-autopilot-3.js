@@ -21,6 +21,7 @@
 
 import fs       from 'fs';
 import path     from 'path';
+import crypto   from 'crypto';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 import dotenv   from 'dotenv';
@@ -33,6 +34,32 @@ const { callClaudeCLI }           = await import('../src/claude-cli.js');
 const { generateThumbnailV3, closeBrowser } = await import('../src/thumbnail-v3.js');
 const { generateMetadata }        = await import('../src/youtube-metadata-generator.js');
 const { uploadVideo, getVideoProcessingStatus } = await import('../src/youtube.js');
+
+const SONNET = 'claude-sonnet-4-6';
+const JARVIS_STATE_FILE = path.join(ROOT, 'jarvis', 'state.json');
+
+// Traditions/philosophers to skip — already published or deleted this run
+const AVOID_TRADITIONS = ['Stoicism', 'Buddhism'];
+
+function jarvisUpdateJob(jobId, patch) {
+  if (!jobId) return;
+  try {
+    const state = JSON.parse(fs.readFileSync(JARVIS_STATE_FILE, 'utf-8'));
+    const idx   = state.renders.findIndex(r => r.id === jobId);
+    if (idx >= 0) Object.assign(state.renders[idx], patch, { updatedAt: new Date().toISOString() });
+    state.last_updated = new Date().toISOString();
+    fs.writeFileSync(JARVIS_STATE_FILE, JSON.stringify(state, null, 2));
+  } catch { /* Jarvis not running — fine */ }
+}
+
+function jarvisAddJob(job) {
+  try {
+    const state = JSON.parse(fs.readFileSync(JARVIS_STATE_FILE, 'utf-8'));
+    state.renders.unshift(job);
+    state.last_updated = new Date().toISOString();
+    fs.writeFileSync(JARVIS_STATE_FILE, JSON.stringify(state, null, 2));
+  } catch { /* Jarvis not running — fine */ }
+}
 
 const CHANNEL          = 'sleepless-philosophers';
 const PRINCIPLES_FILE  = path.join(ROOT, 'data', 'reference-principles.json');
@@ -53,14 +80,17 @@ function parseArgs() {
 }
 
 // ─── SCHEDULE DATES ───────────────────────────────────────────────────────────
-// Bangkok = UTC+7.  8pm tonight = 13:00 UTC today.  8am tomorrow = 01:00 UTC tomorrow.
+// Video 1: null = upload immediately as PUBLIC (goes live right now, Sunday)
+// Video 2: Monday 8am Bangkok = UTC+7 → 2026-05-11T01:00:00Z
+// Video 3: Tuesday 8am Bangkok             → 2026-05-12T01:00:00Z
 
 function scheduleDates() {
   const today = new Date();
-  const d1 = new Date(today); d1.setUTCHours(13, 0, 0, 0);
-  const d2 = new Date(today); d2.setUTCDate(d2.getUTCDate() + 1); d2.setUTCHours(1, 0, 0, 0);
-  const d3 = new Date(today); d3.setUTCDate(d3.getUTCDate() + 2); d3.setUTCHours(1, 0, 0, 0);
-  return [d1.toISOString(), d2.toISOString(), d3.toISOString()];
+  const ymd   = today.toISOString().slice(0, 10); // e.g. "2026-05-10"
+  const [y, m, d] = ymd.split('-').map(Number);
+  const d2 = new Date(Date.UTC(y, m - 1, d + 1, 1, 0, 0, 0));
+  const d3 = new Date(Date.UTC(y, m - 1, d + 2, 1, 0, 0, 0));
+  return [null, d2.toISOString(), d3.toISOString()];
 }
 
 // ─── TOPIC SELECTION ──────────────────────────────────────────────────────────
@@ -78,26 +108,27 @@ async function pick3Topics(principles) {
 Reference data (350 videos analyzed):
 ${JSON.stringify(ctx, null, 2)}
 
-Pick exactly 3 video topics for tonight + next 2 mornings.
+Pick exactly 3 video topics for today + next 2 days.
 
-DIVERSITY RULES (strictly enforced):
-1. No two videos from the same philosopher or tradition.
-2. Cover 3 distinct traditions: choose from Stoicism, Eastern/Taoism, Ancient Greek, Buddhism, Existentialism, Medieval, Mythology, Pre-Socratic.
-3. Each video must use a different title pattern from: encyclopedic_number, completeness_claim, duration_list, superlative_quality.
-4. At least one title must include "(NO ADS)" prefix.
-5. Use named philosophers where possible — "Seneca" beats "Stoic philosopher".
+HARD RULES:
+1. NEVER pick these traditions (already published): ${JSON.stringify(AVOID_TRADITIONS)}
+2. No two videos from the same philosopher or tradition.
+3. Cover 3 distinct traditions from: Taoism, Ancient Greek (non-Stoic), Epicureanism, Zen, Confucianism, Pre-Socratic, Medieval Scholasticism, Existentialism, Mythology, Hindu philosophy, Neoplatonism.
+4. Each video must use a different title pattern from: encyclopedic_number, completeness_claim, duration_list, superlative_quality.
+5. At least one title must include "(NO ADS)" prefix.
+6. Use named philosophers where possible — "Lao Tzu" beats "Taoist philosopher".
 
-VIDEO 1 is the highest-stakes — it posts tonight and sets the channel's first impression. Make it the strongest topic.
+VIDEO 1 is the highest-stakes — it posts live immediately today. Make it the strongest, most-searched topic.
 
-Return ONLY this JSON:
+Return ONLY this JSON (no markdown):
 {
   "videos": [
     {
       "topic": "concise topic description for the render engine (30 words max)",
-      "title": "the winning YouTube title",
       "tradition": "tradition name",
       "philosopher": "primary philosopher or null",
       "title_pattern": "pattern name",
+      "draft_title": "initial YouTube title candidate",
       "diversity_note": "one sentence: how this differs from the other two"
     }
   ]
@@ -110,6 +141,58 @@ Return ONLY this JSON:
   const result = JSON.parse(m[0]);
   if (!Array.isArray(result.videos) || result.videos.length < 3) throw new Error('Topic selection: need exactly 3 videos');
   return result.videos.slice(0, 3);
+}
+
+// ─── TITLE-FIRST PIPELINE ─────────────────────────────────────────────────────
+// Generate 5 title candidates with Haiku, then Sonnet picks the winner.
+
+async function refineTitleForTopic(topic, tradition, philosopher, draftTitle, titlePattern) {
+  // Step 1: Haiku generates 4 more candidates
+  const haikuPrompt = `Generate 5 YouTube title candidates for a 1-hour philosophy sleep video.
+
+TOPIC: ${topic}
+TRADITION: ${tradition}
+PHILOSOPHER: ${philosopher || 'not specified'}
+DRAFT TITLE: ${draftTitle}
+TITLE PATTERN TO USE: ${titlePattern}
+
+RULES:
+- Sleep-focused language (e.g., "to Fall Asleep to", "for Deep Sleep", "Sleep Meditation")
+- Include philosopher/tradition name
+- One of the 5 must start with "(NO ADS) "
+- Pattern: encyclopedic_number = "30 Biggest X", completeness_claim = "All of X Explained", duration_list = "4 Hours of X", superlative_quality = "The Most Calming X"
+- Avoid clickbait — the audience is calm philosophy enthusiasts
+
+Return ONLY a JSON array of 5 strings:
+["title 1", "title 2", "title 3", "title 4", "title 5"]`;
+
+  const haikuRaw  = await callClaudeCLI(haikuPrompt, { model: HAIKU, timeoutMs: 30000 });
+  const haikuMatch = haikuRaw.match(/\[[\s\S]*\]/);
+  const candidates = haikuMatch ? JSON.parse(haikuMatch[0]) : [draftTitle];
+  if (candidates.length < 1) return draftTitle;
+
+  // Step 2: Sonnet picks the winner
+  const sonnetPrompt = `You are a YouTube title expert for a philosophy sleep channel "Sleepless Philosophers".
+
+Pick the single BEST title from these ${candidates.length} candidates for maximum clicks from insomniacs searching for calm philosophy content.
+
+TOPIC: ${topic}
+TRADITION: ${tradition}
+
+CANDIDATES:
+${candidates.map((c, i) => `${i + 1}. ${c}`).join('\n')}
+
+Evaluate on: searchability, emotional appeal to sleep seekers, philosophical authenticity, title length (50-70 chars ideal).
+
+Return ONLY this JSON (no markdown):
+{"winner_index": N, "title": "exact title text", "reason": "one sentence"}`;
+
+  const sonnetRaw   = await callClaudeCLI(sonnetPrompt, { model: SONNET, timeoutMs: 45000 });
+  const sonnetMatch = sonnetRaw.match(/\{[\s\S]*\}/);
+  if (!sonnetMatch) return candidates[0];
+  const pick = JSON.parse(sonnetMatch[0]);
+  log(`  Title winner: "${pick.title}" — ${pick.reason}`);
+  return pick.title || candidates[0];
 }
 
 // ─── SLUG ─────────────────────────────────────────────────────────────────────
@@ -331,7 +414,8 @@ function buildReport(results, startedAt) {
     lines.push(`### Video ${r.index}: ${r.title}`);
     lines.push(`- Tradition: ${r.tradition}`);
     lines.push(`- Topic: ${r.topic}`);
-    lines.push(`- Scheduled: ${r.scheduledAt ? new Date(r.scheduledAt).toLocaleString() : 'immediate'}`);
+    lines.push(`- Privacy: ${r.isPublic ? 'PUBLIC (live now)' : 'PRIVATE (scheduled)'}`);
+    lines.push(`- Scheduled: ${r.scheduledAt ? new Date(r.scheduledAt).toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }) + ' Bangkok' : 'immediate'}`);
     lines.push(`- Status: ${r.status}`);
     if (r.videoId) lines.push(`- Video ID: ${r.videoId}`);
     if (r.videoId) lines.push(`- URL: https://www.youtube.com/watch?v=${r.videoId}`);
@@ -375,9 +459,17 @@ async function main() {
   const topics = await pick3Topics(principles);
   const dates  = scheduleDates();
 
+  // ── Refine titles (5 Haiku candidates → Sonnet picks best) ──
+  logSection('TITLE REFINEMENT');
+  for (let i = 0; i < topics.length; i++) {
+    const t = topics[i];
+    log(`  Video ${i+1}: ${t.tradition} — refining title...`);
+    t.title = await refineTitleForTopic(t.topic, t.tradition, t.philosopher, t.draft_title || t.topic, t.title_pattern);
+  }
+
   log('\n3-video lineup:');
   topics.forEach((t, i) => {
-    const d = new Date(dates[i]).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+    const d = dates[i] ? new Date(dates[i]).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' }) : 'IMMEDIATE (public)';
     log(`  ${i + 1}. [${d}] "${t.title}"`);
     log(`     Tradition: ${t.tradition} | Pattern: ${t.title_pattern}`);
   });
@@ -387,12 +479,23 @@ async function main() {
   // ── Process each video ──
   for (let i = 0; i < topics.length; i++) {
     const t           = topics[i];
-    const scheduledAt = dates[i];
+    const scheduledAt = dates[i];           // null for Video 1 = immediate public
+    const isPublic    = i === 0;            // Video 1 goes live now; 2+3 are scheduled private
     const slug        = slugify(t.topic);
     const outputDir   = path.join(ROOT, 'output', slug);
     const videoPath   = path.join(outputDir, 'final.mp4');
-    const result      = { index: i + 1, title: t.title, topic: t.topic, tradition: t.tradition, scheduledAt, status: 'pending', videoId: null };
+    const jobId       = crypto.randomUUID();
+    const result      = { index: i + 1, title: t.title, topic: t.topic, tradition: t.tradition, scheduledAt, isPublic, status: 'pending', videoId: null };
     results.push(result);
+
+    // Register in Jarvis state.json so the dashboard shows progress
+    jarvisAddJob({
+      id: jobId, topic: t.topic, channel: CHANNEL,
+      status: 'rendering', step: 'Starting', progress: 5,
+      videoId: null, videoUrl: null,
+      scheduledAt: scheduledAt || null,
+      createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+    });
 
     logSection(`VIDEO ${i + 1} / 3 — ${t.tradition}`);
     log(`  Title:     "${t.title}"`);
@@ -403,14 +506,18 @@ async function main() {
       // Step 1: Render video
       if (!opts.skipRender && fs.existsSync(videoPath)) {
         log('\n── Step 1: Video cached — skipping render ──');
+        jarvisUpdateJob(jobId, { step: 'Video cached', progress: 40 });
       } else if (!opts.skipRender) {
         log('\n── Step 1: Rendering 60-min video ──');
+        jarvisUpdateJob(jobId, { step: 'Rendering video', progress: 10 });
         await renderVideo(t.topic, slug, 60);
         if (!fs.existsSync(videoPath)) throw new Error(`Render completed but ${videoPath} not found`);
         log(`  ✓ ${videoPath}`);
+        jarvisUpdateJob(jobId, { step: 'Render complete', progress: 40 });
       } else {
         log('\n── Step 1: --skip-render set ──');
         if (!fs.existsSync(videoPath)) throw new Error(`No video at ${videoPath} and --skip-render set`);
+        jarvisUpdateJob(jobId, { step: 'Video ready (skipped render)', progress: 40 });
       }
 
       // Step 2: Load script for thumbnail context
@@ -423,11 +530,14 @@ async function main() {
 
       // Step 3: Generate 3 thumbnail variants
       log('\n── Step 2: Generating 3 thumbnail variants ──');
+      jarvisUpdateJob(jobId, { step: 'Generating thumbnails', progress: 45 });
       const { best, unused } = await generate3Variants(outputDir, t.topic, t.title, scriptText);
       result.bestThumbRating = best.rating;
+      jarvisUpdateJob(jobId, { step: `Thumbnail approved (${best.rating}/10)`, progress: 65 });
 
       // Step 4: Generate YouTube metadata
       log('\n── Step 3: Generating YouTube metadata ──');
+      jarvisUpdateJob(jobId, { step: 'Generating metadata', progress: 68 });
       const scenes = fs.existsSync(scriptJsonPath) ? JSON.parse(fs.readFileSync(scriptJsonPath, 'utf-8')) : [];
       const meta = await generateMetadata(t.topic, scenes);
       meta.title = t.title; // use our carefully selected title, not the metadata generator's
@@ -448,6 +558,9 @@ async function main() {
       }
 
       log('\n── Step 4: Uploading to YouTube ──');
+      log(`  Privacy: ${isPublic ? 'PUBLIC (live now)' : 'PRIVATE (scheduled)'}`);
+      if (scheduledAt) log(`  Publish at: ${new Date(scheduledAt).toLocaleString('en-US', { timeZone: 'Asia/Bangkok' })} Bangkok`);
+      jarvisUpdateJob(jobId, { step: 'Uploading to YouTube', progress: 75 });
       const videoId = await uploadVideo({
         channelName:   CHANNEL,
         videoPath,
@@ -455,33 +568,42 @@ async function main() {
         description:   meta.description,
         tags:          meta.tags,
         thumbnailPath: best.pngPath,
-        scheduledAt,
-        privacyStatus: 'private',
+        scheduledAt:   isPublic ? null : scheduledAt,
+        privacyStatus: isPublic ? 'public' : 'private',
       });
 
       result.videoId = videoId;
       result.status  = 'uploaded';
 
       fs.writeFileSync(path.join(outputDir, 'youtube-metadata.json'), JSON.stringify({
-        ...meta, scheduledAt, channel: CHANNEL, videoId,
+        ...meta, scheduledAt: isPublic ? null : scheduledAt, channel: CHANNEL, videoId,
+        privacyStatus: isPublic ? 'public' : 'private',
       }, null, 2));
 
       log(`\n  ✓ Uploaded: https://www.youtube.com/watch?v=${videoId}`);
       log(`  Studio:     https://studio.youtube.com/video/${videoId}/edit`);
+      jarvisUpdateJob(jobId, {
+        status: 'done', step: isPublic ? 'Live on YouTube' : 'Scheduled',
+        progress: 95, videoId,
+        videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+      });
 
       // Step 6: Archive + cleanup
       if (opts.keepFiles) {
         log('  --keep-files set — skipping cleanup.');
       } else {
         log('\n── Step 5: Archive + cleanup ──');
-        await archiveAndCleanup(videoId, slug, outputDir, scheduledAt, unused);
+        jarvisUpdateJob(jobId, { step: 'Archiving + cleanup', progress: 97 });
+        await archiveAndCleanup(videoId, slug, outputDir, isPublic ? null : scheduledAt, unused);
         result.status = 'archived';
+        jarvisUpdateJob(jobId, { step: 'Complete', progress: 100 });
       }
 
     } catch (e) {
       log(`\n  ✗ Video ${i + 1} failed: ${e.message}`);
       result.status = 'failed';
       result.error  = e.message;
+      jarvisUpdateJob(jobId, { status: 'failed', step: `Failed: ${e.message}`, progress: 0 });
       // Continue to next video — don't abort the queue
     }
 

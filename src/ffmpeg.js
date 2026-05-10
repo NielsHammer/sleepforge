@@ -440,10 +440,10 @@ export function generateIntroSting(outputPath, durationSec = 2) {
     `sine=frequency=60:sample_rate=44100:duration=${d}[s0]`,
     `sine=frequency=220:sample_rate=44100:duration=${d}[s1]`,
     `sine=frequency=660:sample_rate=44100:duration=${d}[s2]`,
-    `[s0]volume=0.35,afade=t=in:st=0:d=0.6[sub]`,
-    `[s1]volume=0.20,afade=t=in:st=0:d=0.4[pad]`,
-    `[s2]volume=0.12,adelay=1650|1650[chime]`,
-    `[sub][pad][chime]amix=inputs=3:duration=longest,afade=t=out:st=${fadeOutSt}:d=0.3,alimiter=limit=0.85:level=true[out]`,
+    `[s0]volume=0.90,afade=t=in:st=0:d=0.6[sub]`,
+    `[s1]volume=0.55,afade=t=in:st=0:d=0.4[pad]`,
+    `[s2]volume=0.32,adelay=1650|1650[chime]`,
+    `[sub][pad][chime]amix=inputs=3:duration=longest,afade=t=out:st=${fadeOutSt}:d=0.3,alimiter=limit=0.92:level=true[out]`,
   ].join(';');
 
   const result = spawnSync('ffmpeg', [
