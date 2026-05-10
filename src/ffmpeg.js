@@ -462,15 +462,19 @@ export function generateIntroSting(outputPath, durationSec = 2) {
 }
 
 // Prepend intro sting to a voiceover: sting.wav + voiceover.wav → output.wav
+// Both are resampled to 44100 Hz before concat — sting is 44100 Hz, Chatterbox voice
+// is 24000 Hz, and -c:a copy would embed a mismatched sample rate header causing 1.84x
+// playback speed (chipmunk voice).
 export function prependIntroSting(stingPath, voicePath, outputPath) {
-  const concatList = path.join(path.dirname(outputPath), '_sting_concat.txt');
-  fs.writeFileSync(concatList,
-    `file '${stingPath.replace(/\\/g, '/')}'\nfile '${voicePath.replace(/\\/g, '/')}'`
-  );
   const result = spawnSync('ffmpeg', [
-    '-y', '-f', 'concat', '-safe', '0', '-i', concatList, '-c:a', 'copy', outputPath,
-  ], { stdio: 'pipe', timeout: 30000 });
-  fs.unlinkSync(concatList);
+    '-y',
+    '-i', stingPath,
+    '-i', voicePath,
+    '-filter_complex', '[0:a]aresample=44100[s];[1:a]aresample=44100[v];[s][v]concat=n=2:v=0:a=1[out]',
+    '-map', '[out]',
+    '-c:a', 'pcm_s16le',
+    outputPath,
+  ], { stdio: 'pipe', timeout: 60000 });
   if (result.status !== 0) {
     const errMsg = result.stderr?.toString().slice(-300) || 'unknown error';
     throw new Error(`prependIntroSting failed: ${errMsg}`);
