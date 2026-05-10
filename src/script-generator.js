@@ -367,7 +367,9 @@ async function generateScriptBlock(topic, blockNum, totalBlocks, philosophers, d
   const prompt = buildSleepPhilosophyPrompt(topic, blockMinutes.toString(), blockPhilosophers)
     + continuityNote + closingNote;
 
-  const raw = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 180000 });
+  // Scale timeout with block size — 15-min blocks need up to 6 min at Haiku's pace
+  const blockTimeoutMs = Math.max(180000, blockMinutes * 24000);
+  const raw = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: blockTimeoutMs });
   const text = raw.trim()
     .replace(/^```(?:json)?\s*/gm, "").replace(/```\s*$/gm, "").trim();
 
