@@ -255,3 +255,56 @@ export async function getVideoStats(videoId, channelName) {
     retention_avg_pct,
   };
 }
+
+// ─── listChannelVideos ────────────────────────────────────────────────────────
+// Returns all videos on the channel (public + private + scheduled).
+// Each item: { videoId, title, publishedAt, privacyStatus, scheduledAt }
+
+export async function listChannelVideos(channelName) {
+  const auth    = await authenticate(channelName);
+  const youtube = google.youtube({ version: 'v3', auth });
+
+  // Step 1: get uploads playlist ID
+  const chanRes = await youtube.channels.list({ part: ['contentDetails'], mine: true });
+  const uploadsId = chanRes.data.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+  if (!uploadsId) throw new Error('Could not find uploads playlist for channel');
+
+  // Step 2: paginate through all playlist items
+  const videoIds = [];
+  let pageToken;
+  do {
+    const res = await youtube.playlistItems.list({
+      part: ['contentDetails'],
+      playlistId: uploadsId,
+      maxResults: 50,
+      pageToken,
+    });
+    for (const item of res.data.items || []) {
+      if (item.contentDetails?.videoId) videoIds.push(item.contentDetails.videoId);
+    }
+    pageToken = res.data.nextPageToken;
+  } while (pageToken);
+
+  if (videoIds.length === 0) return [];
+
+  // Step 3: fetch snippet + status in batches of 50
+  const videos = [];
+  for (let i = 0; i < videoIds.length; i += 50) {
+    const batch = videoIds.slice(i, i + 50);
+    const res = await youtube.videos.list({
+      part: ['snippet', 'status'],
+      id: batch,
+    });
+    for (const item of res.data.items || []) {
+      videos.push({
+        videoId:      item.id,
+        title:        item.snippet?.title || '',
+        publishedAt:  item.snippet?.publishedAt || null,
+        privacyStatus: item.status?.privacyStatus || 'private',
+        scheduledAt:  item.status?.publishAt || null,
+      });
+    }
+  }
+
+  return videos;
+}
