@@ -1,0 +1,21 @@
+{
+  "slug": "sleepless-philosophers",
+  "display_name": "Sleepless Philosophers",
+  "youtube_handle": "@SleeplessPhilosophers",
+  "niche": "philosophy",
+  "tone": "calm, meditative, philosophical, period-authentic ancient art, no modern faces, no contemporary makeup, no plucked eyebrows, no current-era hairstyles, historical accuracy",
+  "audience": "insomniacs seeking calming ancient philosophy to fall asleep to",
+  "banned_topics": ["speculative aliens", "UFO", "conspiracy", "modern politics", "religion as doctrine"],
+  "banned_words_thumbnail": ["shocking", "you won't believe", "amazing", "insane", "epic", "mind-blowing"],
+  "allowed_reference_niches": ["sleep_philosophy", "sleep_ambient"],
+  "target_word_count": 9000,
+  "target_duration_minutes": 60,
+  "voice": "chatterbox-archer",
+  "script_model": "claude-haiku-4-5-20251001",
+  "thumbnail_model": "claude-sonnet-4-6",
+  "image_style": "chalk-on-blackboard",
+  "image_library_status": "active",
+  "image_library_path": "assets/image-library",
+  "background_video": "assets/background-videos/sleepless-philosophers.mp4",
+  "philosophers": ["socrates", "plato", "aristotle", "marcus-aurelius", "epictetus", "seneca", "diogenes", "heraclitus", "epicurus", "lao-tzu", "plotinus", "confucius", "zhuangzi"]
+}

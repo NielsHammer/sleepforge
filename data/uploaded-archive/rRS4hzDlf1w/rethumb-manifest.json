@@ -1,0 +1,22 @@
+{
+  "videoId": "rRS4hzDlf1w",
+  "title": "All of Confucius Philosophy Explained | Sleep Meditation",
+  "channel": "sleepless-philosophers",
+  "rethumbnailedAt": "2026-05-11T08:49:11.493Z",
+  "bestVariant": {
+    "index": 1,
+    "rating": 8,
+    "path": "C:\\dev\\sleepforge\\output\\_rethumb\\rRS4hzDlf1w\\v1\\thumbnail.png"
+  },
+  "unusedVariants": [
+    {
+      "index": 2,
+      "rating": 8
+    },
+    {
+      "index": 3,
+      "rating": 8
+    }
+  ],
+  "dryRun": false
+}

@@ -1,0 +1,44 @@
+{
+  "approved": [
+    {
+      "id": "9d255905",
+      "topic": "Taoism: Wu Wei and the Art of Non-Forcing",
+      "title": "Wu Wei Sleep: Fall Asleep by Letting Go | Taoist Philosophy for Insomnia",
+      "tradition": "Taoism",
+      "notes": "title is not clickbaity enough, we need clickbait, remember to learn from your references. the thumbnail is pretty good but not clickbaity enough",
+      "approvedAt": "2026-05-11T17:05:27.801Z"
+    },
+    {
+      "id": "821a5a5a",
+      "topic": "Epicureanism: Simple Pleasures and Peace of Mind",
+      "title": "Epicureanism for Sleep: The Ancient Philosophy of Simple Pleasures & Inner Peace",
+      "tradition": "Epicureanism",
+      "notes": "title is not clickbaity enough, we need clickbait, remember to learn from your references. the thumbnail is pretty good but not clickbaity enough",
+      "approvedAt": "2026-05-11T17:05:28.229Z"
+    }
+  ],
+  "rejected": [
+    {
+      "id": "821a5a5a",
+      "topic": "Epicureanism: Simple Pleasures and Peace of Mind",
+      "title": "Epicureanism for Sleep: The Ancient Philosophy of Simple Pleasures & Inner Peace",
+      "tradition": "Epicureanism",
+      "notes": "title is not clickbaity enough, we need clickbait, remember to learn from your references. the thumbnail is pretty good but not clickbaity enough",
+      "rejectedAt": "2026-05-11T17:05:39.453Z"
+    },
+    {
+      "id": "9d255905",
+      "topic": "Taoism: Wu Wei and the Art of Non-Forcing",
+      "title": "Wu Wei Sleep: Fall Asleep by Letting Go | Taoist Philosophy for Insomnia",
+      "tradition": "Taoism",
+      "notes": "title is not clickbaity enough, we need clickbait, remember to learn from your references. the thumbnail is pretty good but not clickbaity enough",
+      "rejectedAt": "2026-05-11T17:05:43.822Z"
+    }
+  ],
+  "notes": [
+    "title is not clickbaity enough, we need clickbait, remember to learn from your references. the thumbnail is pretty good but not clickbaity enough",
+    "title is not clickbaity enough, we need clickbait, remember to learn from your references. the thumbnail is pretty good but not clickbaity enough",
+    "title is not clickbaity enough, we need clickbait, remember to learn from your references. the thumbnail is pretty good but not clickbaity enough",
+    "title is not clickbaity enough, we need clickbait, remember to learn from your references. the thumbnail is pretty good but not clickbaity enough"
+  ]
+}

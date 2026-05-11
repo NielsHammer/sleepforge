@@ -45,8 +45,9 @@ const SEARCH_COST  = 100;
 const VIDEO_COST   = 1;   // per video (conservative — actual API cost is per-batch call)
 const MAX_PAGES    = 4;
 
-const IS_DRY_RUN    = process.argv.includes('--dry-run');
-const NICHE_FILTER  = (() => { const i = process.argv.indexOf('--niche'); return i >= 0 ? process.argv[i+1] : null; })();
+const IS_DRY_RUN      = process.argv.includes('--dry-run');
+const NICHE_FILTER    = (() => { const i = process.argv.indexOf('--niche');   return i >= 0 ? process.argv[i+1] : null; })();
+const CHANNEL_HANDLE  = (() => { const i = process.argv.indexOf('--channel'); return i >= 0 ? process.argv[i+1] : null; })();
 
 // ─── LOGGING ─────────────────────────────────────────────────────────────────
 
@@ -236,6 +237,137 @@ async function processVideo(item, nicheId, harvestedSet, index) {
   return true;
 }
 
+// ─── CHANNEL-DIRECT HARVEST ──────────────────────────────────────────────────
+// Resolves a @handle to its uploads playlist and pulls ALL videos.
+// No MIN_VIEWS filter, no duration filter — we want everything for reference.
+// Tags all videos under nicheId (default: space_documentary).
+
+async function harvestChannel(youtube, handle, nicheId, harvestedSet, index, state) {
+  const cleanHandle = handle.replace('@', '');
+  log(`\nResolving channel handle: @${cleanHandle}...`);
+
+  let uploadsPlaylistId;
+  try {
+    const chanRes = await youtube.channels.list({
+      part: ['contentDetails', 'snippet'],
+      forHandle: cleanHandle,
+    });
+    const chan = chanRes.data.items?.[0];
+    if (!chan) throw new Error(`Channel not found: @${cleanHandle}`);
+    uploadsPlaylistId = chan.contentDetails?.relatedPlaylists?.uploads;
+    if (!uploadsPlaylistId) throw new Error(`No uploads playlist for @${cleanHandle}`);
+    log(`  Channel: "${chan.snippet?.title}" (${chan.id})`);
+    log(`  Uploads playlist: ${uploadsPlaylistId}`);
+    spendQuota(state, 1); // channels.list costs 1 unit
+  } catch (e) {
+    log(`  ✗ Could not resolve @${cleanHandle}: ${e.message}`);
+    return 0;
+  }
+
+  // Paginate through all uploads
+  const videoIds = [];
+  let pageToken;
+  let page = 0;
+  do {
+    if (quotaRemaining(state) < 1) { log('  Quota exhausted during playlist pagination'); break; }
+    try {
+      const res = await youtube.playlistItems.list({
+        part: ['contentDetails'],
+        playlistId: uploadsPlaylistId,
+        maxResults: 50,
+        ...(pageToken ? { pageToken } : {}),
+      });
+      spendQuota(state, 1); // playlistItems.list costs 1 unit
+      for (const item of res.data.items || []) {
+        const vid = item.contentDetails?.videoId;
+        if (vid && !harvestedSet.has(vid)) videoIds.push(vid);
+      }
+      pageToken = res.data.nextPageToken;
+      page++;
+      if (page % 5 === 0) log(`  Paginating uploads: ${videoIds.length} new IDs so far (page ${page})...`);
+      await new Promise(r => setTimeout(r, 300));
+    } catch (e) {
+      log(`  Pagination error: ${e.message}`);
+      break;
+    }
+  } while (pageToken);
+
+  log(`  Found ${videoIds.length} unharvested videos`);
+  if (videoIds.length === 0) return 0;
+
+  // Fetch details in batches of 50
+  let newCount = 0;
+  for (let i = 0; i < videoIds.length; i += 50) {
+    const batch = videoIds.slice(i, i + 50);
+    if (quotaRemaining(state) < 1) { log('  Quota exhausted during details fetch'); break; }
+    let items;
+    try {
+      const res = await youtube.videos.list({
+        part: ['snippet', 'statistics', 'contentDetails'],
+        id: batch,
+      });
+      spendQuota(state, 1); // videos.list batch costs ~1 unit
+      items = res.data.items || [];
+    } catch (e) {
+      log(`  Details batch error: ${e.message}`);
+      continue;
+    }
+
+    for (const item of items) {
+      if (harvestedSet.has(item.id)) continue;
+      const sn = item.snippet || {};
+      const st = item.statistics || {};
+      const cd = item.contentDetails || {};
+
+      const videoDir = path.join(REFS_DIR, 'by-niche', nicheId, item.id);
+      fs.mkdirSync(videoDir, { recursive: true });
+
+      const durationSec = parseDurationSec(cd.duration);
+      const metadata = {
+        video_id:        item.id,
+        url:             `https://www.youtube.com/watch?v=${item.id}`,
+        niche:           nicheId,
+        title:           sn.title || '',
+        description:     (sn.description || '').slice(0, 2000),
+        channel_title:   sn.channelTitle || '',
+        channel_id:      sn.channelId || '',
+        channel_handle:  `@${cleanHandle}`,
+        published_at:    sn.publishedAt || '',
+        tags:            sn.tags || [],
+        default_language: sn.defaultLanguage || 'en',
+        view_count:      parseInt(st.viewCount || '0'),
+        like_count:      parseInt(st.likeCount || '0'),
+        comment_count:   parseInt(st.commentCount || '0'),
+        duration_sec:    durationSec,
+        duration_iso:    cd.duration || '',
+        thumbnail_url:   sn.thumbnails?.maxres?.url || sn.thumbnails?.high?.url || '',
+        harvested_at:    new Date().toISOString(),
+        harvest_source:  'channel_direct',
+      };
+
+      fs.writeFileSync(path.join(videoDir, 'metadata.json'), JSON.stringify(metadata, null, 2));
+
+      const thumbPath = path.join(videoDir, 'thumbnail.jpg');
+      if (!fs.existsSync(thumbPath)) await downloadThumbnail(item.id, thumbPath);
+
+      const existing = index.findIndex(e => e.video_id === item.id);
+      if (existing >= 0) index[existing] = metadata;
+      else index.push(metadata);
+
+      harvestedSet.add(item.id);
+      newCount++;
+    }
+
+    state.harvested_ids = [...harvestedSet];
+    saveState(state);
+    saveIndex(index);
+    await new Promise(r => setTimeout(r, 500));
+  }
+
+  log(`  ✓ Harvested ${newCount} new videos from @${cleanHandle}`);
+  return newCount;
+}
+
 // ─── MAIN ────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -268,6 +400,31 @@ async function main() {
     const auth = await authenticate(CHANNEL);
     youtube = google.youtube({ version: 'v3', auth });
     log('  ✓ Authenticated');
+  }
+
+  // ── Channel-direct harvest mode ────────────────────────────────────────────
+  if (CHANNEL_HANDLE) {
+    const nicheId = NICHE_FILTER || 'space_documentary';
+    log(`\nChannel-direct harvest: ${CHANNEL_HANDLE} → niche "${nicheId}"`);
+    fs.mkdirSync(path.join(REFS_DIR, 'by-niche', nicheId), { recursive: true });
+
+    if (!IS_DRY_RUN && youtube) {
+      const handles = CHANNEL_HANDLE.split(',').map(h => h.trim()).filter(Boolean);
+      let totalChannelNew = 0;
+      for (const handle of handles) {
+        const n = await harvestChannel(youtube, handle, nicheId, harvestedSet, index, state);
+        totalChannelNew += n;
+      }
+      state.harvested_ids = [...harvestedSet];
+      state.last_run = new Date().toISOString();
+      saveState(state);
+      saveIndex(index);
+      log(`\n✓ Channel harvest complete: ${totalChannelNew} new videos added to "${nicheId}"`);
+      log(`  Total in niche: ${index.filter(v => v.niche === nicheId).length}`);
+    } else {
+      log(`  [dry-run] Would harvest from ${CHANNEL_HANDLE} into niche "${nicheId}"`);
+    }
+    return;
   }
 
   const publishedAfter = new Date();

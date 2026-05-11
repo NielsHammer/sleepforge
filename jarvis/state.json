@@ -1,6 +1,110 @@
 {
   "renders": [
     {
+      "id": "1dcaa999-f53a-4de6-ac0e-a2e2ff7d261e",
+      "topic": "Cynical philosophy of Diogenes of Sinope: radical simplicity, anaideia (shamelessness), living according to nature, rejecting convention and status, virtue as the only good, askesis, the barrel of Diogenes",
+      "channel": "sleepless-philosophers",
+      "status": "done",
+      "step": "Complete",
+      "progress": 100,
+      "videoId": "3wg5ogDyyIY",
+      "videoUrl": "https://www.youtube.com/watch?v=3wg5ogDyyIY",
+      "scheduledAt": "2026-05-17T01:00:00Z",
+      "createdAt": "2026-05-11T04:54:16.258Z",
+      "updatedAt": "2026-05-11T07:16:13.883Z"
+    },
+    {
+      "id": "4353cc85-8b0d-4be2-badf-d527ba511b54",
+      "topic": "Aristotelian philosophy: virtue ethics, the golden mean, eudaimonia (flourishing), Nicomachean Ethics, teleology, the unmoved mover, phronesis (practical wisdom), the good life, friendship",
+      "channel": "sleepless-philosophers",
+      "status": "done",
+      "step": "Complete",
+      "progress": 100,
+      "videoId": "qXrKvkJhh1I",
+      "videoUrl": "https://www.youtube.com/watch?v=qXrKvkJhh1I",
+      "scheduledAt": "2026-05-16T01:00:00Z",
+      "createdAt": "2026-05-11T02:05:45.871Z",
+      "updatedAt": "2026-05-11T04:54:16.255Z"
+    },
+    {
+      "id": "2dc95599-fb95-4321-8c0e-e7140f0fda26",
+      "topic": "Heraclitean philosophy: panta rhei (everything flows), unity of opposites, logos as the rational principle, fire as the fundamental substance, change as constant, the Obscure philosopher of Ephesus",
+      "channel": "sleepless-philosophers",
+      "status": "done",
+      "step": "Complete",
+      "progress": 100,
+      "videoId": "_IJ2P5S_Rpc",
+      "videoUrl": "https://www.youtube.com/watch?v=_IJ2P5S_Rpc",
+      "scheduledAt": "2026-05-15T01:00:00Z",
+      "createdAt": "2026-05-10T23:55:26.065Z",
+      "updatedAt": "2026-05-11T02:05:45.868Z"
+    },
+    {
+      "id": "2f1d6ddf-a7bd-4d8c-9c2e-e402c6868a6f",
+      "topic": "Confucian philosophy: ren (benevolence), li (ritual propriety), yi (righteousness), the Analects, self-cultivation, the junzi (superior person), filial piety, social harmony and virtuous governance",
+      "channel": "sleepless-philosophers",
+      "status": "done",
+      "step": "Complete",
+      "progress": 100,
+      "videoId": "rRS4hzDlf1w",
+      "videoUrl": "https://www.youtube.com/watch?v=rRS4hzDlf1w",
+      "scheduledAt": "2026-05-14T01:00:00Z",
+      "createdAt": "2026-05-10T21:42:39.814Z",
+      "updatedAt": "2026-05-10T23:55:26.062Z"
+    },
+    {
+      "id": "efbe8e13-8f04-4386-94c4-0249a8db41b9",
+      "topic": "Socratic philosophy: the examined life, Socratic method of questioning, maieutics, dialectic, aporia, Socratic irony, the trial of Socrates, virtue through dialogue",
+      "channel": "sleepless-philosophers",
+      "status": "done",
+      "step": "Complete",
+      "progress": 100,
+      "videoId": "SlugP393zyE",
+      "videoUrl": "https://www.youtube.com/watch?v=SlugP393zyE",
+      "scheduledAt": "2026-05-13T01:00:00Z",
+      "createdAt": "2026-05-10T19:34:18.702Z",
+      "updatedAt": "2026-05-10T21:42:39.811Z"
+    },
+    {
+      "id": "0a114c9f-cad7-45ca-a969-0b962219d727",
+      "topic": "Neoplatonic philosophy: the One, emanation, spiritual hierarchy, Plotinus metaphysics, mystical contemplation for transcendent sleep states",
+      "channel": "sleepless-philosophers",
+      "status": "failed",
+      "step": "Failed: All 3 thumbnail variants failed",
+      "progress": 0,
+      "videoId": null,
+      "videoUrl": null,
+      "scheduledAt": "2026-05-12T01:00:00.000Z",
+      "createdAt": "2026-05-10T16:30:02.750Z",
+      "updatedAt": "2026-05-10T19:19:41.189Z"
+    },
+    {
+      "id": "4c66c2ce-c9a6-4af8-82d9-a3ae74913fbe",
+      "topic": "Taoist philosophy: the Way (Tao), wu wei principle, natural flow, simplicity, yin-yang harmony, cosmic balance teachings for meditative rest",
+      "channel": "sleepless-philosophers",
+      "status": "failed",
+      "step": "Failed: claude CLI timed out after 60000ms",
+      "progress": 0,
+      "videoId": null,
+      "videoUrl": null,
+      "scheduledAt": "2026-05-11T01:00:00.000Z",
+      "createdAt": "2026-05-10T13:24:04.835Z",
+      "updatedAt": "2026-05-10T16:30:02.746Z"
+    },
+    {
+      "id": "73ad5f1d-00aa-4980-9c7e-e83f8e627a38",
+      "topic": "Epicureanism philosophy: true teachings of Epicurus, simple living, the role of pleasure in happiness, distinguishing from hedonism misconception",
+      "channel": "sleepless-philosophers",
+      "status": "failed",
+      "step": "Failed: render exited 1",
+      "progress": 0,
+      "videoId": null,
+      "videoUrl": null,
+      "scheduledAt": null,
+      "createdAt": "2026-05-10T11:17:31.762Z",
+      "updatedAt": "2026-05-10T13:24:04.818Z"
+    },
+    {
       "id": "bded452a-9fd6-4f05-86f5-25c7e66cb95e",
       "topic": "30 Stoic Principles for Inner Peace | Sleep Story",
       "channel": "sleepless-philosophers",
@@ -39,7 +143,7 @@
       "refreshed_at": "2026-05-08T23:35:35.890Z"
     }
   },
-  "last_updated": "2026-05-09T13:51:04.220Z",
+  "last_updated": "2026-05-11T07:16:13.883Z",
   "unused_thumbnails": [
     {
       "videoId": "_EJ1oGNKdcs",

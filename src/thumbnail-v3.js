@@ -1022,8 +1022,9 @@ export async function generateThumbnailV3({
   outputDir,
   title,
   scriptText = '',
-  niche = 'philosophy',
-  tone = 'calm, meditative, philosophical',
+  niche = null,
+  tone = null,
+  channelConfig = null,
   _attempt = 1,
   _priorAttempt = null,
   _lockedHook = null,
@@ -1031,6 +1032,9 @@ export async function generateThumbnailV3({
   _skipCritic = false,
   _maxAttempts = MAX_ATTEMPTS,
 }) {
+  // Apply channel config defaults (caller's explicit niche/tone take precedence)
+  niche = niche || channelConfig?.niche || 'philosophy';
+  tone  = tone  || channelConfig?.tone  || 'calm, meditative, philosophical';
   console.log('============================================================');
   console.log('SleepForge Thumbnail v3 (HTML/CSS)' + (_attempt > 1 ? ` — RETRY ${_attempt}/${MAX_ATTEMPTS}` : ''));
   console.log('============================================================');

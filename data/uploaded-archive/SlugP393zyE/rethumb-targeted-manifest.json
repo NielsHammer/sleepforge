@@ -1,0 +1,22 @@
+{
+  "videoId": "SlugP393zyE",
+  "title": "30 Socratic Dialogues for Deep Sleep",
+  "channel": "sleepless-philosophers",
+  "rethumbnailedAt": "2026-05-11T10:59:36.704Z",
+  "bestVariant": {
+    "index": 3,
+    "rating": 8,
+    "path": "C:\\dev\\sleepforge\\output\\_rethumb-targeted\\SlugP393zyE\\v3\\thumbnail.png"
+  },
+  "unusedVariants": [
+    {
+      "index": 1,
+      "rating": 7
+    },
+    {
+      "index": 2,
+      "rating": 7
+    }
+  ],
+  "dryRun": false
+}

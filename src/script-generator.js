@@ -21,7 +21,7 @@ import { callClaudeCLI } from "./claude-cli.js";
 // which wraps it in the locked chalk-on-blackboard style template.
 
 const MODEL = "claude-haiku-4-5-20251001"; // CLAUDE.md rule: Haiku for scripts
-const WORDS_PER_MINUTE = 110; // Slower than VideoForge's 130 — sleep pacing
+const WORDS_PER_MINUTE = 150; // Calibrated to actual Kokoro TTS speed — 110 produced ~45min videos for 60min target
 
 // ─── PHILOSOPHER DATABASE ───────────────────────────────────────────────────
 // Each philosopher has enough context for Haiku to write accurately without
@@ -302,12 +302,12 @@ You MUST produce exactly the number of scenes specified — this is non-negotiab
     "moment": "The specific philosophical moment or teaching (e.g. 'drinking the hemlock')",
     "action": "What the philosopher is physically doing — ONE specific pose or gesture (e.g. 'raising a cup to his lips with steady hands')",
     "setting": "Brief setting description (e.g. 'the stone prison cell, a crumbling Doric column')",
-    "narration": "The narration text for this scene. 55-80 words. 1-2 short paragraphs separated by \\n\\n"
+    "narration": "The narration text for this scene. 75-110 words. 1-2 short paragraphs separated by \\n\\n"
   }
 ]
 
 RULES FOR SCENES:
-- Each scene = 30-45 seconds of narration = 55-80 words. NO MORE.
+- Each scene = 30-45 seconds of narration = 75-110 words. NO MORE.
 - Each scene must focus on ONE philosopher and ONE specific moment
 - The "action" field must describe a single physical gesture or pose — this drives the image
 - The "action" field must NEVER mention light sources: no candle, fire, flame, lantern, torch, lamp, glow — these break the image style
@@ -320,8 +320,8 @@ RULES FOR SCENES:
 
 // ─── SCRIPT STRUCTURE ───────────────────────────────────────────────────────
 
-function buildSleepPhilosophyPrompt(topic, duration, philosophers) {
-  const targetWords = Math.round(parseInt(duration) * WORDS_PER_MINUTE);
+function buildSleepPhilosophyPrompt(topic, duration, philosophers, wpm = WORDS_PER_MINUTE, channelConfig = null) {
+  const targetWords = Math.round(parseInt(duration) * wpm);
   const minWords = Math.round(targetWords * 0.92);
   const maxWords = Math.round(targetWords * 1.08);
   const sceneCount = Math.max(2, Math.round(parseInt(duration) * 60 / 37)); // ~37 seconds per scene
@@ -337,12 +337,17 @@ Key moments: ${p.moments.join("; ")}
 Themes: ${p.themes}`;
   }).filter(Boolean).join("\n");
 
-  return `You are writing a ${duration}-minute sleep philosophy narration — a calm, meditative
-exploration of ancient philosophical wisdom meant to help listeners drift to sleep.
+  // Channel-specific banned topics block
+  const bannedTopicsBlock = channelConfig?.banned_topics?.length
+    ? `\nBANNED TOPICS (channel rules — do not introduce):\n${channelConfig.banned_topics.map(t => `  - ${t}`).join('\n')}\n`
+    : '';
+
+  return `You are writing a ${duration}-minute sleep ${channelConfig?.niche || 'philosophy'} narration — a calm, meditative
+exploration meant to help listeners drift to sleep.
 
 TOPIC: "${topic}"
-TARGET DURATION: ${duration} minutes (~${targetWords} words at ${WORDS_PER_MINUTE} wpm)
-NUMBER OF SCENES: exactly ${sceneCount} scenes (each ~37 seconds / ~65 words)
+TARGET DURATION: ${duration} minutes (~${targetWords} words at ${wpm} wpm)
+NUMBER OF SCENES: exactly ${sceneCount} scenes (each ~37 seconds / ~${Math.round(wpm * 37 / 60)} words)
 
 ═══ PHILOSOPHER REFERENCE ═══
 Use ONLY these philosophers and their real teachings. Do not invent quotes or moments.
@@ -409,9 +414,9 @@ ${SLEEP_VOICE_RULES}
 
 ${SCENE_OUTPUT_FORMAT}
 
-WORD COUNT — CRITICAL:
+${bannedTopicsBlock}WORD COUNT — CRITICAL:
 Total narration across all scenes: ${minWords}–${maxWords} words
-Each scene: ~${WORDS_PER_MINUTE * 3} words (3 minutes)
+Each scene: ~${Math.round(wpm * 37 / 60)} words (37 seconds)
 Number of scenes: ${sceneCount}
 
 Return ONLY the JSON array. No preamble, no markdown fences, no explanation.`;
@@ -422,10 +427,10 @@ Return ONLY the JSON array. No preamble, no markdown fences, no explanation.`;
 
 const BLOCK_SIZE_MINUTES = 15;
 
-async function generateScriptBlock(topic, blockNum, totalBlocks, philosophers, duration) {
+async function generateScriptBlock(topic, blockNum, totalBlocks, philosophers, duration, wpm = WORDS_PER_MINUTE, channelConfig = null) {
   const blockMinutes = Math.min(BLOCK_SIZE_MINUTES, duration - (blockNum - 1) * BLOCK_SIZE_MINUTES);
   const sceneCount = Math.max(2, Math.round(blockMinutes * 60 / 37)); // ~37 seconds per scene
-  const targetWords = Math.round(blockMinutes * WORDS_PER_MINUTE);
+  const targetWords = Math.round(blockMinutes * wpm);
 
   // Rotate philosophers across blocks so we don't cluster
   const blockPhilosophers = [];
@@ -444,7 +449,7 @@ async function generateScriptBlock(topic, blockNum, totalBlocks, philosophers, d
     ? `\nFINAL BLOCK: This is the ending. The last 2 scenes should be the most peaceful and quiet of the entire video. Bring the themes to rest. End with implied silence.\n`
     : "";
 
-  const prompt = buildSleepPhilosophyPrompt(topic, blockMinutes.toString(), blockPhilosophers)
+  const prompt = buildSleepPhilosophyPrompt(topic, blockMinutes.toString(), blockPhilosophers, wpm, channelConfig)
     + continuityNote + closingNote;
 
   // Scale timeout with block size — 15-min blocks need up to 6 min at Haiku's pace
@@ -550,8 +555,15 @@ function lintForFictionalNames(scenes) {
 export async function generateScript(topic, options = {}) {
   const duration = parseInt(options.duration) || 60; // Default 60 min for sleep
   const outputDir = options.output || "./scripts";
+  const channelConfig = options.channelConfig || null;
   const philosopherKeys = options.philosophers
+    || channelConfig?.philosophers
     || ["socrates", "plato", "aristotle", "marcus-aurelius", "epictetus", "seneca"];
+
+  // Channel config can override effective WPM via target_word_count (e.g. 9000 words / 60 min = 150 wpm)
+  const effectiveWPM = channelConfig?.target_word_count
+    ? Math.round(channelConfig.target_word_count / Math.max(duration, 1))
+    : WORDS_PER_MINUTE;
 
   // Validate philosopher keys
   const validPhilosophers = philosopherKeys.filter(k => PHILOSOPHERS[k]);
@@ -564,6 +576,7 @@ export async function generateScript(topic, options = {}) {
   console.log(`\n  SleepForge Script Generator`);
   console.log(`  Topic: "${topic}"`);
   console.log(`  Duration: ${duration} min`);
+  console.log(`  Channel: ${channelConfig?.slug || 'default'}`);
   console.log(`  Philosophers: ${validPhilosophers.map(k => PHILOSOPHERS[k].name).join(", ")}`);
   console.log(`  Model: ${MODEL} (target cost: ~$0.10)`);
 
@@ -575,7 +588,7 @@ export async function generateScript(topic, options = {}) {
     console.log(`  Writing ${blockLabel}...`);
 
     try {
-      const scenes = await generateScriptBlock(topic, i, totalBlocks, validPhilosophers, duration);
+      const scenes = await generateScriptBlock(topic, i, totalBlocks, validPhilosophers, duration, effectiveWPM, channelConfig);
       allScenes.push(...scenes);
       console.log(`  ${blockLabel}: ${scenes.length} scenes`);
     } catch (err) {
@@ -584,7 +597,7 @@ export async function generateScript(topic, options = {}) {
       console.log(`  Retrying ${blockLabel}...`);
       await new Promise(r => setTimeout(r, 3000));
       try {
-        const scenes = await generateScriptBlock(topic, i, totalBlocks, validPhilosophers, duration);
+        const scenes = await generateScriptBlock(topic, i, totalBlocks, validPhilosophers, duration, effectiveWPM, channelConfig);
         allScenes.push(...scenes);
       } catch (retryErr) {
         console.error(`  ${blockLabel} retry failed: ${retryErr.message}`);

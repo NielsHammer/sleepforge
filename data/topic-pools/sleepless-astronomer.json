@@ -1,0 +1,157 @@
+{
+  "channel": "sleepless-astronomer",
+  "niche": "space_documentary",
+  "style_reference": "AstroKobi — calm, wonder-driven, fact-grounded, no speculation",
+  "topics": [
+    {
+      "title": "Voyager 1: The Farthest Human-Made Object and What It Tells Us",
+      "category": "missions_probes",
+      "angle": "Follow Voyager 1's 47-year journey beyond the heliosphere — the Golden Record, interstellar space, and what it means to send a message into the void"
+    },
+    {
+      "title": "The James Webb Space Telescope's Most Astounding Discoveries",
+      "category": "telescopes_discoveries",
+      "angle": "JWST's first year of images — deep field, exoplanet atmospheres, the earliest galaxies, and how it rewrote our timeline of the universe"
+    },
+    {
+      "title": "What's Inside a Black Hole: An Hour of Deep Space Wonder",
+      "category": "stellar_phenomena",
+      "angle": "Event horizons, singularities, spaghettification, Hawking radiation — what we know and what remains mystery"
+    },
+    {
+      "title": "UY Scuti and the Largest Stars Ever Discovered",
+      "category": "stellar_phenomena",
+      "angle": "Hypergiant stars so vast our sun is invisible inside them — stellar lifecycles, supernovae, and the scale that makes distances meaningless"
+    },
+    {
+      "title": "The Pale Blue Dot: Carl Sagan and the Scale of Everything",
+      "category": "scale_of_universe",
+      "angle": "Voyager 1's famous photograph, Sagan's reflection, and an hour meditating on humanity's place in a 93-billion light-year universe"
+    },
+    {
+      "title": "How the Universe Will End: Heat Death, Big Rip, and Big Freeze",
+      "category": "cosmology",
+      "angle": "The three leading theories for the universe's final state — trillions of years from now, entropy wins"
+    },
+    {
+      "title": "Neutron Stars: The Densest Objects You Can Actually Touch",
+      "category": "stellar_phenomena",
+      "angle": "A teaspoon weighs a billion tons. Pulsars, magnetars, and the physics of collapsed stellar cores"
+    },
+    {
+      "title": "The Andromeda Collision: When Our Galaxy Merges in 4 Billion Years",
+      "category": "cosmology",
+      "angle": "The slow-motion collision already in progress — what it will look like, what survives, and why most stars never actually collide"
+    },
+    {
+      "title": "Exoplanets: The Most Earth-Like Worlds We've Found So Far",
+      "category": "exoplanets",
+      "angle": "Kepler, TESS, and JWST results — ocean worlds, super-Earths, tidally locked planets, and the Goldilocks zone"
+    },
+    {
+      "title": "The Hubble Deep Field: 10,000 Galaxies in a Patch of Sky",
+      "category": "telescopes_discoveries",
+      "angle": "The 1995 image that changed everything — what we see when we look back 13 billion years"
+    },
+    {
+      "title": "Dark Matter and Dark Energy: The 95% We Cannot See",
+      "category": "cosmology",
+      "angle": "Gravitational lensing, galaxy rotation curves, and the invisible scaffolding holding the universe together"
+    },
+    {
+      "title": "The Apollo 11 Moon Landing: One Hour of the Mission in Full",
+      "category": "missions_probes",
+      "angle": "From launch to splashdown — the science, the tension, and the quiet wonder of the first humans on another world"
+    },
+    {
+      "title": "The Pillars of Creation: Star Birth Inside the Eagle Nebula",
+      "category": "stellar_phenomena",
+      "angle": "The iconic nebula image and what it actually shows — protostars forming, stellar winds, and light-years-tall gas columns"
+    },
+    {
+      "title": "Titan: Saturn's Moon with Rivers and Rain, Just Not of Water",
+      "category": "missions_probes",
+      "angle": "Cassini-Huygens findings — methane lakes, nitrogen atmosphere, and the most Earth-like place in the solar system (just not for us)"
+    },
+    {
+      "title": "The Big Bang: Everything from Nothing in the First Three Minutes",
+      "category": "cosmology",
+      "angle": "Cosmic microwave background, inflation theory, nucleosynthesis — how matter, light, and time emerged from a singularity"
+    },
+    {
+      "title": "Gamma-Ray Bursts: The Most Powerful Explosions in the Universe",
+      "category": "stellar_phenomena",
+      "angle": "Brighter than entire galaxies for seconds — the physics of dying massive stars and colliding neutron stars"
+    },
+    {
+      "title": "The Cosmic Web: How Galaxies Are Arranged Across the Universe",
+      "category": "scale_of_universe",
+      "angle": "Filaments, voids, and galaxy clusters — the large-scale structure of the universe looks like a neural network"
+    },
+    {
+      "title": "Mars: Everything We Know After 50 Years of Missions",
+      "category": "missions_probes",
+      "angle": "Viking, Curiosity, Perseverance — the red planet's geology, ancient oceans, and the ongoing search for past life"
+    },
+    {
+      "title": "The Death of Stars: From Red Giants to White Dwarfs to Black Holes",
+      "category": "stellar_phenomena",
+      "angle": "The full stellar lifecycle — what happens to stars of different masses as they age, collapse, and sometimes explode"
+    },
+    {
+      "title": "Gravitational Waves: Hearing the Universe for the First Time",
+      "category": "telescopes_discoveries",
+      "angle": "LIGO's 2015 detection, the chirp of two merging black holes, and what listening to spacetime teaches us"
+    },
+    {
+      "title": "Europa and Enceladus: Ocean Moons and the Question of Life",
+      "category": "exoplanets",
+      "angle": "Subsurface oceans beneath ice shells, hydrothermal vents, and why these moons are the best bet for extraterrestrial life in our solar system"
+    },
+    {
+      "title": "The Speed of Light and Why Nothing Can Exceed It",
+      "category": "time_space_concepts",
+      "angle": "Special relativity, time dilation, the light-year as a time machine — looking at the stars is looking into the past"
+    },
+    {
+      "title": "Pulsars: Lighthouses of the Galaxy Spinning Hundreds of Times Per Second",
+      "category": "stellar_phenomena",
+      "angle": "Millisecond pulsars, pulsar timing arrays, and how these spinning neutron stars keep more precise time than atomic clocks"
+    },
+    {
+      "title": "The Observable Universe: What 46 Billion Light-Years Really Means",
+      "category": "scale_of_universe",
+      "angle": "The cosmic horizon, expansion faster than light, and why we can only ever see a fraction of what exists"
+    },
+    {
+      "title": "The Cassini Mission: Thirteen Years Orbiting Saturn",
+      "category": "missions_probes",
+      "angle": "The rings, the moons, the hexagonal polar storm — Cassini's greatest findings and its deliberate plunge into Saturn's atmosphere"
+    },
+    {
+      "title": "Quasars: The Brightest Objects in the Universe, Powered by Hunger",
+      "category": "stellar_phenomena",
+      "angle": "Supermassive black holes consuming gas at galactic centers, outshining entire galaxies — quasars as cosmic lighthouses across billions of light-years"
+    },
+    {
+      "title": "The Multiverse: Many Worlds, Many Universes — What Physics Actually Says",
+      "category": "cosmology",
+      "angle": "Inflation theory bubbles, quantum many-worlds interpretation — the actual theoretical basis, without speculation"
+    },
+    {
+      "title": "The Oort Cloud and the Edge of Our Solar System",
+      "category": "scale_of_universe",
+      "angle": "Trillions of comets, a light-year from the sun — the solar system's outer boundary and the comets it sends our way"
+    },
+    {
+      "title": "Betelgeuse: When a Star on Our Doorstep is About to Explode",
+      "category": "stellar_phenomena",
+      "angle": "The great dimming of 2020, supergiant variability, and what Betelgeuse's supernova will look like from Earth when it comes"
+    },
+    {
+      "title": "The New Horizons Flyby: Pluto Up Close for the First Time",
+      "category": "missions_probes",
+      "angle": "The 9-year journey, Pluto's heart-shaped plain of nitrogen ice, Charon's canyon, and the moment we saw a world that had been just a dot"
+    }
+  ]
+}

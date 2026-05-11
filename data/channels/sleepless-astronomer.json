@@ -1,0 +1,22 @@
+{
+  "slug": "sleepless-astronomer",
+  "display_name": "Sleepless Astronomer",
+  "youtube_handle": "@sleepastronomer",
+  "niche": "space_documentary",
+  "tone": "calm cinematic documentary, AstroKobi-inspired but sleep-friendly, wonder without urgency, deep-space scale, slow narration, no excitement cues",
+  "audience": "viewers wanting to fall asleep to deep-sky astronomy and cosmology explanations",
+  "banned_topics": ["speculative aliens", "UFO", "conspiracy theories", "religious framing of cosmology", "pseudo-science", "ancient aliens"],
+  "banned_words_thumbnail": ["shocking", "you won't believe", "terrifying", "NASA is hiding", "alien", "UFO", "insane", "mind-blowing"],
+  "allowed_reference_niches": ["space_documentary", "sleep_ambient"],
+  "target_word_count": 9000,
+  "target_duration_minutes": 60,
+  "voice": "chatterbox-archer",
+  "script_model": "claude-haiku-4-5-20251001",
+  "thumbnail_model": "claude-sonnet-4-6",
+  "image_style": "cinematic-space",
+  "image_library_status": "pending",
+  "image_library_path": "assets/image-library-astronomer",
+  "background_video": null,
+  "topic_pool": "data/topic-pools/sleepless-astronomer.json",
+  "notes": "Channel exists (40 subs, 117 videos). OAuth token active. Video pipeline not yet started — image library must be built first. See image_library_status: pending."
+}

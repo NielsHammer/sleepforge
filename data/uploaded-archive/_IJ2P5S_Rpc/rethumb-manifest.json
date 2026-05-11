@@ -1,0 +1,22 @@
+{
+  "videoId": "_IJ2P5S_Rpc",
+  "title": "1 Hour of Heraclitus: Everything Flows for Deep Sleep",
+  "channel": "sleepless-philosophers",
+  "rethumbnailedAt": "2026-05-11T09:04:58.013Z",
+  "bestVariant": {
+    "index": 1,
+    "rating": 8,
+    "path": "C:\\dev\\sleepforge\\output\\_rethumb\\_IJ2P5S_Rpc\\v1\\thumbnail.png"
+  },
+  "unusedVariants": [
+    {
+      "index": 2,
+      "rating": 8
+    },
+    {
+      "index": 3,
+      "rating": 8
+    }
+  ],
+  "dryRun": false
+}

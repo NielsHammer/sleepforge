@@ -1,0 +1,22 @@
+{
+  "videoId": "qXrKvkJhh1I",
+  "title": "The Wisest Ideas of Aristotle for Sleep Meditation",
+  "channel": "sleepless-philosophers",
+  "rethumbnailedAt": "2026-05-11T09:17:17.317Z",
+  "bestVariant": {
+    "index": 1,
+    "rating": 8,
+    "path": "C:\\dev\\sleepforge\\output\\_rethumb\\qXrKvkJhh1I\\v1\\thumbnail.png"
+  },
+  "unusedVariants": [
+    {
+      "index": 2,
+      "rating": 8
+    },
+    {
+      "index": 3,
+      "rating": 8
+    }
+  ],
+  "dryRun": false
+}

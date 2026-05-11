@@ -1,0 +1,22 @@
+{
+  "videoId": "3wg5ogDyyIY",
+  "title": "(NO ADS) 25 Teachings of Diogenes the Cynic for Deep Sleep",
+  "channel": "sleepless-philosophers",
+  "rethumbnailedAt": "2026-05-11T10:45:53.817Z",
+  "bestVariant": {
+    "index": 2,
+    "rating": 8,
+    "path": "C:\\dev\\sleepforge\\output\\_rethumb-targeted\\3wg5ogDyyIY\\v2\\thumbnail.png"
+  },
+  "unusedVariants": [
+    {
+      "index": 1,
+      "rating": 7
+    },
+    {
+      "index": 3,
+      "rating": 7
+    }
+  ],
+  "dryRun": false
+}

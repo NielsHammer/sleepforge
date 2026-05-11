@@ -72,13 +72,13 @@ function buildPrincipleContext() {
 
 // ─── MAIN EXPORT ─────────────────────────────────────────────────────────────
 
-export async function generateMetadata(topic, scenes = []) {
+export async function generateMetadata(topic, scenes = [], channelConfig = null) {
   const scriptExcerpt = scenes
     .map((s) => s.narration || "")
     .join("\n\n")
     .slice(0, 2000);
 
-  const prompt = buildPrompt(topic, scriptExcerpt);
+  const prompt = buildPrompt(topic, scriptExcerpt, channelConfig);
   const raw    = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 120000 });
 
   const match = raw.match(/\{[\s\S]*\}/);
@@ -93,17 +93,25 @@ export async function generateMetadata(topic, scenes = []) {
   };
 }
 
-function buildPrompt(topic, scriptExcerpt) {
+function buildPrompt(topic, scriptExcerpt, channelConfig = null) {
   const principleCtx = buildPrincipleContext();
-  return `You are a YouTube SEO expert specialising in sleep, meditation, and philosophy channels.${principleCtx}
+  const niche    = channelConfig?.niche    || 'philosophy';
+  const audience = channelConfig?.audience || 'adults who use YouTube to fall asleep — they want calm narration, philosophical wisdom, and ambient atmosphere';
+  const channelName = channelConfig?.display_name || 'Sleepless Philosophers';
+  const bannedTopicsNote = channelConfig?.banned_topics?.length
+    ? `\nAVOID THESE TOPICS in description and tags: ${channelConfig.banned_topics.join(', ')}`
+    : '';
 
-Generate metadata for a sleep story video. The target audience is adults who use YouTube to fall asleep — they want calm narration, philosophical wisdom, and ambient atmosphere.
+  return `You are a YouTube SEO expert specialising in sleep, meditation, and ${niche} channels.${principleCtx}
+
+Generate metadata for a sleep story video on the "${channelName}" channel.
+Target audience: ${audience}
 
 Topic: "${topic}"
 
 Script excerpt:
 ${scriptExcerpt}
-
+${bannedTopicsNote}
 Return a single JSON object:
 {
   "title": "Title here",
@@ -113,12 +121,12 @@ Return a single JSON object:
 
 TITLE rules:
 - 50-65 characters
-- Lead with the philosopher name or concept keyword (for search ranking)
-- Evoke calm, wisdom, or restful sleep — never clickbait
-- Examples: "Marcus Aurelius on Letting Go | Sleep Story", "Stoic Wisdom for a Restful Mind"
+- Lead with the main concept or subject name (for search ranking)
+- Evoke calm, wonder, or restful sleep — never clickbait
+- Examples: "Marcus Aurelius on Letting Go | Sleep Story", "The Death of Stars | Deep Sleep Documentary"
 
 DESCRIPTION rules:
-- Line 1-2: compelling hook (visible before "Show more") — what wisdom the viewer will absorb
+- Line 1-2: compelling hook (visible before "Show more") — what the viewer will experience
 - Blank line, then 3-4 benefit bullets starting with ✦
 - Blank line, then CTA: "Subscribe and hit 🔔 for new sleep stories every day."
 - Blank line, then a note about the ambient audio/atmosphere
@@ -126,8 +134,8 @@ DESCRIPTION rules:
 - Total: 400-600 characters
 
 TAGS rules (15 tags):
-- Mix of: philosopher name, topic keywords, sleep-specific terms
-- Include: "sleep story", "sleep meditation", "philosophical sleep", "stoicism for sleep"
-- Be specific: "marcus aurelius stoicism" beats "philosophy"
+- Mix of: subject name, topic keywords, sleep-specific terms
+- Include: "sleep story", "sleep meditation", "${niche} for sleep"
+- Be specific
 - No hashtags in tags array — plain text only`;
 }
