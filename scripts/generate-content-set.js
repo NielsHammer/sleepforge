@@ -14,7 +14,6 @@
 import fs        from 'fs';
 import path      from 'path';
 import crypto    from 'crypto';
-import puppeteer from 'puppeteer';
 import { fileURLToPath } from 'url';
 import dotenv    from 'dotenv';
 
@@ -22,7 +21,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT      = path.resolve(__dirname, '..');
 dotenv.config({ path: path.join(ROOT, '.env') });
 
-const { callClaudeCLI } = await import('../src/claude-cli.js');
+const { callClaudeCLI }                     = await import('../src/claude-cli.js');
+const { generateThumbnailV3, closeBrowser } = await import('../src/thumbnail-v3.js');
 
 const CONTENT_SETS_DIR = path.join(ROOT, 'data', 'content-sets');
 const APPROVAL_QUEUE   = path.join(ROOT, 'data', 'approval-queue.json');
@@ -39,65 +39,17 @@ function writeQueue(items) {
 
 function emit(obj) { process.stdout.write(JSON.stringify(obj) + '\n'); }
 
-const TRADITION_COLORS = {
-  'Stoicism':      ['#1a2332', '#2c3e50'],
-  'Taoism':        ['#0d2b1e', '#155a3a'],
-  'Buddhism':      ['#1a0a2e', '#2d1b4e'],
-  'Epicureanism':  ['#1a1500', '#2e2600'],
-  'Platonism':     ['#0d1a2b', '#152a44'],
-  'Aristotelianism':['#1a1200','#2e2000'],
-  'Confucianism':  ['#1a0d00', '#2e1a00'],
-  'Existentialism':['#0f0f0f', '#1a1a2e'],
-  'default':       ['#0a0a1a', '#1a1a3a'],
+const TRADITION_TONE = {
+  'Stoicism':       'stoic, disciplined, ancient Roman marble, period-authentic art',
+  'Taoism':         'tranquil, flowing, ancient Chinese ink wash painting, period-authentic art',
+  'Buddhism':       'serene, meditative, ancient Buddhist sculpture or thangka, period-authentic art',
+  'Epicureanism':   'peaceful, gentle, ancient Greek or Hellenistic art, period-authentic art',
+  'Platonism':      'contemplative, idealist, ancient Greek sculpture, period-authentic art',
+  'Aristotelianism':'scholarly, balanced, ancient Greek or Byzantine art, period-authentic art',
+  'Confucianism':   'harmonious, ordered, ancient Chinese scroll painting, period-authentic art',
+  'Existentialism': 'introspective, modern philosophical, painterly, no modern photos',
+  'default':        'calm, meditative, philosophical, period-authentic ancient art',
 };
-
-function escapeHtml(s) {
-  return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
-
-async function generatePreviewThumbnail(setDir, title, tradition) {
-  const [bg1, bg2] = TRADITION_COLORS[tradition] || TRADITION_COLORS.default;
-  const html = `<!DOCTYPE html><html><head><style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{width:1280px;height:720px;display:flex;align-items:center;justify-content:center;
-     background:linear-gradient(135deg,${bg1} 0%,${bg2} 100%);font-family:Georgia,serif;position:relative;}
-.title{color:#fff;font-size:${title.length > 60 ? 56 : 68}px;font-weight:bold;text-align:center;
-       padding:60px 80px;text-shadow:0 2px 24px rgba(0,0,0,.85);
-       max-width:1100px;letter-spacing:0.04em;word-spacing:0.18em;line-height:1.25;}
-.tag{position:absolute;top:32px;right:40px;color:rgba(255,255,255,.5);
-     font-size:18px;letter-spacing:4px;font-family:monospace;text-transform:uppercase;}
-.bar{position:absolute;bottom:0;left:0;right:0;height:4px;
-     background:linear-gradient(90deg,rgba(0,212,255,.6),rgba(255,179,0,.6),rgba(0,212,255,.6));}
-</style></head><body>
-  <div class="title">${escapeHtml(title)}</div>
-  <div class="tag">${escapeHtml(tradition)}</div>
-  <div class="bar"></div>
-</body></html>`;
-
-  const htmlPath  = path.join(setDir, '_preview.html');
-  const thumbPath = path.join(setDir, 'thumbnail.png');
-  fs.writeFileSync(htmlPath, html, 'utf-8');
-
-  let browser;
-  try {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox','--disable-setuid-sandbox','--disable-gpu'],
-    });
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1280, height: 720 });
-    await page.goto(`file://${htmlPath.replace(/\\/g,'/')}`);
-    await page.screenshot({ path: thumbPath });
-  } finally {
-    if (browser) await browser.close();
-    try { fs.unlinkSync(htmlPath); } catch {}
-  }
-  return thumbPath;
-}
 
 async function generateOneSet(existingTopics, overrideId = null) {
   const id     = overrideId || crypto.randomUUID().slice(0,8);
@@ -143,8 +95,32 @@ Reply ONLY with this JSON (no markdown):
 
   const data = JSON.parse(match[0]);
 
-  // ── Step 2: preview thumbnail ──
-  await generatePreviewThumbnail(setDir, data.primaryTitle, data.tradition);
+  // ── Step 2: real thumbnail via full thumbnail-v3 pipeline ──
+  const tone = TRADITION_TONE[data.tradition] || TRADITION_TONE.default;
+  try {
+    await generateThumbnailV3({
+      outputDir:  setDir,
+      title:      data.primaryTitle,
+      scriptText: '',
+      niche:      'philosophy',
+      tone:       `calm, meditative, philosophical, ${tone}, no modern faces, no contemporary makeup, no plucked eyebrows, no current-era hairstyles`,
+    });
+  } catch (e) {
+    emit({ status: 'progress', msg: `⚠ Thumbnail generation failed for set ${id}: ${e.message.slice(0, 120)}`, i: 0, total: 0 });
+    // Fall back to a minimal CSS placeholder so the set isn't blocked
+    const fallbackHtml = `<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box;}body{width:1280px;height:720px;background:#0a0a1a;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;}.t{color:#fff;font-size:68px;font-weight:bold;text-align:center;padding:60px;letter-spacing:0.04em;word-spacing:0.18em;}</style></head><body><div class="t">${data.primaryTitle.replace(/</g,'&lt;')}</div></body></html>`;
+    const { default: puppeteer } = await import('puppeteer');
+    let browser;
+    try {
+      browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox','--disable-setuid-sandbox','--disable-gpu'] });
+      const page = await browser.newPage();
+      await page.setViewport({ width: 1280, height: 720 });
+      await page.setContent(fallbackHtml);
+      await page.screenshot({ path: path.join(setDir, 'thumbnail.png') });
+    } finally {
+      if (browser) await browser.close();
+    }
+  }
 
   // ── Step 3: save content.json ──
   const content = {
@@ -201,4 +177,5 @@ for (let i = 0; i < count; i++) {
   }
 }
 
+await closeBrowser().catch(() => {});
 emit({ status: 'done', sets: results });
