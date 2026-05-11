@@ -551,8 +551,9 @@ The strongest thumbnails share a structure: a single hero image fills the frame,
 THE HOOK MUST TRIGGER A FEELING, NOT DESCRIBE A FACT.
 Strong hook patterns: impossible-sounding specifics, personal challenges, forbidden frames, stark contrasts. Weak patterns: raw numbers without verbs, vague descriptors, topic categories.
 
-TEXT CRAFT:
-- Text must be readable at 168x94. Below 36px it vanishes.
+TEXT CRAFT — HARD RULES (violation = automatic rejection, no exceptions):
+- ALL visible text MUST be font-size 56px or larger. There is NO exception. Sub-56px text is a hard failure that will reject this entire design. Even supplementary text (channel name, subtitle, attribution) must be 56px+. If a design element can only fit at small size, remove it.
+- The hook text (1-3 words) should be 80-140px for maximum impact at mobile scale.
 - Never grey text — use white, near-black, or saturated color.
 - MANDATORY on ALL text elements: set both letter-spacing AND word-spacing explicitly.
   Example: style="font-size:96px; letter-spacing:0.05em; word-spacing:0.2em;"
@@ -951,8 +952,8 @@ function checkHtmlLegibility(html) {
   for (const m of fontSizeMatches) {
     let pxValue = parseFloat(m[1]);
     if (m[2] === 'rem' || m[2] === 'em') pxValue *= 16;
-    if (pxValue < 36) {
-      violations.push(`text font-size ${pxValue}px is below 36px minimum`);
+    if (pxValue < 56) {
+      violations.push(`text font-size ${pxValue}px is below 56px minimum`);
     }
   }
   const colorMatches = [...html.matchAll(/color\s*:\s*(#[0-9a-f]{3,6}|rgba?\([^)]+\))/gi)];
@@ -1005,6 +1006,14 @@ function checkHtmlLegibility(html) {
     }
   }
   return { ok: violations.length === 0, violations };
+}
+
+// Bumps all font-size values below minPx to minPx in the HTML string.
+// Applied automatically when the legibility checker finds sub-threshold font sizes.
+function fixSmallFontSizes(html, minPx = 56) {
+  return html.replace(/font-size\s*:\s*(\d+(?:\.\d+)?)\s*px/gi, (match, val) => {
+    return parseFloat(val) < minPx ? `font-size: ${minPx}px` : match;
+  });
 }
 
 // ─── MAIN ENTRY POINT ─────────────────────────────────────────────────────────
@@ -1121,10 +1130,16 @@ export async function generateThumbnailV3({
   const htmlPath = path.join(outputDir, 'thumbnail-v3.html');
   const pngPath = path.join(outputDir, 'thumbnail.png');
 
+  let rewrittenFinal = rewritten;
   const legibility = checkHtmlLegibility(rewritten);
   if (!legibility.ok) {
     console.log('  ⚠️  Legibility violations:');
     for (const v of legibility.violations) console.log('    ✗ ' + v);
+    const hasFontViolation = legibility.violations.some(v => /below 56px/.test(v));
+    if (hasFontViolation) {
+      rewrittenFinal = fixSmallFontSizes(rewritten, 56);
+      console.log('  🔧 Auto-fixed: bumped all sub-56px font sizes to 56px');
+    }
   }
 
   // Text-presence check: verify hook words appear in the rendered HTML text content.
@@ -1132,26 +1147,24 @@ export async function generateThumbnailV3({
   const hookTextFromPlan = plan.hook_text || lockedHook?.winner || null;
   const textPresenceIssues = [];
   if (hookTextFromPlan) {
-    const visibleText = extractVisibleText(rewritten).toLowerCase();
+    const visibleText = extractVisibleText(rewrittenFinal).toLowerCase();
     const hookWords   = hookTextFromPlan.toLowerCase().split(/\s+/).filter(w => w.length > 1);
     const missingWords = hookWords.filter(w => !visibleText.includes(w));
     if (missingWords.length === hookWords.length) {
-      // ALL hook words missing — definite text-presence failure
       textPresenceIssues.push(`CRITICAL: Hook text "${hookTextFromPlan}" not found in rendered HTML — text may be missing or off-screen`);
       console.log('  ⚠️  TEXT PRESENCE FAIL: hook "' + hookTextFromPlan + '" absent from HTML');
     } else if (missingWords.length > 0) {
       textPresenceIssues.push(`Hook word(s) "${missingWords.join(' ')}" not found in rendered HTML`);
     }
   }
-  // Also flag near-empty text content (image-only designs with no text)
-  const visibleTextContent = extractVisibleText(rewritten).replace(/\s+/g, ' ').trim();
+  const visibleTextContent = extractVisibleText(rewrittenFinal).replace(/\s+/g, ' ').trim();
   if (visibleTextContent.length < 5) {
     textPresenceIssues.push('CRITICAL: No text content found in rendered HTML — thumbnail appears to be image-only');
     console.log('  ⚠️  TEXT PRESENCE FAIL: no visible text in HTML at all');
   }
 
   try {
-    await renderHtmlToPng(rewritten, pngPath, htmlPath);
+    await renderHtmlToPng(rewrittenFinal, pngPath, htmlPath);
     const sizeKB = Math.round(fs.statSync(pngPath).size / 1024);
     console.log('  Saved: ' + pngPath + ' (' + sizeKB + ' KB)');
   } catch (e) {
@@ -1189,7 +1202,7 @@ export async function generateThumbnailV3({
   // Apply legibility penalties
   if (!legibility.ok) {
     const hasHardViolation = legibility.violations.some(v =>
-      /font-size .* below 36px/.test(v) || /typo/i.test(v) || /negative letter-spacing/.test(v) || /math equation/.test(v));
+      /font-size .* below 56px/.test(v) || /typo/i.test(v) || /negative letter-spacing/.test(v) || /math equation/.test(v));
     const hasSoftViolation = legibility.violations.some(v =>
       /transform: rotate/.test(v) || /grey/i.test(v) || /no word-spacing declared/.test(v));
     if (hasHardViolation) {
