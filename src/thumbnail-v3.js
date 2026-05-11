@@ -218,62 +218,76 @@ async function resolveImageRequest(req, label, outDir) {
 
 // ─── HOOK WRITER ──────────────────────────────────────────────────────────────
 
-async function generateHookCandidates({ title, scriptText, niche, tone }) {
+function buildHookPrompt(title, scriptText, niche, tone, priorFailureFeedback = null) {
   const scriptExcerpt = scriptText ? scriptText.substring(0, 4000) : 'No script available — design from title alone.';
+  const failureBlock = priorFailureFeedback
+    ? `\n⚠️  YOUR PREVIOUS HOOK FAILED VALIDATION:\n${priorFailureFeedback}\nGenerate 5 NEW candidates that avoid these issues.\n`
+    : '';
 
-  const prompt = `You are writing hook text for a YouTube thumbnail. 1-3 words that appear over an image at 168x94 pixels on a phone screen.
+  return `You are writing hook text for a YouTube thumbnail. 1-3 words that appear over an image at 168x94 pixels on a phone screen.
 
 TITLE: "${title}"
 NICHE: ${niche || 'unknown'}
 TONE: ${tone || 'unknown'}
-
+CHANNEL TYPE: Philosophy sleep stories — calm, meditative, cerebral. NOT a drama channel.
+${failureBlock}
 SCRIPT (mine this for the specific thing that makes THIS video interesting):
 """
 ${scriptExcerpt}
 """
 
-A thumbnail hook is a PROMISE. It tells the viewer what they'll learn and makes them feel like they NEED to know. It is not poetry. It is not a clever phrase. It is a promise that, combined with the image, makes someone think "I have to watch this."
+A thumbnail hook is a PROMISE. 1-3 words that make the viewer think "I have to watch this."
 
-Before generating candidates, answer these two questions about the video:
-1. WHAT IS THE SINGLE MOST INTERESTING THING IN THIS VIDEO? (Not a mood. Not a theme. The specific surprising fact, event, or revelation.)
-2. WHAT IMAGE WILL LIKELY APPEAR IN THE THUMBNAIL? (The obvious visual subject. The hook must work WITH this image, not duplicate it.)
+Before generating candidates, answer these two questions:
+1. WHAT IS THE SINGLE MOST INTERESTING THING IN THIS VIDEO? (Not a mood. The specific insight or paradox.)
+2. WHAT IMAGE WILL LIKELY APPEAR IN THE THUMBNAIL? (The hook must work WITH this image, not duplicate it.)
 
-The hook and image SPLIT the work:
-- The IMAGE shows you WHAT (the philosopher, the concept, the scene)
-- The HOOK tells you WHY you should care (what happened, what's surprising, what you'll gain)
-- Together they answer: "what is this video about and why should I watch it?"
+═══ SLEEP CHANNEL — HARD RULES FOR HOOK TEXT ═══
 
-CRITICAL DISTINCTION — STATEMENTS vs EMOTIONS:
-The biggest failure mode is hooks that DESCRIBE what happened instead of making you FEEL it.
-  - Statements score lower. Emotions score higher.
-  - "STILL KILLING" is an EMOTION — present-tense dread. Score it higher.
-  - "MISSILES STARVED" is gold standard — curious, clickable, emotional, AND you understand the video.
+This is a relaxation/sleep channel. These rules are NON-NEGOTIABLE:
 
-Before locking any hook, ALL FOUR must be true:
-  1. Would the average person be CURIOUS?
-  2. Would they WANT TO CLICK?
-  3. Would they FEEL something?
-  4. Would they UNDERSTAND what the video is about?
+1. NO DEATH OR VIOLENCE WORDS. Never use: died, dying, dead, death, kill, killed, murder,
+   corpse, grave, blood, weapon, torture, war, attack. These repel sleep viewers.
+
+2. SIMPLE VOCABULARY ONLY. Every word must be in the top 3000 most common English words.
+   A 5-year-old should recognize every word. Test each word: would a child know it?
+
+3. NO COMPARATIVE ADJECTIVES ALONE. "FREER" alone fails — it sounds unfinished.
+   "WISER" alone fails. If you use a comparative (-er suffix), you MUST include "THAN".
+   "FREER THAN KINGS" is ok. "FREER" alone is not.
+
+4. NO PAST-TENSE VERB AS FIRST WORD WITHOUT A SUBJECT. "KINGS OBEYED" fails — who
+   obeyed? "DIED NODDING" fails — morbid AND the verb has no anchor.
+   Use PRESENT TENSE or IMPERATIVES: KNOW, NEED, SEE, STILL, FEEL, FIND, HOLD.
+
+5. PHILOSOPHY SLEEP HOOKS USE PARADOX + PRESENT TENSE. The best philosophy hooks create
+   a gentle contradiction the viewer needs to resolve. They feel like a quiet revelation,
+   not a thriller movie.
+
+═══ WINNERS — STUDY THESE ═══
+These are from actual high-performing philosophy sleep thumbnails:
+  - "STILL DREAMING" — Zhuangzi butterfly paradox. Present tense. Double meaning.
+  - "KNOW NOTHING" — Socrates. Direct quote distillation. 2 common words.
+  - "NEED NOTHING" — Stoic/Epicurean principle. Direct distillation. 2 common words.
+  - "STILL FREE" — Epictetus. "Still" does double duty (motionless AND yet/continuing).
+  - "STILL FULL" — Hilbert's Hotel. Makes abstract concept feel eerie.
+
+═══ LOSERS — AVOID THESE PATTERNS ═══
+These failed and must not be repeated:
+  - "FREER THAN KINGS" → shortened to "FREER" on thumbnail — comparative alone sounds broken
+  - "DIED NODDING" — morbid, past tense, nonsensical for a sleep video about philosophy
+  - "KINGS OBEYED" — past-tense verb with no subject, confusing without context
+  - "BOTH ENGINES DEAD" — statement, not emotion; "dead" is a violence word
+  - "NO OTHER DOCTOR" — states a fact, doesn't create feeling
 
 Generate 5 candidate hooks. Score each 1-10 on THREE axes:
   - clarity: does a viewer INSTANTLY understand the topic when they see this hook + the likely image?
   - promise: does this hook make the viewer feel "I NEED to watch this"?
   - emotion: does this hook make the viewer FEEL something in 0.05 seconds?
 
-WINNERS from our pool (study these):
-  - "MISSILES STARVED" — SR-71 video. You instantly understand: the plane outran missiles.
-  - "PUNCHED THROUGH" — Tonga eruption. Visceral, instant understanding.
-  - "STILL FULL" — Hilbert's Hotel paradox. Makes an abstract concept feel eerie.
-  - "FROZEN FOREVER" — Black hole. Existential dread in two words.
-  - "STILL KILLING" — Chernobyl. Present-tense dread, ongoing threat.
-  - "NEVER SEEN RAIN" — Atacama Desert. Simple, curious, makes you need to know.
+NOTE: Morbid/violent hooks may score high on "emotion" — do NOT let that override the HARD RULES above.
 
-LOSERS from our pool (avoid these patterns):
-  - "BOTH ENGINES DEAD" — Statement about mechanical failure, not human stakes.
-  - "ORGANS GO DARK" — Sounds like death but the video is about SIZE.
-  - "NO OTHER DOCTOR" — States a staffing fact, doesn't make you feel desperation.
-
-Pick the SINGLE BEST hook. Return ONLY this JSON:
+Pick the SINGLE BEST hook that PASSES ALL 5 SLEEP CHANNEL RULES. Return ONLY this JSON:
 {
   "what_is_interesting": "one sentence: the single most interesting thing in this video",
   "likely_image": "one sentence: what the thumbnail image will probably show",
@@ -287,15 +301,55 @@ Pick the SINGLE BEST hook. Return ONLY this JSON:
   "winner": "the chosen hook text",
   "winner_reasoning": "one sentence: why this hook + the likely image makes a viewer think 'I have to watch this'"
 }`;
-
-  const text = await callClaudeCLI(prompt, { model: CLI_MODEL, timeoutMs: 120000 });
-  const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/, '');
-  const m = cleaned.match(/\{[\s\S]*\}/);
-  if (!m) throw new Error('Hook planner returned no JSON');
-  const result = JSON.parse(m[0]);
-  if (!result.winner) throw new Error('Hook planner returned no winner');
-  return result;
 }
+
+async function generateHookCandidates({ title, scriptText, niche, tone }) {
+  // Up to 3 attempts if the validator rejects the winner
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const feedbackFromPrior = attempt > 1 ? _lastHookFailureFeedback : null;
+    const prompt = buildHookPrompt(title, scriptText, niche, tone, feedbackFromPrior);
+
+    const text = await callClaudeCLI(prompt, { model: CLI_MODEL, timeoutMs: 120000 });
+    const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/, '');
+    const m = cleaned.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error('Hook planner returned no JSON');
+    const result = JSON.parse(m[0]);
+    if (!result.winner) throw new Error('Hook planner returned no winner');
+
+    // Validate the winner
+    const validation = validateHookText(result.winner);
+    if (validation.valid) {
+      if (attempt > 1) console.log(`  [Hook] Attempt ${attempt}: PASSED validation — "${result.winner}"`);
+      return result;
+    }
+
+    console.log(`  [Hook] Attempt ${attempt}: FAILED validation — "${result.winner}"`);
+    for (const issue of validation.issues) console.log(`    ✗ ${issue}`);
+
+    // Also try the other candidates — pick first one that passes
+    const fallback = (result.candidates || []).find(c => validateHookText(c.hook).valid);
+    if (fallback) {
+      console.log(`  [Hook] Using runner-up that passed: "${fallback.hook}"`);
+      result.winner = fallback.hook;
+      result.winner_reasoning = `(validator fallback) ${fallback.hook} — passed all sleep-channel rules`;
+      return result;
+    }
+
+    // Build feedback string for next attempt
+    _lastHookFailureFeedback = `Hook "${result.winner}" failed: ${validation.issues.join('; ')}. ALL candidates failed validation too. You must generate hooks using ONLY common words, present tense, no death/violence, no standalone comparatives.`;
+
+    if (attempt === 3) {
+      // Final fallback: return the result anyway but log the failure
+      console.log('  [Hook] All 3 attempts failed validation — using last winner with warning');
+      result._validation_failed = true;
+      result._validation_issues = validation.issues;
+      return result;
+    }
+  }
+}
+
+// Module-level state for hook retry feedback (reset per generateThumbnailV3 call)
+let _lastHookFailureFeedback = null;
 
 // ─── TOPIC CONCRETENESS CLASSIFIER ────────────────────────────────────────────
 
@@ -642,40 +696,55 @@ async function renderHtmlToPng(html, outPath, tempHtmlPath) {
 
 // ─── CRITIC ───────────────────────────────────────────────────────────────────
 
-async function reviewThumbnail(pngPath, title) {
+async function reviewThumbnail(pngPath, title, hookText = null) {
   const pool = loadPoolEntriesWithImages(3, 0);
   const pngDir = path.dirname(pngPath);
-  const pngFilename = path.basename(pngPath);
 
   const referenceBlock = pool.winners.length > 0
-    ? `\nApproved reference designs (Niels personally approved these — calibrate your rating against their quality level):\n${pool.winners.map((w, i) => `  ${i + 1}. "${w.title}": ${w.approved_reason}`).join('\n')}\nOutputs that match this level of intentionality should rate 7+.\n`
+    ? `\nApproved reference designs (calibrate your rating against their quality):\n${pool.winners.map((w, i) => `  ${i + 1}. "${w.title}": ${w.approved_reason}`).join('\n')}\n`
+    : '';
+
+  const hookCheckBlock = hookText
+    ? `\nEXPECTED HOOK TEXT: "${hookText}"
+COHERENCE CHECK — after viewing the thumbnail, ask:
+1. Is the hook text "${hookText}" clearly visible at full size? If NO → rate ≤ 2.
+2. Would "${hookText}" make sense to someone who sees it next to the title "${title}"? If NO → rate ≤ 4.
+3. Does the hook feel relevant to the philosophy topic, or random/disconnected? If random → rate ≤ 4.\n`
     : '';
 
   const prompt = `Use the Read tool to view the thumbnail image at this path:
 ${pngPath}
 
 Then rate this YouTube thumbnail for the video "${title}".
-${referenceBlock}
-Rate 1-10:
-- 1-3: Has a hard defect (typo, unreadable text, wrong subject, looks broken)
-- 4-5: Functional but forgettable, looks like a template
-- 6: Decent — one good idea but execution has issues
-- 7: Solid — publishable quality
-- 8-9: Excellent — would actually go on a real channel
-- 10: Best-of-the-year tier
+${referenceBlock}${hookCheckBlock}
+HARD FAILS — these cap the rating at 2/10, no exceptions:
+- Hook text is not visible in the thumbnail (missing, too small, or off-screen)
+- The thumbnail is mostly black or blank — rendering failed
+- No text visible anywhere in the thumbnail
 
-Be honest, not reflexively harsh.
-
-Hard defects that cap the rating at 4:
+HARD FAILS — these cap the rating at 4/10:
 - Visible typos
 - Text covering the focal subject of the image
-- Subject identity is wrong
+- Hook text is present but unreadable at thumbnail preview size (168x94)
+- Hook text seems disconnected from the video title (random words, not a distillation)
+- Subject identity is wrong for the topic
 - Floating clip-art / emoji icons used as decoration
-- Compositionally identical to a template with no specific design choices for THIS topic
+- Compositionally identical to a generic template with no design choices for THIS topic
+
+Rate 1-10:
+- 1-2: Rendering failed or no text visible
+- 3-4: Text visible but unreadable or hook incoherent
+- 5: Functional but forgettable
+- 6: Decent — one good idea but execution issues
+- 7: Solid — publishable quality
+- 8-9: Excellent — would actually go on a real channel
+- 10: Best-of-year tier
 
 Return ONLY valid JSON:
 {
   "rating": 1,
+  "hook_visible": true,
+  "hook_coherent": true,
   "would_use_on_real_channel": false,
   "designer_verdict": "one sentence — what's good or bad about this specific design",
   "specific_problems": ["concrete defects, empty array if none"],
@@ -719,6 +788,122 @@ const COMMON_WORDS = new Set([
   // Philosophy / sleep-specific words common in SleepForge content
   'virtue','stoic','stoicism','wisdom','meditations','aurelius','marcus','seneca','epictetus','socrates','plato','aristotle','philosophy','philosopher','philosophers','ancient','greek','roman','emperor','eternal','consciousness','existence','mortality','contemplation','equanimity','temperance','justice','courage','reason','logos','pneuma','ataraxia','eudaimonia','apatheia',
 ]);
+
+// ─── HOOK VALIDATOR ───────────────────────────────────────────────────────────
+// Catches the failure modes that the hook writer's internal scoring misses.
+
+const MORBID_HOOK_WORDS = new Set([
+  'died','dying','die','dead','death','kill','killed','killing','kills','murder','murdered',
+  'corpse','grave','tomb','buried','bury','suicide','execution','executed','slaughter',
+  'blood','bleed','bleeding','wound','wounded','suffering','suffer','tortured','torture',
+  'war','weapon','violence','violent','attack','attacked',
+]);
+
+// Words that are valid as part of longer phrases but not as standalone comparatives.
+// "FREER" alone fails; "FREER THAN KINGS" would pass the comparative check.
+function detectOrphanComparative(words) {
+  const hasTrailingThan = words.some(w => w === 'than');
+  if (hasTrailingThan) return null; // "than" present — comparative is anchored
+  for (const w of words) {
+    if (w.length >= 5 && w.endsWith('er') && !COMMON_WORDS.has(w)) {
+      return `"${w.toUpperCase()}" is a comparative adjective without "than" — sounds incomplete as a hook`;
+    }
+  }
+  return null;
+}
+
+// "KINGS OBEYED" — past-tense verb as sole/first word with no clear subject.
+function detectOrphanPastTense(words) {
+  const first = words[0];
+  if (!first) return null;
+  // Past-tense indicators: ends in -ed but is NOT itself a common word
+  if (first.endsWith('ed') && !COMMON_WORDS.has(first)) {
+    return `"${first.toUpperCase()}" is a past-tense verb as the first word with no subject — reads oddly out of context`;
+  }
+  // Also catch when the ONLY other word is the subject but the verb is confusing
+  if (words.length === 2 && words[1].endsWith('ed') && !COMMON_WORDS.has(words[1])) {
+    return `"${words[1].toUpperCase()}" as a subject-less past-tense verb — confusing without context`;
+  }
+  return null;
+}
+
+// Main validator — returns { valid: bool, issues: string[] }
+function validateHookText(hook) {
+  if (!hook) return { valid: false, issues: ['empty hook'] };
+  const words = hook.toLowerCase().trim().split(/\s+/);
+  const issues = [];
+
+  // Check 1: No morbid/death words on a sleep channel
+  for (const w of words) {
+    if (MORBID_HOOK_WORDS.has(w)) {
+      issues.push(`"${w.toUpperCase()}" is a death/violence word — inappropriate for a sleep channel`);
+    }
+  }
+
+  // Check 2: All words should be common English OR known philosophy terms
+  // We check stems to handle -ing/-ed/-s forms of common words
+  const uncommonly = words.filter(w => {
+    if (COMMON_WORDS.has(w) || SPELLING_WHITELIST.has(w)) return false;
+    // Try common morphological variants: -ing, -ed, -s, -er
+    const stems = [
+      w.endsWith('ing') && w.length > 4 ? w.slice(0, -3) : null,
+      w.endsWith('ing') && w.length > 4 ? w.slice(0, -3) + 'e' : null,
+      w.endsWith('s')   && w.length > 3 ? w.slice(0, -1)      : null,
+      w.endsWith('ed')  && w.length > 3 ? w.slice(0, -2)      : null,
+      w.endsWith('ed')  && w.length > 3 ? w.slice(0, -1)      : null,
+    ].filter(Boolean);
+    return !stems.some(s => COMMON_WORDS.has(s));
+  });
+  for (const w of uncommonly) {
+    issues.push(`"${w.toUpperCase()}" is not a common English word — hooks must use simple vocabulary`);
+  }
+
+  // Check 3: No orphan comparative (-er without "than")
+  const comparativeIssue = detectOrphanComparative(words);
+  if (comparativeIssue) issues.push(comparativeIssue);
+
+  // Check 4: No orphan past-tense as first word
+  const pastTenseIssue = detectOrphanPastTense(words);
+  if (pastTenseIssue) issues.push(pastTenseIssue);
+
+  return { valid: issues.length === 0, issues };
+}
+
+// ─── FALLBACK TEMPLATE ────────────────────────────────────────────────────────
+// Guaranteed-legible thumbnail used when all 3 variants fail the critic.
+// Pure text on dark background — boring but always readable.
+
+function generateFallbackThumbnailHTML(title, channelName = 'Sleepless Philosophers') {
+  const escaped = (title || 'Philosophy for Sleep')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  // Split title into two lines if long
+  const words   = title.split(' ');
+  const mid     = Math.ceil(words.length / 2);
+  const line1   = words.slice(0, mid).join(' ');
+  const line2   = words.slice(mid).join(' ');
+  const l1esc   = line1.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  const l2esc   = line2.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  const fontSize = title.length > 50 ? 60 : title.length > 35 ? 68 : 78;
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{width:1280px;height:720px;background:#080808;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Playfair Display',Georgia,serif;}
+.bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,#1a1020 0%,#050505 70%);opacity:0.95;}
+.accent{position:absolute;top:0;left:0;width:8px;height:100%;background:linear-gradient(to bottom,#c0903040,#c090308a,#c0903040);}
+.container{position:relative;z-index:2;padding:80px 100px;text-align:left;max-width:1100px;}
+h1{font-size:${fontSize}px;color:#f5f0e8;line-height:1.15;letter-spacing:0.04em;word-spacing:0.2em;font-weight:700;text-shadow:0 4px 30px rgba(0,0,0,0.9);}
+.sub{margin-top:28px;font-family:'Open Sans',sans-serif;font-size:34px;color:#8a7055;letter-spacing:0.12em;word-spacing:0.2em;font-weight:300;}
+</style></head>
+<body>
+<div class="bg"></div>
+<div class="accent"></div>
+<div class="container">
+  <h1>${l1esc}${l2esc ? '<br>' + l2esc : ''}</h1>
+  <div class="sub">${channelName.toUpperCase()}</div>
+</div>
+</body></html>`;
+}
 
 function extractVisibleText(html) {
   const noStyle = html.replace(/<style[\s\S]*?<\/style>/gi, '');
@@ -842,10 +1027,13 @@ export async function generateThumbnailV3({
 
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
+  // Reset hook retry state on first attempt
+  if (_attempt === 1) _lastHookFailureFeedback = null;
+
   // Step 0: Hook writer
   let lockedHook = _lockedHook;
   if (!lockedHook) {
-    console.log('\n--- Step 0: Hook writer (5 candidates → pick strongest) ---');
+    console.log('\n--- Step 0: Hook writer (5 candidates → validator → pick strongest) ---');
     try {
       lockedHook = await generateHookCandidates({ title, scriptText, niche, tone });
       console.log('  Candidates:');
@@ -853,6 +1041,10 @@ export async function generateThumbnailV3({
         console.log(`    "${c.hook}" — clarity:${c.clarity} promise:${c.promise} emotion:${c.emotion} total:${c.total}`);
       }
       console.log('  WINNER: "' + lockedHook.winner + '"');
+      if (lockedHook._validation_failed) {
+        console.log('  ⚠ Winner did not pass all validation rules (used as best available)');
+        for (const issue of (lockedHook._validation_issues || [])) console.log('    ✗ ' + issue);
+      }
       console.log('  Why: ' + lockedHook.winner_reasoning);
       fs.writeFileSync(path.join(outputDir, 'thumbnail-v3-hook.json'), JSON.stringify(lockedHook, null, 2));
     } catch (e) {
@@ -931,6 +1123,29 @@ export async function generateThumbnailV3({
     for (const v of legibility.violations) console.log('    ✗ ' + v);
   }
 
+  // Text-presence check: verify hook words appear in the rendered HTML text content.
+  // This catches designs where the hook text was omitted or overridden in the HTML.
+  const hookTextFromPlan = plan.hook_text || lockedHook?.winner || null;
+  const textPresenceIssues = [];
+  if (hookTextFromPlan) {
+    const visibleText = extractVisibleText(rewritten).toLowerCase();
+    const hookWords   = hookTextFromPlan.toLowerCase().split(/\s+/).filter(w => w.length > 1);
+    const missingWords = hookWords.filter(w => !visibleText.includes(w));
+    if (missingWords.length === hookWords.length) {
+      // ALL hook words missing — definite text-presence failure
+      textPresenceIssues.push(`CRITICAL: Hook text "${hookTextFromPlan}" not found in rendered HTML — text may be missing or off-screen`);
+      console.log('  ⚠️  TEXT PRESENCE FAIL: hook "' + hookTextFromPlan + '" absent from HTML');
+    } else if (missingWords.length > 0) {
+      textPresenceIssues.push(`Hook word(s) "${missingWords.join(' ')}" not found in rendered HTML`);
+    }
+  }
+  // Also flag near-empty text content (image-only designs with no text)
+  const visibleTextContent = extractVisibleText(rewritten).replace(/\s+/g, ' ').trim();
+  if (visibleTextContent.length < 5) {
+    textPresenceIssues.push('CRITICAL: No text content found in rendered HTML — thumbnail appears to be image-only');
+    console.log('  ⚠️  TEXT PRESENCE FAIL: no visible text in HTML at all');
+  }
+
   try {
     await renderHtmlToPng(rewritten, pngPath, htmlPath);
     const sizeKB = Math.round(fs.statSync(pngPath).size / 1024);
@@ -947,12 +1162,24 @@ export async function generateThumbnailV3({
     return pngPath;
   }
   console.log('\n--- Step 5: Harsh designer critic ---');
-  const review = await reviewThumbnail(pngPath, title);
+  const review = await reviewThumbnail(pngPath, title, hookTextFromPlan);
   console.log('  Critic rating: ' + review.rating + '/10');
   if (review.designer_verdict) console.log('  Designer verdict: ' + review.designer_verdict);
   if (review.problems.length > 0) {
     console.log('  Problems:');
     for (const p of review.problems) console.log('    - ' + p);
+  }
+
+  // Apply text-presence penalties (hardest: text absent = score 1)
+  if (textPresenceIssues.length > 0) {
+    const hasCritical = textPresenceIssues.some(v => v.startsWith('CRITICAL'));
+    if (hasCritical) {
+      review.rating = 1;
+    } else {
+      review.rating = Math.min(review.rating, 4);
+    }
+    review.problems = [...(review.problems || []), ...textPresenceIssues];
+    review._text_presence_issues = textPresenceIssues;
   }
 
   // Apply legibility penalties
@@ -966,7 +1193,7 @@ export async function generateThumbnailV3({
     } else if (hasSoftViolation) {
       review.rating = Math.max(1, review.rating - 2);
     }
-    review.problems = [...review.problems, ...legibility.violations.map(v => 'LEGIBILITY: ' + v)];
+    review.problems = [...(review.problems || []), ...legibility.violations.map(v => 'LEGIBILITY: ' + v)];
     review._legibility_violations = legibility.violations;
   }
 
@@ -987,7 +1214,8 @@ export async function generateThumbnailV3({
     return generateThumbnailV3({ outputDir, title, scriptText, niche, tone, _attempt: _attempt + 1, _priorAttempt: review, _lockedHook: lockedHook, _lockedMetaphor: lockedMetaphor, _skipCritic, _maxAttempts });
   }
 
-  console.log('\n⚠️  Out of retries. Promoting best of attempts.');
+  // All attempts exhausted — promote the best-scoring attempt OR use fallback template
+  console.log('\n⚠️  Out of retries. Checking best of attempts...');
   let best = { rating: review.rating, path: pngPath };
   for (let a = 1; a < _attempt; a++) {
     try {
@@ -1001,5 +1229,26 @@ export async function generateThumbnailV3({
     console.log('  Best attempt was ' + best.rating + '/10 — promoting it');
     fs.copyFileSync(best.path, pngPath);
   }
+
+  // If best score is still critically low (≤ 2), use guaranteed-legible fallback template
+  if (best.rating <= 2) {
+    console.log('\n🔴 Best attempt scored ' + best.rating + '/10 — activating guaranteed-legible fallback template');
+    const fallbackHtml = generateFallbackThumbnailHTML(title);
+    const fallbackHtmlPath = path.join(outputDir, 'thumbnail-fallback.html');
+    const fallbackPngPath  = path.join(outputDir, 'thumbnail.png');
+    try {
+      await renderHtmlToPng(fallbackHtml, fallbackPngPath, fallbackHtmlPath);
+      console.log('  ✓ Fallback template rendered: ' + fallbackPngPath);
+      fs.writeFileSync(path.join(outputDir, 'thumbnail-v3-review.json'), JSON.stringify({
+        rating: 5, designer_verdict: 'Fallback template — guaranteed legible, minimal design',
+        problems: ['All AI-generated variants failed — using fallback text template'],
+        what_works: ['Text always visible', 'Guaranteed readable at mobile scale'],
+        fix_instructions: null, _fallback: true,
+      }, null, 2));
+    } catch (e) {
+      console.log('  ✗ Fallback render failed: ' + e.message);
+    }
+  }
+
   return pngPath;
 }
