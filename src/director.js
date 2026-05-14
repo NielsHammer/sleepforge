@@ -372,7 +372,7 @@ export async function createStoryboard(scenes, wordTimestamps, totalDuration, br
   //   - never reuses the previous clip's image (no two-in-a-row)
   //   - prefers least-recently-used among the top scored matches
   //   - falls back to globally-LRU if no entry scores > 0
-  const library = loadLibrary();
+  const library = loadLibrary(brief.libraryPath || null);
   const useCounts = new Map();
   let prevId = null;
   let hits = 0;

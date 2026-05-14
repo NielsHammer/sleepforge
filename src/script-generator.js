@@ -550,12 +550,242 @@ function lintForFictionalNames(scenes) {
   return flagged;
 }
 
+// ─── SPACE DOCUMENTARY SCRIPT GENERATOR ─────────────────────────────────────
+// Routes here when channelConfig.niche === 'space_documentary'.
+// Generates scenes with { subject, moment, action, setting, narration },
+// then maps subject → philosopher for downstream director/library compatibility.
+
+const SPACE_VOICE_RULES = `
+You are writing a sleep space documentary narration. This will be read aloud by a calm,
+slow narrator to help people fall asleep. Every sentence must be soothing and wonder-filled.
+
+VOICE — NON-NEGOTIABLE:
+- Contractions always: "you'd", "that's", "it's", "wouldn't", "we've"
+- Slow rhythm. Short sentences followed by long flowing ones.
+- Present tense for scenes: "Voyager crosses the heliopause. The solar wind falls silent."
+- Second person for transitions: "You can imagine the silence there. Complete. Absolute."
+- Poetic but never purple. Simple words. Never showy.
+- Pauses between paragraphs — each blank line is a breath for the listener.
+- No excitement, no urgency, no hooks. This is the opposite of a YouTube video.
+- Wonder without breathlessness. Awe without exclamation.
+- The goal is to make the listener feel small, contemplative, and drowsy.
+
+ACCURACY:
+- State facts accurately. Round numbers are fine (use words: "four hundred million kilometers")
+- If a number is uncertain or estimated, use "roughly", "about", "approximately"
+- Never speculate about alien life or unconfirmed phenomena
+- Spell out ALL numbers as words: "twenty-three billion kilometers" not "23 billion km"
+- Spell out units naturally: "light-years" as "light years", "km/s" as "kilometers per second"
+- This is read by text-to-speech. Write EXACTLY how it should sound.
+
+PACING:
+- Each scene should last 2-4 paragraphs of narration (~200-400 words)
+- Blank lines between paragraphs create natural pauses
+- Repeat key ideas gently — sleep listeners drift in and out
+- End each scene with a quiet settling sentence before moving on
+
+BANNED FOREVER:
+"dive into", "delve", "game-changer", "let's unpack", "it's worth noting",
+"in today's world", "at the end of the day", "picture this", "fast forward",
+"fascinating", "interesting", "incredible", "amazing", "unbelievable",
+"but first", "stay tuned", "subscribe", "like and share", "without further ado",
+"buckle up", "mind-blowing", "jaw-dropping", "epic", "alien life confirmed",
+"NASA is hiding", "we may never know" (use "much remains unknown" instead)
+
+BANNED SENTENCE STARTERS:
+Never start a sentence with "As", "While", "Furthermore", "Additionally",
+"It's important to note", "It's worth mentioning", "Picture this"
+
+FORMAT:
+- Write ONLY narration text — no [brackets], no stage directions, no (notes)
+- Blank lines between paragraphs
+- No headers, no bullet points, no markdown — pure narration only
+`;
+
+const SPACE_SCENE_OUTPUT_FORMAT = `
+OUTPUT FORMAT — CRITICAL:
+Return a JSON array of scene objects. Each scene represents 30-45 seconds of narration.
+You MUST produce exactly the number of scenes specified — this is non-negotiable.
+
+[
+  {
+    "subject": "slug-form subject, e.g. 'voyager-probe', 'black-hole', 'saturn-rings', 'jwst-telescope'",
+    "moment": "The specific phenomenon or discovery being described (e.g. 'crossing the heliopause')",
+    "action": "What the primary object is doing or what the scene shows — ONE specific visual detail",
+    "setting": "Brief setting description — where in space, what surrounds it",
+    "narration": "The narration text for this scene. 75-110 words. 1-2 short paragraphs separated by \\n\\n"
+  }
+]
+
+RULES FOR SCENES:
+- Each scene = 30-45 seconds of narration = 75-110 words. NO MORE.
+- Each scene must focus on ONE subject (mission, object, or phenomenon) and ONE specific moment
+- The "subject" field must be a short lowercase slug (used for image library matching)
+- The "action" field describes what the viewer sees — specific and visual
+- Vary subjects across scenes — never put the same subject in consecutive scenes
+- Each scene needs a DIFFERENT visual angle — never repeat the same framing
+- Scenes should flow naturally from one to the next as a continuous documentary
+`;
+
+function buildSpaceDocumentaryPrompt(topic, durationMinutes, wpm = WORDS_PER_MINUTE, channelConfig = null) {
+  const targetWords = Math.round(parseInt(durationMinutes) * wpm);
+  const minWords    = Math.round(targetWords * 0.92);
+  const maxWords    = Math.round(targetWords * 1.08);
+  const sceneCount  = Math.max(2, Math.round(parseInt(durationMinutes) * 60 / 37));
+
+  const bannedTopicsBlock = channelConfig?.banned_topics?.length
+    ? `\nBANNED TOPICS (channel rules):\n${channelConfig.banned_topics.map(t => `  - ${t}`).join('\n')}\n`
+    : '';
+
+  return `You are writing a ${durationMinutes}-minute sleep space documentary narration — a calm, meditative
+exploration of ${topic} meant to help listeners drift to sleep.
+
+TOPIC: "${topic}"
+TARGET DURATION: ${durationMinutes} minutes (~${targetWords} words at ${wpm} wpm)
+NUMBER OF SCENES: exactly ${sceneCount} scenes (each ~37 seconds / ~${Math.round(wpm * 37 / 60)} words)
+
+═══ NARRATIVE ARC ═══
+
+OPENING (first scene):
+Begin in a specific place in space. Ground the listener immediately.
+"Beyond the orbit of Neptune, where the sun is just the brightest star in the sky,
+something moves. It has been moving for forty-seven years. And it will move forever."
+Make them feel the scale. Make them feel the silence.
+
+BODY (middle scenes):
+Move through different aspects of the topic. Each scene should:
+- Open with a vivid sensory or scientific detail
+- Present ONE fact or phenomenon related to the topic
+- Explain the idea simply, as if to someone drifting off to sleep
+- Close with a quiet, settling thought about scale or time
+
+The scenes should feel like a slow documentary camera panning across the cosmos —
+taking its time, never rushing, always returning to silence.
+
+CLOSE (final 2 scenes):
+Bring the themes together. The final scene should be the most peaceful —
+an image of vast, silent space, ideas settling like dust.
+End with silence implied. The listener should already be asleep.
+
+${SPACE_VOICE_RULES}
+
+${SPACE_SCENE_OUTPUT_FORMAT}
+
+${bannedTopicsBlock}WORD COUNT — CRITICAL:
+Total narration across all scenes: ${minWords}–${maxWords} words
+Each scene: ~${Math.round(wpm * 37 / 60)} words (37 seconds)
+Number of scenes: ${sceneCount}
+
+Return ONLY the JSON array. No preamble, no markdown fences, no explanation.`;
+}
+
+async function generateSpaceScriptBlock(topic, blockNum, totalBlocks, duration, wpm = WORDS_PER_MINUTE, channelConfig = null) {
+  const blockMinutes = Math.min(BLOCK_SIZE_MINUTES, duration - (blockNum - 1) * BLOCK_SIZE_MINUTES);
+
+  const continuityNote = blockNum > 1
+    ? `\nCONTINUITY: This is block ${blockNum} of ${totalBlocks}. The listener has been listening for ${(blockNum - 1) * BLOCK_SIZE_MINUTES} minutes. They may be half asleep. Do NOT re-introduce concepts. Flow naturally from the previous section. The pace should be even slower now.\n`
+    : "";
+
+  const closingNote = blockNum === totalBlocks
+    ? `\nFINAL BLOCK: This is the ending. The last 2 scenes should be the most peaceful and quiet of the entire video. Bring the themes to rest. End with implied silence.\n`
+    : "";
+
+  const prompt = buildSpaceDocumentaryPrompt(topic, blockMinutes.toString(), wpm, channelConfig)
+    + continuityNote + closingNote;
+
+  const blockTimeoutMs = Math.max(180000, blockMinutes * 24000);
+  const raw = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: blockTimeoutMs });
+  const text = raw.trim()
+    .replace(/^```(?:json)?\s*/gm, "").replace(/```\s*$/gm, "").trim();
+
+  const scenes = JSON.parse(text);
+
+  // Map subject → philosopher so director and library matching work unchanged
+  for (const s of scenes) {
+    if (!s.philosopher) s.philosopher = s.subject || "space";
+  }
+
+  return scenes;
+}
+
+async function generateSpaceScript(topic, options = {}) {
+  const duration      = parseInt(options.duration) || 60;
+  const outputDir     = options.output || "./scripts";
+  const channelConfig = options.channelConfig || null;
+  const effectiveWPM  = channelConfig?.target_word_count
+    ? Math.round(channelConfig.target_word_count / Math.max(duration, 1))
+    : WORDS_PER_MINUTE;
+
+  fs.mkdirSync(outputDir, { recursive: true });
+
+  console.log(`\n  SleepForge Space Script Generator`);
+  console.log(`  Topic: "${topic}"`);
+  console.log(`  Duration: ${duration} min`);
+  console.log(`  Channel: ${channelConfig?.slug || 'sleepless-astronomer'}`);
+  console.log(`  Model: ${MODEL} (target cost: ~$0.10)`);
+
+  const totalBlocks = Math.max(1, Math.ceil(duration / BLOCK_SIZE_MINUTES));
+  const allScenes   = [];
+
+  for (let i = 1; i <= totalBlocks; i++) {
+    const blockLabel = `block ${i}/${totalBlocks}`;
+    console.log(`  Writing ${blockLabel}...`);
+    try {
+      const scenes = await generateSpaceScriptBlock(topic, i, totalBlocks, duration, effectiveWPM, channelConfig);
+      allScenes.push(...scenes);
+      console.log(`  ${blockLabel}: ${scenes.length} scenes`);
+    } catch (err) {
+      console.error(`  ${blockLabel} failed: ${err.message}`);
+      console.log(`  Retrying ${blockLabel}...`);
+      await new Promise(r => setTimeout(r, 3000));
+      const scenes = await generateSpaceScriptBlock(topic, i, totalBlocks, duration, effectiveWPM, channelConfig);
+      allScenes.push(...scenes);
+    }
+  }
+
+  const slug          = topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+  const jsonPath      = path.join(outputDir, `${slug}.json`);
+  const narrationText = allScenes.map(s => s.narration).join("\n\n\n");
+  const txtPath       = path.join(outputDir, `${slug}.txt`);
+  const promptsPath   = path.join(outputDir, `${slug}-image-prompts.json`);
+
+  fs.writeFileSync(jsonPath,    JSON.stringify(allScenes, null, 2));
+  fs.writeFileSync(txtPath,     narrationText);
+  fs.writeFileSync(promptsPath, JSON.stringify([], null, 2)); // library-only: no live image prompts
+
+  const totalWords  = narrationText.split(/\s+/).length;
+  const estMinutes  = (totalWords / WORDS_PER_MINUTE).toFixed(1);
+
+  console.log(`\n  Space script complete!`);
+  console.log(`  Scenes: ${allScenes.length}`);
+  console.log(`  Words: ${totalWords} (~${estMinutes} min at ${WORDS_PER_MINUTE} wpm)`);
+  console.log(`  JSON: ${jsonPath}`);
+  console.log(`  Text: ${txtPath}`);
+
+  return {
+    scenes:      allScenes,
+    jsonPath,
+    txtPath,
+    promptsPath,
+    imagePrompts: [],
+    wordCount:   totalWords,
+    estMinutes:  parseFloat(estMinutes),
+    sceneCount:  allScenes.length,
+  };
+}
+
 // ─── MAIN EXPORT ────────────────────────────────────────────────────────────
 
 export async function generateScript(topic, options = {}) {
   const duration = parseInt(options.duration) || 60; // Default 60 min for sleep
   const outputDir = options.output || "./scripts";
   const channelConfig = options.channelConfig || null;
+
+  // Space documentary niche bypasses philosopher-based generation entirely
+  if (channelConfig?.niche === 'space_documentary') {
+    return generateSpaceScript(topic, options);
+  }
+
   const philosopherKeys = options.philosophers
     || channelConfig?.philosophers
     || ["socrates", "plato", "aristotle", "marcus-aurelius", "epictetus", "seneca"];

@@ -14,8 +14,8 @@
   "script_model": "claude-haiku-4-5-20251001",
   "thumbnail_model": "claude-sonnet-4-6",
   "image_style": "cinematic-space",
-  "image_library_status": "pending",
-  "image_library_path": "assets/image-library-astronomer",
+  "image_library_status": "ready",
+  "image_library_path": "assets/images/space-library-v1/",
   "background_video": null,
   "topic_pool": "data/topic-pools/sleepless-astronomer.json",
   "notes": "Channel exists (40 subs, 117 videos). OAuth token active. Video pipeline not yet started — image library must be built first. See image_library_status: pending."

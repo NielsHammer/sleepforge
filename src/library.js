@@ -14,18 +14,20 @@ import fs from "fs";
 
 const LIBRARY_PATH = "assets/images/library-v1/index.json";
 
-let _cache = null;
+// Per-path cache so philosopher and space libraries can coexist in one process
+const _cacheByPath = new Map();
 
 export function loadLibrary(forcePath = null) {
-  if (_cache && !forcePath) return _cache;
   const p = forcePath || LIBRARY_PATH;
+  if (_cacheByPath.has(p)) return _cacheByPath.get(p);
   if (!fs.existsSync(p)) {
     console.warn(`  ⚠ Library not found: ${p}`);
-    _cache = [];
-    return _cache;
+    _cacheByPath.set(p, []);
+    return [];
   }
-  _cache = JSON.parse(fs.readFileSync(p, "utf-8"));
-  return _cache;
+  const lib = JSON.parse(fs.readFileSync(p, "utf-8"));
+  _cacheByPath.set(p, lib);
+  return lib;
 }
 
 export function lookupLibraryImage(library, query) {
