@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { callClaudeCLI } from "./claude-cli.js";
+import { getSleepIntro } from "./intro-templates.js";
 
 // ─── SleepForge Script Generator ────────────────────────────────────────────
 //
@@ -584,6 +585,32 @@ PACING:
 - Repeat key ideas gently — sleep listeners drift in and out
 - End each scene with a quiet settling sentence before moving on
 
+EYES-CLOSED LISTENER — CRITICAL:
+The listener has their eyes closed. They are NOT watching the screen. They may already be half asleep.
+NEVER reference visual elements. Never say: "see", "look", "watch", "this image shows",
+"as shown", "pictured here", "on your screen", "displayed", "notice" (when meaning look),
+"here we have", "what you're looking at", "this is a [thing]" as a label.
+
+Instead, describe everything through rich descriptive language — as if narrating an audiobook
+to someone in the dark. Use spatial, scale, color, motion, texture, and sound.
+
+EXAMPLES:
+BAD:  "This is a neutron star spinning hundreds of times per second."
+GOOD: "Imagine an object no wider than a city — roughly twenty kilometers across — spinning
+       two hundred times every single second. The surface moving at half the speed of light."
+
+BAD:  "As you can see, the accretion disk glows in brilliant orange."
+GOOD: "Superheated gas spirals inward, glowing in orange and white, compressed until it shines
+       brighter than a billion suns combined."
+
+BAD:  "Look at how the Pillars of Creation tower above the surrounding nebula."
+GOOD: "Three columns of gas and dust rise from the cloud — each one taller than the distance
+       from Earth to the nearest star. Ancient, patient, and very slowly eroding."
+
+BAD:  "This image shows Voyager drifting through interstellar space."
+GOOD: "Somewhere beyond the reach of the solar wind, a small golden machine drifts through
+       interstellar space. It's been drifting for nearly fifty years. And it'll drift forever."
+
 BANNED FOREVER:
 "dive into", "delve", "game-changer", "let's unpack", "it's worth noting",
 "in today's world", "at the end of the day", "picture this", "fast forward",
@@ -741,6 +768,11 @@ async function generateSpaceScript(topic, options = {}) {
       const scenes = await generateSpaceScriptBlock(topic, i, totalBlocks, duration, effectiveWPM, channelConfig);
       allScenes.push(...scenes);
     }
+  }
+
+  // Prepend sleep intro for channels that request it
+  if (channelConfig?.intro_template === 'sleep_audiobook') {
+    allScenes.unshift(getSleepIntro(topic));
   }
 
   const slug          = topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);

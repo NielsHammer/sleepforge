@@ -873,6 +873,7 @@ export function composeFinalVideoWithBg({
   outputPath,
   duration,
   introDuration,  // seconds of black + fade-in before video content (default 0)
+  fullscreen = false, // true = space channel: images fill 1920×1080, no bg, no frame
 }) {
   const intro = introDuration || 0;
   const d = Math.ceil(duration) + intro;
@@ -885,7 +886,7 @@ export function composeFinalVideoWithBg({
   let idx = 0;
 
   let bgIdx = null;
-  if (bgImagePath && fileExists(bgImagePath)) {
+  if (!fullscreen && bgImagePath && fileExists(bgImagePath)) {
     inputs.push(`-loop 1 -framerate 30 -t ${d} -i "${path.resolve(bgImagePath)}"`);
     bgIdx = idx++;
   }
@@ -903,7 +904,7 @@ export function composeFinalVideoWithBg({
   const voiceIdx = idx++;
 
   let frameIdx = null;
-  if (framePath && fileExists(framePath)) {
+  if (!fullscreen && framePath && fileExists(framePath)) {
     inputs.push(`-loop 1 -framerate 1 -i "${path.resolve(framePath)}"`);
     frameIdx = idx++;
   }
@@ -911,11 +912,16 @@ export function composeFinalVideoWithBg({
   // Build filter_complex
   const filters = [];
 
-  // Base layer: chalk in inner 1728×972 window, padded to 1920×1080.
-  // bg (when present) is darkened to 30% + blurred for bokeh, screen-blended
-  // behind chalk so the philosophy library shows through dark chalk areas.
-  if (bgIdx !== null) {
-    // bg: fill inner 1728×972, blur for bokeh, darken to 30%, pad to full frame
+  // Base layer
+  if (fullscreen) {
+    // Fullscreen (space channel): images fill the entire 1920×1080 viewport.
+    // No bg image, no frame margins — cover-crop to avoid letter-boxing.
+    filters.push(
+      `[${slideshowIdx}:v]scale=1920:1080:force_original_aspect_ratio=increase,` +
+      `crop=1920:1080,setsar=1,fps=30,format=gbrp[base]`
+    );
+  } else if (bgIdx !== null) {
+    // Framed + bg: chalk in inner 1728×972 window, bg blurred behind it.
     filters.push(
       `[${bgIdx}:v]scale=1728:972:force_original_aspect_ratio=increase,` +
       `crop=1728:972,setsar=1,fps=30,` +
@@ -924,17 +930,15 @@ export function composeFinalVideoWithBg({
       `pad=1920:1080:96:54:color=black,` +
       `format=gbrp[bg_dark]`
     );
-    // chalk: fill inner 1728×972, pad to full frame with black margins
     filters.push(
       `[${slideshowIdx}:v]scale=1728:972:force_original_aspect_ratio=increase,` +
       `crop=1728:972,setsar=1,fps=30,` +
       `pad=1920:1080:96:54:color=black,` +
       `format=gbrp[chalk]`
     );
-    // screen blend: library glows through chalk's dark areas; white chalk lines stay white
     filters.push(`[bg_dark][chalk]blend=all_mode=screen:shortest=1[base]`);
   } else {
-    // No bg — chalk in inner window, black margins
+    // Framed, no bg — chalk in inner window, black margins
     filters.push(
       `[${slideshowIdx}:v]scale=1728:972:force_original_aspect_ratio=increase,` +
       `crop=1728:972,setsar=1,fps=30,` +

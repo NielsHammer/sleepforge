@@ -53,6 +53,23 @@ function cleanWord(w) {
  * @param {string} outputPath - Where to write the .ass file
  * @returns {string|null} Path to generated .ass file, or null if no timestamps
  */
+// Sound-effect words Whisper inserts into transcripts for non-speech audio.
+// These must be stripped before generating captions.
+const SOUND_EFFECT_WORDS = new Set([
+  'music', 'laughs', 'laughter', 'applause', 'silence', 'pause',
+  'clapping', 'cheering', 'crying', 'sighing', 'coughing', 'breathing',
+  'ambient', 'noise', 'chuckling', 'chuckles', 'humming',
+]);
+
+export function filterWhisperSoundEffects(wordTimestamps) {
+  return wordTimestamps.filter((w) => {
+    const word = (w.word || '').trim();
+    if (/^\[.*\]$/.test(word) || /^\(.*\)$/.test(word)) return false;
+    const bare = word.toLowerCase().replace(/[^a-z]/g, '');
+    return !SOUND_EFFECT_WORDS.has(bare);
+  });
+}
+
 export function generateASS(wordTimestamps, outputPath, opts = {}) {
   if (!wordTimestamps || wordTimestamps.length === 0) return null;
 

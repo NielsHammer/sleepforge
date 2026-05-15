@@ -1,14 +1,15 @@
 /**
- * SleepForge 2-minute test video — Sleepless Astronomer
+ * SleepForge 2-minute test video — Sleepless Astronomer (v2)
  *
- * Identical pipeline to test-video-2min.js except:
- *   - Uses space_documentary niche → generateSpaceScript via generateScript
- *   - Loads space image library (assets/images/space-library-v1/index.json)
- *   - Uses astronomer background image (assets/backgrounds/astronomer-bg-1080.jpg)
- *   - Output: output/astronomer-test-2min/
+ * Fixes applied vs v1:
+ *   FIX 1 — Fullscreen: no gold frame, no bg, space images fill 1920×1080
+ *   FIX 2 — No captions (show_captions: false), whisper sound-effects filtered
+ *   FIX 3 — Eyes-closed descriptive script (no visual references)
+ *   FIX 4 — Sleep intro prepended (intro_template: sleep_audiobook)
  *
- * Usage: node scripts/test-astronomer-2min.js
- *   SLEEPFORGE_TOPIC env var overrides the default topic.
+ * Usage:
+ *   node scripts/test-astronomer-2min.js
+ *   SLEEPFORGE_TOPIC="..." SLEEPFORGE_SLUG="..." node scripts/test-astronomer-2min.js
  */
 import 'dotenv/config';
 import fs   from 'fs';
@@ -16,9 +17,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawn, execSync } from 'child_process';
 
-import { generateScript }   from '../src/script-generator.js';
-import { generateASS }      from '../src/subtitles.js';
-import { createStoryboard } from '../src/director.js';
+import { generateScript }              from '../src/script-generator.js';
+import { generateASS, filterWhisperSoundEffects } from '../src/subtitles.js';
+import { createStoryboard }            from '../src/director.js';
 import {
   createClipSlideshow,
   mixAudio,
@@ -38,9 +39,9 @@ const PROJECT_ROOT = path.resolve(__dirname, '..');
 const PYTHON_BIN   = process.env.PYTHON_BIN
   || path.join(PROJECT_ROOT, '.venv', 'Scripts', 'python.exe');
 
-const TOPIC        = process.env.SLEEPFORGE_TOPIC || 'Voyager 1: The Farthest Human-Made Object and What It Tells Us';
+const TOPIC        = process.env.SLEEPFORGE_TOPIC || "What's Inside a Black Hole: An Hour of Deep Space Wonder";
 const DURATION_MIN = parseInt(process.env.SLEEPFORGE_DURATION || '2', 10);
-const SLUG         = process.env.SLEEPFORGE_SLUG  || 'astronomer-voyager-2min';
+const SLUG         = process.env.SLEEPFORGE_SLUG  || 'astronomer-test-v2-2min';
 const OUTPUT_DIR   = path.join(PROJECT_ROOT, 'output', SLUG);
 const ASSETS_DIR   = path.join(OUTPUT_DIR, 'assets');
 const SENTENCES_DIR = path.join(ASSETS_DIR, 'sentences');
@@ -51,7 +52,6 @@ const WHISPER_PATH   = path.join(ASSETS_DIR, 'whisper.json');
 const ASS_PATH       = path.join(ASSETS_DIR, 'subtitles.ass');
 const SLIDESHOW_PATH = path.join(OUTPUT_DIR, 'slideshow.mp4');
 const VOICE_MIX_PATH = path.join(OUTPUT_DIR, 'voice-mix.m4a');
-const BG_MUSIC_PATH  = path.join(PROJECT_ROOT, 'assets', 'audio', 'bgmusic.mp3');
 const FINAL_PATH     = path.join(OUTPUT_DIR, 'final.mp4');
 const FRAME_30S_PATH = path.join(OUTPUT_DIR, 'frame-30s.png');
 const FRAME_IMG_PATH = path.join(OUTPUT_DIR, 'verify-image-scene.png');
@@ -60,18 +60,22 @@ const STING_PATH       = path.join(ASSETS_DIR, 'intro-sting.wav');
 const STING_VOICE_PATH = path.join(ASSETS_DIR, 'voiceover-with-sting.wav');
 const INTRO_DURATION   = 2;
 
+// Astronomer channel config — drives niche routing, frame_style, show_captions, intro_template
+const CHANNEL_CONFIG = JSON.parse(
+  fs.readFileSync(path.join(PROJECT_ROOT, 'data', 'channels', 'sleepless-astronomer.json'), 'utf-8')
+);
+
+const FULLSCREEN    = CHANNEL_CONFIG.frame_style === 'fullscreen';
+const SHOW_CAPTIONS = CHANNEL_CONFIG.show_captions !== false;
+
+// Space image library
+const SPACE_LIB_PATH = path.join(PROJECT_ROOT, 'assets', 'images', 'space-library-v1', 'index.json');
+
+// Background (only used in framed mode — not loaded in fullscreen)
 const BG_IMAGE_PATH = path.join(PROJECT_ROOT, 'assets', 'backgrounds', 'astronomer-bg-1080.jpg');
 const BG_PROMPT     = 'deep space observatory at night, vast star field, Milky Way arc, ' +
                       'telescope dome silhouette, dark blue atmosphere, cinematic, no people, ' +
                       'no text, soft focus, nebula glow in background, cosmic scale, serene';
-
-// Space image library index for this channel
-const SPACE_LIB_PATH = path.join(PROJECT_ROOT, 'assets', 'images', 'space-library-v1', 'index.json');
-
-// Astronomer channel config — passed to generateScript so it routes to generateSpaceScript
-const CHANNEL_CONFIG = JSON.parse(
-  fs.readFileSync(path.join(PROJECT_ROOT, 'data', 'channels', 'sleepless-astronomer.json'), 'utf-8')
-);
 
 for (const d of [OUTPUT_DIR, ASSETS_DIR, SENTENCES_DIR]) {
   fs.mkdirSync(d, { recursive: true });
@@ -79,23 +83,20 @@ for (const d of [OUTPUT_DIR, ASSETS_DIR, SENTENCES_DIR]) {
 
 const t_pipeline = Date.now();
 log('═══════════════════════════════════════════');
-log('SleepForge — Astronomer 2-minute test video');
+log('SleepForge — Astronomer test v2 (all fixes)');
 log('Topic: ' + TOPIC);
 log('Output: ' + OUTPUT_DIR);
+log(`Fullscreen: ${FULLSCREEN} | Captions: ${SHOW_CAPTIONS}`);
 log('═══════════════════════════════════════════');
 
-// Force re-render of slideshow/audio on each pass
+// Force re-render of composed outputs each pass
 if (fs.existsSync(SLIDESHOW_PATH))   fs.unlinkSync(SLIDESHOW_PATH);
 if (fs.existsSync(VOICE_MIX_PATH))   fs.unlinkSync(VOICE_MIX_PATH);
 if (fs.existsSync(STING_VOICE_PATH)) fs.unlinkSync(STING_VOICE_PATH);
 if (fs.existsSync(FINAL_PATH))       fs.unlinkSync(FINAL_PATH);
 
-// Check library exists before starting
 if (!fs.existsSync(SPACE_LIB_PATH)) {
   log(`\nERROR: Space image library not found: ${SPACE_LIB_PATH}`);
-  log('Run these first:');
-  log('  node scripts/generate-space-prompts.js');
-  log('  node scripts/generate-space-images.js --all');
   process.exit(1);
 }
 
@@ -113,8 +114,8 @@ serverProc.on('error', err => log('Chatterbox server error: ' + err.message));
 log('  Waiting for model load...');
 const serverReady = waitForChatterbox(300);
 
-// ── Step 2: Script ────────────────────────────────────────────────────────────
-log(`\n── Step 2: Script generation (space niche → Haiku, ${DURATION_MIN} min) ──`);
+// ── Step 2: Script (space niche, eyes-closed descriptive, sleep intro) ────────
+log(`\n── Step 2: Script generation (space niche, ${DURATION_MIN} min) ──`);
 const scriptJsonPath = path.join(SCRIPTS_DIR, SLUG + '.json');
 let scenes;
 if (fs.existsSync(scriptJsonPath)) {
@@ -131,7 +132,8 @@ if (fs.existsSync(scriptJsonPath)) {
 }
 const scriptText = scenes.map(s => s.narration).join('\n\n');
 const wordCount  = scriptText.split(/\s+/).length;
-log(`  ${scenes.length} scenes, ${wordCount} words (~${Math.round(wordCount / 110)} min)`);
+const hasIntro   = scenes[0]?.subject === 'intro';
+log(`  ${scenes.length} scenes, ${wordCount} words${hasIntro ? ' (incl. sleep intro)' : ''}`);
 
 // ── Step 3: Voiceover ─────────────────────────────────────────────────────────
 log('\n── Step 3: Chatterbox TTS (archer voice) ──');
@@ -200,7 +202,7 @@ if (fs.existsSync(VOICEOVER_PATH)) {
 const audioDuration = getAudioDuration(VOICEOVER_PATH);
 const totalDuration = audioDuration + INTRO_DURATION;
 
-// ── Step 4: Whisper ───────────────────────────────────────────────────────────
+// ── Step 4: Whisper + sound-effect filter ────────────────────────────────────
 log('\n── Step 4: Whisper word timestamps ──');
 let wordTimestamps = [];
 if (fs.existsSync(WHISPER_PATH)) {
@@ -223,10 +225,15 @@ if (fs.existsSync(WHISPER_PATH)) {
   fs.writeFileSync(WHISPER_PATH, JSON.stringify(wordTimestamps));
   log(`  ${wordTimestamps.length} words in ${((Date.now()-t0)/1000).toFixed(0)}s`);
 }
+// FIX 2: Strip [music], [laughs], etc. from Whisper output
+const beforeFilter = wordTimestamps.length;
+wordTimestamps = filterWhisperSoundEffects(wordTimestamps);
+if (wordTimestamps.length < beforeFilter) {
+  log(`  Filtered ${beforeFilter - wordTimestamps.length} sound-effect tokens`);
+}
 
 // ── Step 5: Director + space library image assignment ─────────────────────────
 log('\n── Step 5: Director + space library image lookup ──');
-log(`  Library: ${SPACE_LIB_PATH}`);
 const { clips } = await createStoryboard(scenes, wordTimestamps, audioDuration, {
   targetClipSec: 4,
   libraryPath:   SPACE_LIB_PATH,
@@ -238,99 +245,94 @@ for (const clip of clips) {
   }
 }
 
-const assigned    = clips.filter(c => c.imagePath && fs.existsSync(c.imagePath)).length;
+const assigned     = clips.filter(c => c.imagePath && fs.existsSync(c.imagePath)).length;
 const subjectsUsed = [...new Set(clips.map(c => c.philosopher).filter(Boolean))];
-log(`  ${clips.length} clips | ${assigned}/${clips.length} images from space library | no Fal.ai calls`);
-log(`  Subjects in script: ${subjectsUsed.join(', ')}`);
-log('  Sample assignments (first 4 clips):');
+log(`  ${clips.length} clips | ${assigned}/${clips.length} images from space library`);
+log(`  Subjects: ${subjectsUsed.join(', ')}`);
 for (const clip of clips.slice(0, 4)) {
   const img = clip.imagePath ? path.basename(clip.imagePath) : 'none';
   log(`    [${clip.index}] score=${clip.imageScore ?? '-'} "${(clip.text||'').slice(0,45)}…" → ${img}`);
 }
 
-// ── Step 7: Astronomer background image ──────────────────────────────────────
-log('\n── Step 7: Astronomer background image ──');
-if (!fs.existsSync(BG_IMAGE_PATH)) {
+// ── Step 7: Background (framed mode only) ────────────────────────────────────
+log('\n── Step 7: Background image ──');
+if (FULLSCREEN) {
+  log('  Fullscreen mode — no background image');
+} else if (!fs.existsSync(BG_IMAGE_PATH)) {
   fs.mkdirSync(path.dirname(BG_IMAGE_PATH), { recursive: true });
   log('  Generating via Flux Schnell (one-time, cached)...');
-  log(`  Prompt: ${BG_PROMPT.slice(0, 80)}...`);
   await generateSceneImage(BG_PROMPT, BG_IMAGE_PATH);
   log(`  Background: ${BG_IMAGE_PATH}`);
 } else {
   log(`  Cached: ${BG_IMAGE_PATH}`);
 }
 
-// ── Step 9: ASS subtitles ─────────────────────────────────────────────────────
-log('\n── Step 9: ASS karaoke subtitles ──');
-if (fs.existsSync(ASS_PATH)) fs.unlinkSync(ASS_PATH);
-if (wordTimestamps.length > 0) {
-  generateASS(wordTimestamps, ASS_PATH, { timeOffsetSec: INTRO_DURATION });
-  log(`  Generated: ${ASS_PATH} (+${INTRO_DURATION}s offset for intro sting)`);
+// ── Step 9: ASS subtitles (only if show_captions) ────────────────────────────
+log('\n── Step 9: Subtitles ──');
+if (!SHOW_CAPTIONS) {
+  log('  Captions disabled (show_captions: false) — skipping');
 } else {
-  log('  No timestamps — skipping subtitles');
+  if (fs.existsSync(ASS_PATH)) fs.unlinkSync(ASS_PATH);
+  if (wordTimestamps.length > 0) {
+    generateASS(wordTimestamps, ASS_PATH, { timeOffsetSec: INTRO_DURATION });
+    log(`  Generated: ${ASS_PATH}`);
+  } else {
+    log('  No timestamps — skipping');
+  }
 }
 
-// ── Step 10: Atmosphere layers + frame ───────────────────────────────────────
-log('\n── Step 10: Generating atmosphere layers + frame ──');
+// ── Step 10: Atmosphere layers ────────────────────────────────────────────────
+log('\n── Step 10: Atmosphere layers ──');
 const particlesPath = await ensureParticleLoop();
 log(`  Particles: ${particlesPath}`);
 const smokePath = ensureSmokeLoop();
 log(`  Smoke: ${smokePath}`);
 
-const framePaths     = ensurePhilosophyFrameSet(path.join(PROJECT_ROOT, 'assets', 'frames'));
-const frameIdx       = parseInt(process.env.FRAME_VARIANT || '0', 10);
-const selectedFramePath = framePaths[frameIdx % framePaths.length];
-log(`  Frame variant ${(frameIdx % framePaths.length) + 1}/10: ${path.basename(selectedFramePath)}`);
+const framePaths      = ensurePhilosophyFrameSet(path.join(PROJECT_ROOT, 'assets', 'frames'));
+const selectedFrame   = FULLSCREEN ? null : framePaths[0];
+if (FULLSCREEN) log('  Frame: none (fullscreen mode)');
+else log(`  Frame: ${path.basename(selectedFrame)}`);
 
 // ── Step 12: FFmpeg composition ───────────────────────────────────────────────
 log('\n── Step 12: FFmpeg composition ──');
 
-log('  Building clip slideshow (image scenes, 1.5s xfade)...');
+log('  Building clip slideshow...');
 createClipSlideshow(clips, Math.ceil(audioDuration), SLIDESHOW_PATH, { fadeTime: 1.5 });
 
 log('  Generating intro sting (2s cinematic swell)...');
 generateIntroSting(STING_PATH, INTRO_DURATION);
 prependIntroSting(STING_PATH, VOICEOVER_PATH, STING_VOICE_PATH);
 
-log('  Mixing single audio track (sting + voice + fire + bgmusic, no sidechain)...');
+log('  Mixing audio (sting + voice + fire + bgmusic)...');
 mixAudio(STING_VOICE_PATH, Math.ceil(totalDuration), VOICE_MIX_PATH, {
   includeBgMusic:  true,
   bgMusicVolume:   '0.25',
   fireplaceVolume: '0.08',
 });
 
-log('  Composing final video (single audio track, frame overlay, intro sting)...');
+log(`  Composing final video (fullscreen: ${FULLSCREEN}, captions: ${SHOW_CAPTIONS})...`);
 composeFinalVideoWithBg({
-  bgImagePath:    BG_IMAGE_PATH,
+  bgImagePath:    FULLSCREEN ? null : BG_IMAGE_PATH,
   slideshowPath:  SLIDESHOW_PATH,
   particlesPath,
   smokePath,
-  assPath:        fs.existsSync(ASS_PATH) ? ASS_PATH : null,
+  assPath:        SHOW_CAPTIONS && fs.existsSync(ASS_PATH) ? ASS_PATH : null,
   voiceAudioPath: VOICE_MIX_PATH,
   bgMusicPath:    null,
-  framePath:      selectedFramePath,
+  framePath:      selectedFrame,
   outputPath:     FINAL_PATH,
   duration:       audioDuration,
   introDuration:  INTRO_DURATION,
+  fullscreen:     FULLSCREEN,
 });
 
 // ── Step 13: Verification ─────────────────────────────────────────────────────
 log('\n── Step 13: Verification ──');
-
-const probeOutput = execSync(
-  `ffprobe -v quiet -show_streams "${FINAL_PATH}"`,
-  { encoding: 'utf-8' }
-);
+const probeOutput = execSync(`ffprobe -v quiet -show_streams "${FINAL_PATH}"`, { encoding: 'utf-8' });
 const videoStreams = (probeOutput.match(/codec_type=video/g) || []).length;
 const audioStreams = (probeOutput.match(/codec_type=audio/g) || []).length;
 log(`  Streams: ${videoStreams} video, ${audioStreams} audio`);
-if (audioStreams === 1) {
-  log('  ✓ Single audio track confirmed (WMP-compatible)');
-} else if (audioStreams === 0) {
-  log('  ✗ No audio stream detected!');
-} else {
-  log(`  ⚠ ${audioStreams} audio streams — expected 1`);
-}
+if (audioStreams === 1) log('  ✓ Single audio track (WMP-compatible)');
 
 const frameTs = Math.min(30, audioDuration * 0.4);
 execSync(
@@ -341,18 +343,12 @@ const frameOk = fs.existsSync(FRAME_30S_PATH) && fs.statSync(FRAME_30S_PATH).siz
 log(`  Frame at ${frameTs.toFixed(1)}s: ${frameOk ? FRAME_30S_PATH : 'FAILED'}`);
 
 try {
-  execSync(
-    `ffmpeg -y -ss 8 -i "${FINAL_PATH}" -vframes 1 -q:v 2 "${FRAME_IMG_PATH}"`,
-    { stdio: 'pipe' }
-  );
+  execSync(`ffmpeg -y -ss 8 -i "${FINAL_PATH}" -vframes 1 -q:v 2 "${FRAME_IMG_PATH}"`, { stdio: 'pipe' });
   log(`  Image scene frame (8s): ${FRAME_IMG_PATH}`);
 } catch {}
 
 try {
-  const volOut = execSync(
-    `ffmpeg -y -i "${FINAL_PATH}" -t 5 -af "volumedetect" -f null NUL 2>&1`,
-    { encoding: 'utf-8' }
-  );
+  const volOut = execSync(`ffmpeg -y -i "${FINAL_PATH}" -t 5 -af "volumedetect" -f null NUL 2>&1`, { encoding: 'utf-8' });
   const meanVol = volOut.match(/mean_volume:\s*(-[\d.]+)\s*dB/);
   if (meanVol) log(`  Audio mean (first 5s): ${meanVol[1]} dBFS`);
 } catch (e) {
@@ -366,13 +362,15 @@ const finalSize = Math.round(fs.statSync(FINAL_PATH).size / 1024 / 1024);
 const elapsed   = Math.round((Date.now() - t_pipeline) / 1000);
 
 log('\n═══════════════════════════════════════════');
-log('✅ DONE — Astronomer test render complete');
+log('✅ DONE — Astronomer test v2');
 log(`   Video:         ${FINAL_PATH}`);
 log(`   Duration:      ${totalDuration.toFixed(1)}s (${(totalDuration/60).toFixed(2)} min)`);
-log(`   Clips:         ${clips.length} @ ~4s each (space library images)`);
-log(`   Audio streams: ${audioStreams} (target: 1)`);
+log(`   Clips:         ${clips.length} @ ~4s each`);
+log(`   Audio:         ${audioStreams} stream (target: 1)`);
 log(`   File size:     ${finalSize} MB`);
 log(`   Pipeline:      ${Math.floor(elapsed/60)}m ${elapsed%60}s`);
+log(`   Fullscreen:    ${FULLSCREEN}`);
+log(`   Captions:      ${SHOW_CAPTIONS}`);
 log(`   Frame 30s:     ${FRAME_30S_PATH}`);
 log(`   Verify image:  ${FRAME_IMG_PATH}`);
 log('═══════════════════════════════════════════');
@@ -407,14 +405,13 @@ async function restartChatterbox() {
   serverProc.on('error', err => log('Chatterbox restart error: ' + err.message));
   const ok = await waitForChatterbox(120);
   if (ok) log('  [TTS] Chatterbox restarted ✓');
-  else    log('  [TTS] WARNING: Chatterbox did not recover after restart');
+  else    log('  [TTS] WARNING: Chatterbox did not recover');
   return ok;
 }
 
 async function chatterboxTTSWithRetry(text, outputPath, maxAttempts = 3) {
   const silence2s = path.join(ASSETS_DIR, '_silence-2000.wav');
   ensureSilence(silence2s, 2000);
-  let lastErr;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       if (attempt > 1) {
@@ -425,7 +422,6 @@ async function chatterboxTTSWithRetry(text, outputPath, maxAttempts = 3) {
       await chatterboxTTS(text, outputPath);
       return;
     } catch (err) {
-      lastErr = err;
       log(`  [TTS] Attempt ${attempt}/${maxAttempts} failed: ${err.message}`);
     }
   }
