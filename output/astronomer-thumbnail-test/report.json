@@ -1,0 +1,140 @@
+{
+  "generated": "2026-05-16T21:38:57.432Z",
+  "sets": [
+    {
+      "set": 1,
+      "topic": "Voyager 1: The Farthest Human-Made Object and What It Tells Us",
+      "category": "missions_probes",
+      "angle": "Follow Voyager 1's 47-year journey beyond the heliosphere — the Golden Record, interstellar space, and what it means to send a message into the void",
+      "slug": "set-1-voyager-1-the-farthest-human-made-object",
+      "title_candidates": [
+        "How Are We Still Hearing From Voyager 1?",
+        "What If Voyager 1 Found Intelligent Life?",
+        "Voyager 1's Golden Record: A Message to Aliens",
+        "This Is Why Voyager 1 Will Never Come Home",
+        "After 47 Years, Voyager 1 Just Revealed Something"
+      ],
+      "title_winner": "This Is Why Voyager 1 Will Never Come Home",
+      "title_reason": "The phrase 'never come home' triggers an emotional finality that forces the click — it reframes a technical journey as a human story of permanent loss, while 'This Is Why' creates an irresistible knowledge gap that only the video can close.",
+      "variants": [
+        {
+          "variant": 1,
+          "path": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-1-voyager-1-the-farthest-human-made-object\\thumb-v1\\thumbnail.png",
+          "dir": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-1-voyager-1-the-farthest-human-made-object\\thumb-v1",
+          "rating": 6,
+          "hook": "STILL ALIVE",
+          "verdict": "The two-tone 'STILL ALIVE' hook is well-executed and immediately coherent with the title, but the thumbnail reads as a generic 'space planet' composition with no visual sign of Voyager 1 itself."
+        },
+        {
+          "variant": 2,
+          "error": "claude CLI timed out after 480000ms",
+          "rating": 0
+        },
+        {
+          "variant": 3,
+          "path": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-1-voyager-1-the-farthest-human-made-object\\thumb-v3\\thumbnail.png",
+          "dir": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-1-voyager-1-the-farthest-human-made-object\\thumb-v3",
+          "rating": 7,
+          "hook": "STILL ALIVE",
+          "verdict": "Strong, clean composition with a genuinely dramatic hook — 'STILL ALIVE' lands perfectly against the title and the glowing sun creates real visual tension, but the sun as the hero image reads as generic space content rather than distinctly Voyager 1."
+        }
+      ],
+      "best_variant": 3,
+      "best_rating": 7,
+      "best_hook": "STILL ALIVE",
+      "best_verdict": "Strong, clean composition with a genuinely dramatic hook — 'STILL ALIVE' lands perfectly against the title and the glowing sun creates real visual tension, but the sun as the hero image reads as generic space content rather than distinctly Voyager 1."
+    },
+    {
+      "set": 2,
+      "topic": "What's Inside a Black Hole: An Hour of Deep Space Wonder",
+      "category": "stellar_phenomena",
+      "angle": "Event horizons, singularities, spaghettification, Hawking radiation — what we know and what remains mystery",
+      "slug": "set-2-what-s-inside-a-black-hole-an-hour-of-de",
+      "title_candidates": [
+        "What If You Got Sucked Into a Black Hole?",
+        "What Exactly Exists Beyond the Event Horizon?",
+        "What Spaghettification Does to Your Body",
+        "Hawking Radiation Is More INSANE Than You Think",
+        "Could a Rogue Black Hole Destroy Earth Soon?"
+      ],
+      "title_winner": "What Exactly Exists Beyond the Event Horizon?",
+      "title_reason": "The word 'exactly' creates an implicit promise of a definitive answer to science's most tantalizing unanswered question, forcing a click from anyone even mildly curious about black holes — while staying credibly scientific with zero sensationalism.",
+      "variants": [
+        {
+          "variant": 1,
+          "path": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-2-what-s-inside-a-black-hole-an-hour-of-de\\thumb-v1\\thumbnail.png",
+          "dir": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-2-what-s-inside-a-black-hole-an-hour-of-de\\thumb-v1",
+          "rating": 7,
+          "hook": "REALITY ENDS",
+          "verdict": "Strong concept and imagery with a punchy, coherent hook, but the plain bold font lacks typographic personality and the left-text/right-visual layout is the default template for space channels."
+        },
+        {
+          "variant": 2,
+          "path": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-2-what-s-inside-a-black-hole-an-hour-of-de\\thumb-v2\\thumbnail.png",
+          "dir": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-2-what-s-inside-a-black-hole-an-hour-of-de\\thumb-v2",
+          "rating": 7,
+          "hook": "UNKNOWABLE.",
+          "verdict": "Bold, perfectly-placed hook word with strong atmospheric backing — held back only by a cosmic-web visual that reads as generic deep-space rather than specifically 'event horizon'."
+        },
+        {
+          "variant": 3,
+          "path": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-2-what-s-inside-a-black-hole-an-hour-of-de\\thumb-v3\\thumbnail.png",
+          "dir": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-2-what-s-inside-a-black-hole-an-hour-of-de\\thumb-v3",
+          "rating": 8,
+          "hook": "NOBODY KNOWS.",
+          "verdict": "A visually stunning black hole composition paired with a perfectly distilled, punchy hook — 'NOBODY KNOWS.' is exactly the right answer to the title's question and creates genuine intrigue."
+        }
+      ],
+      "best_variant": 3,
+      "best_rating": 8,
+      "best_hook": "NOBODY KNOWS.",
+      "best_verdict": "A visually stunning black hole composition paired with a perfectly distilled, punchy hook — 'NOBODY KNOWS.' is exactly the right answer to the title's question and creates genuine intrigue."
+    },
+    {
+      "set": 3,
+      "topic": "Betelgeuse: When a Star on Our Doorstep is About to Explode",
+      "category": "stellar_phenomena",
+      "angle": "The great dimming of 2020, supergiant variability, and what Betelgeuse's supernova will look like from Earth when it comes",
+      "slug": "set-3-betelgeuse-when-a-star-on-our-doorstep-i",
+      "title_candidates": [
+        "What If Betelgeuse Exploded Tomorrow Night?",
+        "The Mystery of Betelgeuse's Great Dimming",
+        "When Betelgeuse Explodes, Here's What Happens",
+        "Could Betelgeuse's Explosion Reach Earth?",
+        "Betelgeuse Is Sending Urgent Warning Signs"
+      ],
+      "title_winner": "Betelgeuse Is Sending Urgent Warning Signs",
+      "title_reason": "Present-tense urgency combined with the unresolved mystery of 'what signs?' forces an immediate click, while the Great Dimming event gives the claim concrete credibility without over-explaining.",
+      "variants": [
+        {
+          "variant": 1,
+          "path": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-3-betelgeuse-when-a-star-on-our-doorstep-i\\thumb-v1\\thumbnail.png",
+          "dir": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-3-betelgeuse-when-a-star-on-our-doorstep-i\\thumb-v1",
+          "rating": 7,
+          "hook": "IT STARTED",
+          "verdict": "Clean, punchy, and coherent — 'IT STARTED' plus a swirling fiery star orb next to the title 'Betelgeuse Is Sending Urgent Warning Signs' creates genuine urgency, but the left-text / right-visual split is a well-worn space-channel template that doesn't push it into memorable territory."
+        },
+        {
+          "variant": 2,
+          "path": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-3-betelgeuse-when-a-star-on-our-doorstep-i\\thumb-v2\\thumbnail.png",
+          "dir": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-3-betelgeuse-when-a-star-on-our-doorstep-i\\thumb-v2",
+          "rating": 7,
+          "hook": "IT STARTED",
+          "verdict": "Clean, punchy, and legible — 'IT STARTED' dominates instantly and pairs perfectly with the warning-signs title, but the star imagery reads as generic 'space' rather than specifically Betelgeuse (a red supergiant), slightly diluting topic authenticity."
+        },
+        {
+          "variant": 3,
+          "path": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-3-betelgeuse-when-a-star-on-our-doorstep-i\\thumb-v3\\thumbnail.png",
+          "dir": "C:\\dev\\sleepforge\\output\\astronomer-thumbnail-test\\set-3-betelgeuse-when-a-star-on-our-doorstep-i\\thumb-v3",
+          "rating": 8,
+          "hook": "TOO CLOSE",
+          "verdict": "Clean, punchy composition with a bold readable hook and a genuinely dramatic stellar visual that earns the urgency — this would stop a scroll."
+        }
+      ],
+      "best_variant": 3,
+      "best_rating": 8,
+      "best_hook": "TOO CLOSE",
+      "best_verdict": "Clean, punchy composition with a bold readable hook and a genuinely dramatic stellar visual that earns the urgency — this would stop a scroll."
+    }
+  ]
+}
