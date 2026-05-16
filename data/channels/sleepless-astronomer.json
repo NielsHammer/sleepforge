@@ -19,6 +19,7 @@
   "frame_style": "fullscreen",
   "show_captions": false,
   "intro_template": "sleep_audiobook",
+  "thumbnail_style": "astrokobi",
   "background_video": null,
   "topic_pool": "data/topic-pools/sleepless-astronomer.json",
   "notes": "Channel exists (40 subs, 117 videos). OAuth token active. Video pipeline not yet started — image library must be built first. See image_library_status: pending."

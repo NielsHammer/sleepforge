@@ -168,7 +168,27 @@ async function downloadToFile(url, dest) {
 
 const PERSON_KEYWORDS = /\b(philosopher|bust|portrait|figure|man|woman|person|face|human|statue|sculpture|painting|aurelius|seneca|plato|aristotle|socrates|jung|nietzsche|descartes|kant|hegel|buddha|confucius|stoic|ancient|roman|greek|medieval|renaissance)\b/i;
 
-async function resolveImageRequest(req, label, outDir) {
+async function resolveImageRequest(req, label, outDir, _spaceLibImages = []) {
+  // Space library: use pre-selected local images instead of API calls
+  if (req.source_hint === 'space_library') {
+    const idx = (req.id || 1) - 1;
+    const src = _spaceLibImages[idx] || _spaceLibImages[0];
+    if (!src) {
+      console.log(`  [${label}] No space library image available — skipping`);
+      return null;
+    }
+    const ext = path.extname(src);
+    const localPath = path.join(outDir, `${label}${ext}`);
+    try {
+      fs.copyFileSync(src, localPath);
+      console.log(`  [${label}] Space library: ${path.basename(src)}`);
+      return localPath;
+    } catch (e) {
+      console.log(`  [${label}] Space library copy failed: ${e.message}`);
+      return null;
+    }
+  }
+
   let prompt = req.prompt || req.query || '';
   if (!prompt) return null;
   const isReal = req.source_hint === 'real' || req.use_real_photo === true;
@@ -214,6 +234,182 @@ async function resolveImageRequest(req, label, outDir) {
     console.log(`  [${label}] download failed: ${e.message}`);
     return null;
   }
+}
+
+// ─── SPACE LIBRARY IMAGE PICKER ──────────────────────────────────────────────
+
+function pickSpaceLibraryImages(n = 3, channelConfig = null) {
+  const libPath = channelConfig?.image_library_path
+    ? path.join(PROJECT_ROOT, channelConfig.image_library_path)
+    : path.join(PROJECT_ROOT, 'assets', 'images', 'space-library-v1');
+  if (!fs.existsSync(libPath)) return [];
+  const files = fs.readdirSync(libPath)
+    .filter(f => /\.(jpg|jpeg|png)$/i.test(f))
+    .map(f => path.join(libPath, f));
+  if (files.length === 0) return [];
+  const shuffled = [...files].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, n);
+}
+
+// ─── ASTROKOBI HOOK WRITER ────────────────────────────────────────────────────
+
+function buildAstrokobiHookPrompt(title, scriptText, priorFailureFeedback = null) {
+  const scriptExcerpt = scriptText ? scriptText.substring(0, 3000) : 'No script — design from title alone.';
+  const failureBlock = priorFailureFeedback
+    ? `\n⚠ YOUR PREVIOUS HOOK FAILED:\n${priorFailureFeedback}\nGenerate 5 NEW candidates that avoid these issues.\n`
+    : '';
+
+  return `You are writing 2-4 word thumbnail hook text for an astronomy YouTube video in the style of AstroKobi.
+
+TITLE: "${title}"
+${failureBlock}
+SCRIPT EXCERPT (mine for the most dramatic fact or surprising reveal):
+"""
+${scriptExcerpt}
+"""
+
+AstroKobi thumbnail hooks are REACTIONS or SHOCKING STATEMENTS — never topic descriptions.
+
+EXAMPLES OF WINNING ASTROKOBI HOOKS:
+  - "THIS IS BAD" — reaction to an alarming discovery
+  - "SHOULD NOT BE POSSIBLE" — something defying expectation
+  - "THEY DID" — someone actually attempted something extreme
+  - "YES." — simple confirmation of a seemingly impossible thing (note: period)
+  - "THEY LIED" — an institution was wrong or misleading
+  - "EARTH 2.0" — discovery resembles Earth
+  - "WAIT" — challenges something the viewer thought they knew
+  - "NEVER" — absolute impossibility
+  - "IMPOSSIBLE" — something that can't be
+
+RULES:
+1. 2-4 words MAXIMUM. Shorter is often stronger ("YES." beats "YES IT IS").
+2. Must be a STATEMENT or LABEL — not a question, not a topic description.
+3. Creates curiosity gap: viewer thinks "I must watch to understand what this means."
+4. Works as ALL CAPS white text overlaid on a space photo at 168×94 pixels (phone screen).
+5. Can use dramatic/alarming words — this is an astronomy channel, not a sleep channel.
+6. If using a period, it must be intentional ("YES." or "REAL." — not "THEY DID.")
+
+Generate 5 candidate hooks. Score each on:
+  - curiosity (1-10): does it make a viewer need to click?
+  - surprise (1-10): would it stop a fast scroller?
+  - clarity (1-10): pairs naturally with the title to create a clear story?
+  - brevity (1-10): shorter is better (4 words = max score 7, 3 words = 9, 2 words = 10)
+
+Return ONLY this JSON:
+{
+  "candidates": [
+    { "hook": "TEXT", "curiosity": N, "surprise": N, "clarity": N, "brevity": N, "total": N },
+    { "hook": "TEXT", "curiosity": N, "surprise": N, "clarity": N, "brevity": N, "total": N },
+    { "hook": "TEXT", "curiosity": N, "surprise": N, "clarity": N, "brevity": N, "total": N },
+    { "hook": "TEXT", "curiosity": N, "surprise": N, "clarity": N, "brevity": N, "total": N },
+    { "hook": "TEXT", "curiosity": N, "surprise": N, "clarity": N, "brevity": N, "total": N }
+  ],
+  "winner": "the chosen hook text",
+  "winner_reasoning": "one sentence: why this hook + the title creates a curiosity gap that makes a viewer click"
+}`;
+}
+
+function validateAstrokobiHookText(hook) {
+  if (!hook) return { valid: false, issues: ['empty hook'] };
+  const words = hook.trim().replace(/\.$/, '').split(/\s+/);
+  const issues = [];
+  if (words.length > 5) {
+    issues.push(`hook is ${words.length} words — AstroKobi hooks are 1-4 words max`);
+  }
+  if (hook.endsWith('?') && words.length > 4) {
+    issues.push('hook is a long question — AstroKobi hooks are short statements');
+  }
+  return { valid: issues.length === 0, issues };
+}
+
+// ─── ASTROKOBI PLANNER PROMPT ─────────────────────────────────────────────────
+
+function buildAstrokobiPlannerPrompt({ title, scriptText, lockedHook, priorAttempt, numSpaceImages = 3 }) {
+  const scriptExcerpt = scriptText ? scriptText.substring(0, 4000) : 'No script — design from title alone.';
+  const retryBlock = priorAttempt
+    ? `\n═══ YOUR PREVIOUS ATTEMPT WAS REJECTED ═══\nCritic gave it ${priorAttempt.rating}/10. Verdict: ${priorAttempt.designer_verdict || '(none)'}\nProblems: ${(priorAttempt.problems || []).slice(0, 4).join(' | ') || '(none)'}\nFix: ${priorAttempt.fix_instructions || '(none)'}\nMake a STRUCTURALLY DIFFERENT design — not a tweak.\n`
+    : '';
+
+  const imageBlock = numSpaceImages > 0
+    ? `
+═══ SPACE LIBRARY IMAGES (pre-fetched, photoreal) ═══
+${numSpaceImages} photorealistic deep-space images are available as {{IMG:1}} through {{IMG:${numSpaceImages}}}.
+All images are real astrophotography — nebulae, galaxies, star fields, etc.
+Use image_requests with source_hint: "space_library" and they will be swapped in.
+You may use 1, 2, or 3 images — or none if you design a pure text/CSS composition.
+`
+    : '';
+
+  const lockedHookBlock = lockedHook
+    ? `\n═══ LOCKED HOOK — DO NOT CHANGE ═══\nHOOK: "${lockedHook.winner}"\nWHY: ${lockedHook.winner_reasoning}\n`
+    : '';
+
+  return `You are a senior YouTube thumbnail designer. You are designing for the astronomy channel "Sleepless Astronomer" which matches the visual style of AstroKobi exactly.
+${retryBlock}${imageBlock}${lockedHookBlock}
+═══ THE VIDEO ═══
+
+TITLE: "${title}"
+NICHE: astronomy documentary
+TONE: cinematic, dramatic, photorealistic space
+
+SCRIPT (mine for dramatic facts — specific numbers, distances, events):
+"""
+${scriptExcerpt}
+"""
+
+═══ ASTROKOBI STYLE — HARD REQUIREMENTS ═══
+
+Study these AstroKobi examples. COPY THIS STYLE EXACTLY:
+  - "4 Planets Better For Life Than Earth" → hook: "EARTH 2.0" (planet + star comparison, pure white Bebas Neue)
+  - "How Are We Still In Contact With Voyager?" → hook: "SHOULD NOT BE POSSIBLE" (Voyager probe + Earth + laser)
+  - "Could The Big Bang Happen Again?" → hook: "YES." (curved Earth horizon + cosmic rim)
+  - "What Came Before The Big Bang?" → hook: "THEY LIED" (cosmic structure)
+  - "15 Insane Events You Will Miss" → hook: "EARTH" (planet vs sun comparison, tiny Earth)
+
+FONT: Bold, condensed, sans-serif ONLY.
+  - Load "Bebas Neue" from Google Fonts, OR use font-family: Impact, 'Arial Black', sans-serif
+  - ALL CAPS always
+  - White or near-white text (#FFFFFF or #F0F0FF)
+  - Drop shadow for legibility: text-shadow: 3px 3px 0 #000, 0 0 20px rgba(0,0,0,0.8)
+  - Hook text: 100-180px — HUGE. It must dominate the thumbnail.
+  - font-weight: 900 or 800
+
+COMPOSITION:
+  - ONE clear focal subject (planet, probe, star, galaxy) fills 40-70% of the frame
+  - Dark deep-space backdrop (near-black: #000008 to #0a0a1a)
+  - Hook text on top of or beside the focal subject
+  - Simple — 2 elements max: background image + hook text
+  - NO: gold borders, chalk drawings, serif fonts, ornate overlays, decorative badges
+
+COLOR:
+  - Background: very dark (#000010 to #05050f)
+  - Text: #FFFFFF or #F5F5FF
+  - Optional accent: bright planet glow (#FF6B35 orange, #4FC3F7 ice blue, #FFF176 star yellow)
+  - Bright, saturated — NOT muted, NOT washed-out
+
+NO PERIOD-AUTHENTIC RULES — this is astronomy, not philosophy. Real space photos are preferred.
+
+═══ TECHNICAL CONSTRAINTS ═══
+1. Complete valid HTML5 document, no scripts, server-side rendering only.
+2. Body exactly 1280×720, no margin/padding/scroll.
+3. Use {{IMG:1}}, {{IMG:2}}, {{IMG:3}} for space library images (specify source_hint: "space_library").
+4. Google Fonts via @import or link is allowed.
+5. ALL TEXT must be font-size 56px or larger — no exceptions.
+6. Hook text must be 100px or larger.
+7. Set word-spacing >= 0.15em on all text elements.
+
+═══ RETURN FORMAT — JSON ONLY ═══
+
+{
+  "primary_subject": "the main visual subject (e.g. 'black hole', 'Voyager probe', 'neutron star')",
+  "subject_is_person": false,
+  "hook_text": "the hook text shown in the thumbnail",
+  "image_requests": [
+    { "id": 1, "prompt": "description of which space library image to use", "source_hint": "space_library", "purpose": "main background / focal subject" }
+  ],
+  "html": "<!DOCTYPE html><html>...</html>",
+  "why": "3-4 sentences: why this image + hook makes someone stop scrolling"
+}`;
 }
 
 // ─── HOOK WRITER ──────────────────────────────────────────────────────────────
@@ -303,11 +499,15 @@ Pick the SINGLE BEST hook that PASSES ALL 5 SLEEP CHANNEL RULES. Return ONLY thi
 }`;
 }
 
-async function generateHookCandidates({ title, scriptText, niche, tone }) {
+async function generateHookCandidates({ title, scriptText, niche, tone, channelConfig = null }) {
+  const isAstrokobi = channelConfig?.thumbnail_style === 'astrokobi';
+
   // Up to 3 attempts if the validator rejects the winner
   for (let attempt = 1; attempt <= 3; attempt++) {
     const feedbackFromPrior = attempt > 1 ? _lastHookFailureFeedback : null;
-    const prompt = buildHookPrompt(title, scriptText, niche, tone, feedbackFromPrior);
+    const prompt = isAstrokobi
+      ? buildAstrokobiHookPrompt(title, scriptText, feedbackFromPrior)
+      : buildHookPrompt(title, scriptText, niche, tone, feedbackFromPrior);
 
     const text = await callClaudeCLI(prompt, { model: CLI_MODEL, timeoutMs: 120000 });
     const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/, '');
@@ -316,8 +516,11 @@ async function generateHookCandidates({ title, scriptText, niche, tone }) {
     const result = JSON.parse(m[0]);
     if (!result.winner) throw new Error('Hook planner returned no winner');
 
-    // Validate the winner
-    const validation = validateHookText(result.winner);
+    // Validate the winner — use channel-appropriate validator
+    const validation = isAstrokobi
+      ? validateAstrokobiHookText(result.winner)
+      : validateHookText(result.winner);
+
     if (validation.valid) {
       if (attempt > 1) console.log(`  [Hook] Attempt ${attempt}: PASSED validation — "${result.winner}"`);
       return result;
@@ -327,19 +530,18 @@ async function generateHookCandidates({ title, scriptText, niche, tone }) {
     for (const issue of validation.issues) console.log(`    ✗ ${issue}`);
 
     // Also try the other candidates — pick first one that passes
-    const fallback = (result.candidates || []).find(c => validateHookText(c.hook).valid);
+    const validator = isAstrokobi ? validateAstrokobiHookText : validateHookText;
+    const fallback = (result.candidates || []).find(c => validator(c.hook).valid);
     if (fallback) {
       console.log(`  [Hook] Using runner-up that passed: "${fallback.hook}"`);
       result.winner = fallback.hook;
-      result.winner_reasoning = `(validator fallback) ${fallback.hook} — passed all sleep-channel rules`;
+      result.winner_reasoning = `(validator fallback) ${fallback.hook} — passed validation`;
       return result;
     }
 
-    // Build feedback string for next attempt
-    _lastHookFailureFeedback = `Hook "${result.winner}" failed: ${validation.issues.join('; ')}. ALL candidates failed validation too. You must generate hooks using ONLY common words, present tense, no death/violence, no standalone comparatives.`;
+    _lastHookFailureFeedback = `Hook "${result.winner}" failed: ${validation.issues.join('; ')}. ALL candidates failed too.`;
 
     if (attempt === 3) {
-      // Final fallback: return the result anyway but log the failure
       console.log('  [Hook] All 3 attempts failed validation — using last winner with warning');
       result._validation_failed = true;
       result._validation_issues = validation.issues;
@@ -612,7 +814,22 @@ function loadPoolEntriesWithImages(maxWinners = 4, maxLosers = 3) {
 
 // ─── PLANNER ──────────────────────────────────────────────────────────────────
 
-async function planThumbnail({ title, scriptText, niche, tone, priorAttempt, lockedHook = null, lockedMetaphor = null }) {
+async function planThumbnail({ title, scriptText, niche, tone, priorAttempt, lockedHook = null, lockedMetaphor = null, channelConfig = null, _spaceLibImages = [] }) {
+  const isAstrokobi = channelConfig?.thumbnail_style === 'astrokobi';
+
+  // AstroKobi: skip reference loader + approval pool, use dedicated planner
+  if (isAstrokobi) {
+    console.log('  [Planner] AstroKobi style — using dedicated space planner');
+    const prompt = buildAstrokobiPlannerPrompt({ title, scriptText, lockedHook, priorAttempt, numSpaceImages: _spaceLibImages.length });
+    const text = await callClaudeCLI(prompt, { model: CLI_MODEL, timeoutMs: 480000 });
+    const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/, '');
+    const m = cleaned.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error('AstroKobi planner returned no JSON');
+    const plan = JSON.parse(m[0]);
+    if (!plan.html) throw new Error('AstroKobi planner returned no html field');
+    return plan;
+  }
+
   const visionRefs = selectReferenceThumbnailImages(title, niche || 'education', 4);
   const pool = loadPoolEntriesWithImages(4, 3);
 
@@ -1044,18 +1261,35 @@ export async function generateThumbnailV3({
 
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
+  const isAstrokobi = channelConfig?.thumbnail_style === 'astrokobi';
+
   // Reset hook retry state on first attempt
   if (_attempt === 1) _lastHookFailureFeedback = null;
+
+  // AstroKobi: pre-select space library images before planning
+  let _spaceLibImages = [];
+  if (isAstrokobi && _attempt === 1) {
+    _spaceLibImages = pickSpaceLibraryImages(3, channelConfig);
+    if (_spaceLibImages.length > 0) {
+      console.log(`  Space library: ${_spaceLibImages.length} images pre-selected`);
+      for (const p of _spaceLibImages) console.log(`    • ${path.basename(p)}`);
+    } else {
+      console.log('  ⚠ No space library images found — will use AI image generation');
+    }
+  }
 
   // Step 0: Hook writer
   let lockedHook = _lockedHook;
   if (!lockedHook) {
     console.log('\n--- Step 0: Hook writer (5 candidates → validator → pick strongest) ---');
     try {
-      lockedHook = await generateHookCandidates({ title, scriptText, niche, tone });
+      lockedHook = await generateHookCandidates({ title, scriptText, niche, tone, channelConfig });
       console.log('  Candidates:');
       for (const c of (lockedHook.candidates || [])) {
-        console.log(`    "${c.hook}" — clarity:${c.clarity} promise:${c.promise} emotion:${c.emotion} total:${c.total}`);
+        const scores = isAstrokobi
+          ? `curiosity:${c.curiosity} surprise:${c.surprise} brevity:${c.brevity} total:${c.total}`
+          : `clarity:${c.clarity} promise:${c.promise} emotion:${c.emotion} total:${c.total}`;
+        console.log(`    "${c.hook}" — ${scores}`);
       }
       console.log('  WINNER: "' + lockedHook.winner + '"');
       if (lockedHook._validation_failed) {
@@ -1070,44 +1304,49 @@ export async function generateThumbnailV3({
     }
   }
 
-  // Step 0.4: Topic concreteness classifier
-  let topicClass = null;
-  if (lockedHook) {
-    console.log('\n--- Step 0.4: Topic concreteness classifier ---');
-    topicClass = await classifyTopicConcreteness({ title, scriptText, niche });
-    console.log('  is_abstract: ' + topicClass.is_abstract + ' (subject: ' + (topicClass.subject || 'none') + ')');
-    console.log('  reason: ' + topicClass.reason);
-    fs.writeFileSync(path.join(outputDir, 'thumbnail-v3-topicclass.json'), JSON.stringify(topicClass, null, 2));
-  }
-
-  // Step 0.5: Visual metaphor brainstorm (abstract topics only)
+  // Steps 0.4 + 0.5: Skip for AstroKobi — all space topics are concrete, no metaphor needed
   let lockedMetaphor = _lockedMetaphor;
-  const shouldBrainstormMetaphor = !lockedMetaphor && lockedHook && (topicClass?.is_abstract !== false);
-  if (!shouldBrainstormMetaphor && !lockedMetaphor) {
-    console.log('\n--- Step 0.5: Skipping metaphor brainstorm — topic is CONCRETE (subject: ' + (topicClass?.subject || 'unknown') + ') ---');
-  }
-  if (shouldBrainstormMetaphor) {
-    console.log('\n--- Step 0.5: Visual metaphor brainstorm (5 candidates → pick strongest) ---');
-    try {
-      lockedMetaphor = await generateImageMetaphors({ title, scriptText, niche, tone, lockedHook });
-      console.log('  Metaphor candidates:');
-      for (const c of (lockedMetaphor.candidates || [])) {
-        const total = (c.surprise || 0) + (c.emotional_impact || 0) + (c.specificity || 0) + (c.hook_coherence || 0);
-        console.log(`    s:${c.surprise} e:${c.emotional_impact} sp:${c.specificity} hc:${c.hook_coherence} = ${total} → "${(c.metaphor || '').substring(0, 80)}"`);
-      }
-      const winner = lockedMetaphor.winner;
-      console.log('  WINNER: ' + (winner?.metaphor || 'unknown'));
-      console.log('  Why: ' + lockedMetaphor.winner_reasoning);
-      fs.writeFileSync(path.join(outputDir, 'thumbnail-v3-metaphor.json'), JSON.stringify(lockedMetaphor, null, 2));
-    } catch (e) {
-      console.log('  [Metaphor brainstorm] Failed: ' + e.message + ' — design pass will pick image freely');
-      lockedMetaphor = null;
+  if (!isAstrokobi) {
+    // Step 0.4: Topic concreteness classifier
+    let topicClass = null;
+    if (lockedHook) {
+      console.log('\n--- Step 0.4: Topic concreteness classifier ---');
+      topicClass = await classifyTopicConcreteness({ title, scriptText, niche });
+      console.log('  is_abstract: ' + topicClass.is_abstract + ' (subject: ' + (topicClass.subject || 'none') + ')');
+      console.log('  reason: ' + topicClass.reason);
+      fs.writeFileSync(path.join(outputDir, 'thumbnail-v3-topicclass.json'), JSON.stringify(topicClass, null, 2));
     }
+
+    // Step 0.5: Visual metaphor brainstorm (abstract topics only)
+    const shouldBrainstormMetaphor = !lockedMetaphor && lockedHook && (topicClass?.is_abstract !== false);
+    if (!shouldBrainstormMetaphor && !lockedMetaphor) {
+      console.log('\n--- Step 0.5: Skipping metaphor brainstorm — topic is CONCRETE (subject: ' + (topicClass?.subject || 'unknown') + ') ---');
+    }
+    if (shouldBrainstormMetaphor) {
+      console.log('\n--- Step 0.5: Visual metaphor brainstorm (5 candidates → pick strongest) ---');
+      try {
+        lockedMetaphor = await generateImageMetaphors({ title, scriptText, niche, tone, lockedHook });
+        console.log('  Metaphor candidates:');
+        for (const c of (lockedMetaphor.candidates || [])) {
+          const total = (c.surprise || 0) + (c.emotional_impact || 0) + (c.specificity || 0) + (c.hook_coherence || 0);
+          console.log(`    s:${c.surprise} e:${c.emotional_impact} sp:${c.specificity} hc:${c.hook_coherence} = ${total} → "${(c.metaphor || '').substring(0, 80)}"`);
+        }
+        const winner = lockedMetaphor.winner;
+        console.log('  WINNER: ' + (winner?.metaphor || 'unknown'));
+        console.log('  Why: ' + lockedMetaphor.winner_reasoning);
+        fs.writeFileSync(path.join(outputDir, 'thumbnail-v3-metaphor.json'), JSON.stringify(lockedMetaphor, null, 2));
+      } catch (e) {
+        console.log('  [Metaphor brainstorm] Failed: ' + e.message + ' — design pass will pick image freely');
+        lockedMetaphor = null;
+      }
+    }
+  } else {
+    console.log('\n--- Steps 0.4 + 0.5: Skipped (AstroKobi — concrete space topic, library images pre-loaded) ---');
   }
 
   // Step 1: Plan
   console.log('\n--- Step 1: Claude designs the thumbnail (full HTML/CSS) ---');
-  const plan = await planThumbnail({ title, scriptText, niche, tone, priorAttempt: _priorAttempt, lockedHook, lockedMetaphor });
+  const plan = await planThumbnail({ title, scriptText, niche, tone, priorAttempt: _priorAttempt, lockedHook, lockedMetaphor, channelConfig, _spaceLibImages });
   plan.title = title;
   plan.niche = niche;
   plan._attempt = _attempt;
@@ -1124,7 +1363,7 @@ export async function generateThumbnailV3({
   console.log('\n--- Step 2: Fetching images ---');
   const imagePaths = {};
   for (const req of (plan.image_requests || [])) {
-    const localPath = await resolveImageRequest(req, `img-${req.id}`, outputDir);
+    const localPath = await resolveImageRequest(req, `img-${req.id}`, outputDir, _spaceLibImages);
     if (localPath) imagePaths[req.id] = localPath;
   }
 
@@ -1232,7 +1471,7 @@ export async function generateThumbnailV3({
     fs.copyFileSync(pngPath, path.join(archDir, 'thumbnail.png'));
     fs.copyFileSync(path.join(outputDir, 'thumbnail-v3-plan.json'), path.join(archDir, 'thumbnail-v3-plan.json'));
     fs.copyFileSync(path.join(outputDir, 'thumbnail-v3-review.json'), path.join(archDir, 'thumbnail-v3-review.json'));
-    return generateThumbnailV3({ outputDir, title, scriptText, niche, tone, _attempt: _attempt + 1, _priorAttempt: review, _lockedHook: lockedHook, _lockedMetaphor: lockedMetaphor, _skipCritic, _maxAttempts });
+    return generateThumbnailV3({ outputDir, title, scriptText, niche, tone, channelConfig, _attempt: _attempt + 1, _priorAttempt: review, _lockedHook: lockedHook, _lockedMetaphor: lockedMetaphor, _skipCritic, _maxAttempts });
   }
 
   // All attempts exhausted — promote the best-scoring attempt OR use fallback template
