@@ -1,0 +1,46 @@
+[
+  {
+    "subject": "intro",
+    "moment": "sleep welcome",
+    "action": "gentle welcome to the listener",
+    "setting": "quiet, dark space",
+    "philosopher": "intro",
+    "narration": "Welcome to Sleepless Astronomer.\n\nThese videos are made for one thing: to help you drift gently to sleep while the universe tells its stories.\n\nSo wherever you are right now — in bed, in the dark, or somewhere quiet — take a moment. Let your body settle. Close your eyes if you haven't already. Take a slow breath in.\n\nYou don't need to watch. You don't need to follow along. Everything tonight will be described in words, the way a story is told in the dark. All you have to do is listen.\n\nTonight, we're going to explore What's Inside a Black Hole. There's no hurry. The universe has been here for almost fourteen billion years. It can wait a little longer.\n\nSo let yourself be still. Let your thoughts slow down. And when you're ready — or even if you're not — let's begin."
+  },
+  {
+    "subject": "black-hole-event-horizon-m87",
+    "moment": "The Shadow of Eternity",
+    "action": "On April 10, 2019, the Event Horizon Telescope Collaboration released the first image ever captured of a black hole — M87*, a gravitational void 6.5 billion times the mass of the Sun, 55 million light-years away, with an event horizon stretching 38 billion kilometers across; the image was reconstructed using an algorithm called CHIRP, developed by computer scientist Katie Bouman while she was still a graduate student at MIT",
+    "setting": "The Shadow of Eternity",
+    "arc_role": "hook",
+    "philosopher": "black-hole-event-horizon-m87",
+    "narration": "On April tenth, twenty nineteen, the first image of a black hole's edge arrived. M87* — a void six point five billion times our Sun's mass, fifty-five million light-years away. Its boundary stretched thirty-eight billion kilometers.\n\nKatie Bouman, a graduate student at MIT, had helped design the algorithm called CHIRP. Telescopes from across the world spoke as one, their signals woven into a single shadow we'd never glimpsed before.\n\nBeyond that boundary, where light surrenders — that's where the universe keeps its deepest secrets."
+  },
+  {
+    "subject": "karl-schwarzschild-field-equations",
+    "moment": "Solved in the Trenches",
+    "action": "In December 1915, German physicist Karl Schwarzschild solved Einstein's brand-new field equations from the artillery trenches of the Russian front during World War I, calculating that any object compressed below a critical radius becomes a black hole — for Earth, that radius is just 8.87 millimeters, roughly the diameter of a hazelnut; he mailed the solution to Einstein and died five months later from pemphigus, a disease contracted at the front",
+    "setting": "Solved in the Trenches",
+    "arc_role": "setup",
+    "philosopher": "karl-schwarzschild-field-equations",
+    "narration": "Karl Schwarzschild sat in artillery trenches. December, nineteen fifteen. The Russian front burned while he worked through Einstein's equations. He'd discovered something striking: compress any object below a critical radius, and it'd disappear from the universe. For Earth, that threshold was eight point eight seven millimeters — the size of a hazelnut. He mailed his solution to Einstein. Five months later, pemphigus claimed him.\n\nHis mathematics revealed the boundary. What becomes of time there?"
+  },
+  {
+    "subject": "gravitational-time-dilation-event-horizon",
+    "moment": "Where Time Goes Still",
+    "action": "General relativity predicts that at the event horizon of a black hole, gravitational time dilation becomes effectively infinite — an outside observer watching a clock fall inward would see it tick slower and slower, its light stretching from blue to red to infrared, freezing at the boundary and never crossing; yet the clock itself, in its own reference frame, ticks normally and crosses the horizon in finite time, with no local warning that anything extraordinary has occurred",
+    "setting": "Where Time Goes Still",
+    "arc_role": "setup",
+    "philosopher": "gravitational-time-dilation-event-horizon",
+    "narration": "Time does strange things at the boundary.\n\nA clock falls inward. From far away, something remarkable happens: it ticks slower and slower. Its light redshifts, deepening through red, deepening still into infrared, finally frozen at the edge.\n\nBut here's the profound part: the clock itself feels nothing at all. In its own reference frame, it ticks normally through finite time. No warning. No change in the local world of the falling traveler.\n\nThey cross, entirely unaware of what lies inward."
+  },
+  {
+    "subject": "penrose-singularity-theorem-spacetime",
+    "moment": "The Last Known Moment",
+    "action": "In 1965, mathematician Roger Penrose — who received the Nobel Prize in Physics in October 2020 specifically for this work — proved that once matter crosses a black hole's event horizon, every possible path through spacetime curves inescapably toward a single point of infinite density called the singularity; for a ten-solar-mass black hole, a falling observer would reach that singularity in roughly ten microseconds after crossing, a moment where the curvature of spacetime becomes literally infinite and every known law of physics — quantum mechanics, thermodynamics, relativity — fails simultaneously, leaving the interior of a black hole as the one place in the universe that no equation can yet describe",
+    "setting": "The Last Known Moment",
+    "arc_role": "setup",
+    "philosopher": "penrose-singularity-theorem-spacetime",
+    "narration": "In nineteen sixty-five, mathematician Roger Penrose proved what lies inward.\n\nOnce you cross the event horizon, every possible path through spacetime curves toward a single point. For a black hole ten times the Sun's mass, you'd reach it in ten microseconds. The singularity.\n\nWhere spacetime itself curves infinitely. Where every law of physics fails simultaneously.\n\nThis work earned him the Nobel Prize—October, twenty twenty.\n\nYet what exists in that interior, no equation can describe."
+  }
+]
