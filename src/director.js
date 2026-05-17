@@ -1,4 +1,6 @@
+import path from "path";
 import { loadLibrary, lookupLibraryImageDiverse, lookupLibraryImageRotating } from "./library.js";
+import { matchImage, createMatcherState, estimateSegmentEnergy } from "./keyword-matcher.js";
 
 // ─── Sleep Mode Director ────────────────────────────────────────────────────
 //
@@ -357,6 +359,10 @@ function buildClipWindows(scenes, wordTimestamps, totalDuration, opts = {}) {
 // Returns { clips, videoBible }.
 
 export async function createStoryboard(scenes, wordTimestamps, totalDuration, brief = {}) {
+  const useKeywordMatcher = brief.imageMatching === 'keyword_semantic';
+  const minClipSec = brief.minClipDurationSec ?? 3;
+  const maxClipSec = brief.maxClipDurationSec ?? 6;
+
   // Fine-grain mode (sleep default): one clip every targetClipSec seconds so
   // the chalk imagery stays visually alive. Scene-mode (legacy) only used if
   // brief explicitly opts out by setting targetClipSec to 0/null.
@@ -368,10 +374,46 @@ export async function createStoryboard(scenes, wordTimestamps, totalDuration, br
         maxClipSec: brief.maxClipSec || 45,
       });
 
-  // Resolve library image per clip — rotating picker:
-  //   - never reuses the previous clip's image (no two-in-a-row)
-  //   - prefers least-recently-used among the top scored matches
-  //   - falls back to globally-LRU if no entry scores > 0
+  // ── Keyword-semantic matching (Sleepless Astronomer) ──────────────────────
+  if (useKeywordMatcher) {
+    const state = createMatcherState();
+    const matchLog = [];
+    let kwHits = 0, fallbacks = 0;
+
+    for (const clip of clips) {
+      // Adjust clip duration by energy before lookup
+      const { target_seconds, energy } = estimateSegmentEnergy(clip.text, minClipSec, maxClipSec);
+      clip.energyTarget = target_seconds;
+      clip.energy = energy;
+
+      const result = matchImage(clip.text, state);
+      clip.imagePath       = result.image_path;
+      clip.imageId         = result.image_path ? path.basename(result.image_path) : null;
+      clip.imageScore      = result.match_score;
+      clip.keywordMatched  = result.keyword_matched;
+      clip.matchPhrase     = result.match_phrase;
+      clip.fallbackUsed    = result.fallback_used;
+
+      if (result.keyword_matched) kwHits++;
+      else fallbacks++;
+
+      matchLog.push({
+        clip: clip.index,
+        start: clip.start_time.toFixed(1),
+        text: clip.text.slice(0, 60),
+        keyword: result.keyword_matched || '(fallback)',
+        phrase: result.match_phrase,
+        score: result.match_score.toFixed(1),
+        energy,
+        image: clip.imageId,
+      });
+    }
+
+    console.log(`  Director [keyword]: ${clips.length} clips — ${kwHits} keyword hits, ${fallbacks} fallbacks`);
+    return { clips, videoBible: SLEEP_PHILOSOPHY_BIBLE, matchLog };
+  }
+
+  // ── Legacy library matching (Philosophers + fallback) ─────────────────────
   const library = loadLibrary(brief.libraryPath || null);
   const useCounts = new Map();
   let prevId = null;
