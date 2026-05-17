@@ -915,8 +915,8 @@ async function generateSpaceScript(topic, options = {}) {
     priorNarration = narration;
   }
 
-  // Prepend sleep intro for channels that request it
-  if (channelConfig?.intro_template === 'sleep_audiobook') {
+  // Prepend channel intro for channels that request it
+  if (channelConfig?.intro_template === 'channel_intro' || channelConfig?.intro_template === 'sleep_audiobook') {
     allScenes.unshift(getSleepIntro(topic));
   }
 

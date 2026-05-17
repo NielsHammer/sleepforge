@@ -18,7 +18,7 @@
   "image_library_path": "assets/images/space-library-v1/",
   "frame_style": "fullscreen",
   "show_captions": false,
-  "intro_template": "sleep_audiobook",
+  "intro_template": "channel_intro",
   "thumbnail_style": "astrokobi",
   "background_video": null,
   "topic_pool": "data/topic-pools/sleepless-astronomer.json",

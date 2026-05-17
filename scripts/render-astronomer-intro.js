@@ -146,11 +146,14 @@ if (!FORCE && fs.existsSync(FINAL_PATH) && fs.statSync(FINAL_PATH).size > 10000)
 } else {
   if (FORCE && fs.existsSync(FINAL_PATH)) fs.unlinkSync(FINAL_PATH);
 
-  // Use audio duration as authoritative length (-shortest trims video to audio)
+  // Explicit -map 0:v -map 1:a required — Remotion outputs a silent audio stream,
+  // so without explicit mapping ffmpeg defaults to that stream instead of the whoosh.
   const r = spawnSync('ffmpeg', [
     '-y',
     '-i', INTRO_VID,
     '-i', WHOOSH_PATH,
+    '-map', '0:v',
+    '-map', '1:a',
     '-c:v', 'copy',
     '-c:a', 'aac', '-b:a', '192k',
     '-shortest',
@@ -177,6 +180,20 @@ const dur = execSync(
 ).trim();
 log(`  Streams: ${vs} video, ${as} audio`);
 log(`  Duration: ${parseFloat(dur).toFixed(3)}s`);
+
+// Verify audio is not silent — Remotion embeds a silent stream that can win if -map is wrong
+const tmpWav = FINAL_PATH.replace('.mp4', '-verify.wav');
+execSync(`ffmpeg -y -i "${FINAL_PATH}" -t 4.5 -vn -ar 44100 "${tmpWav}"`, { stdio: 'pipe' });
+const volCheck = execSync(
+  `ffmpeg -i "${tmpWav}" -af "volumedetect" -vn -sn -dn -f null - 2>&1`,
+  { encoding: 'utf-8' }
+);
+try { fs.unlinkSync(tmpWav); } catch {}
+const peakVol = parseFloat((volCheck.match(/max_volume:\s*([-\d.]+)\s*dB/) || [])[1] ?? '-999');
+if (peakVol < -50) {
+  throw new Error(`Intro audio is silent (peak ${peakVol} dB) — mux pulled Remotion's silent stream. Check -map flags.`);
+}
+log(`  Audio peak: ${peakVol} dB ✓`);
 
 log('\n══════════════════════════════════════════════════');
 log('  ✅ Astronomer intro v2 built');
