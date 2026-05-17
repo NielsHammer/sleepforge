@@ -828,8 +828,9 @@ async function generateSpaceScript(topic, options = {}) {
   const duration      = parseInt(options.duration) || 60;
   const outputDir     = options.output || "./scripts";
   const channelConfig = options.channelConfig || null;
+  const targetDurMin  = channelConfig?.target_duration_minutes || 60;
   const effectiveWPM  = channelConfig?.target_word_count
-    ? Math.round(channelConfig.target_word_count / Math.max(duration, 1))
+    ? Math.round(channelConfig.target_word_count / targetDurMin)
     : WORDS_PER_MINUTE;
 
   // Scene count: ~3 min per scene for full videos, fewer for shorts
