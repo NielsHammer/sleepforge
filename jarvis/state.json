@@ -1,6 +1,60 @@
 {
   "renders": [
     {
+      "id": "voyager-1-the-farthest-human-made-object-and-what-it-te-1778971043677",
+      "channel": "sleepless-astronomer",
+      "topic": "Voyager 1: The Farthest Human-Made Object and What It Tells Us",
+      "status": "done",
+      "step": 8,
+      "createdAt": "2026-05-16T22:37:23.678Z",
+      "updatedAt": "2026-05-17T00:58:52.964Z",
+      "title": "How Are We Still Hearing from Voyager 1?",
+      "duration": 3650,
+      "thumbScore": 7,
+      "videoId": "nQIjOBAWMHY",
+      "url": "https://www.youtube.com/watch?v=nQIjOBAWMHY",
+      "privacyStatus": "public"
+    },
+    {
+      "id": "ed316c95-699c-44c5-898c-837f5159bea4",
+      "topic": "Seneca's philosophy: Letters to Lucilius on the shortness of life, time as our most precious possession — we waste it on trivialities, tranquility of mind (De Tranquillitate Animi), anger as temporary madness, meditatio mortis (contemplation of death as preparation for living), the brevity of life, philosophy as daily practice and consolation",
+      "channel": "sleepless-philosophers",
+      "status": "failed",
+      "step": "Upload failed: Upload failed after 5 attempts: Token refresh failed for \"sleepless-philosophers",
+      "progress": 0,
+      "videoId": null,
+      "videoUrl": null,
+      "scheduledAt": "2026-05-20T01:00:00Z",
+      "createdAt": "2026-05-12T02:30:29.494Z",
+      "updatedAt": "2026-05-12T05:22:11.505Z"
+    },
+    {
+      "id": "9c50a4f9-ec08-4673-976d-b9d6d543ffcd",
+      "topic": "Epictetus Stoic philosophy: the dichotomy of control, prohairesis (moral choice), the Enchiridion teachings, freedom through acceptance, suffering as misperception of events, the Stoic practice of daily philosophy, life as a banquet — take what is offered, the inner citadel no one can breach",
+      "channel": "sleepless-philosophers",
+      "status": "done",
+      "step": "Complete",
+      "progress": 100,
+      "videoId": "TjTuo6lL_48",
+      "videoUrl": "https://www.youtube.com/watch?v=TjTuo6lL_48",
+      "scheduledAt": "2026-05-19T01:00:00Z",
+      "createdAt": "2026-05-11T23:21:26.261Z",
+      "updatedAt": "2026-05-12T02:30:29.492Z"
+    },
+    {
+      "id": "e74cf5e0-c35a-4666-aa8c-15b93d98b7f7",
+      "topic": "Platonic philosophy: the Theory of Forms, the Allegory of the Cave, the divided line of knowledge, the Republic and philosopher-kings, anamnesis (recollection of past lives), the tripartite soul, eros as ascent toward the Good, the Form of the Good as the highest reality",
+      "channel": "sleepless-philosophers",
+      "status": "done",
+      "step": "Complete",
+      "progress": 100,
+      "videoId": "mc2s9AZq2ys",
+      "videoUrl": "https://www.youtube.com/watch?v=mc2s9AZq2ys",
+      "scheduledAt": "2026-05-18T01:00:00Z",
+      "createdAt": "2026-05-11T20:28:09.744Z",
+      "updatedAt": "2026-05-11T23:21:26.257Z"
+    },
+    {
       "id": "1dcaa999-f53a-4de6-ac0e-a2e2ff7d261e",
       "topic": "Cynical philosophy of Diogenes of Sinope: radical simplicity, anaideia (shamelessness), living according to nature, rejecting convention and status, virtue as the only good, askesis, the barrel of Diogenes",
       "channel": "sleepless-philosophers",
@@ -143,7 +197,7 @@
       "refreshed_at": "2026-05-08T23:35:35.890Z"
     }
   },
-  "last_updated": "2026-05-11T07:16:13.883Z",
+  "last_updated": "2026-05-17T00:58:52.964Z",
   "unused_thumbnails": [
     {
       "videoId": "_EJ1oGNKdcs",
