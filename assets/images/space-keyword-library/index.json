@@ -1,0 +1,1207 @@
+{
+  "keywords": {
+    "black hole": {
+      "priority": 10,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "event horizon",
+        "singularity",
+        "black holes",
+        "galactic center",
+        "supermassive"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/black-hole/black-hole-001.jpg",
+        "assets/images/space-keyword-library/black-hole/black-hole-002.jpg",
+        "assets/images/space-keyword-library/black-hole/black-hole-003.jpg",
+        "assets/images/space-keyword-library/black-hole/black-hole-004.jpg",
+        "assets/images/space-keyword-library/black-hole/black-hole-005.jpg",
+        "assets/images/space-keyword-library/black-hole/black-hole-006.jpg",
+        "assets/images/space-keyword-library/black-hole/black-hole-007.jpg",
+        "assets/images/space-keyword-library/black-hole/black-hole-008.jpg",
+        "assets/images/space-keyword-library/black-hole/black-hole-009.jpg",
+        "assets/images/space-keyword-library/black-hole/black-hole-010.jpg"
+      ]
+    },
+    "saturn": {
+      "priority": 10,
+      "category": "planet",
+      "aliases": [
+        "ringed planet",
+        "saturn's rings",
+        "saturn's hexagon",
+        "cassini division",
+        "lord of the rings"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/saturn/saturn-001.jpg",
+        "assets/images/space-keyword-library/saturn/saturn-002.jpg",
+        "assets/images/space-keyword-library/saturn/saturn-003.jpg",
+        "assets/images/space-keyword-library/saturn/saturn-004.jpg",
+        "assets/images/space-keyword-library/saturn/saturn-005.jpg",
+        "assets/images/space-keyword-library/saturn/saturn-006.jpg",
+        "assets/images/space-keyword-library/saturn/saturn-007.jpg",
+        "assets/images/space-keyword-library/saturn/saturn-008.jpg",
+        "assets/images/space-keyword-library/saturn/saturn-009.jpg",
+        "assets/images/space-keyword-library/saturn/saturn-010.jpg"
+      ]
+    },
+    "earth": {
+      "priority": 10,
+      "category": "planet",
+      "aliases": [
+        "our planet",
+        "blue marble",
+        "the earth",
+        "home planet",
+        "pale blue dot"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/earth/earth-001.jpg",
+        "assets/images/space-keyword-library/earth/earth-002.jpg",
+        "assets/images/space-keyword-library/earth/earth-003.jpg",
+        "assets/images/space-keyword-library/earth/earth-004.jpg",
+        "assets/images/space-keyword-library/earth/earth-005.jpg",
+        "assets/images/space-keyword-library/earth/earth-006.jpg",
+        "assets/images/space-keyword-library/earth/earth-007.jpg",
+        "assets/images/space-keyword-library/earth/earth-008.jpg",
+        "assets/images/space-keyword-library/earth/earth-009.jpg",
+        "assets/images/space-keyword-library/earth/earth-010.jpg"
+      ]
+    },
+    "nebula": {
+      "priority": 10,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "nebulae",
+        "gas cloud",
+        "stellar cloud",
+        "cosmic cloud",
+        "emission nebula",
+        "planetary nebula"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/nebula/nebula-001.jpg",
+        "assets/images/space-keyword-library/nebula/nebula-002.jpg",
+        "assets/images/space-keyword-library/nebula/nebula-003.jpg",
+        "assets/images/space-keyword-library/nebula/nebula-004.jpg",
+        "assets/images/space-keyword-library/nebula/nebula-005.jpg",
+        "assets/images/space-keyword-library/nebula/nebula-006.jpg",
+        "assets/images/space-keyword-library/nebula/nebula-007.jpg",
+        "assets/images/space-keyword-library/nebula/nebula-008.jpg",
+        "assets/images/space-keyword-library/nebula/nebula-009.jpg",
+        "assets/images/space-keyword-library/nebula/nebula-010.jpg"
+      ]
+    },
+    "jupiter": {
+      "priority": 9,
+      "category": "planet",
+      "aliases": [
+        "great red spot",
+        "gas giant",
+        "king of planets",
+        "jovian"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/jupiter/jupiter-001.jpg",
+        "assets/images/space-keyword-library/jupiter/jupiter-002.jpg",
+        "assets/images/space-keyword-library/jupiter/jupiter-003.jpg",
+        "assets/images/space-keyword-library/jupiter/jupiter-004.jpg",
+        "assets/images/space-keyword-library/jupiter/jupiter-005.jpg",
+        "assets/images/space-keyword-library/jupiter/jupiter-006.jpg",
+        "assets/images/space-keyword-library/jupiter/jupiter-007.jpg",
+        "assets/images/space-keyword-library/jupiter/jupiter-008.jpg",
+        "assets/images/space-keyword-library/jupiter/jupiter-009.jpg",
+        "assets/images/space-keyword-library/jupiter/jupiter-010.jpg"
+      ]
+    },
+    "milky way": {
+      "priority": 9,
+      "category": "galaxy",
+      "aliases": [
+        "our galaxy",
+        "galactic center",
+        "galactic disk",
+        "galactic plane",
+        "galactic arm"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/milky-way/milky-way-001.jpg",
+        "assets/images/space-keyword-library/milky-way/milky-way-002.jpg",
+        "assets/images/space-keyword-library/milky-way/milky-way-003.jpg",
+        "assets/images/space-keyword-library/milky-way/milky-way-004.jpg",
+        "assets/images/space-keyword-library/milky-way/milky-way-005.jpg",
+        "assets/images/space-keyword-library/milky-way/milky-way-006.jpg",
+        "assets/images/space-keyword-library/milky-way/milky-way-007.jpg",
+        "assets/images/space-keyword-library/milky-way/milky-way-008.jpg",
+        "assets/images/space-keyword-library/milky-way/milky-way-009.jpg",
+        "assets/images/space-keyword-library/milky-way/milky-way-010.jpg"
+      ]
+    },
+    "moon": {
+      "priority": 9,
+      "category": "moon",
+      "aliases": [
+        "the moon",
+        "lunar surface",
+        "lunar",
+        "earth's moon",
+        "craters",
+        "moonlight"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/moon/moon-001.jpg",
+        "assets/images/space-keyword-library/moon/moon-002.jpg",
+        "assets/images/space-keyword-library/moon/moon-003.jpg",
+        "assets/images/space-keyword-library/moon/moon-004.jpg",
+        "assets/images/space-keyword-library/moon/moon-005.jpg",
+        "assets/images/space-keyword-library/moon/moon-006.jpg",
+        "assets/images/space-keyword-library/moon/moon-007.jpg",
+        "assets/images/space-keyword-library/moon/moon-008.jpg",
+        "assets/images/space-keyword-library/moon/moon-009.jpg",
+        "assets/images/space-keyword-library/moon/moon-010.jpg"
+      ]
+    },
+    "sun": {
+      "priority": 9,
+      "category": "star",
+      "aliases": [
+        "our star",
+        "solar",
+        "the star",
+        "solar surface",
+        "sunspot",
+        "solar atmosphere"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/sun/sun-001.jpg",
+        "assets/images/space-keyword-library/sun/sun-002.jpg",
+        "assets/images/space-keyword-library/sun/sun-003.jpg",
+        "assets/images/space-keyword-library/sun/sun-004.jpg",
+        "assets/images/space-keyword-library/sun/sun-005.jpg",
+        "assets/images/space-keyword-library/sun/sun-006.jpg",
+        "assets/images/space-keyword-library/sun/sun-007.jpg",
+        "assets/images/space-keyword-library/sun/sun-008.jpg",
+        "assets/images/space-keyword-library/sun/sun-009.jpg",
+        "assets/images/space-keyword-library/sun/sun-010.jpg"
+      ]
+    },
+    "mars": {
+      "priority": 9,
+      "category": "planet",
+      "aliases": [
+        "red planet",
+        "the red world",
+        "martian",
+        "olympus mons",
+        "valles marineris"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/mars/mars-001.jpg",
+        "assets/images/space-keyword-library/mars/mars-002.jpg",
+        "assets/images/space-keyword-library/mars/mars-003.jpg",
+        "assets/images/space-keyword-library/mars/mars-004.jpg",
+        "assets/images/space-keyword-library/mars/mars-005.jpg",
+        "assets/images/space-keyword-library/mars/mars-006.jpg",
+        "assets/images/space-keyword-library/mars/mars-007.jpg",
+        "assets/images/space-keyword-library/mars/mars-008.jpg",
+        "assets/images/space-keyword-library/mars/mars-009.jpg",
+        "assets/images/space-keyword-library/mars/mars-010.jpg"
+      ]
+    },
+    "star formation": {
+      "priority": 8,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "stellar nursery",
+        "protostar",
+        "star-forming region",
+        "molecular cloud",
+        "young stars",
+        "star birth"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/star-formation/star-formation-001.jpg",
+        "assets/images/space-keyword-library/star-formation/star-formation-002.jpg",
+        "assets/images/space-keyword-library/star-formation/star-formation-003.jpg",
+        "assets/images/space-keyword-library/star-formation/star-formation-004.jpg",
+        "assets/images/space-keyword-library/star-formation/star-formation-005.jpg",
+        "assets/images/space-keyword-library/star-formation/star-formation-006.jpg",
+        "assets/images/space-keyword-library/star-formation/star-formation-007.jpg",
+        "assets/images/space-keyword-library/star-formation/star-formation-008.jpg",
+        "assets/images/space-keyword-library/star-formation/star-formation-009.jpg",
+        "assets/images/space-keyword-library/star-formation/star-formation-010.jpg"
+      ]
+    },
+    "supernova": {
+      "priority": 8,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "supernovae",
+        "stellar explosion",
+        "dying star",
+        "star death",
+        "stellar death",
+        "exploding star"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/supernova/supernova-001.jpg",
+        "assets/images/space-keyword-library/supernova/supernova-002.jpg",
+        "assets/images/space-keyword-library/supernova/supernova-003.jpg",
+        "assets/images/space-keyword-library/supernova/supernova-004.jpg",
+        "assets/images/space-keyword-library/supernova/supernova-005.jpg",
+        "assets/images/space-keyword-library/supernova/supernova-006.jpg",
+        "assets/images/space-keyword-library/supernova/supernova-007.jpg",
+        "assets/images/space-keyword-library/supernova/supernova-008.jpg",
+        "assets/images/space-keyword-library/supernova/supernova-009.jpg",
+        "assets/images/space-keyword-library/supernova/supernova-010.jpg"
+      ]
+    },
+    "exoplanet": {
+      "priority": 8,
+      "category": "exoplanet",
+      "aliases": [
+        "exoplanets",
+        "alien world",
+        "distant planet",
+        "kepler planet",
+        "super-earth",
+        "hot jupiter",
+        "ocean world"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/exoplanet/exoplanet-001.jpg",
+        "assets/images/space-keyword-library/exoplanet/exoplanet-002.jpg",
+        "assets/images/space-keyword-library/exoplanet/exoplanet-003.jpg",
+        "assets/images/space-keyword-library/exoplanet/exoplanet-004.jpg",
+        "assets/images/space-keyword-library/exoplanet/exoplanet-005.jpg",
+        "assets/images/space-keyword-library/exoplanet/exoplanet-006.jpg",
+        "assets/images/space-keyword-library/exoplanet/exoplanet-007.jpg",
+        "assets/images/space-keyword-library/exoplanet/exoplanet-008.jpg",
+        "assets/images/space-keyword-library/exoplanet/exoplanet-009.jpg",
+        "assets/images/space-keyword-library/exoplanet/exoplanet-010.jpg"
+      ]
+    },
+    "voyager": {
+      "priority": 8,
+      "category": "spacecraft",
+      "aliases": [
+        "voyager 1",
+        "voyager probe",
+        "golden record",
+        "interstellar probe",
+        "voyager spacecraft"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/voyager/voyager-001.jpg",
+        "assets/images/space-keyword-library/voyager/voyager-002.jpg",
+        "assets/images/space-keyword-library/voyager/voyager-003.jpg",
+        "assets/images/space-keyword-library/voyager/voyager-004.jpg",
+        "assets/images/space-keyword-library/voyager/voyager-005.jpg",
+        "assets/images/space-keyword-library/voyager/voyager-006.jpg",
+        "assets/images/space-keyword-library/voyager/voyager-007.jpg",
+        "assets/images/space-keyword-library/voyager/voyager-008.jpg",
+        "assets/images/space-keyword-library/voyager/voyager-009.jpg",
+        "assets/images/space-keyword-library/voyager/voyager-010.jpg"
+      ]
+    },
+    "jwst": {
+      "priority": 8,
+      "category": "telescope",
+      "aliases": [
+        "james webb",
+        "webb telescope",
+        "james webb space telescope",
+        "webb space telescope",
+        "webb's first images"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/jwst/jwst-001.jpg",
+        "assets/images/space-keyword-library/jwst/jwst-002.jpg",
+        "assets/images/space-keyword-library/jwst/jwst-003.jpg",
+        "assets/images/space-keyword-library/jwst/jwst-004.jpg",
+        "assets/images/space-keyword-library/jwst/jwst-005.jpg",
+        "assets/images/space-keyword-library/jwst/jwst-006.jpg",
+        "assets/images/space-keyword-library/jwst/jwst-007.jpg",
+        "assets/images/space-keyword-library/jwst/jwst-008.jpg",
+        "assets/images/space-keyword-library/jwst/jwst-009.jpg",
+        "assets/images/space-keyword-library/jwst/jwst-010.jpg"
+      ]
+    },
+    "hubble": {
+      "priority": 8,
+      "category": "telescope",
+      "aliases": [
+        "hubble telescope",
+        "hubble space telescope",
+        "hubble's eye",
+        "space telescope"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/hubble/hubble-001.jpg",
+        "assets/images/space-keyword-library/hubble/hubble-002.jpg",
+        "assets/images/space-keyword-library/hubble/hubble-003.jpg",
+        "assets/images/space-keyword-library/hubble/hubble-004.jpg",
+        "assets/images/space-keyword-library/hubble/hubble-005.jpg",
+        "assets/images/space-keyword-library/hubble/hubble-006.jpg",
+        "assets/images/space-keyword-library/hubble/hubble-007.jpg",
+        "assets/images/space-keyword-library/hubble/hubble-008.jpg",
+        "assets/images/space-keyword-library/hubble/hubble-009.jpg",
+        "assets/images/space-keyword-library/hubble/hubble-010.jpg"
+      ]
+    },
+    "deep field": {
+      "priority": 8,
+      "category": "observation",
+      "aliases": [
+        "hubble deep field",
+        "deep field image",
+        "ten thousand galaxies",
+        "10000 galaxies",
+        "looking back in time"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/deep-field/deep-field-001.jpg",
+        "assets/images/space-keyword-library/deep-field/deep-field-002.jpg",
+        "assets/images/space-keyword-library/deep-field/deep-field-003.jpg",
+        "assets/images/space-keyword-library/deep-field/deep-field-004.jpg",
+        "assets/images/space-keyword-library/deep-field/deep-field-005.jpg",
+        "assets/images/space-keyword-library/deep-field/deep-field-006.jpg",
+        "assets/images/space-keyword-library/deep-field/deep-field-007.jpg",
+        "assets/images/space-keyword-library/deep-field/deep-field-008.jpg",
+        "assets/images/space-keyword-library/deep-field/deep-field-009.jpg",
+        "assets/images/space-keyword-library/deep-field/deep-field-010.jpg"
+      ]
+    },
+    "andromeda": {
+      "priority": 8,
+      "category": "galaxy",
+      "aliases": [
+        "andromeda galaxy",
+        "m31",
+        "our nearest neighbor galaxy",
+        "andromeda collision",
+        "andromeda merger"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/andromeda/andromeda-001.jpg",
+        "assets/images/space-keyword-library/andromeda/andromeda-002.jpg",
+        "assets/images/space-keyword-library/andromeda/andromeda-003.jpg",
+        "assets/images/space-keyword-library/andromeda/andromeda-004.jpg",
+        "assets/images/space-keyword-library/andromeda/andromeda-005.jpg",
+        "assets/images/space-keyword-library/andromeda/andromeda-006.jpg",
+        "assets/images/space-keyword-library/andromeda/andromeda-007.jpg",
+        "assets/images/space-keyword-library/andromeda/andromeda-008.jpg",
+        "assets/images/space-keyword-library/andromeda/andromeda-009.jpg",
+        "assets/images/space-keyword-library/andromeda/andromeda-010.jpg"
+      ]
+    },
+    "neutron star": {
+      "priority": 7,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "neutron stars",
+        "collapsed star",
+        "stellar remnant",
+        "densest object"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/neutron-star/neutron-star-001.jpg",
+        "assets/images/space-keyword-library/neutron-star/neutron-star-002.jpg",
+        "assets/images/space-keyword-library/neutron-star/neutron-star-003.jpg",
+        "assets/images/space-keyword-library/neutron-star/neutron-star-004.jpg",
+        "assets/images/space-keyword-library/neutron-star/neutron-star-005.jpg",
+        "assets/images/space-keyword-library/neutron-star/neutron-star-006.jpg",
+        "assets/images/space-keyword-library/neutron-star/neutron-star-007.jpg",
+        "assets/images/space-keyword-library/neutron-star/neutron-star-008.jpg",
+        "assets/images/space-keyword-library/neutron-star/neutron-star-009.jpg",
+        "assets/images/space-keyword-library/neutron-star/neutron-star-010.jpg"
+      ]
+    },
+    "pulsar": {
+      "priority": 7,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "pulsars",
+        "rotating neutron star",
+        "lighthouse star",
+        "pulsar beam",
+        "millisecond pulsar"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/pulsar/pulsar-001.jpg",
+        "assets/images/space-keyword-library/pulsar/pulsar-002.jpg",
+        "assets/images/space-keyword-library/pulsar/pulsar-003.jpg",
+        "assets/images/space-keyword-library/pulsar/pulsar-004.jpg",
+        "assets/images/space-keyword-library/pulsar/pulsar-005.jpg",
+        "assets/images/space-keyword-library/pulsar/pulsar-006.jpg",
+        "assets/images/space-keyword-library/pulsar/pulsar-007.jpg",
+        "assets/images/space-keyword-library/pulsar/pulsar-008.jpg",
+        "assets/images/space-keyword-library/pulsar/pulsar-009.jpg",
+        "assets/images/space-keyword-library/pulsar/pulsar-010.jpg"
+      ]
+    },
+    "aurora": {
+      "priority": 7,
+      "category": "atmospheric_phenomena",
+      "aliases": [
+        "northern lights",
+        "aurora borealis",
+        "aurora australis",
+        "polar lights",
+        "magnetosphere aurora"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/aurora/aurora-001.jpg",
+        "assets/images/space-keyword-library/aurora/aurora-002.jpg",
+        "assets/images/space-keyword-library/aurora/aurora-003.jpg",
+        "assets/images/space-keyword-library/aurora/aurora-004.jpg",
+        "assets/images/space-keyword-library/aurora/aurora-005.jpg",
+        "assets/images/space-keyword-library/aurora/aurora-006.jpg",
+        "assets/images/space-keyword-library/aurora/aurora-007.jpg",
+        "assets/images/space-keyword-library/aurora/aurora-008.jpg",
+        "assets/images/space-keyword-library/aurora/aurora-009.jpg",
+        "assets/images/space-keyword-library/aurora/aurora-010.jpg"
+      ]
+    },
+    "comet": {
+      "priority": 7,
+      "category": "solar_system",
+      "aliases": [
+        "comets",
+        "icy body",
+        "dirty snowball",
+        "comet tail",
+        "comet nucleus",
+        "halley's comet"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/comet/comet-001.jpg",
+        "assets/images/space-keyword-library/comet/comet-002.jpg",
+        "assets/images/space-keyword-library/comet/comet-003.jpg",
+        "assets/images/space-keyword-library/comet/comet-004.jpg",
+        "assets/images/space-keyword-library/comet/comet-005.jpg",
+        "assets/images/space-keyword-library/comet/comet-006.jpg",
+        "assets/images/space-keyword-library/comet/comet-007.jpg",
+        "assets/images/space-keyword-library/comet/comet-008.jpg",
+        "assets/images/space-keyword-library/comet/comet-009.jpg",
+        "assets/images/space-keyword-library/comet/comet-010.jpg"
+      ]
+    },
+    "red giant": {
+      "priority": 7,
+      "category": "star",
+      "aliases": [
+        "dying star",
+        "red supergiant",
+        "aging star",
+        "betelgeuse",
+        "uy scuti",
+        "hypergiant",
+        "expanding star"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/red-giant/red-giant-001.jpg",
+        "assets/images/space-keyword-library/red-giant/red-giant-002.jpg",
+        "assets/images/space-keyword-library/red-giant/red-giant-003.jpg",
+        "assets/images/space-keyword-library/red-giant/red-giant-004.jpg",
+        "assets/images/space-keyword-library/red-giant/red-giant-005.jpg",
+        "assets/images/space-keyword-library/red-giant/red-giant-006.jpg",
+        "assets/images/space-keyword-library/red-giant/red-giant-007.jpg",
+        "assets/images/space-keyword-library/red-giant/red-giant-008.jpg",
+        "assets/images/space-keyword-library/red-giant/red-giant-009.jpg",
+        "assets/images/space-keyword-library/red-giant/red-giant-010.jpg"
+      ]
+    },
+    "solar flare": {
+      "priority": 7,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "solar eruption",
+        "coronal mass ejection",
+        "cme",
+        "solar storm",
+        "solar prominence",
+        "solar wind"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/solar-flare/solar-flare-001.jpg",
+        "assets/images/space-keyword-library/solar-flare/solar-flare-002.jpg",
+        "assets/images/space-keyword-library/solar-flare/solar-flare-003.jpg",
+        "assets/images/space-keyword-library/solar-flare/solar-flare-004.jpg",
+        "assets/images/space-keyword-library/solar-flare/solar-flare-005.jpg",
+        "assets/images/space-keyword-library/solar-flare/solar-flare-006.jpg",
+        "assets/images/space-keyword-library/solar-flare/solar-flare-007.jpg",
+        "assets/images/space-keyword-library/solar-flare/solar-flare-008.jpg",
+        "assets/images/space-keyword-library/solar-flare/solar-flare-009.jpg",
+        "assets/images/space-keyword-library/solar-flare/solar-flare-010.jpg"
+      ]
+    },
+    "pillars of creation": {
+      "priority": 7,
+      "category": "nebula",
+      "aliases": [
+        "eagle nebula",
+        "pillars",
+        "gas columns",
+        "m16"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-001.jpg",
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-002.jpg",
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-003.jpg",
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-004.jpg",
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-005.jpg",
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-006.jpg",
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-007.jpg",
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-008.jpg",
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-009.jpg",
+        "assets/images/space-keyword-library/pillars-of-creation/pillars-of-creation-010.jpg"
+      ]
+    },
+    "titan": {
+      "priority": 7,
+      "category": "moon",
+      "aliases": [
+        "saturn's moon titan",
+        "titan's methane",
+        "titan's atmosphere",
+        "titan's lakes",
+        "cassini huygens"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/titan/titan-001.jpg",
+        "assets/images/space-keyword-library/titan/titan-002.jpg",
+        "assets/images/space-keyword-library/titan/titan-003.jpg",
+        "assets/images/space-keyword-library/titan/titan-004.jpg",
+        "assets/images/space-keyword-library/titan/titan-005.jpg",
+        "assets/images/space-keyword-library/titan/titan-006.jpg",
+        "assets/images/space-keyword-library/titan/titan-007.jpg",
+        "assets/images/space-keyword-library/titan/titan-008.jpg",
+        "assets/images/space-keyword-library/titan/titan-009.jpg",
+        "assets/images/space-keyword-library/titan/titan-010.jpg"
+      ]
+    },
+    "globular cluster": {
+      "priority": 7,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "ancient stars",
+        "dense star cluster",
+        "ball of stars",
+        "omega centauri",
+        "47 tucanae"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-001.jpg",
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-002.jpg",
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-003.jpg",
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-004.jpg",
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-005.jpg",
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-006.jpg",
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-007.jpg",
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-008.jpg",
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-009.jpg",
+        "assets/images/space-keyword-library/globular-cluster/globular-cluster-010.jpg"
+      ]
+    },
+    "dark matter": {
+      "priority": 7,
+      "category": "cosmology",
+      "aliases": [
+        "dark energy",
+        "invisible matter",
+        "cosmic scaffolding",
+        "dark web",
+        "gravitational web"
+      ],
+      "visual_specificity": "low",
+      "images": [
+        "assets/images/space-keyword-library/dark-matter/dark-matter-001.jpg",
+        "assets/images/space-keyword-library/dark-matter/dark-matter-002.jpg",
+        "assets/images/space-keyword-library/dark-matter/dark-matter-003.jpg",
+        "assets/images/space-keyword-library/dark-matter/dark-matter-004.jpg",
+        "assets/images/space-keyword-library/dark-matter/dark-matter-005.jpg",
+        "assets/images/space-keyword-library/dark-matter/dark-matter-006.jpg",
+        "assets/images/space-keyword-library/dark-matter/dark-matter-007.jpg",
+        "assets/images/space-keyword-library/dark-matter/dark-matter-008.jpg",
+        "assets/images/space-keyword-library/dark-matter/dark-matter-009.jpg",
+        "assets/images/space-keyword-library/dark-matter/dark-matter-010.jpg"
+      ]
+    },
+    "galaxy cluster": {
+      "priority": 7,
+      "category": "cosmology",
+      "aliases": [
+        "cluster of galaxies",
+        "galaxy groups",
+        "abel cluster",
+        "virgo cluster",
+        "bullet cluster"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-001.jpg",
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-002.jpg",
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-003.jpg",
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-004.jpg",
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-005.jpg",
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-006.jpg",
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-007.jpg",
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-008.jpg",
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-009.jpg",
+        "assets/images/space-keyword-library/galaxy-cluster/galaxy-cluster-010.jpg"
+      ]
+    },
+    "spiral galaxy": {
+      "priority": 7,
+      "category": "galaxy",
+      "aliases": [
+        "spiral arms",
+        "disk galaxy",
+        "galactic spiral",
+        "barred spiral"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-001.jpg",
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-002.jpg",
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-003.jpg",
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-004.jpg",
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-005.jpg",
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-006.jpg",
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-007.jpg",
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-008.jpg",
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-009.jpg",
+        "assets/images/space-keyword-library/spiral-galaxy/spiral-galaxy-010.jpg"
+      ]
+    },
+    "crab nebula": {
+      "priority": 7,
+      "category": "nebula",
+      "aliases": [
+        "supernova remnant",
+        "taurus constellation",
+        "m1",
+        "pulsar nebula"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-001.jpg",
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-002.jpg",
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-003.jpg",
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-004.jpg",
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-005.jpg",
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-006.jpg",
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-007.jpg",
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-008.jpg",
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-009.jpg",
+        "assets/images/space-keyword-library/crab-nebula/crab-nebula-010.jpg"
+      ]
+    },
+    "white dwarf": {
+      "priority": 6,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "dead star",
+        "cooling remnant",
+        "stellar core",
+        "planetary nebula center"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-001.jpg",
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-002.jpg",
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-003.jpg",
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-004.jpg",
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-005.jpg",
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-006.jpg",
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-007.jpg",
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-008.jpg",
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-009.jpg",
+        "assets/images/space-keyword-library/white-dwarf/white-dwarf-010.jpg"
+      ]
+    },
+    "magnetar": {
+      "priority": 6,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "magnetic neutron star",
+        "strongest magnet",
+        "magnetic field star",
+        "extreme magnetism"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/magnetar/magnetar-001.jpg",
+        "assets/images/space-keyword-library/magnetar/magnetar-002.jpg",
+        "assets/images/space-keyword-library/magnetar/magnetar-003.jpg",
+        "assets/images/space-keyword-library/magnetar/magnetar-004.jpg",
+        "assets/images/space-keyword-library/magnetar/magnetar-005.jpg",
+        "assets/images/space-keyword-library/magnetar/magnetar-006.jpg",
+        "assets/images/space-keyword-library/magnetar/magnetar-007.jpg",
+        "assets/images/space-keyword-library/magnetar/magnetar-008.jpg",
+        "assets/images/space-keyword-library/magnetar/magnetar-009.jpg",
+        "assets/images/space-keyword-library/magnetar/magnetar-010.jpg"
+      ]
+    },
+    "binary star": {
+      "priority": 6,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "double star",
+        "binary system",
+        "two stars orbiting",
+        "stellar pair"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/binary-star/binary-star-001.jpg",
+        "assets/images/space-keyword-library/binary-star/binary-star-002.jpg",
+        "assets/images/space-keyword-library/binary-star/binary-star-003.jpg",
+        "assets/images/space-keyword-library/binary-star/binary-star-004.jpg",
+        "assets/images/space-keyword-library/binary-star/binary-star-005.jpg",
+        "assets/images/space-keyword-library/binary-star/binary-star-006.jpg",
+        "assets/images/space-keyword-library/binary-star/binary-star-007.jpg",
+        "assets/images/space-keyword-library/binary-star/binary-star-008.jpg",
+        "assets/images/space-keyword-library/binary-star/binary-star-009.jpg",
+        "assets/images/space-keyword-library/binary-star/binary-star-010.jpg"
+      ]
+    },
+    "accretion disk": {
+      "priority": 6,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "glowing ring",
+        "superheated disk",
+        "material spiraling",
+        "accretion",
+        "disk of gas"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-001.jpg",
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-002.jpg",
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-003.jpg",
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-004.jpg",
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-005.jpg",
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-006.jpg",
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-007.jpg",
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-008.jpg",
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-009.jpg",
+        "assets/images/space-keyword-library/accretion-disk/accretion-disk-010.jpg"
+      ]
+    },
+    "galaxy merger": {
+      "priority": 6,
+      "category": "galaxy",
+      "aliases": [
+        "colliding galaxies",
+        "merging galaxies",
+        "galaxy collision",
+        "tidal tails",
+        "interacting galaxies"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-001.jpg",
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-002.jpg",
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-003.jpg",
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-004.jpg",
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-005.jpg",
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-006.jpg",
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-007.jpg",
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-008.jpg",
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-009.jpg",
+        "assets/images/space-keyword-library/galaxy-merger/galaxy-merger-010.jpg"
+      ]
+    },
+    "quasar": {
+      "priority": 6,
+      "category": "cosmology",
+      "aliases": [
+        "quasars",
+        "active galactic nucleus",
+        "blazing galactic core",
+        "brightest object",
+        "quasi-stellar"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/quasar/quasar-001.jpg",
+        "assets/images/space-keyword-library/quasar/quasar-002.jpg",
+        "assets/images/space-keyword-library/quasar/quasar-003.jpg",
+        "assets/images/space-keyword-library/quasar/quasar-004.jpg",
+        "assets/images/space-keyword-library/quasar/quasar-005.jpg",
+        "assets/images/space-keyword-library/quasar/quasar-006.jpg",
+        "assets/images/space-keyword-library/quasar/quasar-007.jpg",
+        "assets/images/space-keyword-library/quasar/quasar-008.jpg",
+        "assets/images/space-keyword-library/quasar/quasar-009.jpg",
+        "assets/images/space-keyword-library/quasar/quasar-010.jpg"
+      ]
+    },
+    "planetary rings": {
+      "priority": 6,
+      "category": "planetary_feature",
+      "aliases": [
+        "ring system",
+        "ring plane",
+        "uranus rings",
+        "neptune rings",
+        "ice rings"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-001.jpg",
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-002.jpg",
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-003.jpg",
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-004.jpg",
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-005.jpg",
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-006.jpg",
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-007.jpg",
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-008.jpg",
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-009.jpg",
+        "assets/images/space-keyword-library/planetary-rings/planetary-rings-010.jpg"
+      ]
+    },
+    "asteroid": {
+      "priority": 6,
+      "category": "solar_system",
+      "aliases": [
+        "asteroids",
+        "space rock",
+        "asteroid belt",
+        "minor planet",
+        "near-earth asteroid",
+        "impact crater"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/asteroid/asteroid-001.jpg",
+        "assets/images/space-keyword-library/asteroid/asteroid-002.jpg",
+        "assets/images/space-keyword-library/asteroid/asteroid-003.jpg",
+        "assets/images/space-keyword-library/asteroid/asteroid-004.jpg",
+        "assets/images/space-keyword-library/asteroid/asteroid-005.jpg",
+        "assets/images/space-keyword-library/asteroid/asteroid-006.jpg",
+        "assets/images/space-keyword-library/asteroid/asteroid-007.jpg",
+        "assets/images/space-keyword-library/asteroid/asteroid-008.jpg",
+        "assets/images/space-keyword-library/asteroid/asteroid-009.jpg",
+        "assets/images/space-keyword-library/asteroid/asteroid-010.jpg"
+      ]
+    },
+    "gravitational lensing": {
+      "priority": 6,
+      "category": "cosmology",
+      "aliases": [
+        "einstein ring",
+        "bending light",
+        "bent light",
+        "gravitational lens",
+        "light bending"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-001.jpg",
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-002.jpg",
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-003.jpg",
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-004.jpg",
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-005.jpg",
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-006.jpg",
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-007.jpg",
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-008.jpg",
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-009.jpg",
+        "assets/images/space-keyword-library/gravitational-lensing/gravitational-lensing-010.jpg"
+      ]
+    },
+    "cosmic web": {
+      "priority": 6,
+      "category": "cosmology",
+      "aliases": [
+        "large scale structure",
+        "galaxy filaments",
+        "cosmic filaments",
+        "galactic web",
+        "web of galaxies"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-001.jpg",
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-002.jpg",
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-003.jpg",
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-004.jpg",
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-005.jpg",
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-006.jpg",
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-007.jpg",
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-008.jpg",
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-009.jpg",
+        "assets/images/space-keyword-library/cosmic-web/cosmic-web-010.jpg"
+      ]
+    },
+    "apollo": {
+      "priority": 6,
+      "category": "spacecraft",
+      "aliases": [
+        "apollo 11",
+        "moon landing",
+        "apollo mission",
+        "astronauts on the moon",
+        "eagle has landed"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/apollo/apollo-001.jpg",
+        "assets/images/space-keyword-library/apollo/apollo-002.jpg",
+        "assets/images/space-keyword-library/apollo/apollo-003.jpg",
+        "assets/images/space-keyword-library/apollo/apollo-004.jpg",
+        "assets/images/space-keyword-library/apollo/apollo-005.jpg",
+        "assets/images/space-keyword-library/apollo/apollo-006.jpg",
+        "assets/images/space-keyword-library/apollo/apollo-007.jpg",
+        "assets/images/space-keyword-library/apollo/apollo-008.jpg",
+        "assets/images/space-keyword-library/apollo/apollo-009.jpg",
+        "assets/images/space-keyword-library/apollo/apollo-010.jpg"
+      ]
+    },
+    "gamma ray burst": {
+      "priority": 5,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "grb",
+        "most powerful explosion",
+        "gamma burst",
+        "hypernova",
+        "collapsar"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-001.jpg",
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-002.jpg",
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-003.jpg",
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-004.jpg",
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-005.jpg",
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-006.jpg",
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-007.jpg",
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-008.jpg",
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-009.jpg",
+        "assets/images/space-keyword-library/gamma-ray-burst/gamma-ray-burst-010.jpg"
+      ]
+    },
+    "solar corona": {
+      "priority": 5,
+      "category": "star",
+      "aliases": [
+        "corona",
+        "sun's atmosphere",
+        "solar atmosphere",
+        "coronal loops",
+        "solar eclipse corona"
+      ],
+      "visual_specificity": "high",
+      "images": [
+        "assets/images/space-keyword-library/solar-corona/solar-corona-001.jpg",
+        "assets/images/space-keyword-library/solar-corona/solar-corona-002.jpg",
+        "assets/images/space-keyword-library/solar-corona/solar-corona-003.jpg",
+        "assets/images/space-keyword-library/solar-corona/solar-corona-004.jpg",
+        "assets/images/space-keyword-library/solar-corona/solar-corona-005.jpg",
+        "assets/images/space-keyword-library/solar-corona/solar-corona-006.jpg",
+        "assets/images/space-keyword-library/solar-corona/solar-corona-007.jpg",
+        "assets/images/space-keyword-library/solar-corona/solar-corona-008.jpg",
+        "assets/images/space-keyword-library/solar-corona/solar-corona-009.jpg",
+        "assets/images/space-keyword-library/solar-corona/solar-corona-010.jpg"
+      ]
+    },
+    "europa": {
+      "priority": 5,
+      "category": "moon",
+      "aliases": [
+        "jupiter's moon europa",
+        "europa's ice shell",
+        "under the ice",
+        "europa's ocean",
+        "ice crust"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/europa/europa-001.jpg",
+        "assets/images/space-keyword-library/europa/europa-002.jpg",
+        "assets/images/space-keyword-library/europa/europa-003.jpg",
+        "assets/images/space-keyword-library/europa/europa-004.jpg",
+        "assets/images/space-keyword-library/europa/europa-005.jpg",
+        "assets/images/space-keyword-library/europa/europa-006.jpg",
+        "assets/images/space-keyword-library/europa/europa-007.jpg",
+        "assets/images/space-keyword-library/europa/europa-008.jpg",
+        "assets/images/space-keyword-library/europa/europa-009.jpg",
+        "assets/images/space-keyword-library/europa/europa-010.jpg"
+      ]
+    },
+    "protoplanetary disk": {
+      "priority": 5,
+      "category": "stellar_phenomena",
+      "aliases": [
+        "planet-forming disk",
+        "disk around young star",
+        "solar system forming",
+        "protostellar disk",
+        "circumstellar disk"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-001.jpg",
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-002.jpg",
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-003.jpg",
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-004.jpg",
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-005.jpg",
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-006.jpg",
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-007.jpg",
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-008.jpg",
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-009.jpg",
+        "assets/images/space-keyword-library/protoplanetary-disk/protoplanetary-disk-010.jpg"
+      ]
+    },
+    "oort cloud": {
+      "priority": 5,
+      "category": "solar_system",
+      "aliases": [
+        "comet reservoir",
+        "outer solar system",
+        "distant comets",
+        "solar system boundary",
+        "cometary reservoir"
+      ],
+      "visual_specificity": "low",
+      "images": [
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-001.jpg",
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-002.jpg",
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-003.jpg",
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-004.jpg",
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-005.jpg",
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-006.jpg",
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-007.jpg",
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-008.jpg",
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-009.jpg",
+        "assets/images/space-keyword-library/oort-cloud/oort-cloud-010.jpg"
+      ]
+    },
+    "interstellar space": {
+      "priority": 5,
+      "category": "cosmology",
+      "aliases": [
+        "between the stars",
+        "interstellar medium",
+        "heliopause",
+        "heliosphere boundary",
+        "beyond the heliosphere"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-001.jpg",
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-002.jpg",
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-003.jpg",
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-004.jpg",
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-005.jpg",
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-006.jpg",
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-007.jpg",
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-008.jpg",
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-009.jpg",
+        "assets/images/space-keyword-library/interstellar-space/interstellar-space-010.jpg"
+      ]
+    },
+    "big bang": {
+      "priority": 5,
+      "category": "cosmology",
+      "aliases": [
+        "the big bang",
+        "origin of the universe",
+        "universe beginning",
+        "cosmic inflation",
+        "planck era"
+      ],
+      "visual_specificity": "low",
+      "images": [
+        "assets/images/space-keyword-library/big-bang/big-bang-001.jpg",
+        "assets/images/space-keyword-library/big-bang/big-bang-002.jpg",
+        "assets/images/space-keyword-library/big-bang/big-bang-003.jpg",
+        "assets/images/space-keyword-library/big-bang/big-bang-004.jpg",
+        "assets/images/space-keyword-library/big-bang/big-bang-005.jpg",
+        "assets/images/space-keyword-library/big-bang/big-bang-006.jpg",
+        "assets/images/space-keyword-library/big-bang/big-bang-007.jpg",
+        "assets/images/space-keyword-library/big-bang/big-bang-008.jpg",
+        "assets/images/space-keyword-library/big-bang/big-bang-009.jpg",
+        "assets/images/space-keyword-library/big-bang/big-bang-010.jpg"
+      ]
+    },
+    "venus": {
+      "priority": 5,
+      "category": "planet",
+      "aliases": [
+        "morning star",
+        "evening star",
+        "venus clouds",
+        "venusian atmosphere",
+        "hottest planet"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/venus/venus-001.jpg",
+        "assets/images/space-keyword-library/venus/venus-002.jpg",
+        "assets/images/space-keyword-library/venus/venus-003.jpg",
+        "assets/images/space-keyword-library/venus/venus-004.jpg",
+        "assets/images/space-keyword-library/venus/venus-005.jpg",
+        "assets/images/space-keyword-library/venus/venus-006.jpg",
+        "assets/images/space-keyword-library/venus/venus-007.jpg",
+        "assets/images/space-keyword-library/venus/venus-008.jpg",
+        "assets/images/space-keyword-library/venus/venus-009.jpg",
+        "assets/images/space-keyword-library/venus/venus-010.jpg"
+      ]
+    },
+    "cosmic microwave background": {
+      "priority": 5,
+      "category": "cosmology",
+      "aliases": [
+        "cmb",
+        "afterglow of the big bang",
+        "cosmic background radiation",
+        "first light",
+        "relic radiation"
+      ],
+      "visual_specificity": "medium",
+      "images": [
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-001.jpg",
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-002.jpg",
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-003.jpg",
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-004.jpg",
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-005.jpg",
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-006.jpg",
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-007.jpg",
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-008.jpg",
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-009.jpg",
+        "assets/images/space-keyword-library/cosmic-microwave-background/cosmic-microwave-background-010.jpg"
+      ]
+    }
+  }
+}

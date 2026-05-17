@@ -95,7 +95,7 @@ Return ONLY a JSON array of 10 objects, no other text:
 ]`;
 
   try {
-    const text = await callClaudeCLI(prompt, { model: HAIKU, timeoutMs: 30000 });
+    const text = await callClaudeCLI(prompt, { model: HAIKU, timeoutMs: 90000 });
     const parsed = JSON.parse(text.trim().match(/\[[\s\S]*\]/)?.[0] || text.trim());
 
     for (const item of parsed.slice(0, 10)) {
