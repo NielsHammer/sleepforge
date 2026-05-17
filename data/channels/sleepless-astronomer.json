@@ -24,5 +24,17 @@
   "topic_pool": "data/topic-pools/sleepless-astronomer.json",
   "intro_video_path": "assets/intros/sleepless-astronomer/intro-final.mp4",
   "intro_duration_seconds": 4.754,
+  "script_quality_targets": {
+    "INFORMATION_DENSITY": 7,
+    "SPECIFICITY": 7,
+    "REPETITION": 7,
+    "PROGRESSION": 6,
+    "SUSPENSE": 6,
+    "MYSTERY_TONE": 7,
+    "SLEEP_PACING": 8,
+    "VISUAL_DESCRIPTION": 8,
+    "AI_SLOP": 8,
+    "INTRO_QUALITY": 7
+  },
   "notes": "Channel exists (40 subs, 117 videos). OAuth token active. Video pipeline not yet started — image library must be built first. See image_library_status: pending."
 }
