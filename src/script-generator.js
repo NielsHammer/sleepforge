@@ -654,86 +654,174 @@ RULES FOR SCENES:
 - Scenes should flow naturally from one to the next as a continuous documentary
 `;
 
-function buildSpaceDocumentaryPrompt(topic, durationMinutes, wpm = WORDS_PER_MINUTE, channelConfig = null) {
-  const targetWords = Math.round(parseInt(durationMinutes) * wpm);
-  const minWords    = Math.round(targetWords * 0.92);
-  const maxWords    = Math.round(targetWords * 1.08);
-  const sceneCount  = Math.max(2, Math.round(parseInt(durationMinutes) * 60 / 37));
+// ─── REFERENCE PATTERN LOADER ─────────────────────────────────────────────────
+// Reads space_sleep_longform_patterns from data/reference-principles.json.
+// Falls back to hardcoded defaults if not yet generated.
+
+const PROJECT_ROOT_SG = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+function loadSpaceReferencePatterns() {
+  try {
+    const p = path.join(PROJECT_ROOT_SG, 'data', 'reference-principles.json');
+    if (!fs.existsSync(p)) return null;
+    const data = JSON.parse(fs.readFileSync(p, 'utf-8'));
+    return data.space_sleep_longform_patterns || null;
+  } catch { return null; }
+}
+
+// ─── PASS 1: OUTLINE (Sonnet) ─────────────────────────────────────────────────
+// Generates a structured 20-scene outline with unique factual anchors per scene.
+// Each anchor is a SPECIFIC fact, person, date, or event — never repeated.
+
+async function generateSpaceScriptOutline(topic, sceneCount, wordsPerScene, channelConfig, refPatterns) {
+  const arcRoles = {
+    hook:        [1, 2, 3],
+    setup:       [4, 5, 6, 7, 8, 9, 10],
+    revelation:  [11, 12, 13, 14, 15],
+    resolution:  [16, 17, 18, 19, 20],
+  };
+
+  const compressedArc = sceneCount <= 6 ? {
+    hook: [1],
+    setup: [2, 3, 4],
+    revelation: [5],
+    resolution: [sceneCount],
+  } : arcRoles;
+
+  // Scene arc role assignment
+  const sceneArcRoles = [];
+  for (let i = 1; i <= sceneCount; i++) {
+    if ((compressedArc.hook || []).includes(i))       sceneArcRoles.push('hook');
+    else if ((compressedArc.setup || []).includes(i)) sceneArcRoles.push('setup');
+    else if ((compressedArc.revelation || []).includes(i)) sceneArcRoles.push('revelation');
+    else sceneArcRoles.push('resolution');
+  }
 
   const bannedTopicsBlock = channelConfig?.banned_topics?.length
-    ? `\nBANNED TOPICS (channel rules):\n${channelConfig.banned_topics.map(t => `  - ${t}`).join('\n')}\n`
+    ? `\nBANNED TOPICS: ${channelConfig.banned_topics.join(', ')}\n`
     : '';
 
-  return `You are writing a ${durationMinutes}-minute sleep space documentary narration — a calm, meditative
-exploration of ${topic} meant to help listeners drift to sleep.
+  const refBlock = refPatterns
+    ? `\nREFERENCE PATTERNS (from ${refPatterns.video_count || '?'} high-AVD space sleep videos):
+- Target pacing: ${refPatterns.target_wpm || 150} words per minute
+- Info density: ${refPatterns.target_info_density_per_min || 2} new facts per minute
+- Scene length: ${refPatterns.scene_length_words || wordsPerScene} words per scene
+- Opening formula: ${refPatterns.opening_hook_formula || 'Start in a specific place, ground the listener in the silence and scale'}
+- Transition formula: ${refPatterns.transition_formula || 'Each scene ends with a settling thought that introduces the next anchor'}
+- Anti-repetition: ${(refPatterns.anti_repetition_rules || []).join('; ')}
+`
+    : '';
 
+  const prompt = `You are an expert script architect for a long-form sleep space documentary channel.
+
+Generate a ${sceneCount}-scene story outline for a ${Math.round(sceneCount * wordsPerScene / 150)}-minute video on:
 TOPIC: "${topic}"
-TARGET DURATION: ${durationMinutes} minutes (~${targetWords} words at ${wpm} wpm)
-NUMBER OF SCENES: exactly ${sceneCount} scenes (each ~37 seconds / ~${Math.round(wpm * 37 / 60)} words)
 
-═══ NARRATIVE ARC ═══
+CRITICAL REQUIREMENTS:
+1. Each scene must have a UNIQUE factual_anchor — a specific fact, person, date, or event
+2. No two scenes may cover the same information
+3. Facts must be SPECIFIC and SURPRISING — not generic ("it is cold") but precise ("two hundred seventy degrees below zero Celsius — colder than any place humans have ever created on Earth")
+4. Include real people where they exist (scientists, engineers, historical figures involved in the mission/discovery)
+5. Include specific dates, measurements, and named events
+6. The outline must enforce a narrative arc — a sleeping listener must feel the story building
 
-OPENING (first scene):
-Begin in a specific place in space. Ground the listener immediately.
-"Beyond the orbit of Neptune, where the sun is just the brightest star in the sky,
-something moves. It has been moving for forty-seven years. And it will move forever."
-Make them feel the scale. Make them feel the silence.
+ARC STRUCTURE (enforce strictly):
+${sceneArcRoles.map((role, i) => `  Scene ${i+1}: [${role.toUpperCase()}] — ${
+  role === 'hook'       ? 'Open with a specific, gripping fact or sensory moment. The mystery that pulls the listener in.' :
+  role === 'setup'      ? 'Build context. Each scene adds one piece of the puzzle. Nothing restated.' :
+  role === 'revelation' ? 'The most surprising, counterintuitive, or emotionally resonant fact. The payoff.' :
+                          'Quiet resolution. Scale, perspective, the emotional meaning of what was just learned.'
+}`).join('\n')}
 
-BODY (middle scenes):
-Move through different aspects of the topic. Each scene should:
-- Open with a vivid sensory or scientific detail
-- Present ONE fact or phenomenon related to the topic
-- Explain the idea simply, as if to someone drifting off to sleep
-- Close with a quiet, settling thought about scale or time
+${refBlock}
+${bannedTopicsBlock}
 
-The scenes should feel like a slow documentary camera panning across the cosmos —
-taking its time, never rushing, always returning to silence.
+Return a JSON array of exactly ${sceneCount} scene objects:
+[
+  {
+    "scene_number": 1,
+    "chapter_label": "short title for this scene (3-5 words)",
+    "factual_anchor": "the ONE specific fact, person, date, or event this scene is built around — must be unique across all scenes",
+    "arc_role": "hook|setup|revelation|resolution",
+    "pivot_to_next": "one sentence: what question or idea this scene leaves open to pull into the next scene",
+    "subject_slug": "lowercase-slug for image library (e.g. 'voyager-probe', 'black-hole-event-horizon')"
+  }
+]
 
-CLOSE (final 2 scenes):
-Bring the themes together. The final scene should be the most peaceful —
-an image of vast, silent space, ideas settling like dust.
-End with silence implied. The listener should already be asleep.
+Return ONLY the JSON array. No preamble, no markdown fences.`;
+
+  const raw = await callClaudeCLI(prompt, { model: 'claude-sonnet-4-6', timeoutMs: 180000 });
+  const text = raw.trim().replace(/^```(?:json)?\s*/gm, '').replace(/```\s*$/gm, '').trim();
+  const outline = JSON.parse(text);
+
+  // Verify uniqueness of factual anchors
+  const anchors = outline.map(s => s.factual_anchor?.toLowerCase() || '');
+  const duplicates = anchors.filter((a, i) => anchors.indexOf(a) !== i);
+  if (duplicates.length > 0) {
+    console.log(`  ⚠ Outline has ${duplicates.length} duplicate anchor(s) — proceeding anyway`);
+  }
+
+  return outline;
+}
+
+// ─── PASS 2: EXPAND SCENE (Haiku) ────────────────────────────────────────────
+// Expands one outline entry into full sleep narration prose.
+// Has full outline context so it knows what's covered and what's coming.
+
+async function expandSpaceScene(scene, outline, priorTwoSentences, bannedAnchors, wordsPerScene, channelConfig) {
+  const outlineContext = outline.map(s =>
+    `Scene ${s.scene_number} [${s.arc_role}]: ${s.factual_anchor}`
+  ).join('\n');
+
+  const bannedBlock = bannedAnchors.length > 0
+    ? `\nBANNED — already covered in prior scenes (do NOT restate):\n${bannedAnchors.map(a => `  - ${a}`).join('\n')}\n`
+    : '';
+
+  const continuityBlock = priorTwoSentences
+    ? `\nCONTINUITY — this scene must flow from the previous scene's final words:\n"${priorTwoSentences}"\n`
+    : '';
+
+  const prompt = `You are writing scene ${scene.scene_number} of a ${outline.length}-scene sleep space documentary.
+
+SCENE TO WRITE:
+- Chapter: "${scene.chapter_label}"
+- Arc role: ${scene.arc_role} (${
+    scene.arc_role === 'hook'       ? 'gripping opening — establish the mystery' :
+    scene.arc_role === 'setup'      ? 'build context, add one piece of the puzzle' :
+    scene.arc_role === 'revelation' ? 'most surprising fact — the payoff moment' :
+                                      'quiet resolution — scale, perspective, peace'
+  })
+- Factual anchor: "${scene.factual_anchor}"
+- Pivot to next: "${scene.pivot_to_next || ''}"
+
+FULL OUTLINE CONTEXT (what this video covers):
+${outlineContext}
+${bannedBlock}
+${continuityBlock}
+TARGET LENGTH: ${wordsPerScene} words (±10%)
 
 ${SPACE_VOICE_RULES}
 
-${SPACE_SCENE_OUTPUT_FORMAT}
+Write ONLY the narration text for this scene.
+- The factual_anchor MUST be woven into the narration as a specific detail
+- Do NOT repeat or paraphrase any banned anchor
+- Flow naturally from the continuity sentence if provided
+- End with a quiet settling thought that hints at the pivot_to_next without stating it directly
+- No brackets, no headers, no stage directions — pure narration prose only`;
 
-${bannedTopicsBlock}WORD COUNT — CRITICAL:
-Total narration across all scenes: ${minWords}–${maxWords} words
-Each scene: ~${Math.round(wpm * 37 / 60)} words (37 seconds)
-Number of scenes: ${sceneCount}
-
-Return ONLY the JSON array. No preamble, no markdown fences, no explanation.`;
+  const raw = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 90000 });
+  return raw.trim();
 }
 
-async function generateSpaceScriptBlock(topic, blockNum, totalBlocks, duration, wpm = WORDS_PER_MINUTE, channelConfig = null) {
-  const blockMinutes = Math.min(BLOCK_SIZE_MINUTES, duration - (blockNum - 1) * BLOCK_SIZE_MINUTES);
+// ─── EXTRACT LAST TWO SENTENCES ──────────────────────────────────────────────
 
-  const continuityNote = blockNum > 1
-    ? `\nCONTINUITY: This is block ${blockNum} of ${totalBlocks}. The listener has been listening for ${(blockNum - 1) * BLOCK_SIZE_MINUTES} minutes. They may be half asleep. Do NOT re-introduce concepts. Flow naturally from the previous section. The pace should be even slower now.\n`
-    : "";
-
-  const closingNote = blockNum === totalBlocks
-    ? `\nFINAL BLOCK: This is the ending. The last 2 scenes should be the most peaceful and quiet of the entire video. Bring the themes to rest. End with implied silence.\n`
-    : "";
-
-  const prompt = buildSpaceDocumentaryPrompt(topic, blockMinutes.toString(), wpm, channelConfig)
-    + continuityNote + closingNote;
-
-  const blockTimeoutMs = Math.max(180000, blockMinutes * 24000);
-  const raw = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: blockTimeoutMs });
-  const text = raw.trim()
-    .replace(/^```(?:json)?\s*/gm, "").replace(/```\s*$/gm, "").trim();
-
-  const scenes = JSON.parse(text);
-
-  // Map subject → philosopher so director and library matching work unchanged
-  for (const s of scenes) {
-    if (!s.philosopher) s.philosopher = s.subject || "space";
-  }
-
-  return scenes;
+function lastTwoSentences(text) {
+  if (!text) return '';
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+  return sentences.slice(-2).join(' ').trim();
 }
+
+// ─── TWO-PASS SPACE SCRIPT GENERATOR ─────────────────────────────────────────
 
 async function generateSpaceScript(topic, options = {}) {
   const duration      = parseInt(options.duration) || 60;
@@ -743,31 +831,86 @@ async function generateSpaceScript(topic, options = {}) {
     ? Math.round(channelConfig.target_word_count / Math.max(duration, 1))
     : WORDS_PER_MINUTE;
 
+  // Scene count: ~3 min per scene for full videos, fewer for shorts
+  const sceneCount     = Math.max(4, Math.round(duration / 3));
+  const wordsPerScene  = Math.round((duration * effectiveWPM) / sceneCount);
+
   fs.mkdirSync(outputDir, { recursive: true });
 
-  console.log(`\n  SleepForge Space Script Generator`);
+  console.log(`\n  SleepForge Space Script Generator (two-pass)`);
   console.log(`  Topic: "${topic}"`);
-  console.log(`  Duration: ${duration} min`);
+  console.log(`  Duration: ${duration} min | Scenes: ${sceneCount} | ~${wordsPerScene} words/scene`);
   console.log(`  Channel: ${channelConfig?.slug || 'sleepless-astronomer'}`);
-  console.log(`  Model: ${MODEL} (target cost: ~$0.10)`);
 
-  const totalBlocks = Math.max(1, Math.ceil(duration / BLOCK_SIZE_MINUTES));
-  const allScenes   = [];
+  // Load reference patterns (may be null if harvest hasn't run yet)
+  const refPatterns = loadSpaceReferencePatterns();
+  if (refPatterns) {
+    console.log(`  Reference patterns: ✓ (${refPatterns.video_count || '?'} videos analyzed)`);
+  } else {
+    console.log(`  Reference patterns: none yet (run learn-space-script-patterns.js after harvest)`);
+  }
 
-  for (let i = 1; i <= totalBlocks; i++) {
-    const blockLabel = `block ${i}/${totalBlocks}`;
-    console.log(`  Writing ${blockLabel}...`);
-    try {
-      const scenes = await generateSpaceScriptBlock(topic, i, totalBlocks, duration, effectiveWPM, channelConfig);
-      allScenes.push(...scenes);
-      console.log(`  ${blockLabel}: ${scenes.length} scenes`);
-    } catch (err) {
-      console.error(`  ${blockLabel} failed: ${err.message}`);
-      console.log(`  Retrying ${blockLabel}...`);
-      await new Promise(r => setTimeout(r, 3000));
-      const scenes = await generateSpaceScriptBlock(topic, i, totalBlocks, duration, effectiveWPM, channelConfig);
-      allScenes.push(...scenes);
+  // ── Pass 1: Generate outline (Sonnet) ─────────────────────────────────────
+  console.log(`\n  Pass 1: Generating ${sceneCount}-scene outline (Sonnet)...`);
+  let outline;
+  try {
+    outline = await generateSpaceScriptOutline(topic, sceneCount, wordsPerScene, channelConfig, refPatterns);
+    console.log(`  ✓ Outline: ${outline.length} scenes`);
+    for (const s of outline.slice(0, 5)) {
+      console.log(`    Scene ${s.scene_number} [${s.arc_role}]: ${(s.factual_anchor || '').slice(0, 70)}`);
     }
+    if (outline.length > 5) console.log(`    ... (+${outline.length - 5} more)`);
+  } catch (err) {
+    console.error(`  Outline generation failed: ${err.message}`);
+    throw err;
+  }
+
+  // ── Pass 2: Expand each scene (Haiku) ────────────────────────────────────
+  console.log(`\n  Pass 2: Expanding ${outline.length} scenes (Haiku)...`);
+  const allScenes = [];
+  const bannedAnchors = [];
+  let priorNarration = '';
+
+  for (let i = 0; i < outline.length; i++) {
+    const sceneSpec = outline[i];
+    console.log(`  Scene ${sceneSpec.scene_number}/${outline.length} [${sceneSpec.arc_role}]: ${(sceneSpec.factual_anchor || '').slice(0, 50)}`);
+
+    let narration;
+    try {
+      narration = await expandSpaceScene(
+        sceneSpec,
+        outline,
+        lastTwoSentences(priorNarration),
+        bannedAnchors,
+        wordsPerScene,
+        channelConfig
+      );
+    } catch (err) {
+      console.error(`  Scene ${sceneSpec.scene_number} expand failed: ${err.message}`);
+      console.log(`  Retrying scene ${sceneSpec.scene_number}...`);
+      await new Promise(r => setTimeout(r, 3000));
+      narration = await expandSpaceScene(
+        sceneSpec, outline, lastTwoSentences(priorNarration),
+        bannedAnchors, wordsPerScene, channelConfig
+      );
+    }
+
+    const wordCount = narration.split(/\s+/).length;
+    console.log(`    ✓ ${wordCount} words`);
+
+    const scene = {
+      subject:    sceneSpec.subject_slug || `scene-${sceneSpec.scene_number}`,
+      moment:     sceneSpec.chapter_label || sceneSpec.factual_anchor,
+      action:     sceneSpec.factual_anchor || '',
+      setting:    sceneSpec.chapter_label || '',
+      arc_role:   sceneSpec.arc_role,
+      philosopher: sceneSpec.subject_slug || 'space',
+      narration,
+    };
+
+    allScenes.push(scene);
+    bannedAnchors.push(sceneSpec.factual_anchor || '');
+    priorNarration = narration;
   }
 
   // Prepend sleep intro for channels that request it
@@ -783,14 +926,14 @@ async function generateSpaceScript(topic, options = {}) {
 
   fs.writeFileSync(jsonPath,    JSON.stringify(allScenes, null, 2));
   fs.writeFileSync(txtPath,     narrationText);
-  fs.writeFileSync(promptsPath, JSON.stringify([], null, 2)); // library-only: no live image prompts
+  fs.writeFileSync(promptsPath, JSON.stringify([], null, 2));
 
-  const totalWords  = narrationText.split(/\s+/).length;
-  const estMinutes  = (totalWords / WORDS_PER_MINUTE).toFixed(1);
+  const totalWords = narrationText.split(/\s+/).length;
+  const estMinutes = (totalWords / effectiveWPM).toFixed(1);
 
-  console.log(`\n  Space script complete!`);
+  console.log(`\n  Space script complete! (two-pass)`);
   console.log(`  Scenes: ${allScenes.length}`);
-  console.log(`  Words: ${totalWords} (~${estMinutes} min at ${WORDS_PER_MINUTE} wpm)`);
+  console.log(`  Words: ${totalWords} (~${estMinutes} min at ${effectiveWPM} wpm)`);
   console.log(`  JSON: ${jsonPath}`);
   console.log(`  Text: ${txtPath}`);
 
@@ -803,6 +946,7 @@ async function generateSpaceScript(topic, options = {}) {
     wordCount:   totalWords,
     estMinutes:  parseFloat(estMinutes),
     sceneCount:  allScenes.length,
+    outline,
   };
 }
 

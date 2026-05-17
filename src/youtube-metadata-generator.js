@@ -104,29 +104,51 @@ export async function generateAstronomerTitleCandidates(topic, channelConfig = n
     ? (topic.title + (topic.angle ? '\n\nAngle: ' + topic.angle : ''))
     : String(topic);
 
-  const haikuPrompt = `Generate 5 YouTube title candidates for a 60-minute astronomy documentary video.
+  const FORMAT_SIGNALS = [
+    '1 Hour for Deep Sleep',
+    '60 Minutes of Space Facts',
+    'Fall Asleep to the Cosmos',
+    'Deep Sleep Astronomy',
+  ];
+
+  const haikuPrompt = `Generate 5 YouTube title candidates for a 60-minute astronomy documentary sleep channel video.
 
 TOPIC: ${topicStr}
-CHANNEL: Sleepless Astronomer — looks like a normal astronomy documentary channel, NOT a sleep channel.
 
-AstroKobi-style patterns to use (pick the most natural fit for this topic):
+FORMAT: Each title MUST follow this exact structure:
+  "[AstroKobi curiosity hook] | [Format signal]"
+
+The pipe character ( | ) separates the curiosity hook from the format signal.
+This signals to YouTube's algorithm that this is a long-form ambient/sleep video.
+
+CURIOSITY HOOK patterns (pick the most natural fit):
   * "What If [extreme space scenario]?"
   * "How Are We Still [doing seemingly impossible thing]?"
   * "Could [cosmic event] Happen [Again / To Us]?"
   * "What Came Before [X]?" / "What Is Outside [X]?"
-  * "[N] [Things/Planets/Events] [Better/More Terrifying] Than [X]"
+  * "[N] [Things/Planets/Events] More [Extreme/Strange] Than [X]"
   * "Solving The [Hardest/Biggest] Problem In [Physics/Astronomy]"
   * "This [Specific Object] Is [Shocking Statement]"
-  * "You Will NEVER [See/Experience] [X] Again"
+  * "The [Object/Event] That [Changed/Broke] Everything"
   * "Scientists [Just Found / Are REALLY Close To] [X]"
   * "[NASA / JWST / Hubble] Just [Verb] [Shocking Object]"
 
-Rules:
-- NEVER mention sleep, meditation, falling asleep, bedtime, or drifting off — not even subtly
-- 40-65 characters each
+FORMAT SIGNAL options (rotate variety across the 5 candidates):
+  "${FORMAT_SIGNALS[0]}"
+  "${FORMAT_SIGNALS[1]}"
+  "${FORMAT_SIGNALS[2]}"
+  "${FORMAT_SIGNALS[3]}"
+
+Hook rules:
 - Create a CURIOSITY GAP — viewer must click to get the answer
 - Use specific names when applicable: "Voyager 1", "Betelgeuse", "JWST", "Cassini"
-- Can use dramatic words: TERRIFYING, INSANE, NEVER, IMPOSSIBLE, REAL
+- Can use dramatic words: TERRIFYING, NEVER, IMPOSSIBLE, REAL
+- Hook portion alone should be 35-55 characters; full title with signal ≤ 80 characters
+
+Examples of correct format:
+  "How Are We Still Hearing from Voyager 1? | 1 Hour for Deep Sleep"
+  "What Happens at the Edge of a Black Hole? | 60 Minutes of Space Facts"
+  "The Star That Will Destroy Its Own Galaxy | Fall Asleep to the Cosmos"
 
 Return ONLY a JSON array of exactly 5 title strings:
 ["Title 1", "Title 2", "Title 3", "Title 4", "Title 5"]`;
@@ -136,13 +158,14 @@ Return ONLY a JSON array of exactly 5 title strings:
   if (!m) throw new Error('No title array in Haiku response');
   const candidates = JSON.parse(m[0]).map(String).slice(0, 5);
 
-  const sonnetPrompt = `You are a YouTube title expert for astronomy documentary channel "Sleepless Astronomer".
+  const sonnetPrompt = `You are a YouTube title expert for astronomy sleep channel "Sleepless Astronomer".
 
+Each candidate follows the format: "[Curiosity hook] | [Format signal]"
 Pick the SINGLE BEST title from these candidates. Optimise for:
-- Highest curiosity gap (viewer MUST click to learn the answer)
-- AstroKobi style: specific, dramatic, creates a clear story from title alone
-- 40-65 characters
-- Looks like a normal astronomy channel (zero sleep keywords)
+- Strongest curiosity gap in the hook (viewer MUST click to learn the answer)
+- Hook is specific and dramatic, not generic
+- Format signal is appropriate for the hook length (total title ≤ 80 chars)
+- The pipe format signals ambient/sleep content to YouTube's algorithm
 
 TOPIC: ${topicStr}
 
@@ -187,18 +210,17 @@ Return a single JSON object:
 }
 
 TITLE rules:
-- 45-65 characters MAXIMUM
-- NEVER mention "sleep", "fall asleep", "drift off", "meditation", "bedtime", "calm" — zero sleep keywords
-- The title must look exactly like a normal astronomy documentary
-- AstroKobi-style patterns (pick the most natural fit):
+- Format: "[Curiosity hook] | [Format signal]" — pipe separates hook from sleep signal
+- Hook portion: 35-55 characters; total title ≤ 80 characters
+- Format signal options: "1 Hour for Deep Sleep" | "60 Minutes of Space Facts" | "Fall Asleep to the Cosmos" | "Deep Sleep Astronomy"
+- AstroKobi-style hook patterns (pick the most natural fit):
   * "What If [extreme space scenario]?"
   * "How Are We Still [doing impossible thing]?"
   * "Could [cosmic event] Happen Again?"
   * "What Came Before [X]?"
-  * "[N] [Things] Better For Life Than Earth"
+  * "The [Object/Event] That [Changed/Broke] Everything"
   * "Solving The Hardest Problem In [Physics/Astronomy]"
   * "This [Object] Is [Shocking Statement]"
-  * "You Will NEVER See [X] Again"
   * "Scientists Just Found [X]"
 - Create a CURIOSITY GAP — viewer clicks to get the answer
 - Use specific names: "Voyager 1", "Betelgeuse", "JWST", "Cassini"
