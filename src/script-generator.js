@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { callClaudeCLI } from "./claude-cli.js";
 import { getSleepIntro } from "./intro-templates.js";
 
