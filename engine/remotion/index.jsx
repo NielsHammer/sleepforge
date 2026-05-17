@@ -39,11 +39,11 @@ const Root = () => {
         height={1080}
       />
 
-      {/* ── Sleepless Astronomer 2-second channel intro ── */}
+      {/* ── Sleepless Astronomer channel intro — 4.754s travelling animation ── */}
       <Composition
         id="AstronomerIntro"
         component={AstronomerIntro}
-        durationInFrames={60}  // 2s @ 30fps
+        durationInFrames={143}  // 4.754s @ 30fps
         fps={30}
         width={1920}
         height={1080}

@@ -7,8 +7,15 @@ import {
   Img,
 } from "remotion";
 
-// ─── Seeded pseudo-random ────────────────────────────────────────────────────
-// LCG — same seed → same stars every render
+// ─── Constants ───────────────────────────────────────────────────────────────
+const TOTAL = 143;      // 4.754s @ 30fps
+const P1_END = 36;      // Hyperspace streaks dissolve by this frame
+const P2_END = 90;      // Logo finishes travelling, arrives at center
+const LOGO_FINAL = 340; // px diameter at full size
+const CX = 960;         // screen center X
+const CY = 540;         // screen center Y
+
+// ─── Seeded LCG RNG — same seed → same layout every render ──────────────────
 function makeRng(seed) {
   let s = seed >>> 0;
   return () => {
@@ -17,202 +24,274 @@ function makeRng(seed) {
   };
 }
 
-// ─── Star field layer ────────────────────────────────────────────────────────
-function StarLayer({ count, seed, driftX, driftY, minOpacity, maxOpacity, minR, maxR, globalOpacity, frame }) {
+// ─── Phase 1: Hyperspace streak layer ────────────────────────────────────────
+// Stars as elongated radial lines pointing away from center (warp-speed look).
+function StarStreakLayer({ count, seed, frame }) {
+  const rng = makeRng(seed);
+
+  // Streak length: zero → peak → zero as hyperspace phase fades out
+  const streakLen = interpolate(frame, [0, 12, P1_END, P1_END + 18], [0, 110, 140, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const layerOp = interpolate(frame, [0, 4, P1_END, P1_END + 14], [0, 0.9, 0.9, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  if (layerOp < 0.01) return null;
+
+  const elements = [];
+  for (let i = 0; i < count; i++) {
+    const angle = rng() * Math.PI * 2;
+    // Stars distributed at varying distances from center — creates depth
+    const minDist = 60 + rng() * 100;
+    const dist = minDist + rng() * 480;
+
+    // Streak extends radially outward from the star's position
+    const x1 = CX + Math.cos(angle) * dist;
+    const y1 = CY + Math.sin(angle) * dist;
+    // Streak length scales with distance (far stars streak more — parallax)
+    const depthMult = 0.3 + (dist / 580) * 0.7;
+    const x2 = CX + Math.cos(angle) * (dist + streakLen * depthMult);
+    const y2 = CY + Math.sin(angle) * (dist + streakLen * depthMult);
+
+    const starOp = (0.35 + rng() * 0.55) * layerOp;
+    const tint = rng() < 0.18;
+    const color = tint ? `rgba(180,170,255,${starOp})` : `rgba(255,255,255,${starOp})`;
+    const strokeW = 0.6 + rng() * 1.2;
+
+    elements.push(
+      <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
+        stroke={color} strokeWidth={strokeW} strokeLinecap="round" />
+    );
+  }
+  return <>{elements}</>;
+}
+
+// ─── Phase 2-3: Normal parallax drifting star dots ───────────────────────────
+function StarDotLayer({ count, seed, driftX, driftY, minOp, maxOp, minR, maxR, globalOp, frame }) {
   const rng = makeRng(seed);
   const stars = [];
   for (let i = 0; i < count; i++) {
     const baseX = rng() * 1920;
     const baseY = rng() * 1080;
-    const r     = minR + rng() * (maxR - minR);
-    const op    = minOpacity + rng() * (maxOpacity - minOpacity);
-    // Slow twinkle — offset per star so they don't pulse together
+    const r = minR + rng() * (maxR - minR);
+    const op = minOp + rng() * (maxOp - minOp);
     const twinklePhase = rng() * Math.PI * 2;
-    const twinkle = 0.85 + 0.15 * Math.sin(twinklePhase + frame * 0.08);
-
+    const twinkle = 0.85 + 0.15 * Math.sin(twinklePhase + frame * 0.07);
     const x = ((baseX + driftX * frame) % 1920 + 1920) % 1920;
     const y = ((baseY + driftY * frame) % 1080 + 1080) % 1080;
-
-    // Slight blue-purple tint on some stars
-    const tint = rng() < 0.25;
-    const color = tint ? `rgba(180,170,255,${op * twinkle * globalOpacity})`
-                       : `rgba(255,255,255,${op * twinkle * globalOpacity})`;
-
-    stars.push(
-      <circle key={i} cx={x} cy={y} r={r} fill={color} />
-    );
+    const tint = rng() < 0.2;
+    const color = tint
+      ? `rgba(180,170,255,${op * twinkle * globalOp})`
+      : `rgba(255,255,255,${op * twinkle * globalOp})`;
+    stars.push(<circle key={i} cx={x} cy={y} r={r} fill={color} />);
   }
   return <>{stars}</>;
 }
 
 // ─── AstronomerIntro ─────────────────────────────────────────────────────────
-// 2 seconds, 60 frames at 30fps.
-//
-// Timeline:
-//   f  0-20: stars fade in (all layers)
-//   f 15-30: nebula glow blooms from center
-//   f 28-45: logo fades in + scales up (ease-out)
-//   f 45-60: logo gold ring gets subtle radial bloom
-
+// 4.754s, 143 frames at 30fps. Three phases:
+//   f  0-36: Hyperspace — star streaks radiate outward, logo is a tiny distant point
+//   f 30-90: Travel    — logo grows, arcs slowly across space, nebula blooms, particle trail
+//   f 90-143: Arrival  — logo locks to center, gold ring blooms, stars settle
 export const AstronomerIntro = ({ logoPath = null }) => {
   const frame = useCurrentFrame();
 
-  // ── Global star fade-in ──
-  const starGlobal = interpolate(frame, [0, 18], [0, 1], { extrapolateRight: "clamp" });
+  // ── Logo arc drift — sinusoidal sway fades in during travel, dies out on arrival ──
+  const driftAmt = interpolate(
+    frame,
+    [P1_END - 4, P1_END + 8, P2_END - 8, P2_END + 12],
+    [0, 1, 1, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const logoX = Math.sin(frame * 0.055) * 85 * driftAmt;
+  const logoY = Math.cos(frame * 0.038) * 42 * driftAmt;
 
-  // ── Nebula bloom ──
-  const nebulaOp = interpolate(frame, [15, 30, 50, 60], [0, 0.45, 0.38, 0.32], {
+  // ── Logo scale: tiny distant point → full size ──
+  const logoScale = interpolate(
+    frame,
+    [0, 16, 52, P2_END, 108],
+    [0.006, 0.018, 0.40, 0.90, 1.0],
+    { extrapolateRight: "clamp" }
+  );
+
+  // ── Logo opacity — visible from the first few frames ──
+  const logoOp = interpolate(frame, [2, 16], [0, 1], {
+    extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // ── Logo fade + scale ──
-  const logoOp = interpolate(frame, [28, 46], [0, 1], {
-    extrapolateRight: "clamp",
-    easing: (t) => 1 - Math.pow(1 - t, 3), // ease-out cubic
-  });
-  const logoScale = interpolate(frame, [28, 46], [0.4, 1.0], {
-    extrapolateRight: "clamp",
-    easing: (t) => 1 - Math.pow(1 - t, 3),
-  });
-
-  // ── Gold ring bloom ──
-  const ringBloom = interpolate(frame, [45, 52, 60], [0, 22, 14], {
-    extrapolateRight: "clamp",
-  });
-  const ringGlow = interpolate(frame, [45, 52, 60], [0, 0.75, 0.55], {
+  // ── Star dots: fade in as hyperspace ends ──
+  const dotStarOp = interpolate(frame, [P1_END - 4, P1_END + 14], [0, 1], {
+    extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // ── Vignette opacity ── fades in slowly
-  const vignetteOp = interpolate(frame, [0, 25], [0, 1], { extrapolateRight: "clamp" });
+  // ── Nebula: blooms during travel, persists ──
+  const nebulaOp = interpolate(
+    frame,
+    [P1_END, P1_END + 22, P2_END, TOTAL],
+    [0, 0.44, 0.50, 0.36],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  // Nebula parallax: follows logo at 28% of drift amplitude
+  const nebX = logoX * 0.28;
+  const nebY = logoY * 0.28;
 
-  const logoSize = 320;
+  // ── Particle trail — 8 gold dots at past logo positions ──
+  const trailActive = interpolate(
+    frame,
+    [P1_END, P1_END + 10, P2_END - 4, P2_END + 8],
+    [0, 1, 1, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const trail = [];
+  for (let i = 0; i < 8; i++) {
+    const delay = (i + 1) * 5;
+    const pf = Math.max(0, frame - delay);
+    const pDrift = interpolate(
+      pf,
+      [P1_END - 4, P1_END + 8, P2_END - 8, P2_END + 12],
+      [0, 1, 1, 0],
+      { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+    );
+    const px = Math.sin(pf * 0.055) * 85 * pDrift;
+    const py = Math.cos(pf * 0.038) * 42 * pDrift;
+    const particleOp = (1 - i / 8) * 0.55 * trailActive;
+    const particleR = 1.5 + (1 - i / 8) * 4;
+    trail.push({ px, py, particleOp, particleR });
+  }
 
-  // Determine logo source — static file (from public/) or null (show ring-only placeholder)
-  const hasLogo = !!logoPath;
-  const logoSrc = hasLogo ? staticFile("astronomer-logo.png") : null;
+  // ── Gold ring bloom: activates on arrival ──
+  const ringBloom = interpolate(
+    frame,
+    [P2_END, P2_END + 14, TOTAL - 18, TOTAL],
+    [0, 28, 18, 14],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const ringGlow = interpolate(
+    frame,
+    [P2_END, P2_END + 14, TOTAL],
+    [0, 0.82, 0.58],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const ringBorderOp = interpolate(frame, [P2_END, P2_END + 10], [0, 0.88], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  // ── Vignette ──
+  const vigOp = interpolate(frame, [0, 22, TOTAL - 16, TOTAL], [0, 0.88, 0.92, 1.0], {
+    extrapolateRight: "clamp",
+  });
+
+  const logoSrc = logoPath ? staticFile("astronomer-logo.png") : null;
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#00000C" }}>
 
-      {/* ── Star SVG layers ── */}
-      <svg
-        width={1920}
-        height={1080}
-        style={{ position: "absolute", top: 0, left: 0 }}
-      >
-        {/* Layer 1 — distant, very slow */}
-        <StarLayer
-          count={65}
-          seed={0xdeadbeef}
-          driftX={0.08}
-          driftY={-0.03}
-          minOpacity={0.15}
-          maxOpacity={0.4}
-          minR={0.5}
-          maxR={1.2}
-          globalOpacity={starGlobal}
-          frame={frame}
+      {/* ── Phase 1: Hyperspace star streaks ── */}
+      <svg width={1920} height={1080} style={{ position: "absolute", top: 0, left: 0 }}>
+        <StarStreakLayer count={90} seed={0xdeadbeef} frame={frame} />
+        <StarStreakLayer count={45} seed={0xcafebabe} frame={frame} />
+      </svg>
+
+      {/* ── Phase 2-3: Drifting parallax star dots ── */}
+      <svg width={1920} height={1080} style={{ position: "absolute", top: 0, left: 0 }}>
+        {/* Distant layer — slowest, dimmest */}
+        <StarDotLayer
+          count={65} seed={0xdeadbeef}
+          driftX={0.06} driftY={-0.02}
+          minOp={0.12} maxOp={0.38} minR={0.5} maxR={1.1}
+          globalOp={dotStarOp} frame={frame}
         />
-        {/* Layer 2 — mid distance */}
-        <StarLayer
-          count={32}
-          seed={0xcafebabe}
-          driftX={0.18}
-          driftY={-0.06}
-          minOpacity={0.3}
-          maxOpacity={0.65}
-          minR={1.0}
-          maxR={1.8}
-          globalOpacity={starGlobal}
-          frame={frame}
+        {/* Mid layer */}
+        <StarDotLayer
+          count={35} seed={0xcafebabe}
+          driftX={0.16} driftY={-0.05}
+          minOp={0.28} maxOp={0.62} minR={0.9} maxR={1.7}
+          globalOp={dotStarOp} frame={frame}
         />
-        {/* Layer 3 — near, faster, brighter */}
-        <StarLayer
-          count={14}
-          seed={0xfeedfeed}
-          driftX={0.38}
-          driftY={-0.14}
-          minOpacity={0.55}
-          maxOpacity={0.9}
-          minR={1.5}
-          maxR={2.8}
-          globalOpacity={starGlobal}
-          frame={frame}
+        {/* Near layer — fastest, brightest */}
+        <StarDotLayer
+          count={16} seed={0xfeedfeed}
+          driftX={0.32} driftY={-0.11}
+          minOp={0.50} maxOp={0.88} minR={1.4} maxR={2.5}
+          globalOp={dotStarOp} frame={frame}
         />
       </svg>
 
-      {/* ── Nebula glow — center bloom ── */}
+      {/* ── Purple nebula cloud — parallax behind logo ── */}
       <div
         style={{
           position: "absolute",
           top: "50%",
           left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 900,
-          height: 600,
+          transform: `translate(calc(-50% + ${nebX}px), calc(-50% + ${nebY}px))`,
+          width: 1020,
+          height: 680,
           borderRadius: "50%",
           background: `radial-gradient(ellipse at 50% 50%,
-            rgba(75, 35, 140, ${nebulaOp}) 0%,
-            rgba(30, 15, 75, ${nebulaOp * 0.5}) 40%,
-            rgba(10, 5, 40, ${nebulaOp * 0.15}) 65%,
+            rgba(75,35,140,${nebulaOp}) 0%,
+            rgba(30,15,75,${nebulaOp * 0.52}) 40%,
+            rgba(10,5,40,${nebulaOp * 0.16}) 65%,
             transparent 80%)`,
-          filter: "blur(40px)",
+          filter: "blur(48px)",
           pointerEvents: "none",
         }}
       />
 
-      {/* ── Secondary purple cloud — offset slightly ── */}
-      <div
-        style={{
-          position: "absolute",
-          top: "42%",
-          left: "48%",
-          transform: "translate(-50%, -50%)",
-          width: 600,
-          height: 400,
-          borderRadius: "50%",
-          background: `radial-gradient(ellipse at 50% 50%,
-            rgba(50, 25, 120, ${nebulaOp * 0.6}) 0%,
-            transparent 70%)`,
-          filter: "blur(60px)",
-          pointerEvents: "none",
-        }}
-      />
+      {/* ── Particle trail — gold dots tracing the arc path ── */}
+      {trail.map((p, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: p.particleR * 2,
+            height: p.particleR * 2,
+            borderRadius: "50%",
+            transform: `translate(calc(-50% + ${p.px}px), calc(-50% + ${p.py}px))`,
+            opacity: p.particleOp,
+            backgroundColor: "rgba(212,168,67,0.85)",
+            boxShadow: `0 0 ${p.particleR * 2.5}px rgba(212,168,67,0.4)`,
+            pointerEvents: "none",
+          }}
+        />
+      ))}
 
-      {/* ── Logo container ── */}
+      {/* ── Logo — travels from tiny point to full size ── */}
       <div
         style={{
           position: "absolute",
           top: "50%",
           left: "50%",
-          transform: `translate(-50%, -50%) scale(${logoScale})`,
+          width: LOGO_FINAL,
+          height: LOGO_FINAL,
+          transform: `translate(calc(-50% + ${logoX}px), calc(-50% + ${logoY}px)) scale(${logoScale})`,
           opacity: logoOp,
-          width: logoSize,
-          height: logoSize,
           borderRadius: "50%",
-          boxShadow: [
-            `0 0 ${ringBloom}px ${ringBloom * 0.5}px rgba(212, 168, 67, ${ringGlow})`,
-            `0 0 ${ringBloom * 2.5}px ${ringBloom}px rgba(180, 130, 40, ${ringGlow * 0.4})`,
-            `0 0 ${ringBloom * 4}px ${ringBloom * 1.5}px rgba(100, 60, 20, ${ringGlow * 0.15})`,
-          ].join(", "),
-          border: `3px solid rgba(212, 168, 67, ${logoOp * 0.85})`,
+          boxShadow: ringBloom > 0.5
+            ? [
+                `0 0 ${ringBloom}px ${ringBloom * 0.5}px rgba(212,168,67,${ringGlow})`,
+                `0 0 ${ringBloom * 2.5}px ${ringBloom}px rgba(180,130,40,${ringGlow * 0.4})`,
+                `0 0 ${ringBloom * 4}px ${ringBloom * 1.5}px rgba(100,60,20,${ringGlow * 0.15})`,
+              ].join(", ")
+            : "none",
+          border: `3px solid rgba(212,168,67,${ringBorderOp})`,
           overflow: "hidden",
           backgroundColor: "#06060f",
         }}
       >
-        {hasLogo ? (
+        {logoSrc ? (
           <Img
             src={logoSrc}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "50%",
-            }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
           />
         ) : (
-          /* Fallback: text-only logo placeholder */
           <div
             style={{
               width: "100%",
@@ -224,31 +303,35 @@ export const AstronomerIntro = ({ logoPath = null }) => {
               background: "radial-gradient(circle, #0d0d20 0%, #050510 100%)",
             }}
           >
-            <div style={{
-              color: "rgba(212,168,67,0.9)",
-              fontSize: 28,
-              fontFamily: "'Georgia', serif",
-              textAlign: "center",
-              letterSpacing: "3px",
-              lineHeight: 1.3,
-            }}>
-              SLEEPLESS<br/>ASTRONOMER
+            <div
+              style={{
+                color: "rgba(212,168,67,0.9)",
+                fontSize: 28,
+                fontFamily: "'Georgia', serif",
+                textAlign: "center",
+                letterSpacing: "3px",
+                lineHeight: 1.3,
+              }}
+            >
+              SLEEPLESS
+              <br />
+              ASTRONOMER
             </div>
           </div>
         )}
       </div>
 
-      {/* ── Vignette — edges darken toward center-focus ── */}
+      {/* ── Vignette — edges darkened throughout ── */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background: `radial-gradient(ellipse at 50% 50%,
-            transparent 30%,
-            rgba(0, 0, 8, 0.35) 60%,
-            rgba(0, 0, 8, 0.72) 85%,
-            rgba(0, 0, 8, 0.88) 100%)`,
-          opacity: vignetteOp,
+            transparent 28%,
+            rgba(0,0,8,0.32) 56%,
+            rgba(0,0,8,0.70) 80%,
+            rgba(0,0,8,0.88) 100%)`,
+          opacity: vigOp,
           pointerEvents: "none",
         }}
       />
