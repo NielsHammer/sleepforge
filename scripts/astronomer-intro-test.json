@@ -1,0 +1,46 @@
+[
+  {
+    "subject": "intro",
+    "moment": "sleep welcome",
+    "action": "gentle welcome to the listener",
+    "setting": "quiet, dark space",
+    "philosopher": "intro",
+    "narration": "You've found Sleepless Astronomer.\n\nThis is a place to rest while the cosmos does the talking. These videos are designed for sleep — for the hours when the mind is restless and the night is quiet.\n\nIf you can, lie back. Let your eyes close. Take a deep breath, and feel the weight of the day begin to lift. You don't need to see anything tonight. Every scale, every distance, every wonder will be painted in words — the way a story is told when the lights are off.\n\nYou might fall asleep before the end. That's not only fine — it's the point.\n\nOur subject tonight is What's Inside a Black Hole: An Hour of Deep Space Wonder. We'll take our time with it. There's no rush here. Only the slow, patient turning of the universe, and a voice to keep you company as you drift.\n\nWhenever you're ready."
+  },
+  {
+    "subject": "m87-black-hole-first-image",
+    "moment": "The Shadow That Shook Science",
+    "action": "On April 10, 2019, the Event Horizon Telescope collaboration released the first image of a black hole — M87*, a supermassive black hole 6.5 billion times the mass of the Sun, located 55 million light-years away — made possible by computer scientist Katie Bouman's CHIRP imaging algorithm, which stitched together data from eight radio telescopes positioned across four continents to form a single Earth-sized observatory",
+    "setting": "The Shadow That Shook Science",
+    "arc_role": "hook",
+    "philosopher": "m87-black-hole-first-image",
+    "narration": "It's April tenth, twenty nineteen. Across the world, eight radio telescopes awaken to a single purpose. Their signals merge. Their data weaves together through mathematics and algorithm. One Earth-sized observatory takes shape—not built of steel, but of light and careful calculation.\n\nThese eight distant eyes had waited for this moment for years. Positioned across four continents, they form an observatory no ground could contain. A machine made of patience, of geometry, of quiet determination. And of one computer scientist's algorithm. Katie Bouman called it CHIRP. It was designed to do something nobody had done before: stitch together fragmentary data from eight separated telescopes into something whole. Into something visible.\n\nWhat they're reaching toward waits fifty-five million light-years away. A supermassive black hole. M eighty-seven. Six and a half billion times the mass of our Sun. So distant that its light has been traveling toward us since the age of dinosaurs. Since before the first humans walked the Earth.\n\nThe signal from M eighty-seven is thin. Impossibly thin. Barely there. A whisper of radio waves stretched across the void.\n\nData arrives. Signals merge. The algorithms work. And what emerges is unprecedented. Proof of a black hole. The first time its boundary—its event horizon—has been rendered knowable. Brought from the realm of pure mathematics into something our minds can grasp. A glowing copper ring.\n\nYet that ring marks something stranger still. It's the edge of invisibility itself. The boundary where even light cannot escape. To understand what it truly means—to grasp the physics beneath it—we must step backward now. Back to a single word, spoken in nineteen sixty-seven at a physics conference. A word that would reshape how the world speaks about darkness and space itself."
+  },
+  {
+    "subject": "john-wheeler-physicist-portrait",
+    "moment": "The Name That Changed Everything",
+    "action": "Physicist John Archibald Wheeler coined the term 'black hole' in December 1967 at a conference in New York City — before that, scientists called them 'frozen stars' or 'gravitationally completely collapsed objects,' language so unwieldy it had stalled theoretical progress for decades; Wheeler's two words made the concept imaginable and unlocked a generation of research",
+    "setting": "The Name That Changed Everything",
+    "arc_role": "setup",
+    "philosopher": "john-wheeler-physicist-portrait",
+    "narration": "That word was \"black hole.\"\n\nIn nineteen sixty-seven, at a physics conference in New York City, a physicist named John Archibald Wheeler offered two simple words to the scientific community. Two words for something that'd resisted clear thinking for decades.\n\nBefore that moment, there was no language that fit. Scientists called these objects \"frozen stars.\" Other times they described them with longer phrases — \"gravitationally completely collapsed objects\" — terms so cumbersome they seemed to block understanding rather than enable it. The mathematics existed. The equations were sound. But the human mind struggled to hold the concept. And so theoretical progress stalled.\n\nThen Wheeler spoke his two words: black hole.\n\nSimple. Dark. Imaginable.\n\nThat was the shift. Once scientists could name this thing, once they could speak about it without language getting in the way, they could imagine it. They could hold it in their minds and turn it over slowly. They could finally ask the questions that'd seemed impossible before. Questions about the boundary itself. Questions about what happens there. Questions about whether anything — matter itself, light, information — could cross that point and carry back some whisper of what lies beyond."
+  },
+  {
+    "subject": "black-hole-event-horizon-curvature",
+    "moment": "Crossing the Invisible Edge",
+    "action": "M87*'s event horizon spans approximately 38 billion kilometers — so immense that tidal forces at the crossing threshold are barely perceptible, meaning a hypothetical traveler could pass the point of absolute no return without feeling a single unusual sensation, yet light itself, moving at 299,792 kilometers per second, curves back and is swallowed before it can carry any signal outward",
+    "setting": "Crossing the Invisible Edge",
+    "arc_role": "setup",
+    "philosopher": "black-hole-event-horizon-curvature",
+    "narration": "M87*'s event horizon stretches thirty-eight billion kilometers. Tidal forces are barely perceptible there.\n\nYou'd cross without feeling anything. Light moving nearly three hundred thousand kilometers per second curves back and is swallowed.\n\nYet something waits beyond that silence."
+  },
+  {
+    "subject": "hawking-radiation-black-hole-decay",
+    "moment": "A Trillion-Year Whisper",
+    "action": "In a 1974 Nature paper, Stephen Hawking mathematically demonstrated that black holes emit faint thermal radiation through quantum effects at their boundary — a black hole equal to one solar mass would radiate at just 60 nanokelvins, approximately 45 million times colder than the cosmic microwave background that fills all of space, meaning it absorbs far more energy than it releases and will take an estimated 2×10^67 years — roughly five million trillion trillion trillion trillion times the current age of the universe — to fully evaporate into nothing",
+    "setting": "A Trillion-Year Whisper",
+    "arc_role": "setup",
+    "philosopher": "hawking-radiation-black-hole-decay",
+    "narration": "Beyond that silence waits a secret older than starlight itself.\n\nIn nineteen seventy-four, Stephen Hawking sat with his equations—no one had dared to complete them until then. He proved something that seemed to violate every law physics had ever written. Black holes, he showed, aren't truly silent. They whisper.\n\nThey emit faint thermal radiation at their boundary through quantum effects—a whisper so impossibly cold it barely exists in any meaningful way. A black hole equal to one solar mass would radiate at just sixty nanokelvins. That's roughly forty-five million times colder than the cosmic microwave background that fills all of space. The hole absorbs far more energy than it releases. Any evaporation would take longer than the universe has existed—far longer than it ever will exist. Enough time for five million trillion trillion trillion trillion universe-ages to pass in slow succession.\n\nThe black holes grow colder still. The universe grows older. And they remain, patient and unchanging, swallowing light across the endless eons.\n\nYet deeper still lies something else entirely. Something beyond the reach of Hawking's whisper. Something past the veil of light itself. A place where spacetime folds completely shut and every equation physics ever wrote surrenders to infinity."
+  }
+]

@@ -22,5 +22,7 @@
   "thumbnail_style": "astrokobi",
   "background_video": null,
   "topic_pool": "data/topic-pools/sleepless-astronomer.json",
+  "intro_video_path": "assets/intros/sleepless-astronomer/intro-final.mp4",
+  "intro_duration_seconds": 2,
   "notes": "Channel exists (40 subs, 117 videos). OAuth token active. Video pipeline not yet started — image library must be built first. See image_library_status: pending."
 }

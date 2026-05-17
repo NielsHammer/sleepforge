@@ -7,6 +7,7 @@ import { CandleAnimation }          from "./components/animations/CandleAnimatio
 import { PathsDivergingAnimation }  from "./components/animations/PathsDivergingAnimation.jsx";
 import { HandReleasingAnimation }   from "./components/animations/HandReleasingAnimation.jsx";
 import { HourglassAnimation }       from "./components/animations/HourglassAnimation.jsx";
+import { AstronomerIntro }          from "./components/AstronomerIntro.jsx";
 
 const Root = () => {
   return (
@@ -36,6 +37,17 @@ const Root = () => {
         fps={30}
         width={1920}
         height={1080}
+      />
+
+      {/* ── Sleepless Astronomer 2-second channel intro ── */}
+      <Composition
+        id="AstronomerIntro"
+        component={AstronomerIntro}
+        durationInFrames={60}  // 2s @ 30fps
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{ logoPath: null }}
       />
 
       {/* ── Philosophy animations (screen-blend overlays) ── */}

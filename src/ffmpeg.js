@@ -461,6 +461,35 @@ export function generateIntroSting(outputPath, durationSec = 2) {
   return outputPath;
 }
 
+// ─── PREPEND INTRO VIDEO ────────────────────────────────────────────────────
+// Concatenates a pre-rendered intro clip (video+audio) before the main body.
+// Both inputs must be H.264 video + AAC audio — re-encodes to ensure compat.
+// Used by the Sleepless Astronomer pipeline to prepend the 2-sec animated intro.
+export function prependIntroVideo(introPath, bodyPath, outputPath) {
+  const timeout = 600000; // 10 min — body can be up to 60 min
+  const result = spawnSync('ffmpeg', [
+    '-y',
+    '-i', path.resolve(introPath),
+    '-i', path.resolve(bodyPath),
+    '-filter_complex',
+    '[0:v]scale=1920:1080,fps=30,format=yuv420p[v0];' +
+    '[1:v]scale=1920:1080,fps=30,format=yuv420p[v1];' +
+    '[0:a]aresample=44100[a0];' +
+    '[1:a]aresample=44100[a1];' +
+    '[v0][a0][v1][a1]concat=n=2:v=1:a=1[v][a]',
+    '-map', '[v]', '-map', '[a]',
+    '-c:v', 'libx264', '-preset', 'fast', '-crf', '22',
+    '-c:a', 'aac', '-b:a', '192k',
+    '-movflags', '+faststart',
+    path.resolve(outputPath),
+  ], { stdio: 'pipe', timeout });
+  if (result.status !== 0) {
+    const err = result.stderr?.toString().slice(-500) || 'unknown error';
+    throw new Error(`prependIntroVideo failed: ${err}`);
+  }
+  return outputPath;
+}
+
 // Prepend intro sting to a voiceover: sting.wav + voiceover.wav → output.wav
 // Both are resampled to 44100 Hz before concat — sting is 44100 Hz, Chatterbox voice
 // is 24000 Hz, and -c:a copy would embed a mismatched sample rate header causing 1.84x
