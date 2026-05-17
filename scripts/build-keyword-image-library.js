@@ -19,8 +19,8 @@ import 'dotenv/config';
 import fs   from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import Anthropic from '@anthropic-ai/sdk';
 import axios from 'axios';
+import { callClaudeCLI } from '../src/claude-cli.js';
 
 const __dirname    = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
@@ -42,8 +42,6 @@ const args = process.argv.slice(2);
 const SKIP_IMAGES = args.includes('--skip-images');
 const SKIP_RETAG  = args.includes('--skip-retag');
 const ONLY_KW     = args.includes('--keyword') ? args[args.indexOf('--keyword') + 1] : null;
-
-const client = new Anthropic();
 
 const t_start = Date.now();
 function log(msg) { console.log(msg); }
@@ -97,13 +95,8 @@ Return ONLY a JSON array of 10 objects, no other text:
 ]`;
 
   try {
-    const resp = await client.messages.create({
-      model: HAIKU,
-      max_tokens: 2000,
-      messages: [{ role: 'user', content: prompt }],
-    });
-    const text = resp.content[0].text.trim();
-    const parsed = JSON.parse(text.match(/\[[\s\S]*\]/)?.[0] || text);
+    const text = await callClaudeCLI(prompt, { model: HAIKU, timeoutMs: 30000 });
+    const parsed = JSON.parse(text.trim().match(/\[[\s\S]*\]/)?.[0] || text.trim());
 
     for (const item of parsed.slice(0, 10)) {
       const variant = item.variant || (parsed.indexOf(item) + 1);
