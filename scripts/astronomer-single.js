@@ -206,13 +206,14 @@ if (fs.existsSync(rawCachePath)) {
   rawScenes = JSON.parse(fs.readFileSync(rawCachePath, 'utf-8'));
   log(`  Cached raw (batch-raw): ${rawScenes.length} scenes`);
 } else if (fs.existsSync(priorRawPath)) {
-  rawScenes = JSON.parse(fs.readFileSync(priorRawPath, 'utf-8'));
-  // Validate: must have narration field
-  if (rawScenes.length > 0 && rawScenes[0].narration) {
-    log(`  Using prior script: ${rawScenes.length} scenes`);
+  const candidate = JSON.parse(fs.readFileSync(priorRawPath, 'utf-8'));
+  const wordCount = candidate.map(s => s.narration || '').join(' ').split(/\s+/).filter(Boolean).length;
+  if (candidate.length > 0 && candidate[0].narration && wordCount >= 5000) {
+    rawScenes = candidate;
+    log(`  Using prior script: ${rawScenes.length} scenes, ${wordCount} words`);
     fs.writeFileSync(rawCachePath, JSON.stringify(rawScenes, null, 2));
   } else {
-    log('  Prior script has no narration — regenerating');
+    log(`  Prior script rejected (${wordCount} words < 5000 min) — regenerating`);
     rawScenes = null;
   }
 } else {
