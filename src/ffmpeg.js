@@ -466,7 +466,7 @@ export function generateIntroSting(outputPath, durationSec = 2) {
 // Both inputs must be H.264 video + AAC audio — re-encodes to ensure compat.
 // Used by the Sleepless Astronomer pipeline to prepend the 2-sec animated intro.
 export function prependIntroVideo(introPath, bodyPath, outputPath) {
-  const timeout = 600000; // 10 min — body can be up to 60 min
+  const timeout = 7200000; // 2 hours — 71-min body at 4x speed = ~18 min encode; leave headroom
   const result = spawnSync('ffmpeg', [
     '-y',
     '-i', path.resolve(introPath),
@@ -482,10 +482,11 @@ export function prependIntroVideo(introPath, bodyPath, outputPath) {
     '-c:a', 'aac', '-b:a', '192k',
     '-movflags', '+faststart',
     path.resolve(outputPath),
-  ], { stdio: 'pipe', timeout });
+  ], { stdio: ['ignore', 'ignore', 'pipe'], timeout, maxBuffer: 128 * 1024 * 1024 });
+  if (result.error) throw new Error(`prependIntroVideo spawn error: ${result.error.message}`);
   if (result.status !== 0) {
-    const err = result.stderr?.toString().slice(-500) || 'unknown error';
-    throw new Error(`prependIntroVideo failed: ${err}`);
+    const err = result.stderr?.toString().slice(-800) || 'unknown error';
+    throw new Error(`prependIntroVideo failed (exit ${result.status}): ${err}`);
   }
   return outputPath;
 }

@@ -257,12 +257,12 @@ if (fs.existsSync(FINAL_SCENES_PATH)) {
 
 // Step 4: Chatterbox TTS
 log('\n── Step 4: Chatterbox TTS ──');
-startChatterboxServer();
-const cbReady = await waitForChatterbox(300);
-if (!cbReady) { log('ERROR: Chatterbox unavailable'); serverProc?.kill(); process.exit(1); }
-log('  Chatterbox healthy ✓');
-
 if (!fs.existsSync(VOICEOVER_PATH)) {
+  startChatterboxServer();
+  const cbReady = await waitForChatterbox(300);
+  if (!cbReady) { log('ERROR: Chatterbox unavailable'); serverProc?.kill(); process.exit(1); }
+  log('  Chatterbox healthy ✓');
+
   const scriptText = finalScenes.map(s => s.narration).join('\n\n');
   const sentences  = splitSentences(scriptText);
   log(`  ${sentences.length} sentences`);
@@ -296,8 +296,10 @@ if (!fs.existsSync(VOICEOVER_PATH)) {
 
   const concatFile = path.join(ASSETS_DIR, '_concat.txt');
   fs.writeFileSync(concatFile, partPaths.map(p => `file '${p.replace(/\\/g, '/')}'`).join('\n'));
-  execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -c:a pcm_s16le "${VOICEOVER_PATH}"`, { stdio: 'pipe' });
+  execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -c:a pcm_s16le "${VOICEOVER_PATH}"`, { stdio: 'ignore' });
   fs.unlinkSync(concatFile);
+} else {
+  log('  Cached: voiceover.wav exists, skipping TTS');
 }
 const audioDuration = getAudioDuration(VOICEOVER_PATH);
 log(`  Voiceover: ${audioDuration.toFixed(1)}s (${(audioDuration / 60).toFixed(1)} min)`);
@@ -311,7 +313,7 @@ if (fs.existsSync(WHISPER_PATH)) {
 } else {
   const whisperOut = execSync(
     `"${PYTHON_BIN}" -c "import whisper,json;m=whisper.load_model('base');r=m.transcribe(r'${VOICEOVER_PATH}',word_timestamps=True,language='en');words=[{'word':w['word'].strip(),'start':round(w['start'],3),'end':round(w['end'],3)} for seg in r['segments'] for w in seg.get('words',[])];print(json.dumps(words))"`,
-    { encoding: 'utf-8', timeout: 600000 }
+    { encoding: 'utf-8', timeout: 600000, maxBuffer: 128 * 1024 * 1024 }
   );
   wordTimestamps = JSON.parse(whisperOut.trim());
   fs.writeFileSync(WHISPER_PATH, JSON.stringify(wordTimestamps));
@@ -345,29 +347,41 @@ log('\n── Step 7: FFmpeg composition ──');
 const particlesPath = await ensureParticleLoop();
 const smokePath     = ensureSmokeLoop();
 
-for (const p of [SLIDESHOW_PATH, VOICE_MIX_PATH, BODY_PATH, FINAL_PATH]) {
-  if (fs.existsSync(p)) fs.unlinkSync(p);
+// Only rebuild body.mp4 if it doesn't exist — saves 45+ min on restart
+if (!fs.existsSync(BODY_PATH)) {
+  for (const p of [SLIDESHOW_PATH, VOICE_MIX_PATH, BODY_PATH]) {
+    if (fs.existsSync(p)) fs.unlinkSync(p);
+  }
+  createClipSlideshow(clips, Math.ceil(audioDuration), SLIDESHOW_PATH, { fadeTime: 1.5 });
+  mixAudio(VOICEOVER_PATH, Math.ceil(audioDuration), VOICE_MIX_PATH, {
+    includeBgMusic: true, bgMusicVolume: '0.25', fireplaceVolume: '0.08',
+  });
+  composeFinalVideoWithBg({
+    bgImagePath:    null,
+    slideshowPath:  SLIDESHOW_PATH,
+    particlesPath,
+    smokePath,
+    assPath:        null,
+    voiceAudioPath: VOICE_MIX_PATH,
+    bgMusicPath:    null,
+    framePath:      null,
+    outputPath:     BODY_PATH,
+    duration:       audioDuration,
+    introDuration:  0,
+    fullscreen:     true,
+  });
+} else {
+  log('  Cached: body.mp4 exists, skipping slideshow + mix + compose');
 }
 
-createClipSlideshow(clips, Math.ceil(audioDuration), SLIDESHOW_PATH, { fadeTime: 1.5 });
-mixAudio(VOICEOVER_PATH, Math.ceil(audioDuration), VOICE_MIX_PATH, {
-  includeBgMusic: true, bgMusicVolume: '0.25', fireplaceVolume: '0.08',
-});
-composeFinalVideoWithBg({
-  bgImagePath:    null,
-  slideshowPath:  SLIDESHOW_PATH,
-  particlesPath,
-  smokePath,
-  assPath:        null,
-  voiceAudioPath: VOICE_MIX_PATH,
-  bgMusicPath:    null,
-  framePath:      null,
-  outputPath:     BODY_PATH,
-  duration:       audioDuration,
-  introDuration:  0,
-  fullscreen:     true,
-});
-prependIntroVideo(INTRO_FINAL_PATH, BODY_PATH, FINAL_PATH);
+// Always re-run prependIntroVideo if final.mp4 missing or too small (<100MB)
+const finalExists = fs.existsSync(FINAL_PATH) && fs.statSync(FINAL_PATH).size > 100 * 1024 * 1024;
+if (!finalExists) {
+  if (fs.existsSync(FINAL_PATH)) fs.unlinkSync(FINAL_PATH);
+  prependIntroVideo(INTRO_FINAL_PATH, BODY_PATH, FINAL_PATH);
+} else {
+  log('  Cached: final.mp4 exists, skipping intro prepend');
+}
 
 const finalMB  = Math.round(fs.statSync(FINAL_PATH).size / 1024 / 1024);
 const finalSec = parseFloat(
