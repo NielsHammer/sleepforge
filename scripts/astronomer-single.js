@@ -374,19 +374,45 @@ if (!fs.existsSync(BODY_PATH)) {
   log('  Cached: body.mp4 exists, skipping slideshow + mix + compose');
 }
 
-// Always re-run prependIntroVideo if final.mp4 missing or too small (<100MB)
-const finalExists = fs.existsSync(FINAL_PATH) && fs.statSync(FINAL_PATH).size > 100 * 1024 * 1024;
-if (!finalExists) {
-  if (fs.existsSync(FINAL_PATH)) fs.unlinkSync(FINAL_PATH);
-  prependIntroVideo(INTRO_FINAL_PATH, BODY_PATH, FINAL_PATH);
-} else {
-  log('  Cached: final.mp4 exists, skipping intro prepend');
+// Validate final.mp4 via ffprobe duration (must be ≥ body duration - 60s)
+function getFfprobeDuration(filePath) {
+  try {
+    const out = execSync(
+      `ffprobe -v quiet -show_entries format=duration -of csv=p=0 "${filePath}"`,
+      { encoding: 'utf-8', timeout: 30000 }
+    ).trim();
+    const d = parseFloat(out);
+    return isFinite(d) && d > 0 ? d : null;
+  } catch { return null; }
+}
+
+const BODY_DURATION_SEC = 4293.8; // known from voiceover.wav (71.6 min)
+const FINAL_MIN_SEC     = BODY_DURATION_SEC - 60; // allow 1 min tolerance
+
+let finalValid = false;
+if (fs.existsSync(FINAL_PATH)) {
+  const dur = getFfprobeDuration(FINAL_PATH);
+  if (dur && dur >= FINAL_MIN_SEC) {
+    finalValid = true;
+    log(`  Cached: final.mp4 valid (${(dur / 60).toFixed(1)} min), skipping intro prepend`);
+  } else {
+    log(`  final.mp4 invalid/corrupt (dur=${dur?.toFixed(0) ?? 'unknown'}s < ${FINAL_MIN_SEC}s) — rebuilding`);
+    fs.unlinkSync(FINAL_PATH);
+  }
+}
+if (!finalValid) {
+  log(`  Prepending intro to body.mp4 → final.mp4 (this takes ~18 min)...`);
+  try {
+    prependIntroVideo(INTRO_FINAL_PATH, BODY_PATH, FINAL_PATH);
+    log(`  prependIntroVideo done`);
+  } catch (err) {
+    log(`  [FATAL] prependIntroVideo failed: ${err.message}`);
+    process.exit(1);
+  }
 }
 
 const finalMB  = Math.round(fs.statSync(FINAL_PATH).size / 1024 / 1024);
-const finalSec = parseFloat(
-  execSync(`ffprobe -v quiet -show_entries format=duration -of csv=p=0 "${FINAL_PATH}"`, { encoding: 'utf-8' }).trim()
-);
+const finalSec = getFfprobeDuration(FINAL_PATH) ?? 0;
 log(`  Final: ${finalMB} MB, ${finalSec.toFixed(0)}s (${(finalSec / 60).toFixed(1)} min)`);
 
 // Step 8: Thumbnail (AstroKobi, up to 3 attempts, critic picks best)
