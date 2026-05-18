@@ -751,7 +751,7 @@ Return a JSON array of exactly ${sceneCount} scene objects:
 
 Return ONLY the JSON array. No preamble, no markdown fences.`;
 
-  const raw = await callClaudeCLI(prompt, { model: 'claude-sonnet-4-6', timeoutMs: 180000 });
+  const raw = await callClaudeCLI(prompt, { model: 'claude-sonnet-4-6', timeoutMs: 600000 });
   const text = raw.trim().replace(/^```(?:json)?\s*/gm, '').replace(/```\s*$/gm, '').trim();
   const outline = JSON.parse(text);
 
@@ -810,7 +810,7 @@ Write ONLY the narration text for this scene.
 - End with a quiet settling thought that hints at the pivot_to_next without stating it directly
 - No brackets, no headers, no stage directions — pure narration prose only`;
 
-  const raw = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 90000 });
+  const raw = await callClaudeCLI(prompt, { model: MODEL, timeoutMs: 300000 });
   return raw.trim();
 }
 

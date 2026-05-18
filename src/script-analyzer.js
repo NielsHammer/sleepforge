@@ -195,7 +195,7 @@ Blank lines within a scene are fine (paragraph breaks).`;
 
 export async function analyzeScript(narrationText, channelConfig = null) {
   const prompt = buildScoringPrompt(narrationText, channelConfig);
-  const raw = await callClaudeCLI(prompt, { model: SONNET, timeoutMs: 180000 });
+  const raw = await callClaudeCLI(prompt, { model: SONNET, timeoutMs: 600000 });
   const clean = raw.trim().replace(/^```(?:json)?\s*/gm, '').replace(/```\s*$/gm, '').trim();
   const analysis = JSON.parse(clean);
   // Recompute total from category scores for reliability
