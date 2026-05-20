@@ -1,364 +1,397 @@
 'use strict';
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
-let ws;
-let _jobs = [];
-const _ytData = {}; // channelSlug -> { scheduled, published, lastStats, channelInfo }
+// ════════════════════════════════════════════════════════════════════════════
+// JARVIS v2 — Holographic Command Center
+// ════════════════════════════════════════════════════════════════════════════
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  startClock();
-  connectWS();
-  pollStatus();
-  loadOverviewData();
-  if (window.lucide) lucide.createIcons();
-  document.getElementById('chat-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
-  });
-});
+// ─── PARTICLES ───────────────────────────────────────────────────────────────
 
-// ─── CLOCK (Bangkok UTC+7) ────────────────────────────────────────────────────
+let pCanvas, pCtx;
+const particles = [];
+const PARTICLE_N = 90;
+
+function initParticles() {
+  pCanvas = document.getElementById('particles-canvas');
+  pCtx    = pCanvas.getContext('2d');
+  sizeCanvas();
+  window.addEventListener('resize', sizeCanvas);
+  for (let i = 0; i < PARTICLE_N; i++) particles.push(mkParticle());
+  requestAnimationFrame(drawParticles);
+}
+
+function sizeCanvas() {
+  pCanvas.width  = window.innerWidth;
+  pCanvas.height = window.innerHeight;
+}
+
+function mkParticle() {
+  return {
+    x:  Math.random() * window.innerWidth,
+    y:  Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.35,
+    vy: (Math.random() - 0.5) * 0.35,
+    r:  Math.random() * 1.2 + 0.2,
+    a:  Math.random() * 0.18 + 0.04,
+    da: (Math.random() > 0.5 ? 1 : -1) * 0.0015,
+  };
+}
+
+function drawParticles() {
+  const w = pCanvas.width, h = pCanvas.height;
+  pCtx.clearRect(0, 0, w, h);
+  for (const p of particles) {
+    p.x += p.vx; p.y += p.vy;
+    p.a += p.da;
+    if (p.a < 0.04 || p.a > 0.28) p.da *= -1;
+    if (p.x < 0) p.x = w;  else if (p.x > w) p.x = 0;
+    if (p.y < 0) p.y = h;  else if (p.y > h) p.y = 0;
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    pCtx.fillStyle = `rgba(0,229,255,${p.a})`;
+    pCtx.fill();
+    if (p.a > 0.2) {
+      pCtx.beginPath();
+      pCtx.arc(p.x, p.y, p.r * 2.8, 0, Math.PI * 2);
+      pCtx.fillStyle = `rgba(0,229,255,${p.a * 0.12})`;
+      pCtx.fill();
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+
+// ─── CLOCK ───────────────────────────────────────────────────────────────────
+
 function startClock() {
+  const el  = document.getElementById('clock-bkk');
+  const pad = n => String(n).padStart(2, '0');
   function tick() {
-    const now = new Date();
-    const bkk = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
-    const h = String(bkk.getHours()).padStart(2,'0');
-    const m = String(bkk.getMinutes()).padStart(2,'0');
-    const s = String(bkk.getSeconds()).padStart(2,'0');
-    const clockEl = document.getElementById('clock-bkk');
-    if (clockEl) clockEl.textContent = `${h}:${m}:${s}`;
-    const dateEl = document.getElementById('clock-date');
-    if (dateEl) dateEl.textContent = bkk.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', timeZone:'Asia/Bangkok' }) + ' BKK';
+    const bkk = new Date(Date.now() + 7 * 3600000);
+    el.textContent = `${pad(bkk.getUTCHours())}:${pad(bkk.getUTCMinutes())}:${pad(bkk.getUTCSeconds())}`;
   }
   tick();
   setInterval(tick, 1000);
 }
 
-// ─── WEBSOCKET ────────────────────────────────────────────────────────────────
+// ─── CORE STATUS ─────────────────────────────────────────────────────────────
+
+let _statusTimer = null;
+
+function setStatus(text, pulse = false) {
+  const el = document.getElementById('core-status');
+  if (el) el.textContent = text.toUpperCase().slice(0, 50);
+  if (pulse) {
+    const core = document.getElementById('core');
+    core.classList.add('pulsing');
+    clearTimeout(_statusTimer);
+    _statusTimer = setTimeout(() => core.classList.remove('pulsing'), 2500);
+  }
+}
+
+// ─── RIPPLES ─────────────────────────────────────────────────────────────────
+
+function spawnRipple() {
+  const host = document.getElementById('ripple-host');
+  if (!host) return;
+  const r = document.createElement('div');
+  r.className = 'ripple';
+  host.appendChild(r);
+  setTimeout(() => r.remove(), 2700);
+}
+
+// ─── WEBSOCKET ───────────────────────────────────────────────────────────────
+
 function connectWS() {
-  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-  ws = new WebSocket(`${proto}://${location.host}/ws`);
-  ws.addEventListener('message', e => {
-    try { handleWSMessage(JSON.parse(e.data)); } catch {}
-  });
-  ws.addEventListener('close', () => setTimeout(connectWS, 3000));
-}
-
-function handleWSMessage(msg) {
-  if (msg.type === 'state')      { _jobs = msg.data?.renders || []; renderAllJobs(); }
-  if (msg.type === 'job_update') { syncJob(msg.job); renderAllJobs(); }
-  if (msg.type === 'metrics')    { updateMetrics(msg); }
-}
-
-function syncJob(job) {
-  const idx = _jobs.findIndex(j => j.id === job.id);
-  if (idx >= 0) _jobs[idx] = job; else _jobs.unshift(job);
-}
-
-// ─── SYSTEM STATUS ────────────────────────────────────────────────────────────
-async function pollStatus() {
   try {
-    const d = await fetchJSON('/api/status');
-    setDot('chatterbox', d.services?.chatterbox);
-    setDot('fal',        !!d.services?.fal);
-    setDot('yt',         d.services?.youtube);
-    setText('cpu-val', d.cpu ?? '--');
-    setText('gpu-val', d.gpu?.gpu ?? '--');
-    const vram = (d.gpu?.vram_used != null && d.gpu?.vram_total)
-      ? `${d.gpu.vram_used}/${d.gpu.vram_total}MB`
-      : '--';
-    setText('vram-val', vram);
-  } catch {}
-  setTimeout(pollStatus, 8000);
+    const ws = new WebSocket(`ws://${location.host}/ws`);
+    ws.onmessage = e => {
+      try {
+        const m = JSON.parse(e.data);
+        if (m.type === 'metrics')    onMetrics(m);
+        if (m.type === 'state')      onState(m);
+        if (m.type === 'job_update') onJobUpdate(m);
+      } catch (_) {}
+    };
+    ws.onclose = () => setTimeout(connectWS, 3000);
+  } catch (_) {}
 }
+
+function onMetrics(d) {
+  if (d.cpu != null) setText('cpu-val', d.cpu);
+
+  // Server nests GPU data: d.gpu = { gpu: %, vram_used: MB, vram_total: MB }
+  const gpuObj  = d.gpu && typeof d.gpu === 'object' ? d.gpu : null;
+  const gpuPct  = gpuObj ? gpuObj.gpu : (typeof d.gpu === 'number' ? d.gpu : null);
+  const vramUsed  = gpuObj ? gpuObj.vram_used  : null;
+  const vramTotal = gpuObj ? gpuObj.vram_total : 12288;
+  if (gpuPct  != null) setText('gpu-val',  gpuPct);
+  if (vramUsed != null) {
+    setText('vram-val', `${Math.round(vramUsed / 1024)}GB / ${Math.round(vramTotal / 1024)}GB`);
+  }
+}
+
+function onState(m) {
+  const count = (m.queue || []).filter(j => j.status === 'rendering').length;
+  setText('render-count', count);
+  if (count > 0) setStatus(`RENDERING ${count} VIDEO${count > 1 ? 'S' : ''}`);
+}
+
+function onJobUpdate(m) {
+  const count = (m.queue || []).filter(j => j.status === 'rendering').length;
+  setText('render-count', count);
+  if (count > 0) setStatus(`RENDERING ${count} VIDEO${count > 1 ? 'S' : ''}`);
+}
+
+// ─── STATUS POLL ─────────────────────────────────────────────────────────────
 
 function setDot(id, ok) {
-  const dot  = document.getElementById(`dot-${id}`);
-  const pill = document.getElementById(`pill-${id}`);
-  if (!dot || !pill) return;
-  dot.className  = `dot ${ok ? 'ok' : 'err'}`;
-  pill.className = `status-pill ${ok ? 'ok' : 'err'}`;
-}
-
-// ─── OVERVIEW DATA ────────────────────────────────────────────────────────────
-async function loadOverviewData() {
-  await Promise.all([
-    loadChannelCard('sleepless-astronomer', 'astro'),
-    loadChannelCard('sleepless-philosophers', 'phil'),
-  ]);
-}
-
-async function loadChannelCard(slug, prefix) {
-  try {
-    const d = await fetchJSON(`/api/youtube/queue/${slug}`);
-    _ytData[slug] = d;
-
-    // Stats
-    if (d.channelInfo) {
-      animateNumber(`${prefix}-subs`,  fmt(d.channelInfo.subs));
-      animateNumber(`${prefix}-views`, fmt(d.channelInfo.totalViews));
-    }
-    if (d.lastStats) {
-      setText(`${prefix}-ctr`,       d.lastStats.ctr != null ? `${d.lastStats.ctr.toFixed(1)}%` : '—');
-      setText(`${prefix}-retention`, d.lastStats.retention_avg_pct != null ? `${d.lastStats.retention_avg_pct.toFixed(1)}%` : '—');
-    }
-
-    // Queue strip
-    renderQueueStrip(prefix, d.scheduled, slug);
-
-    // Last video
-    renderLastVideo(prefix, d.published?.[0], d.lastStats);
-
-    // If channel detail page is showing, populate it
-    if (document.getElementById(`page-${slug.replace('sleepless-', '')}`)?.classList.contains('active')) {
-      renderChannelDetail(slug, d);
-    }
-  } catch (e) {
-    setText(`${prefix}-subs`, '—');
-    console.warn(`loadChannelCard(${slug}):`, e.message);
-  }
-}
-
-function renderQueueStrip(prefix, scheduled, slug) {
-  const el = document.getElementById(`${prefix}-queue-strip`);
-  if (!el) return;
-  const chipClass = prefix === 'astro' ? 'astro-chip' : 'phil-chip';
-
-  if (!scheduled?.length) {
-    el.innerHTML = `<span class="queue-chip empty-slot">⚠ No scheduled videos</span>`;
-    return;
-  }
-
-  // Show next 5 dates
-  const chips = scheduled.slice(0, 5).map((v, i) => {
-    const dt  = new Date(v.scheduledAt);
-    const lbl = dt.toLocaleDateString('en-US', { month:'short', day:'numeric', timeZone:'Asia/Bangkok' });
-    return `<span class="queue-chip ${chipClass}${i === 0 ? ' next' : ''}" title="${esc(v.title)}">${lbl}</span>`;
-  });
-
-  const more = scheduled.length > 5 ? `<span class="text-muted" style="font-size:11px">+${scheduled.length-5} more</span>` : '';
-  el.innerHTML = `<div class="queue-dates"><span class="queue-lbl">Next</span>${chips.join('')}${more}</div>`;
-}
-
-function renderLastVideo(prefix, vid, stats) {
-  const el = document.getElementById(`${prefix}-last-video`);
-  if (!el) return;
-  if (!vid) { el.innerHTML = `<div class="last-video-loading">No published videos found</div>`; return; }
-
-  const dt    = vid.publishedAt ? new Date(vid.publishedAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '';
-  const views = stats?.views != null ? `${fmt(stats.views)} views` : '';
-  const likes = stats?.likes != null ? ` · ${fmt(stats.likes)} likes` : '';
-  const wt    = stats?.watch_time_minutes != null ? ` · ${Math.round(stats.watch_time_minutes/60)}h watch time` : '';
-
-  el.innerHTML = `
-    <div class="last-video-title" title="${esc(vid.title)}">${esc(vid.title)}</div>
-    <div class="last-video-meta">${dt}${views ? ' · ' + views : ''}${likes}${wt}
-      ${vid.videoId ? ` · <a href="https://youtube.com/watch?v=${vid.videoId}" target="_blank" class="last-video-link">▶ Watch</a>` : ''}
-    </div>`;
-}
-
-// ─── RENDER JOBS ──────────────────────────────────────────────────────────────
-function renderAllJobs() {
-  renderJobsContainer('overview-renders', _jobs.filter(j => ['rendering','uploading','queued'].includes(j.status)).slice(0, 5));
-  renderJobsContainer('queue-list', _jobs.slice(0, 30));
-}
-
-function renderJobsContainer(containerId, jobs) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  if (!jobs.length) { el.innerHTML = `<div class="empty-state">No active renders.</div>`; return; }
-  el.innerHTML = jobs.map(jobHTML).join('');
-}
-
-function jobHTML(j) {
-  const pct = j.progress || 0;
-  return `<div class="render-job fade-in">
-    <div class="job-dot ${j.status}"></div>
-    <div class="job-info">
-      <div class="job-title">${esc(j.topic || '—')}</div>
-      <div class="job-step">${esc(j.step || j.status)} · ${esc(j.channel || '')}</div>
-    </div>
-    <div class="job-bar-wrap">
-      <div class="job-bar-bg"><div class="job-bar" style="width:${pct}%"></div></div>
-      <div class="job-pct">${pct}%</div>
-    </div>
-    ${j.videoId ? `<a href="https://youtube.com/watch?v=${j.videoId}" target="_blank" style="font-size:11px;color:var(--astro)">▶ Watch</a>` : ''}
-  </div>`;
-}
-
-// ─── CHANNEL DETAIL ───────────────────────────────────────────────────────────
-function renderChannelDetail(slug, d) {
-  const shortId   = slug.replace('sleepless-', '');
-  const container = document.getElementById(`detail-${shortId}`);
-  if (!container) return;
-
-  const isAstro   = shortId === 'astronomer';
-  const nextClass = isAstro ? 'is-astro-next' : 'is-phil-next';
-  const info      = d.channelInfo;
-  const ls        = d.lastStats;
-
-  // Stats row
-  const statsHTML = `
-    <div class="detail-stats-row">
-      <div class="detail-stat"><div class="detail-stat-val">${info ? fmt(info.subs) : '—'}</div><div class="detail-stat-lbl">Subscribers</div></div>
-      <div class="detail-stat"><div class="detail-stat-val">${info ? fmt(info.totalViews) : '—'}</div><div class="detail-stat-lbl">Total Views</div></div>
-      <div class="detail-stat"><div class="detail-stat-val">${info ? info.videoCount : '—'}</div><div class="detail-stat-lbl">Videos</div></div>
-      <div class="detail-stat"><div class="detail-stat-val">${ls?.ctr != null ? ls.ctr.toFixed(1)+'%' : '—'}</div><div class="detail-stat-lbl">Last CTR</div></div>
-      <div class="detail-stat"><div class="detail-stat-val">${ls?.retention_avg_pct != null ? ls.retention_avg_pct.toFixed(1)+'%' : '—'}</div><div class="detail-stat-lbl">Avg Retention</div></div>
-    </div>`;
-
-  // Scheduled timeline — show next 14 days gaps
-  const now   = new Date();
-  const days  = Array.from({length:14}, (_,i) => {
-    const d = new Date(now); d.setDate(now.getDate() + i); return d;
-  });
-  const scheduledByDate = {};
-  for (const v of (d.scheduled || [])) {
-    const k = new Date(v.scheduledAt).toLocaleDateString('en-CA', { timeZone: 'Asia/Bangkok' }); // YYYY-MM-DD
-    scheduledByDate[k] = v;
-  }
-
-  const tlItems = days.map((day, i) => {
-    const key  = day.toLocaleDateString('en-CA', { timeZone: 'Asia/Bangkok' });
-    const vid  = scheduledByDate[key];
-    const lbl  = day.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
-    if (vid) {
-      return `<div class="tl-item ${i === 0 ? nextClass : ''}">
-        <div class="tl-date">${lbl}</div>
-        <div class="tl-title">${esc(vid.title)}</div>
-      </div>`;
-    }
-    return `<div class="tl-empty">${lbl} — empty</div>`;
-  }).join('');
-
-  const timelineHTML = `
-    <div class="detail-section">
-      <div class="section-head">Scheduled — Next 14 Days</div>
-      <div class="timeline">${tlItems}</div>
-    </div>`;
-
-  // Published table
-  const rows = (d.published || []).map(v => {
-    const dt = v.publishedAt ? new Date(v.publishedAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—';
-    return `<tr>
-      <td class="td-title" title="${esc(v.title)}">${esc(v.title)}</td>
-      <td class="td-date">${dt}</td>
-      <td class="td-yt">${v.videoId ? `<a href="https://youtube.com/watch?v=${v.videoId}" target="_blank">▶ ${v.videoId}</a>` : '—'}</td>
-    </tr>`;
-  }).join('');
-
-  const tableHTML = `
-    <div class="detail-section">
-      <div class="section-head">Recent Published Videos</div>
-      <div class="table-wrap">
-        <table class="videos-table">
-          <thead><tr><th>Title</th><th>Published</th><th>YouTube</th></tr></thead>
-          <tbody>${rows || `<tr><td colspan="3" class="text-muted" style="text-align:center;padding:20px">No published videos found</td></tr>`}</tbody>
-        </table>
-      </div>
-    </div>`;
-
-  container.innerHTML = statsHTML + timelineHTML + tableHTML;
-}
-
-// ─── PAGE NAVIGATION ──────────────────────────────────────────────────────────
-function showPage(id) {
-  // Hide all pages
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-  // Show target
-  const page = document.getElementById(`page-${id}`);
-  if (page) page.classList.add('active');
-  const btn  = document.getElementById(`nav-${id}`);
-  if (btn) btn.classList.add('active');
-
-  // Load channel detail on demand
-  if (id === 'astronomer') {
-    const slug = 'sleepless-astronomer';
-    if (_ytData[slug]) renderChannelDetail(slug, _ytData[slug]);
-    else loadChannelCard(slug, 'astro').then(() => renderChannelDetail(slug, _ytData[slug]));
-  }
-  if (id === 'philosophers') {
-    const slug = 'sleepless-philosophers';
-    if (_ytData[slug]) renderChannelDetail(slug, _ytData[slug]);
-    else loadChannelCard(slug, 'phil').then(() => renderChannelDetail(slug, _ytData[slug]));
-  }
-  if (id === 'queue') renderJobsContainer('queue-list', _jobs.slice(0, 50));
-}
-
-// ─── CHAT ─────────────────────────────────────────────────────────────────────
-async function sendChat() {
-  const input = document.getElementById('chat-input');
-  const msg   = input.value.trim();
-  if (!msg) return;
-  input.value = '';
-
-  appendChat('user', msg);
-  appendChat('thinking', 'JARVIS is thinking…');
-
-  try {
-    const d = await fetchJSON('/api/jarvis/chat', { method:'POST', body: JSON.stringify({ message: msg }), headers: {'Content-Type':'application/json'} });
-    removeLastThinking();
-    appendChat('jarvis', d.reply || '(no reply)');
-  } catch (e) {
-    removeLastThinking();
-    appendChat('jarvis', `My apologies, sir. ${e.message}`);
-  }
-}
-
-function appendChat(role, text) {
-  const msgs = document.getElementById('chat-messages');
-  const div  = document.createElement('div');
-  div.className = `chat-msg ${role} fade-in`;
-  div.textContent = text;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function removeLastThinking() {
-  const msgs  = document.getElementById('chat-messages');
-  const nodes = msgs.querySelectorAll('.chat-msg.thinking');
-  nodes.forEach(n => n.remove());
-}
-
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
-async function fetchJSON(url, opts = {}) {
-  const r = await fetch(url, opts);
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  return r.json();
+  const el = document.getElementById(id);
+  if (el) el.className = 'hud-dot ' + (ok ? 'online' : 'offline');
 }
 
 function setText(id, val) {
+  if (val == null) return;
   const el = document.getElementById(id);
   if (el) el.textContent = val;
 }
 
-function esc(str) {
-  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function pollStatus() {
+  fetch('/api/status').then(r => r.json()).then(d => {
+    setDot('dot-tts', d.chatterbox);
+    setDot('dot-fal', d.fal);
+    setDot('dot-yt',  d.youtube);
+    onMetrics(d);
+    const count = (d.queue || []).filter(j => j.status === 'rendering').length;
+    setText('render-count', count);
+    const statusEl = document.getElementById('core-status');
+    if (count > 0) {
+      setStatus(`RENDERING ${count} VIDEO${count > 1 ? 'S' : ''}`);
+    } else if (statusEl && statusEl.textContent.startsWith('RENDERING')) {
+      setStatus('STANDING BY');
+    }
+  }).catch(() => {});
 }
 
+// ─── CHANNEL DATA ─────────────────────────────────────────────────────────────
+
+const channelCache = {};
+
+const CHANNELS = [
+  { slug: 'sleepless-astronomer',   id: 'astro', name: 'ASTRONOMER',   label: 'Sleepless Astronomer' },
+  { slug: 'sleepless-philosophers', id: 'phil',  name: 'PHILOSOPHERS', label: 'Sleepless Philosophers' },
+];
+
+async function loadChannels() {
+  await Promise.all(CHANNELS.map(ch => loadChannelCard(ch)));
+  setStatus('STANDING BY');
+}
+
+async function loadChannelCard(ch) {
+  setStatus(`SCANNING ${ch.name}`);
+  try {
+    const r = await fetch(`/api/youtube/queue/${ch.slug}`);
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    channelCache[ch.id] = { ...d, ...ch };
+    renderCard(ch.id);
+  } catch (_) {
+    const card = document.getElementById(`card-${ch.id}`);
+    if (card) card.innerHTML = `<div class="cc tl"></div><div class="cc tr"></div><div class="cc bl"></div><div class="cc br"></div><div class="card-loading">CHANNEL OFFLINE</div>`;
+  }
+}
+
+function renderCard(id) {
+  const d = channelCache[id];
+  if (!d) return;
+  const info      = d.channelInfo || {};
+  const scheduled = d.scheduled   || [];
+  const published  = d.published   || [];
+  const lastStats  = d.lastStats   || {};
+  const lastVid    = published[0];
+
+  const qDots = scheduled.slice(0, 5).map(v => {
+    const dt  = new Date(v.scheduledAt || v.publishedAt);
+    const day = dt.toLocaleDateString('en', { weekday: 'short', timeZone: 'Asia/Bangkok' });
+    return `<span class="q-dot" title="${esc(v.title)}">${day}</span>`;
+  }).join('') || '<span class="q-empty">NONE QUEUED</span>';
+
+  const lastBlock = lastVid ? `
+    <div class="card-last">
+      <div class="cl-title">${esc((lastVid.title || '').slice(0, 44))}${(lastVid.title || '').length > 44 ? '…' : ''}</div>
+      ${lastStats.views ? `<div class="cl-stat">${fmt(lastStats.views)} views · ${lastStats.likes || '—'} likes</div>` : ''}
+    </div>` : '';
+
+  const card = document.getElementById(`card-${id}`);
+  if (!card) return;
+  card.innerHTML = `
+    <div class="cc tl"></div><div class="cc tr"></div>
+    <div class="cc bl"></div><div class="cc br"></div>
+    <div class="card-badge badge-${id}">${d.name}</div>
+    <div class="card-label">${d.label}</div>
+    <div class="card-metrics">
+      <div class="cm">
+        <div class="cm-val" id="m-${id}-subs">—</div>
+        <div class="cm-lbl">SUBSCRIBERS</div>
+      </div>
+      <div class="cm">
+        <div class="cm-val" id="m-${id}-views">—</div>
+        <div class="cm-lbl">TOTAL VIEWS</div>
+      </div>
+    </div>
+    <div class="card-queue">
+      <div class="cq-label">UPLOAD QUEUE</div>
+      <div class="cq-dots">${qDots}</div>
+    </div>
+    ${lastBlock}
+    <div class="card-expand-hint">CLICK TO EXPAND ▶</div>
+  `;
+
+  tickNumber(`m-${id}-subs`,   info.subs       || 0);
+  tickNumber(`m-${id}-views`,  info.totalViews  || 0);
+}
+
+// ─── CHANNEL DETAIL OVERLAY ──────────────────────────────────────────────────
+
+function openChannel(which) {
+  const id = which === 'astronomer' ? 'astro' : 'phil';
+  const d  = channelCache[id];
+  if (!d) return;
+
+  setStatus(`ANALYZING ${d.name}`, true);
+
+  const info  = d.channelInfo || {};
+  const sched = (d.scheduled || []).slice(0, 14);
+  const pubs  = (d.published  || []).slice(0, 5);
+
+  const schedRows = sched.length
+    ? sched.map(v => {
+        const dt = new Date(v.scheduledAt || v.publishedAt);
+        return `<div class="od-video-row">
+          <span class="od-date">${dt.toLocaleDateString('en',{month:'short',day:'numeric',timeZone:'Asia/Bangkok'})}</span>
+          <span class="od-title">${esc((v.title || '').slice(0, 62))}</span>
+        </div>`;
+      }).join('')
+    : '<div class="od-empty">NO SCHEDULED VIDEOS</div>';
+
+  const pubRows = pubs.length
+    ? pubs.map(v => {
+        const dt = new Date(v.publishedAt);
+        return `<div class="od-video-row">
+          <span class="od-date">${dt.toLocaleDateString('en',{month:'short',day:'numeric',timeZone:'Asia/Bangkok'})}</span>
+          <span class="od-title">${esc((v.title || '').slice(0, 62))}</span>
+          <span class="od-priv ${v.privacyStatus || ''}">${(v.privacyStatus || '').toUpperCase()}</span>
+        </div>`;
+      }).join('')
+    : '<div class="od-empty">NO RECENT UPLOADS</div>';
+
+  document.getElementById('channel-detail-content').innerHTML = `
+    <div class="od-header">
+      <div class="od-name">${esc(d.label)}</div>
+      <div class="od-stats">
+        <span>${fmt(info.subs || 0)} SUBSCRIBERS</span>
+        <span>${fmt(info.totalViews || 0)} TOTAL VIEWS</span>
+        <span>${info.videoCount || '—'} VIDEOS</span>
+      </div>
+    </div>
+    <div class="od-sections">
+      <div class="od-section"><div class="od-sec-title">UPCOMING SCHEDULE</div>${schedRows}</div>
+      <div class="od-section"><div class="od-sec-title">RECENT UPLOADS</div>${pubRows}</div>
+    </div>
+  `;
+
+  const overlay = document.getElementById('channel-overlay');
+  overlay.classList.remove('hidden');
+
+  setTimeout(() => setStatus('STANDING BY'), 3000);
+}
+
+function closeChannel() {
+  document.getElementById('channel-overlay').classList.add('hidden');
+  setStatus('STANDING BY');
+}
+
+// ─── COMMAND INPUT ────────────────────────────────────────────────────────────
+
+function fillCmd(text) {
+  const el = document.getElementById('command-input');
+  if (!el) return;
+  el.value = text;
+  el.focus();
+}
+
+function sendCommand() {
+  const el  = document.getElementById('command-input');
+  const cmd = (el.value || '').trim();
+  if (!cmd) return;
+  el.value = '';
+
+  setStatus(cmd.slice(0, 50), true);
+
+  const panel = document.getElementById('response-panel');
+  document.getElementById('response-title').textContent = 'COMMAND RECEIVED';
+  document.getElementById('response-body').textContent  =
+    `> ${cmd}\n\n[ PHASE 2 — COMMAND EXECUTION PENDING ]\nWire-up coming in next session.`;
+  panel.classList.remove('hidden', 'slide-in');
+  void panel.offsetWidth;
+  panel.classList.add('slide-in');
+
+  setTimeout(() => {
+    const s = document.getElementById('core-status');
+    if (s && s.textContent === cmd.toUpperCase().slice(0, 50)) setStatus('STANDING BY');
+  }, 5000);
+}
+
+// ─── UTILITIES ───────────────────────────────────────────────────────────────
+
 function fmt(n) {
-  if (n == null) return '—';
-  n = Number(n);
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
-  if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'K';
+  n = +n || 0;
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
   return String(n);
 }
 
-function animateNumber(id, val) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = val;
-  el.classList.remove('count-in');
-  void el.offsetWidth; // reflow to restart animation
-  el.classList.add('count-in');
+function esc(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
-function updateMetrics(msg) {
-  setText('cpu-val', msg.cpu ?? '--');
-  setText('gpu-val', msg.gpu?.gpu ?? '--');
-  if (msg.gpu?.vram_used != null) {
-    setText('vram-val', `${msg.gpu.vram_used}/${msg.gpu.vram_total}MB`);
-  }
+function tickNumber(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const dur   = 1400;
+  const start = Date.now();
+  (function tick() {
+    const t    = Math.min(1, (Date.now() - start) / dur);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = fmt(Math.round(ease * target));
+    if (t < 1) requestAnimationFrame(tick);
+  })();
 }
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  initParticles();
+  startClock();
+  connectWS();
+  pollStatus();
+  setInterval(pollStatus, 8000);
+  loadChannels();
+
+  // Ripple loop
+  spawnRipple();
+  setInterval(spawnRipple, 4200);
+
+  // Command input
+  document.getElementById('command-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendCommand();
+  });
+  document.getElementById('cmd-send').addEventListener('click', sendCommand);
+
+  // Escape closes overlay
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeChannel();
+  });
+});

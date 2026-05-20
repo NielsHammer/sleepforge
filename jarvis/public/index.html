@@ -5,209 +5,146 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JARVIS — SleepForge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;500;600;700&family=Share+Tech+Mono&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="jarvis.css">
 </head>
 <body>
 
-<!-- ═══ SHELL ═══ -->
-<div id="shell">
+  <canvas id="particles-canvas"></canvas>
+  <div id="scan-line"></div>
 
-  <!-- TOP BAR -->
-  <header id="topbar">
-    <div class="topbar-left">
-      <div class="logo">JARVIS</div>
-      <div class="logo-sub">SleepForge Command Center</div>
+  <!-- ═══ HUD TOP ═══ -->
+  <header id="hud">
+    <div class="hud-group">
+      <div class="hud-logo">JARVIS</div>
+      <div class="hud-sep"></div>
+      <div class="hud-item">
+        <div class="hud-val mono" id="clock-bkk">--:--:--</div>
+        <div class="hud-lbl">BANGKOK</div>
+      </div>
     </div>
-    <div class="topbar-center">
-      <div id="clock-bkk">--:--:--</div>
-      <div id="clock-date">Bangkok</div>
-    </div>
-    <div class="topbar-right">
-      <div class="status-pill" id="pill-chatterbox" title="Chatterbox TTS">
-        <span class="dot" id="dot-chatterbox"></span>TTS
+    <div class="hud-group">
+      <div class="hud-item">
+        <div class="hud-val mono" id="cpu-val">--</div>
+        <div class="hud-lbl">CPU%</div>
       </div>
-      <div class="status-pill" id="pill-fal" title="Fal.ai">
-        <span class="dot" id="dot-fal"></span>FAL
+      <div class="hud-item">
+        <div class="hud-val mono" id="gpu-val">--</div>
+        <div class="hud-lbl">GPU%</div>
       </div>
-      <div class="status-pill" id="pill-yt" title="YouTube Auth">
-        <span class="dot" id="dot-yt"></span>YT
+      <div class="hud-item">
+        <div class="hud-val mono" id="vram-val">--</div>
+        <div class="hud-lbl">VRAM</div>
       </div>
-      <div class="metric-chip"><span id="cpu-val">--</span>% CPU</div>
-      <div class="metric-chip" id="gpu-chip"><span id="gpu-val">--</span>% GPU</div>
-      <div class="metric-chip"><span id="vram-val">--</span> VRAM</div>
+      <div class="hud-sep"></div>
+      <div class="hud-item status-item">
+        <div class="hud-dot" id="dot-tts"></div>
+        <div class="hud-lbl">TTS</div>
+      </div>
+      <div class="hud-item status-item">
+        <div class="hud-dot" id="dot-fal"></div>
+        <div class="hud-lbl">FAL</div>
+      </div>
+      <div class="hud-item status-item">
+        <div class="hud-dot" id="dot-yt"></div>
+        <div class="hud-lbl">YT</div>
+      </div>
+      <div class="hud-sep"></div>
+      <div class="hud-item">
+        <div class="hud-val mono" id="render-count">0</div>
+        <div class="hud-lbl">RENDERS</div>
+      </div>
     </div>
   </header>
 
-  <!-- BODY -->
-  <div id="body-wrap">
+  <!-- ═══ MAIN ARENA ═══ -->
+  <main id="arena">
 
-    <!-- SIDEBAR -->
-    <nav id="sidebar">
-      <div class="nav-section">
-        <button class="nav-btn active" onclick="showPage('overview')" id="nav-overview">
-          <i data-lucide="layout-dashboard"></i><span>Overview</span>
-        </button>
+    <div class="arena-row" id="arena-row">
+      <!-- Orbital ellipse track (decorative) -->
+      <div id="orbit-track"></div>
+
+      <!-- CHANNEL CARD: ASTRONOMER -->
+      <div class="orbital-card card-astro" id="card-astro" onclick="openChannel('astronomer')">
+        <div class="cc tl"></div><div class="cc tr"></div>
+        <div class="cc bl"></div><div class="cc br"></div>
+        <div class="card-loading">SCANNING…</div>
       </div>
-      <div class="nav-section">
-        <div class="nav-label">Channels</div>
-        <button class="nav-btn" onclick="showPage('astronomer')" id="nav-astronomer">
-          <i data-lucide="telescope"></i><span>Astronomer</span>
-        </button>
-        <button class="nav-btn" onclick="showPage('philosophers')" id="nav-philosophers">
-          <i data-lucide="book-open"></i><span>Philosophers</span>
-        </button>
-      </div>
-      <div class="nav-section">
-        <div class="nav-label">System</div>
-        <button class="nav-btn" onclick="showPage('queue')" id="nav-queue">
-          <i data-lucide="list-ordered"></i><span>Render Queue</span>
-        </button>
-        <button class="nav-btn" onclick="showPage('jarvis')" id="nav-jarvis">
-          <i data-lucide="message-square"></i><span>JARVIS Chat</span>
-        </button>
-      </div>
-    </nav>
 
-    <!-- MAIN CONTENT -->
-    <main id="main">
-
-      <!-- ═══ OVERVIEW PAGE ═══ -->
-      <div id="page-overview" class="page active">
-        <div class="page-title">Command Overview</div>
-
-        <!-- Channel Cards -->
-        <div class="channel-grid">
-          <!-- Astronomer -->
-          <div class="channel-card channel-astro" onclick="showPage('astronomer')">
-            <div class="card-accent-bar accent-astro"></div>
-            <div class="card-head">
-              <div>
-                <div class="card-name">Sleepless Astronomer</div>
-                <div class="card-handle">@sleepastronomer</div>
-              </div>
-              <div class="card-badge badge-astro">SPACE</div>
-            </div>
-            <div class="card-stats" id="astro-stats">
-              <div class="stat-item">
-                <div class="stat-val" id="astro-subs">—</div>
-                <div class="stat-lbl">Subscribers</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-val" id="astro-views">—</div>
-                <div class="stat-lbl">Total Views</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-val" id="astro-ctr">—</div>
-                <div class="stat-lbl">Last CTR</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-val" id="astro-retention">—</div>
-                <div class="stat-lbl">Avg Retention</div>
-              </div>
-            </div>
-            <div class="card-queue-strip" id="astro-queue-strip">
-              <div class="queue-loading">Loading schedule...</div>
-            </div>
-            <div class="card-last-video" id="astro-last-video">
-              <div class="last-video-loading">Fetching latest...</div>
-            </div>
+      <!-- HOLOGRAPHIC CORE -->
+      <div id="core">
+        <div class="ripple-host" id="ripple-host"></div>
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="ring r3"></div>
+        <div class="ring r4"></div>
+        <div class="ring r5"></div>
+        <div class="ring r6"></div>
+        <div class="core-inner">
+          <div class="core-glow"></div>
+          <div class="core-center">
+            <div class="core-sweep"></div>
+            <div class="cross-h"></div>
+            <div class="cross-v"></div>
+            <div class="core-letter">J</div>
           </div>
-
-          <!-- Philosophers -->
-          <div class="channel-card channel-phil" onclick="showPage('philosophers')">
-            <div class="card-accent-bar accent-phil"></div>
-            <div class="card-head">
-              <div>
-                <div class="card-name">Sleepless Philosophers</div>
-                <div class="card-handle">@SleeplessPhilosophers</div>
-              </div>
-              <div class="card-badge badge-phil">PHILOSOPHY</div>
-            </div>
-            <div class="card-stats">
-              <div class="stat-item">
-                <div class="stat-val" id="phil-subs">—</div>
-                <div class="stat-lbl">Subscribers</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-val" id="phil-views">—</div>
-                <div class="stat-lbl">Total Views</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-val" id="phil-ctr">—</div>
-                <div class="stat-lbl">Last CTR</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-val" id="phil-retention">—</div>
-                <div class="stat-lbl">Avg Retention</div>
-              </div>
-            </div>
-            <div class="card-queue-strip" id="phil-queue-strip">
-              <div class="queue-loading">Loading schedule...</div>
-            </div>
-            <div class="card-last-video" id="phil-last-video">
-              <div class="last-video-loading">Fetching latest...</div>
-            </div>
-          </div>
+          <div class="tick-dot" style="--ang:0deg"></div>
+          <div class="tick-dot" style="--ang:90deg"></div>
+          <div class="tick-dot" style="--ang:180deg"></div>
+          <div class="tick-dot" style="--ang:270deg"></div>
         </div>
-
-        <!-- Active Renders -->
-        <div class="section-head">Active Renders</div>
-        <div id="overview-renders">
-          <div class="empty-state">No active renders.</div>
+        <div id="core-status-wrap">
+          <div class="cs-eyebrow">SYSTEM</div>
+          <div id="core-status" class="cs-text">STANDING BY</div>
         </div>
       </div>
 
-      <!-- ═══ ASTRONOMER PAGE ═══ -->
-      <div id="page-astronomer" class="page">
-        <div class="page-title">Sleepless Astronomer <span class="page-accent accent-astro-text">Space Documentary</span></div>
-        <div class="channel-detail" id="detail-astronomer">
-          <div class="detail-loading">Loading channel data...</div>
-        </div>
+      <!-- CHANNEL CARD: PHILOSOPHERS -->
+      <div class="orbital-card card-phil" id="card-phil" onclick="openChannel('philosophers')">
+        <div class="cc tl"></div><div class="cc tr"></div>
+        <div class="cc bl"></div><div class="cc br"></div>
+        <div class="card-loading">SCANNING…</div>
       </div>
+    </div>
 
-      <!-- ═══ PHILOSOPHERS PAGE ═══ -->
-      <div id="page-philosophers" class="page">
-        <div class="page-title">Sleepless Philosophers <span class="page-accent accent-phil-text">Philosophy</span></div>
-        <div class="channel-detail" id="detail-philosophers">
-          <div class="detail-loading">Loading channel data...</div>
-        </div>
+    <!-- COMMAND INPUT -->
+    <div id="command-area">
+      <div id="command-box">
+        <div class="cc tl"></div><div class="cc tr"></div>
+        <div class="cc bl"></div><div class="cc br"></div>
+        <span class="cmd-prompt">▶</span>
+        <input type="text" id="command-input" placeholder="Tell JARVIS what to do…" autocomplete="off" spellcheck="false">
+        <button id="cmd-send">EXECUTE</button>
       </div>
-
-      <!-- ═══ QUEUE PAGE ═══ -->
-      <div id="page-queue" class="page">
-        <div class="page-title">Render Queue</div>
-        <div id="queue-list">
-          <div class="empty-state">No jobs queued.</div>
-        </div>
+      <div id="command-tags">
+        <span class="cmd-tag" onclick="fillCmd('Show Astronomer analytics')">ASTRONOMER ANALYTICS</span>
+        <span class="cmd-tag" onclick="fillCmd('Show philosophers queue')">PHILOSOPHERS QUEUE</span>
+        <span class="cmd-tag" onclick="fillCmd('Run thumbnail test')">THUMBNAIL TEST</span>
+        <span class="cmd-tag" onclick="fillCmd('System status')">SYSTEM STATUS</span>
+        <span class="cmd-tag" onclick="fillCmd('Queue a video')">QUEUE VIDEO</span>
       </div>
+    </div>
 
-      <!-- ═══ JARVIS CHAT PAGE ═══ -->
-      <div id="page-jarvis" class="page">
-        <div class="page-title">JARVIS</div>
-        <div id="chat-wrap">
-          <div id="chat-messages">
-            <div class="chat-msg jarvis">JARVIS online. What do you need, sir?</div>
-          </div>
-          <div id="chat-input-row">
-            <input id="chat-input" type="text" placeholder="Ask JARVIS anything…" autocomplete="off">
-            <button id="chat-send" onclick="sendChat()">Send</button>
-          </div>
-        </div>
-      </div>
+    <!-- RESPONSE PANEL -->
+    <div id="response-panel" class="hidden">
+      <div class="cc tl"></div><div class="cc tr"></div>
+      <div class="cc bl"></div><div class="cc br"></div>
+      <div id="response-title" class="resp-title">—</div>
+      <div id="response-body" class="resp-body"></div>
+    </div>
 
-    </main>
+  </main>
+
+  <!-- ═══ CHANNEL DETAIL OVERLAY ═══ -->
+  <div id="channel-overlay" class="hidden" onclick="if(event.target===this)closeChannel()">
+    <div id="channel-detail-wrap">
+      <div class="cc tl lg"></div><div class="cc tr lg"></div>
+      <div class="cc bl lg"></div><div class="cc br lg"></div>
+      <button id="overlay-close" onclick="closeChannel()">[ CLOSE ]</button>
+      <div id="channel-detail-content"></div>
+    </div>
   </div>
-</div>
 
-<script src="jarvis.js"></script>
-<script>
-  // Init Lucide icons after DOM is ready
-  document.addEventListener('DOMContentLoaded', () => {
-    if (window.lucide) lucide.createIcons();
-  });
-</script>
+  <script src="jarvis.js"></script>
 </body>
 </html>
