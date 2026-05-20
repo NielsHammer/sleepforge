@@ -101,16 +101,32 @@ export async function callClaudeCLI(prompt, opts = {}) {
 
   const callOpts = { model, timeoutMs, systemPrompt, tools, addDirs, permissionMode, allowedTools };
 
+  const SESSION_LIMIT_PHRASES = [
+    'session limit', 'rate limit', '5-hour limit', 'usage limit', 'Try again later',
+  ];
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await callOnce(prompt, callOpts);
     } catch (err) {
-      const isTimeout = err.message.includes('timed out');
-      if (isTimeout && attempt < maxRetries) {
+      const isTimeout      = err.message.includes('timed out');
+      const isSessionLimit = SESSION_LIMIT_PHRASES.some(p => err.message.includes(p));
+
+      if (attempt >= maxRetries) throw err;
+
+      if (isSessionLimit) {
+        const waitMs = 5 * 60 * 1000; // 5 min — give the session limit time to lift
+        console.log(`  [claude-cli] Attempt ${attempt}/${maxRetries} hit session/rate limit — waiting 5 min then retrying`);
+        await new Promise(r => setTimeout(r, waitMs));
+        continue;
+      }
+
+      if (isTimeout) {
         console.log(`  [claude-cli] Attempt ${attempt}/${maxRetries} timed out — waiting ${retryDelayMs / 1000}s then retrying`);
         await new Promise(r => setTimeout(r, retryDelayMs));
         continue;
       }
+
       throw err;
     }
   }
