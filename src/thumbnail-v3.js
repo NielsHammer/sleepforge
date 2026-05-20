@@ -540,7 +540,29 @@ These failed and must not be repeated:
   - "BOTH ENGINES DEAD" — statement, not emotion; "dead" is a violence word
   - "NO OTHER DOCTOR" — states a fact, doesn't create feeling
 
-Generate 5 candidate hooks. Score each 1-10 on THREE axes:
+${niche === 'philosophy' ? `═══ PHILOSOPHY CHANNEL RULES (from 343-video performance analysis — non-negotiable) ═══
+
+RULE 1 — NAME A SPECIFIC CONCEPT. The hook must distill a named philosophical concept, paradox,
+  or claim. Generic hooks drive ZERO clicks on this channel.
+  ✓ "KNOW NOTHING" — directly names Socratic epistemology
+  ✓ "STILL FULL" — distills Hilbert's infinity paradox into a visceral hook
+  ✓ "STILL DREAMING" — names the Zhuangzi butterfly paradox
+  ✗ "SO WISE" — generic, no named concept
+  ✗ "THINK DEEP" — could apply to any philosophy video, drives no curiosity
+
+RULE 2 — IMPLY ACTIVE FORCE ON THE VIEWER'S MIND. The hook must feel like something happening
+  TO the viewer — not a description of the philosopher or their era.
+  ✓ "KNOW NOTHING" — viewer's certainty is being dissolved
+  ✓ "NEED NOTHING" — radical realization about the viewer's own desires
+  ✗ "PLATO SAID" — reports a fact, exerts zero force on the viewer
+  ✗ "HE KNEW" — describes the philosopher, not the viewer's experience
+
+PHILOSOPHY ANTI-PATTERNS (zero CTR — do not generate):
+  - Generic emotional states without a philosophical anchor: "FEEL FREE", "BE STILL", "FIND PEACE"
+  - Warm/comforting framing: these viewers want cognitive disruption, not reassurance
+  - Sleep as the hook: "DRIFT OFF", "FALL ASLEEP" — sleep is implied by the channel, not a hook
+
+` : ''}Generate 5 candidate hooks. Score each 1-10 on THREE axes:
   - clarity: does a viewer INSTANTLY understand the topic when they see this hook + the likely image?
   - promise: does this hook make the viewer feel "I NEED to watch this"?
   - emotion: does this hook make the viewer FEEL something in 0.05 seconds?
@@ -819,8 +841,42 @@ source_hint: "${lockedMetaphor.winner.source_hint || 'ai'}"
 `
     : '';
 
+  const philosophyDesignRules = niche === 'philosophy' ? `
+═══ PHILOSOPHY CHANNEL DESIGN RULES (from 343-video performance data — MANDATORY) ═══
+
+CHANNEL ISOLATION: These rules apply ONLY to Sleepless Philosophers. They override general design instincts.
+
+RULE 3 — ONE chalk figure, deep background, generous negative space:
+  - Use EXACTLY ONE chalk-drawn classical philosopher bust as the sole visual subject
+  - Position: centered or anchored center-left
+  - Background: deep black (#0a0a0a) to blackboard-green (#1a2e1a) — heavy negative space
+  - NEVER request: multiple figures, decorative borders, competing textures, modern photography
+
+RULE 4 — OMINOUS COLD PALETTE ONLY:
+  - Colors: deep blacks, cool dark greys, white chalk highlights ONLY
+  - NEVER use: warm tones, amber, gold, brown, or anything that reads as inviting or comfortable
+  - The thumbnail must evoke staring into a quiet, slightly unsettling void
+  - Warm = ZERO clicks on this channel (proven by performance data)
+
+RULE 5 — Sleep qualifier NEVER in thumbnail copy:
+  - If "...to Fall Asleep To" appears in the video title, it MUST NOT appear in the thumbnail
+  - Thumbnail text shows ONLY the philosophical concept and its cognitive effect
+
+WHAT WINS ON THIS CHANNEL (17 top-performer analysis):
+  - Bold white chalk-style text in lower third only, two-line max, unobstructed philosopher figure
+  - The SPECIFIC named concept in the hook (solipsism, Zeno, stoicism) — never a generic category
+  - Ominous intellectual tension — the viewer feels something will be broken or revealed
+
+WHAT FAILS ON THIS CHANNEL (zero-click anti-patterns):
+  - Warm framing: amber glow, golden light, soft backgrounds
+  - Generic superlatives: "MOST INSPIRING", "MOST COMFORTING"
+  - Sleep as the primary visual signal: moonlight, pillows, dreamy soft focus
+
+═══════════════════════════════════════════════════════════════════════════════
+` : '';
+
   return `You are a senior YouTube thumbnail designer who charges $500/thumbnail. You design freely. You are not given templates, layouts, or composition rules — you decide every pixel based on what the SPECIFIC video needs.
-${principleCtx}${visionBlock}${lockedHookBlock}${lockedMetaphorBlock}
+${principleCtx}${philosophyDesignRules}${visionBlock}${lockedHookBlock}${lockedMetaphorBlock}
 ═══ THE VIDEO ═══
 
 TITLE: "${title}"
@@ -1019,7 +1075,7 @@ async function renderHtmlToPng(html, outPath, tempHtmlPath) {
 
 // ─── CRITIC ───────────────────────────────────────────────────────────────────
 
-async function reviewThumbnail(pngPath, title, hookText = null) {
+async function reviewThumbnail(pngPath, title, hookText = null, niche = null) {
   const pool = loadPoolEntriesWithImages(3, 0);
   const pngDir = path.dirname(pngPath);
 
@@ -1035,11 +1091,30 @@ COHERENCE CHECK — after viewing the thumbnail, ask:
 3. Does the hook feel relevant to the philosophy topic, or random/disconnected? If random → rate ≤ 4.\n`
     : '';
 
+  const philosophyCriticBlock = niche === 'philosophy' ? `
+PHILOSOPHY CHANNEL SCORING CRITERIA (from 343-video performance analysis — apply these to your rating):
+
+INSTANT DEDUCTIONS — subtract 2 points each (cap at 4/10 if multiple violations):
+- Warm color palette (amber, gold, brown tones) — proven zero-click signal on this channel
+- Multiple philosopher figures or decorative borders — top thumbnails use ONE isolated figure
+- Sleep as primary visual signal (moonlight, pillows, dreamy soft focus) — collapses click intent
+- Generic hook (no named philosophical concept) — "BE WISE" vs "KNOW NOTHING"
+- Hook describes the philosopher rather than acting on the viewer — "PLATO SPOKE" vs "KNOW NOTHING"
+
+SCORING BONUSES (add 1 point each, capped at 10):
+- Exactly ONE chalk-drawn classical philosopher bust, isolated against deep dark background
+- Cold/ominous palette: deep blacks, cool greys, white chalk ONLY
+- Named specific concept visible in hook or layout (solipsism, stoic, Zeno, etc.)
+- Hook implies active cognitive force on the viewer (not a description of a fact)
+- Generous negative space — subject uncluttered
+
+` : '';
+
   const prompt = `Use the Read tool to view the thumbnail image at this path:
 ${pngPath}
 
 Then rate this YouTube thumbnail for the video "${title}".
-${referenceBlock}${hookCheckBlock}
+${referenceBlock}${hookCheckBlock}${philosophyCriticBlock}
 HARD FAILS — these cap the rating at 2/10, no exceptions:
 - Hook text is not visible in the thumbnail (missing, too small, or off-screen)
 - The thumbnail is mostly black or blank — rendering failed
@@ -1527,7 +1602,7 @@ export async function generateThumbnailV3({
     return pngPath;
   }
   console.log('\n--- Step 5: Harsh designer critic ---');
-  const review = await reviewThumbnail(pngPath, title, hookTextFromPlan);
+  const review = await reviewThumbnail(pngPath, title, hookTextFromPlan, niche);
   console.log('  Critic rating: ' + review.rating + '/10');
   if (review.designer_verdict) console.log('  Designer verdict: ' + review.designer_verdict);
   if (review.problems.length > 0) {

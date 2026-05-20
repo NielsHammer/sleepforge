@@ -249,6 +249,33 @@ function buildPrompt(topic, scriptExcerpt, channelConfig = null) {
     ? `\nAVOID THESE TOPICS in description and tags: ${channelConfig.banned_topics.join(', ')}`
     : '';
 
+  const isPhilosophy = niche === 'philosophy';
+
+  const titleRulesBlock = isPhilosophy
+    ? `TITLE rules (PHILOSOPHY CHANNEL — from channel performance data analysis of 343 videos):
+- Rule 1 — NAME A SPECIFIC CONCEPT: Always include a specific philosophical concept, paradox, or claim
+  (solipsism, Zeno's paradoxes, determinism, the problem of other minds, Stoic apatheia, etc.)
+  NEVER use generic descriptors like "deep philosophy ideas" or "philosophy concepts"
+- Rule 2 — ACTIVE FORCE ON THE VIEWER'S MIND: Use constructions like "Will Break / Mess With / Stick In / Prove / Destroy / Change"
+  NEVER lead with "Most [Adjective]" superlatives — they carry zero intellectual specificity and drive zero clicks
+- Rule 5 — SLEEP QUALIFIER IN SUFFIX ONLY: If a sleep qualifier is needed, put it ONLY at the END as a trailing suffix
+  ("…to Fall Asleep To"). NEVER make sleep or relaxation the headline value
+- Target: 50-65 characters
+- WINNING title patterns (study these):
+  "2 Hours of Philosophy That Will Break Your Beliefs"
+  "Philosophy Paradoxes That Prove Time Doesn't Exist"
+  "2 Hours of Solipsism and the Fear That Nothing Is Real"
+  "2 Hours of Philosophy That Will Stick in Your Mind"
+- LOSING title patterns (DO NOT generate these):
+  "2 Hours of Deep Philosophy Ideas to Sleep/Chill to" — generic, sleep-as-headline, ZERO clicks
+  "The Most Comforting Philosophy to Fall Asleep to" — soft superlative, no intellectual hook
+  "All Of Stoic Philosophy Explained in 1 Video..." — format-first, no cognitive tension`
+    : `TITLE rules:
+- 50-65 characters
+- Lead with the main concept or subject name (for search ranking)
+- Evoke calm, wonder, or restful sleep — never clickbait
+- Examples: "Marcus Aurelius on Letting Go | Sleep Story", "The Death of Stars | Deep Sleep Documentary"`;
+
   return `You are a YouTube SEO expert specialising in sleep, meditation, and ${niche} channels.${principleCtx}
 
 Generate metadata for a sleep story video on the "${channelName}" channel.
@@ -266,11 +293,7 @@ Return a single JSON object:
   "tags": ["tag1", "tag2", ...]
 }
 
-TITLE rules:
-- 50-65 characters
-- Lead with the main concept or subject name (for search ranking)
-- Evoke calm, wonder, or restful sleep — never clickbait
-- Examples: "Marcus Aurelius on Letting Go | Sleep Story", "The Death of Stars | Deep Sleep Documentary"
+${titleRulesBlock}
 
 DESCRIPTION rules:
 - Line 1-2: compelling hook (visible before "Show more") — what the viewer will experience
