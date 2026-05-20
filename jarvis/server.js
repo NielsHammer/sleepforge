@@ -241,7 +241,8 @@ regenerate_video_thumbnail(videoId, channel) → {filePath, score} (saves locall
 upload_thumbnail_to_video(videoId, thumbnailPath, channel) → {ok}
 generate_title_candidates(topic, channel, count?) → {titles:[...]}
 analyze_script(scriptText) → {wordCount, scores, issues, verdict}
-queue_video(channel, topic, scheduleDate?) → {id}
+queue_video(channel, topic, scheduleDate?) → {id} — IMPORTANT: this adds to queue only; the queue-worker picks it up within 30 seconds and starts rendering
+get_queue_status() → {rendering, queued, completed, failed, estimatedCompletionISO}
 cancel_queued_video(queueId) → {ok}
 get_video_thumbnail(videoId, channel) → {thumbnailUrl, title}
 search_topics(channel, query) → {results:[...]}
@@ -265,6 +266,12 @@ Example: request_confirmation("run_overnight_batch","queue 5 Astronomer videos t
 ═══ PROTECTED — HARDCODED NEVER ALLOWED ═══
 delete_channel, revoke_oauth_token, delete_youtube_token_file, any bulk delete >3 videos
 Response: "I'm afraid that operation is hardcoded as protected, sir. You'll need to do that manually."
+
+═══ HONESTY RULES — NEVER BREAK ═══
+- queue_video adds to the queue ONLY. Never say "rendering started" or "video is being made." Say "Added to queue. Worker picks it up within 30 seconds — call get_queue_status() to confirm it started."
+- If you queue multiple videos, say "Queued N videos. They will render sequentially — each takes ~2-3 hours. First should start within 30 seconds."
+- Always call get_queue_status() after queuing to show the user the actual state.
+- Never imply work is happening faster than it is.
 
 ═══ PANELS ═══
 Structured: video_list, channel_stats, comparison, system_status, render_queue
@@ -613,7 +620,32 @@ SCRIPT: ${text.slice(0,3000)}`;
         const q    = readQueue();
         q.push(item);
         writeQueue(q);
-        return { ok:true, id, item };
+        return { ok:true, id, item, note:'Added to queue. Queue-worker picks it up within 30s. Each video takes ~2-3 hours. Call get_queue_status() to confirm.' };
+      }
+
+      case 'get_queue_status': {
+        const q = readQueue();
+        const rendering  = q.filter(e => e.status === 'rendering');
+        const queued     = q.filter(e => e.status === 'queued');
+        const completed  = q.filter(e => e.status === 'completed');
+        const failed     = q.filter(e => e.status === 'failed');
+        const RENDER_MS  = 2.5 * 60 * 60 * 1000; // ~2.5h per video estimate
+        let estimatedCompletionISO = null;
+        if (rendering.length > 0 || queued.length > 0) {
+          const startedAt = rendering[0]?.startedAt ? new Date(rendering[0].startedAt) : new Date();
+          const remainingMs = RENDER_MS - (Date.now() - startedAt.getTime());
+          const totalMs = Math.max(remainingMs, 0) + queued.length * RENDER_MS;
+          estimatedCompletionISO = new Date(Date.now() + totalMs).toISOString();
+        }
+        return {
+          workerActive: rendering.length > 0,
+          rendering:    rendering.map(e => ({ id:e.id, channel:e.channel, topic:e.topic, startedAt:e.startedAt||null })),
+          queued:       queued.map(e => ({ id:e.id, channel:e.channel, topic:e.topic, scheduleDate:e.scheduleDate })),
+          completed:    completed.slice(-5).map(e => ({ id:e.id, channel:e.channel, topic:e.topic, url:e.url||null, updatedAt:e.updatedAt||null })),
+          failed:       failed.map(e => ({ id:e.id, channel:e.channel, topic:e.topic, error:e.error||null })),
+          counts:       { rendering:rendering.length, queued:queued.length, completed:completed.length, failed:failed.length },
+          estimatedCompletionISO,
+        };
       }
 
       case 'cancel_queued_video': {
@@ -1453,6 +1485,36 @@ setInterval(async () => {
   broadcast({ type:'metrics', cpu, gpu });
 }, 5000);
 
+// ─── QUEUE WORKER ─────────────────────────────────────────────────────────────
+
+let _queueWorkerProc = null;
+
+function spawnQueueWorker() {
+  const workerScript = path.join(ROOT, 'scripts', 'queue-worker.js');
+  if (!fs.existsSync(workerScript)) {
+    console.warn('[worker] queue-worker.js not found — queue processing disabled');
+    return;
+  }
+  const workerLogOut = path.join(ROOT, 'data', 'queue-worker.log');
+  const outStream = fs.openSync(workerLogOut, 'a');
+  _queueWorkerProc = spawn(process.execPath, [workerScript], {
+    cwd:   ROOT,
+    stdio: ['ignore', outStream, outStream],
+    env:   process.env,
+  });
+  _queueWorkerProc.on('exit', (code, signal) => {
+    console.log(`[worker] Queue worker exited (code=${code} signal=${signal}) — restarting in 5s`);
+    _queueWorkerProc = null;
+    setTimeout(spawnQueueWorker, 5000);
+  });
+  _queueWorkerProc.on('error', err => {
+    console.error(`[worker] Spawn error: ${err.message} — retrying in 5s`);
+    _queueWorkerProc = null;
+    setTimeout(spawnQueueWorker, 5000);
+  });
+  console.log(`[worker] Queue worker started PID=${_queueWorkerProc.pid}`);
+}
+
 // ─── START ────────────────────────────────────────────────────────────────────
 
 httpServer.listen(PORT, () => {
@@ -1461,4 +1523,5 @@ httpServer.listen(PORT, () => {
   console.log(`╠══════════════════════════════════════════╣`);
   console.log(`║   http://localhost:${PORT}                    ║`);
   console.log(`╚══════════════════════════════════════════╝\n`);
+  spawnQueueWorker();
 });
