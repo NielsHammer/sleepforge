@@ -1,0 +1,87 @@
+{
+  "channel": "sleepless-philosophers",
+  "niche": "philosophy",
+  "topics": [
+    {
+      "id": "stoic-30-ideas",
+      "title": "The 30 Biggest Ideas in Stoic Philosophy",
+      "tradition": "Stoicism",
+      "philosopher": "Marcus Aurelius",
+      "used": true,
+      "video_id": "_EJ1oGNKdcs",
+      "uploaded_at": "2026-05-08"
+    },
+    {
+      "id": "platonic-theory-of-forms",
+      "title": "Platonic philosophy: the Theory of Forms, the Allegory of the Cave, the divided line of knowledge, the Republic and philosopher-kings",
+      "tradition": "Platonic / Idealist",
+      "philosopher": "Plato",
+      "used": true,
+      "scheduled_at": "2026-05-18T01:00:00Z"
+    },
+    {
+      "id": "epictetus-dichotomy-of-control",
+      "title": "Epictetus Stoic philosophy: the dichotomy of control, prohairesis (moral choice), the Enchiridion teachings, freedom through acceptance",
+      "tradition": "Stoicism (Roman)",
+      "philosopher": "Epictetus",
+      "used": true,
+      "scheduled_at": "2026-05-19T01:00:00Z"
+    },
+    {
+      "id": "seneca-letters-lucilius",
+      "title": "Seneca's philosophy: Letters to Lucilius on the shortness of life, time as our most precious possession, tranquility of mind",
+      "tradition": "Stoicism (Roman)",
+      "philosopher": "Seneca",
+      "used": true,
+      "scheduled_at": "2026-05-20T01:00:00Z"
+    },
+    {
+      "id": "zenos-paradoxes",
+      "title": "Zeno's Paradoxes: Achilles and the Tortoise, the Arrow Paradox, and What Motion and Infinity Really Mean",
+      "tradition": "Pre-Socratic Greek",
+      "philosopher": "Zeno of Elea",
+      "used": false,
+      "angle": "The paradoxes that stopped philosophers dead in their tracks — Achilles who can never catch the tortoise, the arrow that cannot move, the race course that cannot be completed. What Zeno was really arguing about infinity, motion, and the nature of reality. How these puzzles are still debated today in mathematics and physics."
+    },
+    {
+      "id": "nietzsche-philosophy",
+      "title": "Nietzsche's Philosophy: The Will to Power, Eternal Recurrence, the Übermensch, and God Is Dead",
+      "tradition": "German Idealism / Existentialism",
+      "philosopher": "Friedrich Nietzsche",
+      "used": false,
+      "angle": "The philosopher who declared God is Dead and meant it. The Will to Power as life's fundamental drive. Eternal Recurrence — would you live your life again exactly as it was? The Übermensch as an ideal of self-overcoming. Nietzsche's critique of herd morality and slave morality. How his philosophy was misread and what he actually meant."
+    },
+    {
+      "id": "kant-categorical-imperative",
+      "title": "Kant's Categorical Imperative: The Foundation of Moral Philosophy",
+      "tradition": "German Idealism",
+      "philosopher": "Immanuel Kant",
+      "used": false,
+      "angle": "Act only according to that maxim which you can will to be a universal law. Kant's attempt to ground morality in pure reason rather than God or consequences. The three formulations of the Categorical Imperative. Treating people as ends in themselves. The noumenal and phenomenal worlds."
+    },
+    {
+      "id": "descartes-doubt",
+      "title": "Descartes and the Method of Doubt: I Think Therefore I Am",
+      "tradition": "Rationalism",
+      "philosopher": "René Descartes",
+      "used": false,
+      "angle": "The philosopher who doubted everything to find one thing he could not doubt — his own existence. Cogito ergo sum. The evil demon thought experiment. The mind-body problem. How Cartesian doubt became the foundation of modern philosophy and science."
+    },
+    {
+      "id": "hume-empiricism",
+      "title": "Hume's Empiricism: Causation Is an Illusion and What We Actually Know",
+      "tradition": "British Empiricism",
+      "philosopher": "David Hume",
+      "used": false,
+      "angle": "We have never seen causation — only events following each other. Hume's radical empiricism: all knowledge comes from experience, and we know less than we think. The problem of induction. The bundle theory of the self. How Hume woke Kant from his dogmatic slumber."
+    },
+    {
+      "id": "spinoza-everything-is-god",
+      "title": "Spinoza's Philosophy: God Is Everything and Everything Is God",
+      "tradition": "Rationalism / Pantheism",
+      "philosopher": "Baruch Spinoza",
+      "used": false,
+      "angle": "The philosopher excommunicated for his ideas. Spinoza's pantheism — there is only one substance and it is God, which is also Nature. The illusion of free will. Emotions as confused thinking. Sub specie aeternitatis — seeing things from the perspective of eternity. How Spinoza influenced Einstein."
+    }
+  ]
+}

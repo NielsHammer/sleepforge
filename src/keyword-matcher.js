@@ -24,9 +24,10 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 
-const KEYWORD_LIBRARY_INDEX = path.join(PROJECT_ROOT, "assets", "images", "space-keyword-library", "index.json");
-const SPACE_LIBRARY_INDEX   = path.join(PROJECT_ROOT, "assets", "images", "space-library-v1", "index.json");
-const KEYWORDS_PATH         = path.join(PROJECT_ROOT, "data", "space-keywords.json");
+const KEYWORD_LIBRARY_INDEX  = path.join(PROJECT_ROOT, "assets", "images", "space-keyword-library", "index.json");
+const SPACE_LIBRARY_INDEX    = path.join(PROJECT_ROOT, "assets", "images", "space-library-v1", "index.json");
+const SPACE_LIBRARY_V2_INDEX = path.join(PROJECT_ROOT, "assets", "images", "space-library-v2", "index.json");
+const KEYWORDS_PATH          = path.join(PROJECT_ROOT, "data", "space-keywords.json");
 
 const VISUAL_SPECIFICITY_MULT = { high: 1.2, medium: 1.0, low: 0.7 };
 const COOLDOWN_CLIPS = 8;
@@ -51,8 +52,9 @@ function loadKeywordIndex() {
 let _spaceLib = null;
 function loadSpaceLibrary() {
   if (_spaceLib !== null) return _spaceLib;
-  if (!fs.existsSync(SPACE_LIBRARY_INDEX)) { _spaceLib = []; return []; }
-  _spaceLib = JSON.parse(fs.readFileSync(SPACE_LIBRARY_INDEX, "utf-8"));
+  const v1 = fs.existsSync(SPACE_LIBRARY_INDEX)    ? JSON.parse(fs.readFileSync(SPACE_LIBRARY_INDEX, "utf-8"))    : [];
+  const v2 = fs.existsSync(SPACE_LIBRARY_V2_INDEX) ? JSON.parse(fs.readFileSync(SPACE_LIBRARY_V2_INDEX, "utf-8")) : [];
+  _spaceLib = [...v1, ...v2];
   return _spaceLib;
 }
 
@@ -152,10 +154,13 @@ function pickImage(keyword, state) {
     }
   }
 
-  // Try space-library-v1 with matching keyword_tags
+  // Try space-library-v1/v2 with matching keyword_tags or keyword field (v2 uses .keyword)
   const spaceLib = loadSpaceLibrary();
   const tagged = spaceLib.filter(e =>
-    e.keyword_tags && e.keyword_tags.includes(keyword) && !usedImages.has(e.path)
+    !usedImages.has(e.path) &&
+    ((e.keyword_tags && e.keyword_tags.includes(keyword)) ||
+     (e.keyword === keyword) ||
+     (e.keywords && e.keywords.includes(keyword)))
   );
   if (tagged.length > 0) {
     return tagged[Math.floor(Math.random() * tagged.length)].path;
