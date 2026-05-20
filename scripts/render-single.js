@@ -403,7 +403,14 @@ async function run() {
   const smokePath     = ensureSmokeLoop();
 
   for (const p of [SLIDESHOW_PATH, VOICE_MIX_PATH, BODY_PATH, FINAL_PATH]) {
-    if (fs.existsSync(p)) fs.unlinkSync(p);
+    if (!fs.existsSync(p)) continue;
+    for (let attempt = 0; attempt < 5; attempt++) {
+      try { fs.unlinkSync(p); break; }
+      catch (e) {
+        if (e.code !== 'EBUSY' || attempt === 4) throw e;
+        await new Promise(r => setTimeout(r, 2000));
+      }
+    }
   }
 
   createClipSlideshow(clips, Math.ceil(audioDuration), SLIDESHOW_PATH, { fadeTime: 1.5 });

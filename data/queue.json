@@ -6,28 +6,28 @@
     "scheduleDate": "2026-05-21",
     "status": "queued",
     "createdAt": "2026-05-20T13:46:30.134Z",
-    "resetAt": "2026-05-21T00:00:00.000Z",
-    "resetReason": "ENOBUFS fixed in render-single.js — re-queued"
+    "resetAt": "2026-05-21T21:28:00.000Z",
+    "resetReason": "EBUSY resolved — stale files manually cleared"
   },
   {
     "id": "ffdddc28-a173-47a6-9167-06ebe75fa033",
     "channel": "astronomer",
     "topic": "black holes",
     "scheduleDate": "2026-05-21",
-    "status": "queued",
+    "status": "rendering",
     "createdAt": "2026-05-20T15:04:06.401Z",
-    "resetAt": "2026-05-21T00:00:00.000Z",
-    "resetReason": "ENOBUFS fixed in render-single.js — re-queued"
+    "startedAt": "2026-05-20T21:23:48.051Z",
+    "updatedAt": "2026-05-20T21:23:48.052Z"
   },
   {
     "id": "da67ca36-2cf7-4adb-96ea-0c8a6d607cb3",
     "channel": "astronomer",
     "topic": "the Milky Way",
     "scheduleDate": "2026-05-22",
-    "status": "rendering",
+    "status": "queued",
     "createdAt": "2026-05-20T15:04:06.402Z",
-    "startedAt": "2026-05-20T20:20:45.085Z",
-    "updatedAt": "2026-05-20T20:20:45.086Z"
+    "resetAt": "2026-05-21T21:28:00.000Z",
+    "resetReason": "transient Claude API socket error — re-queued"
   },
   {
     "id": "ca92735b-9ae7-4de2-a494-bfe495636eef",

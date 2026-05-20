@@ -1495,12 +1495,11 @@ function spawnQueueWorker() {
     console.warn('[worker] queue-worker.js not found — queue processing disabled');
     return;
   }
-  const workerLogOut = path.join(ROOT, 'data', 'queue-worker.log');
-  const outStream = fs.openSync(workerLogOut, 'a');
   _queueWorkerProc = spawn(process.execPath, [workerScript], {
     cwd:   ROOT,
-    stdio: ['ignore', outStream, outStream],
+    stdio: 'ignore',
     env:   process.env,
+    detached: false,
   });
   _queueWorkerProc.on('exit', (code, signal) => {
     console.log(`[worker] Queue worker exited (code=${code} signal=${signal}) — restarting in 5s`);
