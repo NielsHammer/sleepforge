@@ -381,7 +381,6 @@ function handleActions(actions) {
   for (const a of actions) {
     switch (a.type) {
       case 'open_channel':
-        // Brief delay so voice starts first
         setTimeout(() => openChannel(a.slug === 'astronomer' ? 'astronomer' : 'philosophers'), 600);
         break;
       case 'close_panel':
@@ -397,15 +396,148 @@ function handleActions(actions) {
           el.style.transition = 'color 0.2s, text-shadow 0.2s';
           el.style.color = '#FFB300';
           el.style.textShadow = '0 0 12px rgba(255,179,0,0.8)';
-          setTimeout(() => {
-            el.style.color = '';
-            el.style.textShadow = '';
-          }, 3000);
+          setTimeout(() => { el.style.color = ''; el.style.textShadow = ''; }, 3000);
         });
         break;
       }
     }
   }
+}
+
+// ─── PANEL RENDERING ─────────────────────────────────────────────────────────
+
+function renderPanels(panels) {
+  if (!panels || panels.length === 0) return;
+  let html = '';
+  for (const p of panels) html += renderPanel(p);
+  document.getElementById('channel-detail-content').innerHTML = html;
+  document.getElementById('channel-overlay').classList.remove('hidden');
+}
+
+function renderPanel(panel) {
+  const { type, title, data } = panel;
+  switch (type) {
+    case 'comparison':    return renderComparisonPanel(title, data);
+    case 'video_list':    return renderVideoListPanel(title, data);
+    case 'channel_stats': return renderChannelStatsPanel(title, data);
+    case 'system_status': return renderSystemStatusPanel(title, data);
+    case 'render_queue':  return renderQueuePanel(title, data);
+    default:
+      return `<div class="od-header"><div class="od-name">${esc(title || type.toUpperCase())}</div></div>
+              <pre class="od-raw">${esc(JSON.stringify(data, null, 2))}</pre>`;
+  }
+}
+
+function renderComparisonPanel(title, data) {
+  const channels = data.channels || [];
+  const cols = channels.map(ch => {
+    const videos = (ch.recentVideos || []).slice(0, 5);
+    const rows = videos.map(v => {
+      const dt  = new Date(v.publishedAt);
+      const day = dt.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+      const views = v.views != null ? fmt(v.views) : '—';
+      const likes = v.likes != null ? fmt(v.likes) : '—';
+      return `<div class="od-video-row">
+        <span class="od-date">${day}</span>
+        <span class="od-title">${esc((v.title || '').slice(0, 50))}</span>
+        <span class="od-stat">${views}v · ${likes}♥</span>
+      </div>`;
+    }).join('') || '<div class="od-empty">NO DATA</div>';
+    return `<div class="od-section">
+      <div class="od-sec-title">${esc((ch.title || ch.channel || '').toUpperCase())}</div>
+      <div class="od-channel-stat-row">
+        <span>${fmt(ch.subs || 0)} SUBS</span>
+        <span>${fmt(ch.totalViews || 0)} VIEWS</span>
+        <span>${ch.videoCount || '—'} VIDEOS</span>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+  return `
+    <div class="od-header"><div class="od-name">${esc(title || 'CHANNEL COMPARISON')}</div></div>
+    <div class="od-sections od-comparison">${cols}</div>`;
+}
+
+function renderVideoListPanel(title, data) {
+  const videos = data.videos || [];
+  const rows = videos.map(v => {
+    const dt    = new Date(v.publishedAt);
+    const day   = dt.toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' });
+    const views = v.views != null ? fmt(v.views) : '—';
+    const likes = v.likes != null ? fmt(v.likes) : '—';
+    const link  = v.videoId
+      ? `<a class="od-yt-link" href="https://youtube.com/watch?v=${v.videoId}" target="_blank">YT↗</a>` : '';
+    return `<div class="od-video-row">
+      <span class="od-date">${day}</span>
+      <span class="od-title">${esc((v.title || '').slice(0, 56))}</span>
+      <span class="od-stat">${views}v · ${likes}♥</span>
+      ${link}
+    </div>`;
+  }).join('') || '<div class="od-empty">NO VIDEOS</div>';
+  const heading = title || ((data.channel || '').toUpperCase() + ' — RECENT VIDEOS');
+  return `
+    <div class="od-header"><div class="od-name">${esc(heading)}</div></div>
+    <div class="od-sections"><div class="od-section">${rows}</div></div>`;
+}
+
+function renderChannelStatsPanel(title, data) {
+  return `
+    <div class="od-header">
+      <div class="od-name">${esc(title || (data.title || '').toUpperCase())}</div>
+      <div class="od-stats">
+        <span>${fmt(data.subs || 0)} SUBSCRIBERS</span>
+        <span>${fmt(data.totalViews || 0)} TOTAL VIEWS</span>
+        <span>${data.videoCount || '—'} VIDEOS</span>
+      </div>
+    </div>`;
+}
+
+function renderSystemStatusPanel(title, data) {
+  const svc = data.services || {};
+  const dot = ok => `<span class="hud-dot ${ok ? 'online' : 'offline'}" style="display:inline-block;margin-right:8px"></span>`;
+  const vramText = data.vramUsed != null
+    ? `${Math.round(data.vramUsed / 1024)}/${Math.round((data.vramTotal || 12288) / 1024)} GB`
+    : '—';
+  const ramText  = data.memUsed != null
+    ? `${Math.round(data.memUsed / 1024)}/${Math.round((data.memTotal || 32768) / 1024)} GB`
+    : '—';
+  return `
+    <div class="od-header"><div class="od-name">${esc(title || 'SYSTEM STATUS')}</div></div>
+    <div class="od-sections">
+      <div class="od-section">
+        <div class="od-sec-title">COMPUTE</div>
+        <div class="od-stat-grid">
+          <div class="od-stat-row"><span>CPU</span><span>${data.cpu ?? '—'}%</span></div>
+          <div class="od-stat-row"><span>GPU</span><span>${data.gpu ?? '—'}%</span></div>
+          <div class="od-stat-row"><span>VRAM</span><span>${vramText}</span></div>
+          <div class="od-stat-row"><span>RAM</span><span>${ramText}</span></div>
+        </div>
+      </div>
+      <div class="od-section">
+        <div class="od-sec-title">SERVICES</div>
+        <div class="od-stat-grid">
+          <div class="od-stat-row">${dot(svc.chatterbox)}<span>CHATTERBOX TTS</span></div>
+          <div class="od-stat-row">${dot(svc.fal)}<span>FAL.AI</span></div>
+          <div class="od-stat-row">${dot(svc.youtube)}<span>YOUTUBE API</span></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderQueuePanel(title, data) {
+  const renders = data.renders || [];
+  const rows = renders.map(r => {
+    const cls = r.status === 'done' ? 'od-priv public'
+              : r.status === 'failed' ? 'od-priv private' : 'od-priv unlisted';
+    return `<div class="od-video-row">
+      <span class="${cls}">${(r.status || '').toUpperCase()}</span>
+      <span class="od-title">${esc((r.topic || '').slice(0, 48))} <span class="od-date">[${esc(r.channel || '')}]</span></span>
+      <span class="od-stat">${r.progress || 0}% — ${esc(r.step || '')}</span>
+    </div>`;
+  }).join('') || '<div class="od-empty">QUEUE EMPTY</div>';
+  return `
+    <div class="od-header"><div class="od-name">${esc(title || 'RENDER QUEUE')}</div></div>
+    <div class="od-sections"><div class="od-section">${rows}</div></div>`;
 }
 
 // ─── COMMAND INPUT ────────────────────────────────────────────────────────────
@@ -443,14 +575,17 @@ async function sendCommand(cmdOverride) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: cmd }),
     });
-    const { spoken, actions } = await r.json();
+    const data   = await r.json();
+    const spoken = data.spoken || '';
+    const panels = data.panels || [];
 
     document.getElementById('response-body').textContent = `> ${cmd}\n\n${spoken}`;
     setStatus(spoken.slice(0, 50).toUpperCase());
 
-    // Play voice + handle actions
-    await playJarvisVoice(spoken);
-    handleActions(actions || []);
+    // Start voice; show panels with brief delay so voice starts first
+    const voicePromise = playJarvisVoice(spoken);
+    if (panels.length > 0) setTimeout(() => renderPanels(panels), 700);
+    await voicePromise;
   } catch (e) {
     document.getElementById('response-body').textContent = `> ${cmd}\n\n[JARVIS OFFLINE — ${e.message}]`;
     setStatus('ERROR');

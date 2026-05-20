@@ -825,6 +825,81 @@ html, body {
   padding: 8px 0;
 }
 
+/* ─── AGENT PANEL ADDITIONS ─────────────────────────────────────────────────── */
+
+.od-comparison {
+  flex-direction: row !important;
+  gap: 32px;
+}
+.od-comparison .od-section { flex: 1; min-width: 0; }
+
+.od-channel-stat-row {
+  display: flex;
+  gap: 18px;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--cyan);
+  text-shadow: var(--glow-xs);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.od-stat {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--text3);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.od-yt-link {
+  font-family: var(--ff-ui);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--cyan);
+  text-decoration: none;
+  flex-shrink: 0;
+  opacity: 0.6;
+  letter-spacing: 1px;
+  transition: opacity 0.2s;
+}
+.od-yt-link:hover { opacity: 1; text-shadow: var(--glow-xs); }
+
+.od-stat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.od-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+}
+.od-stat-row > span:first-child {
+  font-family: var(--ff-ui);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--text3);
+  width: 60px;
+  flex-shrink: 0;
+}
+.od-stat-row > span:last-child {
+  font-family: var(--ff-mono);
+  color: var(--cyan);
+  text-shadow: var(--glow-xs);
+}
+
+.od-raw {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--text3);
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 /* ─── KEYFRAME ANIMATIONS ───────────────────────────────────────────────────── */
 
 @keyframes spin-cw {

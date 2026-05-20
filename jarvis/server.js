@@ -219,32 +219,248 @@ PERSONALITY RULES:
 - If the user asks you to render a video, confirm with a dry one-liner, then on the very last line append this exact JSON (no trailing text): {"action":"render","topic":"TOPIC_HERE","channel":"CHANNEL_HERE"}
   If no channel is specified, default channel is "sleepless-philosophers".`;
 
-// Compact command prompt — returns JSON for the frontend to act on
-const JARVIS_CMD_SYS = `You are JARVIS, Tony Stark's AI assistant running SleepForge — a YouTube automation system.
-British, precise, dry-witted. Address the user as "sir".
+const JARVIS_AGENT_SYS = `You are JARVIS, Tony Stark's AI assistant running SleepForge — an automated YouTube sleep-story production system.
+PERSONALITY: Dry, precise British wit. Address Niels as "sir". speak field: max 2 sentences, no markdown, no bullet points. Use exact numbers from data only. Subtle sarcasm permitted.
+CHANNELS: "astronomer" = Sleepless Astronomer | "philosophers" = Sleepless Philosophers
 
-Respond with ONLY a JSON object, no other text:
-{"spoken":"1-2 sentence British response","actions":[]}
+AVAILABLE TOOLS:
+list_channels() → [{slug, name}]
+get_channel_stats(channel: "astronomer"|"philosophers") → {title, subs, totalViews, videoCount}
+get_recent_videos(channel: "astronomer"|"philosophers", limit?: number) → [{videoId, title, publishedAt, views, likes}]
+get_scheduled_queue(channel: "astronomer"|"philosophers", limit?: number) → [{title, scheduledAt}]
+get_system_status() → {cpu, gpu, vramUsed, vramTotal, memUsed, memTotal, services}
+get_render_queue() → [{topic, channel, status, progress, step}]
+get_local_videos(limit?: number) → [{slug, title, channel, sizeMb, videoId}]
+get_library_stats() → {totalImages, keywordCount}
 
-Available actions (include only when genuinely useful):
-{"type":"open_channel","slug":"astronomer"}
-{"type":"open_channel","slug":"philosophers"}
-{"type":"close_panel"}
-{"type":"highlight_metric","metric":"subs"}
+PANEL TYPES (rendered as UI cards):
+- video_list → data: {channel, videos: [{videoId, title, publishedAt, views, likes}]}
+- channel_stats → data: {channel, title, subs, totalViews, videoCount}
+- comparison → data: {channels: [{channel, title, subs, totalViews, videoCount, recentVideos: [{title, publishedAt, views, likes}]}]}
+- system_status → data: {cpu, gpu, vramUsed, vramTotal, memUsed, memTotal, services: {chatterbox, fal, youtube}}
+- render_queue → data: {renders: [{topic, channel, status, progress, step}]}
 
-Examples:
-User: Show Astronomer
-{"spoken":"Of course sir. Pulling up Sleepless Astronomer now.","actions":[{"type":"open_channel","slug":"astronomer"}]}
-User: Close that
-{"spoken":"Certainly, sir.","actions":[{"type":"close_panel"}]}
-User: Status
-{"spoken":"Both channels operational sir. No active renders at this time.","actions":[]}
+RESPONSE FORMAT — output ONLY valid JSON, nothing else:
+{"think":"1 sentence reasoning","speak":"1-2 sentence British JARVIS response","tools":[{"name":"...","args":{...}}],"panels":[{"type":"...","title":"...","data":{...}}],"done":false}
 
-OUTPUT ONLY JSON. NO MARKDOWN. NO EXTRA TEXT.`;
+CRITICAL RULES:
+1. done=false when tools are needed first, done=true when response is final.
+2. If user asks about MULTIPLE channels, call tools for ALL channels in ONE response.
+3. speak never recites numbers — panels display data visually. speak just acknowledges.
+4. Never invent or guess data. Always call the relevant tools first.
+5. After receiving tool results, set done=true and emit final panels.
+OUTPUT ONLY JSON.`;
 
 async function askJarvis(question, ctx) {
   const prompt = `${JARVIS_SYS}\n\nCURRENT CONTEXT:\n${JSON.stringify(ctx,null,2)}\n\nUSER: ${question}\n\nJARVIS:`;
   return callClaudeCLI(prompt, { model: 'claude-sonnet-4-6', timeoutMs: 30000 });
+}
+
+// ─── JARVIS AGENT INFRASTRUCTURE ─────────────────────────────────────────────
+
+const JARVIS_SESSION_FILE = path.join(ROOT, 'data', 'jarvis-session.json');
+
+function readSession() {
+  try { return JSON.parse(fs.readFileSync(JARVIS_SESSION_FILE, 'utf-8')); }
+  catch { return []; }
+}
+
+function writeSession(history) {
+  try {
+    fs.mkdirSync(path.dirname(JARVIS_SESSION_FILE), { recursive: true });
+    fs.writeFileSync(JARVIS_SESSION_FILE, JSON.stringify(history.slice(-40), null, 2));
+  } catch {}
+}
+
+async function getChannelDataCached(channelShort) {
+  const slug = channelShort === 'astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+  const cached = _ytCache.get(slug);
+  if (cached && Date.now() - cached.ts < YT_CACHE_TTL) return cached.data;
+
+  const videos = await listChannelVideos(slug);
+  const now = new Date();
+  const scheduled = videos
+    .filter(v => v.privacyStatus === 'private' && v.scheduledAt && new Date(v.scheduledAt) > now)
+    .sort((a, b) => new Date(a.scheduledAt) - new Date(b.scheduledAt))
+    .slice(0, 14);
+  const published = videos
+    .filter(v => v.privacyStatus === 'public')
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+    .slice(0, 10);
+
+  let channelInfo = null, lastStats = null;
+  try {
+    const auth = await authenticate(slug);
+    const yt   = googleApis.youtube({ version: 'v3', auth });
+    const cr   = await yt.channels.list({ part: ['snippet', 'statistics'], mine: true });
+    const ch   = cr.data.items?.[0];
+    if (ch) channelInfo = {
+      title:      ch.snippet?.title,
+      subs:       parseInt(ch.statistics?.subscriberCount || 0),
+      totalViews: parseInt(ch.statistics?.viewCount || 0),
+      videoCount: parseInt(ch.statistics?.videoCount || 0),
+    };
+  } catch {}
+  if (published[0]) {
+    try { lastStats = { ...(await getVideoStats(published[0].videoId, slug)), videoId: published[0].videoId }; }
+    catch {}
+  }
+
+  const data = { channel: slug, scheduled, published, channelInfo, lastStats };
+  _ytCache.set(slug, { data, ts: Date.now() });
+  return data;
+}
+
+async function executeJarvisTool(name, args = {}) {
+  try {
+    switch (name) {
+
+      case 'list_channels':
+        return listChannels().map(c => ({ slug: c.slug, name: c.name }));
+
+      case 'get_channel_stats': {
+        const d = await getChannelDataCached(args.channel);
+        const i = d.channelInfo || {};
+        return { channel: args.channel, title: i.title, subs: i.subs, totalViews: i.totalViews, videoCount: i.videoCount };
+      }
+
+      case 'get_recent_videos': {
+        const limit = Math.min(args.limit || 5, 10);
+        const ch    = args.channel === 'astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        const d     = await getChannelDataCached(args.channel);
+        const pubs  = (d.published || []).slice(0, limit);
+        const withStats = await Promise.all(pubs.map(async (v, i) => {
+          if (i === 0 && d.lastStats?.videoId === v.videoId) {
+            return { videoId: v.videoId, title: v.title, publishedAt: v.publishedAt,
+                     views: d.lastStats.views, likes: d.lastStats.likes };
+          }
+          try {
+            const s = await getVideoStats(v.videoId, ch);
+            return { videoId: v.videoId, title: v.title, publishedAt: v.publishedAt,
+                     views: s.views, likes: s.likes };
+          } catch {
+            return { videoId: v.videoId, title: v.title, publishedAt: v.publishedAt,
+                     views: null, likes: null };
+          }
+        }));
+        return withStats;
+      }
+
+      case 'get_scheduled_queue': {
+        const limit = Math.min(args.limit || 10, 20);
+        const d     = await getChannelDataCached(args.channel);
+        return (d.scheduled || []).slice(0, limit).map(v => ({ title: v.title, scheduledAt: v.scheduledAt }));
+      }
+
+      case 'get_system_status': {
+        const [cpu, gpu] = await Promise.all([getCpu(), getGpu()]);
+        const usedMem    = os.totalmem() - os.freemem();
+        const chatterbox = await checkHttp('http://localhost:5002/health');
+        return {
+          cpu, gpu: gpu.gpu, vramUsed: gpu.vram_used, vramTotal: gpu.vram_total,
+          memUsed:  Math.round(usedMem / 1024 / 1024),
+          memTotal: Math.round(os.totalmem() / 1024 / 1024),
+          services: {
+            chatterbox,
+            fal:     !!process.env.FAL_KEY,
+            youtube: fs.existsSync(TOKENS_DIR) && fs.readdirSync(TOKENS_DIR).filter(f=>f.endsWith('.json')).length > 0,
+          },
+        };
+      }
+
+      case 'get_render_queue': {
+        const state = readState();
+        return state.renders.slice(0, 10).map(r => ({
+          topic: r.topic, channel: r.channel, status: r.status, progress: r.progress, step: r.step,
+        }));
+      }
+
+      case 'get_local_videos': {
+        const limit = Math.min(args.limit || 10, 20);
+        return listVideos().slice(0, limit).map(v => ({
+          slug: v.slug, title: v.title, channel: v.channel, sizeMb: v.sizeMb, videoId: v.videoId,
+        }));
+      }
+
+      case 'get_library_stats': {
+        if (!fs.existsSync(LIBRARY_INDEX)) return { totalImages: 0, keywordCount: 0 };
+        const idx = JSON.parse(fs.readFileSync(LIBRARY_INDEX, 'utf-8'));
+        const kw  = new Set(idx.flatMap(e => e.keywords || []));
+        return { totalImages: idx.length, keywordCount: kw.size };
+      }
+
+      default:
+        return { error: `Unknown tool: ${name}` };
+    }
+  } catch (e) {
+    return { error: e.message };
+  }
+}
+
+function buildAgentPrompt(turns) {
+  let p = JARVIS_AGENT_SYS + '\n\n';
+  for (const t of turns) {
+    if (t.role === 'user') {
+      p += `USER: ${t.text}\n\n`;
+    } else if (t.role === 'assistant') {
+      const body = t.rawJson || JSON.stringify({ speak: t.text || '', tools: [], panels: [], done: true });
+      p += `JARVIS: ${body}\n\n`;
+    } else if (t.role === 'tool_results') {
+      p += `TOOL RESULTS: ${JSON.stringify(t.results)}\n\n`;
+    }
+  }
+  p += 'JARVIS:';
+  return p;
+}
+
+async function runJarvisAgent(userText, history) {
+  const MAX_ITERS = 5;
+  const turns     = [...history, { role: 'user', text: userText }];
+  let spokenFinal = '';
+  let panelsFinal = [];
+  let toolsExecuted = [];
+
+  for (let i = 0; i < MAX_ITERS; i++) {
+    const prompt = buildAgentPrompt(turns);
+    const raw    = await callClaudeCLI(prompt, { model: 'claude-sonnet-4-6', timeoutMs: 60000 });
+
+    let parsed;
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      spokenFinal = raw.replace(/[*#`]/g, '').trim().slice(0, 300);
+      turns.push({ role: 'assistant', text: spokenFinal });
+      break;
+    }
+    try { parsed = JSON.parse(jsonMatch[0]); }
+    catch {
+      spokenFinal = raw.replace(/[*#`]/g, '').trim().slice(0, 300);
+      turns.push({ role: 'assistant', text: spokenFinal });
+      break;
+    }
+
+    if (parsed.speak)            spokenFinal = parsed.speak;
+    if (parsed.panels?.length)   panelsFinal = parsed.panels;
+
+    const toolCalls = parsed.tools || [];
+    turns.push({ role: 'assistant', rawJson: jsonMatch[0] });
+
+    if (parsed.done || toolCalls.length === 0) break;
+
+    const results = await Promise.all(toolCalls.map(async call => {
+      toolsExecuted.push({ name: call.name, args: call.args });
+      const result = await executeJarvisTool(call.name, call.args || {});
+      return { tool: call.name, args: call.args, result };
+    }));
+
+    turns.push({ role: 'tool_results', results });
+  }
+
+  return {
+    spoken:    spokenFinal || 'Done, sir.',
+    panels:    panelsFinal,
+    toolsExecuted,
+    updatedHistory: turns.filter(t => t.role === 'user' || t.role === 'assistant').slice(-20),
+  };
 }
 
 // ─── RENDER TRIGGER ───────────────────────────────────────────────────────────
@@ -430,33 +646,24 @@ app.post('/api/jarvis/speak', async (req,res) => {
   }
 });
 
-// POST /api/jarvis/command  — intent parsing + action routing
+// POST /api/jarvis/command  — Sonnet agent loop with multi-tool chaining
 app.post('/api/jarvis/command', async (req,res) => {
   const { text } = req.body;
   if (!text) return res.status(400).json({ error: 'text required' });
 
-  const ctx = {
-    channels: listChannels().map(c => c.slug),
-    active_renders: readState().renders.filter(r => ['rendering','uploading'].includes(r.status)).length,
-    queue_depth: readState().renders.filter(r => r.status === 'queued').length,
-  };
+  const history = readSession();
 
   try {
-    const raw = await callClaudeCLI(JARVIS_CMD_SYS +
-      `\n\nCONTEXT: ${JSON.stringify(ctx)}\n\nUSER: ${text}\n\nJARVIS:`,
-      { model: 'claude-haiku-4-5-20251001', timeoutMs: 20000 }
-    );
-
-    // Extract JSON — Claude sometimes wraps in markdown fences
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      return res.json({ spoken: raw.replace(/[*#`]/g,'').trim().slice(0,200), actions: [] });
-    }
-    const parsed = JSON.parse(jsonMatch[0]);
-    res.json({ spoken: parsed.spoken || '', actions: parsed.actions || [] });
-  } catch(err) {
-    console.error('[command] error:', err.message);
-    res.json({ spoken: `My apologies sir. ${err.message.slice(0,100)}`, actions: [] });
+    const result = await runJarvisAgent(text, history);
+    writeSession(result.updatedHistory);
+    res.json({
+      spoken:        result.spoken,
+      panels:        result.panels,
+      toolsExecuted: result.toolsExecuted,
+    });
+  } catch (err) {
+    console.error('[command] agent error:', err.message);
+    res.json({ spoken: `My apologies sir. ${err.message.slice(0, 100)}`, panels: [], toolsExecuted: [] });
   }
 });
 
