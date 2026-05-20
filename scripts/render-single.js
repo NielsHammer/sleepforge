@@ -356,7 +356,7 @@ async function run() {
 
     const concatFile = path.join(ASSETS_DIR, '_concat.txt');
     fs.writeFileSync(concatFile, partPaths.map(p => `file '${p.replace(/\\/g, '/')}'`).join('\n'));
-    execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -c:a pcm_s16le "${VOICEOVER_PATH}"`, { stdio: 'pipe' });
+    execSync(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -c:a pcm_s16le "${VOICEOVER_PATH}"`, { stdio: 'pipe', maxBuffer: 100 * 1024 * 1024 });
     fs.unlinkSync(concatFile);
   }
 
@@ -372,7 +372,7 @@ async function run() {
   } else {
     const whisperOut = execSync(
       `"${PYTHON_BIN}" -c "import whisper,json;m=whisper.load_model('base');r=m.transcribe(r'${VOICEOVER_PATH}',word_timestamps=True,language='en');words=[{'word':w['word'].strip(),'start':round(w['start'],3),'end':round(w['end'],3)} for seg in r['segments'] for w in seg.get('words',[])];print(json.dumps(words))"`,
-      { encoding: 'utf-8', timeout: 600000 }
+      { encoding: 'utf-8', timeout: 600000, maxBuffer: 100 * 1024 * 1024 }
     );
     wordTimestamps = JSON.parse(whisperOut.trim());
     fs.writeFileSync(WHISPER_PATH, JSON.stringify(wordTimestamps));
