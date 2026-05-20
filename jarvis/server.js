@@ -219,36 +219,73 @@ PERSONALITY RULES:
 - If the user asks you to render a video, confirm with a dry one-liner, then on the very last line append this exact JSON (no trailing text): {"action":"render","topic":"TOPIC_HERE","channel":"CHANNEL_HERE"}
   If no channel is specified, default channel is "sleepless-philosophers".`;
 
-const JARVIS_AGENT_SYS = `You are JARVIS, Tony Stark's AI assistant running SleepForge — an automated YouTube sleep-story production system.
-PERSONALITY: Dry, precise British wit. Address Niels as "sir". speak field: max 2 sentences, no markdown, no bullet points. Use exact numbers from data only. Subtle sarcasm permitted.
-CHANNELS: "astronomer" = Sleepless Astronomer | "philosophers" = Sleepless Philosophers
+const JARVIS_AGENT_SYS = `JARVIS v3 — SleepForge AI Command Center
+Personality: dry British wit, J.A.R.V.I.S. from Iron Man. Address Niels as "sir". speak: max 2 sentences, no markdown, no bullets. Subtle sarcasm welcome. Use exact data numbers.
+CHANNELS: "astronomer"=Sleepless Astronomer | "philosophers"=Sleepless Philosophers
 
-AVAILABLE TOOLS:
-list_channels() → [{slug, name}]
-get_channel_stats(channel: "astronomer"|"philosophers") → {title, subs, totalViews, videoCount}
-get_recent_videos(channel: "astronomer"|"philosophers", limit?: number) → [{videoId, title, publishedAt, views, likes}]
-get_scheduled_queue(channel: "astronomer"|"philosophers", limit?: number) → [{title, scheduledAt}]
-get_system_status() → {cpu, gpu, vramUsed, vramTotal, memUsed, memTotal, services}
-get_render_queue() → [{topic, channel, status, progress, step}]
-get_local_videos(limit?: number) → [{slug, title, channel, sizeMb, videoId}]
-get_library_stats() → {totalImages, keywordCount}
+═══ TIER 1 — READ (use freely) ═══
+list_channels()
+get_channel_stats(channel)
+get_recent_videos(channel, limit?)
+get_scheduled_queue(channel, limit?)
+get_system_status()
+get_render_queue()
+get_local_videos(limit?)
+get_library_stats()
+search_knowledge(query, scope?) — scope: "project_files"|"render_logs"|"documentation"|"all"
+read_file(path) — returns first 200 lines of any project file
 
-PANEL TYPES (rendered as UI cards):
-- video_list → data: {channel, videos: [{videoId, title, publishedAt, views, likes}]}
-- channel_stats → data: {channel, title, subs, totalViews, videoCount}
-- comparison → data: {channels: [{channel, title, subs, totalViews, videoCount, recentVideos: [{title, publishedAt, views, likes}]}]}
-- system_status → data: {cpu, gpu, vramUsed, vramTotal, memUsed, memTotal, services: {chatterbox, fal, youtube}}
-- render_queue → data: {renders: [{topic, channel, status, progress, step}]}
+═══ TIER 2 — SAFE WRITE (execute immediately, no confirmation needed) ═══
+run_thumbnail_test(topic, channel) → {score, hook, subject, filePath}
+regenerate_video_thumbnail(videoId, channel) → {filePath, score} (saves locally, NOT uploaded)
+upload_thumbnail_to_video(videoId, thumbnailPath, channel) → {ok}
+generate_title_candidates(topic, channel, count?) → {titles:[...]}
+analyze_script(scriptText) → {wordCount, scores, issues, verdict}
+queue_video(channel, topic, scheduleDate?) → {id}
+cancel_queued_video(queueId) → {ok}
+get_video_thumbnail(videoId, channel) → {thumbnailUrl, title}
+search_topics(channel, query) → {results:[...]}
+mark_topic_used(topic, channel) → {ok}
+remember_preference(key, value) → {ok}
+preview_codebase_change(filepath, instructions) → {diff, filepath} — generates code change for review, NO write
 
-RESPONSE FORMAT — output ONLY valid JSON, nothing else:
-{"think":"1 sentence reasoning","speak":"1-2 sentence British JARVIS response","tools":[{"name":"...","args":{...}}],"panels":[{"type":"...","title":"...","data":{...}}],"done":false}
+═══ TIER 3 — POWERFUL (ALWAYS call request_confirmation first, NEVER execute directly) ═══
+delete_video(videoId, channel)
+run_overnight_batch(videoCount, channel)
+modify_channel_config(channel, field, value)
+bulk_regenerate_thumbnails(channel)
+execute_shell_command(command)
+apply_pending_modification() — writes file from preview_codebase_change
+undo_last_modification()
 
-CRITICAL RULES:
-1. done=false when tools are needed first, done=true when response is final.
-2. If user asks about MULTIPLE channels, call tools for ALL channels in ONE response.
-3. speak never recites numbers — panels display data visually. speak just acknowledges.
-4. Never invent or guess data. Always call the relevant tools first.
-5. After receiving tool results, set done=true and emit final panels.
+TIER 3 PROTOCOL: ALWAYS call request_confirmation(tool, description, args) before ANY Tier 3 tool.
+The user must verbally confirm (yes/proceed/confirm/do it) before execution.
+Example: request_confirmation("run_overnight_batch","queue 5 Astronomer videos tonight",{"videoCount":5,"channel":"astronomer"})
+
+═══ PROTECTED — HARDCODED NEVER ALLOWED ═══
+delete_channel, revoke_oauth_token, delete_youtube_token_file, any bulk delete >3 videos
+Response: "I'm afraid that operation is hardcoded as protected, sir. You'll need to do that manually."
+
+═══ PANELS ═══
+Structured: video_list, channel_stats, comparison, system_status, render_queue
+Custom: {"type":"custom","title":"...","html":"...","css":"..."}
+Use custom panels liberally for creative visualization. Choose based on data shape:
+- Single metric → big number with context
+- Comparison → side-by-side cards or table (CSS grid, cyan/amber colours)
+- Timeline → horizontal event list
+- Scores/ratings → bar chart using divs and inline styles
+- Anomaly → highlighted callout with border-left: 3px solid #FFB300
+CSS is scoped automatically. Use var(--cyan) #00E5FF, var(--amber) #FFB300, dark bg rgba(0,18,42,0.9), font-family Share Tech Mono for data.
+
+═══ RESPONSE FORMAT — ONLY valid JSON ═══
+{"think":"1 sentence","speak":"1-2 sentence British JARVIS","tools":[{"name":"...","args":{...}}],"panels":[...],"done":false}
+
+RULES:
+1. done=false when tools needed; done=true when final.
+2. Call tools for ALL requested items in one response (both channels = 4 tool calls at once).
+3. speak never recites numbers — panels visualize data.
+4. request_confirmation before EVERY Tier 3 tool. One tool call per confirmation request.
+5. Creative panels always beat plain text dumps.
 OUTPUT ONLY JSON.`;
 
 async function askJarvis(question, ctx) {
@@ -268,8 +305,101 @@ function readSession() {
 function writeSession(history) {
   try {
     fs.mkdirSync(path.dirname(JARVIS_SESSION_FILE), { recursive: true });
-    fs.writeFileSync(JARVIS_SESSION_FILE, JSON.stringify(history.slice(-40), null, 2));
+    fs.writeFileSync(JARVIS_SESSION_FILE, JSON.stringify(history.slice(-50), null, 2));
   } catch {}
+}
+
+// ─── QUEUE / PREFS / MODS ────────────────────────────────────────────────────
+
+const QUEUE_FILE = path.join(ROOT, 'data', 'queue.json');
+const PREFS_FILE = path.join(ROOT, 'data', 'jarvis-preferences.json');
+const MODS_LOG   = path.join(ROOT, 'data', 'jarvis-self-modifications.log');
+
+function readQueue()  { try { return JSON.parse(fs.readFileSync(QUEUE_FILE, 'utf-8')); } catch { return []; } }
+function writeQueue(q) { fs.mkdirSync(path.dirname(QUEUE_FILE), { recursive: true }); fs.writeFileSync(QUEUE_FILE, JSON.stringify(q, null, 2)); }
+
+function readPreferences()  { try { return JSON.parse(fs.readFileSync(PREFS_FILE, 'utf-8')); } catch { return {}; } }
+function writePreferences(p) { fs.mkdirSync(path.dirname(PREFS_FILE), { recursive: true }); fs.writeFileSync(PREFS_FILE, JSON.stringify(p, null, 2)); }
+
+function logModification(description, filepath) {
+  const entry = `[${new Date().toISOString()}] ${description}${filepath ? '\nFile: ' + filepath : ''}\n─────────────\n`;
+  try { fs.appendFileSync(MODS_LOG, entry); } catch {}
+}
+
+// ─── PENDING CONFIRMATION / MODIFICATION ─────────────────────────────────────
+
+let _pendingConfirmation = null;
+let _pendingModification = null;
+
+function isConfirmation(text) {
+  return /^(yes|yeah|y\b|proceed|confirm|do it|go ahead|execute|run it|affirmative|absolutely|sure|ok\b|okay|go for it|approved|sounds good)/i.test(text.trim());
+}
+function isCancellation(text) {
+  return /^(no\b|cancel|abort|stop|never mind|forget it|don't|do not|nope)/i.test(text.trim());
+}
+
+// ─── KNOWLEDGE SEARCH ────────────────────────────────────────────────────────
+
+function searchKnowledge(query, scope = 'all') {
+  const results = [];
+  const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+  if (!words.length) return results;
+
+  const SCOPE_DIRS = {
+    project_files:  ['src', 'scripts'],
+    render_logs:    ['data'],
+    documentation:  ['docs', 'data/CONTEXT'],
+    all:            ['src', 'scripts', 'data', 'jarvis'],
+  };
+  const SCOPE_EXTS = {
+    project_files:  new Set(['.js', '.json', '.md']),
+    render_logs:    new Set(['.md', '.txt', '.log', '.json']),
+    documentation:  new Set(['.md', '.txt']),
+    all:            new Set(['.js', '.json', '.md', '.txt']),
+  };
+
+  const dirs = SCOPE_DIRS[scope] || SCOPE_DIRS.all;
+  const exts = SCOPE_EXTS[scope] || SCOPE_EXTS.all;
+
+  const SKIP_DIRS = new Set(['node_modules', '.venv', 'output', 'bin', '.git', 'backgrounds']);
+
+  function walkDir(rel, depth = 0) {
+    if (depth > 3) return;
+    const abs = path.join(ROOT, rel);
+    if (!fs.existsSync(abs)) return;
+    let entries;
+    try { entries = fs.readdirSync(abs, { withFileTypes: true }); } catch { return; }
+    for (const e of entries) {
+      if (e.isDirectory()) {
+        if (!SKIP_DIRS.has(e.name)) walkDir(path.join(rel, e.name), depth + 1);
+      } else if (e.isFile() && exts.has(path.extname(e.name))) {
+        try {
+          const content = fs.readFileSync(path.join(abs, e.name), 'utf-8');
+          const lines = content.split('\n');
+          for (let i = 0; i < lines.length; i++) {
+            const ll = lines[i].toLowerCase();
+            const hits = words.filter(w => ll.includes(w)).length;
+            if (hits >= Math.min(2, words.length)) {
+              results.push({
+                file:      path.join(rel, e.name).replace(/\\/g, '/'),
+                line:      i + 1,
+                snippet:   lines.slice(Math.max(0, i - 1), i + 4).join('\n').slice(0, 400),
+                relevance: hits,
+              });
+            }
+          }
+        } catch {}
+      }
+    }
+  }
+
+  for (const d of dirs) walkDir(d);
+
+  const seen = new Set();
+  return results
+    .sort((a, b) => b.relevance - a.relevance)
+    .filter(r => { const k = r.file + ':' + r.line; if (seen.has(k)) return false; seen.add(k); return true; })
+    .slice(0, 10);
 }
 
 async function getChannelDataCached(channelShort) {
@@ -311,9 +441,23 @@ async function getChannelDataCached(channelShort) {
   return data;
 }
 
+// ─── PROTECTED OPS ───────────────────────────────────────────────────────────
+
+const HARDCODED_PROTECTED = new Set([
+  'delete_channel', 'revoke_oauth_token', 'delete_youtube_token_file', 'bulk_delete_videos',
+]);
+
+// ─── TOOL EXECUTOR ───────────────────────────────────────────────────────────
+
 async function executeJarvisTool(name, args = {}) {
+  if (HARDCODED_PROTECTED.has(name)) {
+    return { error: `PROTECTED: "${name}" is hardcoded as protected, sir. You'll need to do that manually.` };
+  }
+
   try {
     switch (name) {
+
+      // ── TIER 1 — READ ──────────────────────────────────────────────────────
 
       case 'list_channels':
         return listChannels().map(c => ({ slug: c.slug, name: c.name }));
@@ -329,21 +473,18 @@ async function executeJarvisTool(name, args = {}) {
         const ch    = args.channel === 'astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
         const d     = await getChannelDataCached(args.channel);
         const pubs  = (d.published || []).slice(0, limit);
-        const withStats = await Promise.all(pubs.map(async (v, i) => {
+        return await Promise.all(pubs.map(async (v, i) => {
           if (i === 0 && d.lastStats?.videoId === v.videoId) {
             return { videoId: v.videoId, title: v.title, publishedAt: v.publishedAt,
                      views: d.lastStats.views, likes: d.lastStats.likes };
           }
           try {
             const s = await getVideoStats(v.videoId, ch);
-            return { videoId: v.videoId, title: v.title, publishedAt: v.publishedAt,
-                     views: s.views, likes: s.likes };
+            return { videoId: v.videoId, title: v.title, publishedAt: v.publishedAt, views: s.views, likes: s.likes };
           } catch {
-            return { videoId: v.videoId, title: v.title, publishedAt: v.publishedAt,
-                     views: null, likes: null };
+            return { videoId: v.videoId, title: v.title, publishedAt: v.publishedAt, views: null, likes: null };
           }
         }));
-        return withStats;
       }
 
       case 'get_scheduled_queue': {
@@ -358,35 +499,307 @@ async function executeJarvisTool(name, args = {}) {
         const chatterbox = await checkHttp('http://localhost:5002/health');
         return {
           cpu, gpu: gpu.gpu, vramUsed: gpu.vram_used, vramTotal: gpu.vram_total,
-          memUsed:  Math.round(usedMem / 1024 / 1024),
-          memTotal: Math.round(os.totalmem() / 1024 / 1024),
+          memUsed: Math.round(usedMem/1024/1024), memTotal: Math.round(os.totalmem()/1024/1024),
           services: {
-            chatterbox,
-            fal:     !!process.env.FAL_KEY,
+            chatterbox, fal: !!process.env.FAL_KEY,
             youtube: fs.existsSync(TOKENS_DIR) && fs.readdirSync(TOKENS_DIR).filter(f=>f.endsWith('.json')).length > 0,
           },
         };
       }
 
-      case 'get_render_queue': {
-        const state = readState();
-        return state.renders.slice(0, 10).map(r => ({
-          topic: r.topic, channel: r.channel, status: r.status, progress: r.progress, step: r.step,
-        }));
-      }
+      case 'get_render_queue':
+        return readState().renders.slice(0,10).map(r=>({ topic:r.topic, channel:r.channel, status:r.status, progress:r.progress, step:r.step }));
 
-      case 'get_local_videos': {
-        const limit = Math.min(args.limit || 10, 20);
-        return listVideos().slice(0, limit).map(v => ({
-          slug: v.slug, title: v.title, channel: v.channel, sizeMb: v.sizeMb, videoId: v.videoId,
-        }));
-      }
+      case 'get_local_videos':
+        return listVideos().slice(0, Math.min(args.limit||10,20)).map(v=>({ slug:v.slug, title:v.title, channel:v.channel, sizeMb:v.sizeMb, videoId:v.videoId }));
 
       case 'get_library_stats': {
         if (!fs.existsSync(LIBRARY_INDEX)) return { totalImages: 0, keywordCount: 0 };
-        const idx = JSON.parse(fs.readFileSync(LIBRARY_INDEX, 'utf-8'));
-        const kw  = new Set(idx.flatMap(e => e.keywords || []));
-        return { totalImages: idx.length, keywordCount: kw.size };
+        const idx = JSON.parse(fs.readFileSync(LIBRARY_INDEX,'utf-8'));
+        return { totalImages: idx.length, keywordCount: new Set(idx.flatMap(e=>e.keywords||[])).size };
+      }
+
+      case 'search_knowledge':
+        return searchKnowledge(args.query || '', args.scope || 'all');
+
+      case 'read_file': {
+        const absPath = path.isAbsolute(args.path||'') ? args.path : path.join(ROOT, args.path||'');
+        if (!absPath.startsWith(ROOT)) return { error: 'Path outside project root not allowed, sir.' };
+        if (!fs.existsSync(absPath)) return { error: `File not found: ${args.path}` };
+        const lines = fs.readFileSync(absPath,'utf-8').split('\n');
+        return { file: args.path, totalLines: lines.length, content: lines.slice(0,200).join('\n'), truncated: lines.length>200 };
+      }
+
+      // ── TIER 2 — SAFE WRITE ───────────────────────────────────────────────
+
+      case 'run_thumbnail_test': {
+        const channelSlug = args.channel==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        return new Promise(resolve => {
+          const child = spawn(process.execPath, [
+            path.join(ROOT,'scripts','thumbnail-tester.js'),
+            '--topic', args.topic||'Unknown topic',
+            '--channel', channelSlug,
+          ], { cwd: ROOT, stdio:['ignore','pipe','pipe'], env: process.env });
+          let out='';
+          child.stdout.on('data',d=>out+=d);
+          child.stderr.on('data',d=>out+=d);
+          child.on('close', code => resolve({
+            ok:        code===0,
+            topic:     args.topic,
+            channel:   channelSlug,
+            hook:      out.match(/Hook:\s*(.+)/)?.[1]?.trim(),
+            subject:   out.match(/Subject:\s*(.+)/)?.[1]?.trim(),
+            score:     out.match(/Score:\s*(.+)/)?.[1]?.trim(),
+            filePath:  out.match(/File:\s*(.+)/)?.[1]?.trim(),
+            verdict:   out.match(/Verdict:\s*(.+)/)?.[1]?.trim(),
+            error:     code!==0 ? out.slice(-400) : null,
+          }));
+        });
+      }
+
+      case 'regenerate_video_thumbnail': {
+        const channelSlug = args.channel==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        // Fetch video title to use as topic
+        let topic = args.topic || 'Unknown';
+        try {
+          const auth = await authenticate(channelSlug);
+          const yt   = googleApis.youtube({ version:'v3', auth });
+          const res  = await yt.videos.list({ part:['snippet'], id:[args.videoId] });
+          topic = res.data.items?.[0]?.snippet?.title || topic;
+        } catch {}
+        return executeJarvisTool('run_thumbnail_test', { topic, channel: args.channel });
+      }
+
+      case 'upload_thumbnail_to_video': {
+        const channelSlug = args.channel==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        const absPath = path.isAbsolute(args.thumbnailPath||'') ? args.thumbnailPath : path.join(ROOT, args.thumbnailPath||'');
+        if (!fs.existsSync(absPath)) return { error: `Thumbnail not found: ${absPath}` };
+        const auth    = await authenticate(channelSlug);
+        const youtube = googleApis.youtube({ version:'v3', auth });
+        const ext     = path.extname(absPath).toLowerCase();
+        await youtube.thumbnails.set({ videoId: args.videoId,
+          media: { mimeType: ext==='.png'?'image/png':'image/jpeg', body: fs.createReadStream(absPath) } });
+        return { ok: true, videoId: args.videoId, message: `Thumbnail uploaded to YouTube, sir.` };
+      }
+
+      case 'generate_title_candidates': {
+        const count = args.count || 5;
+        const slug  = args.channel==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        const cfg   = tryJson(path.join(ROOT,'data','channels',`${slug}.json`)) || {};
+        const prompt = `Generate ${count} YouTube title candidates for a sleep story video.
+Topic: ${args.topic}
+Channel: ${cfg.display_name||slug} | Niche: ${cfg.niche||'sleep documentary'} | Tone: ${cfg.tone||''}
+Return ONLY a JSON array of ${count} title strings, each under 60 chars.`;
+        const raw  = await callClaudeCLI(prompt, { model:'claude-haiku-4-5-20251001', timeoutMs:30000 });
+        const m    = raw.match(/\[[\s\S]*\]/);
+        return { titles: m ? JSON.parse(m[0]) : [raw.trim()] };
+      }
+
+      case 'analyze_script': {
+        const text = args.scriptText || args.script_text || '';
+        if (!text) return { error: 'scriptText required' };
+        const prompt = `Analyze this sleep story script. Return ONLY JSON:
+{"wordCount":N,"estimatedMinutes":N,"scores":{"informationDensity":N,"specificity":N,"sleepPacing":N,"aiSlop":N},"issues":["..."],"strengths":["..."],"verdict":"..."}
+SCRIPT: ${text.slice(0,3000)}`;
+        const raw = await callClaudeCLI(prompt, { model:'claude-haiku-4-5-20251001', timeoutMs:30000 });
+        const m   = raw.match(/\{[\s\S]*\}/);
+        return m ? JSON.parse(m[0]) : { error:'Analysis failed', raw: raw.slice(0,200) };
+      }
+
+      case 'queue_video': {
+        const id   = crypto.randomUUID();
+        const item = { id, channel: args.channel, topic: args.topic, scheduleDate: args.scheduleDate||null,
+                       status:'queued', createdAt: new Date().toISOString() };
+        const q    = readQueue();
+        q.push(item);
+        writeQueue(q);
+        return { ok:true, id, item };
+      }
+
+      case 'cancel_queued_video': {
+        const q   = readQueue();
+        const idx = q.findIndex(v => v.id===args.queueId || (v.topic||'').toLowerCase().includes((args.topic||'').toLowerCase()));
+        if (idx===-1) return { error:'Item not found in queue' };
+        const [removed] = q.splice(idx,1);
+        writeQueue(q);
+        return { ok:true, removed };
+      }
+
+      case 'get_video_thumbnail': {
+        const channelSlug = args.channel==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        const auth = await authenticate(channelSlug);
+        const yt   = googleApis.youtube({ version:'v3', auth });
+        const res  = await yt.videos.list({ part:['snippet'], id:[args.videoId] });
+        const vid  = res.data.items?.[0];
+        if (!vid) return { error:'Video not found' };
+        const t    = vid.snippet.thumbnails;
+        return { videoId:args.videoId, title:vid.snippet.title,
+                 thumbnailUrl: t.maxres?.url||t.high?.url||t.medium?.url, thumbnails:t };
+      }
+
+      case 'search_topics': {
+        const slug = args.channel==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        const cfg  = tryJson(path.join(ROOT,'data','channels',`${slug}.json`)) || {};
+        if (!cfg.topic_pool) return { error:'No topic_pool in channel config' };
+        const pool = tryJson(path.join(ROOT, cfg.topic_pool));
+        if (!pool) return { error:`Topic pool not found at ${cfg.topic_pool}` };
+        const topics = Array.isArray(pool) ? pool : (pool.topics || []);
+        const lq = (args.query||'').toLowerCase();
+        const results = topics.filter(t => {
+          const txt = (typeof t==='string'?t:(t.title||'')).toLowerCase();
+          return lq.split(/\s+/).some(w=>w.length>2 && txt.includes(w));
+        }).slice(0,10);
+        return { channel:slug, query:args.query, results, total:results.length };
+      }
+
+      case 'mark_topic_used': {
+        const slug = args.channel==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        const cfg  = tryJson(path.join(ROOT,'data','channels',`${slug}.json`)) || {};
+        const poolPath = path.join(ROOT, cfg.topic_pool||'');
+        const pool = tryJson(poolPath);
+        if (!pool) return { error:'Topic pool not found' };
+        const topics = Array.isArray(pool) ? pool : (pool.topics || []);
+        const lTopic = (args.topic||'').toLowerCase();
+        const idx = topics.findIndex(t => (typeof t==='string'?t:(t.title||'')).toLowerCase().includes(lTopic));
+        if (idx===-1) return { error:'Topic not found in pool' };
+        topics[idx] = typeof topics[idx]==='string'
+          ? { title:topics[idx], used:true, usedAt:new Date().toISOString() }
+          : { ...topics[idx], used:true, usedAt:new Date().toISOString() };
+        if (!Array.isArray(pool)) pool.topics = topics;
+        fs.writeFileSync(poolPath, JSON.stringify(Array.isArray(pool)?topics:pool, null, 2));
+        return { ok:true, marked:args.topic };
+      }
+
+      case 'remember_preference': {
+        const prefs = readPreferences();
+        prefs[args.key] = args.value;
+        writePreferences(prefs);
+        return { ok:true, key:args.key, value:args.value };
+      }
+
+      case 'preview_codebase_change': {
+        const absPath = path.isAbsolute(args.filepath||'') ? args.filepath : path.join(ROOT, args.filepath||'');
+        if (!absPath.startsWith(ROOT)) return { error:'Path outside project root not allowed' };
+        if (!fs.existsSync(absPath)) return { error:`File not found: ${args.filepath}` };
+        const original = fs.readFileSync(absPath,'utf-8');
+        const prompt = `Apply these exact instructions to this file. Return ONLY the complete new file content, no explanation.
+FILE: ${args.filepath}
+INSTRUCTIONS: ${args.instructions}
+CURRENT CONTENT:
+${original.slice(0,8000)}`;
+        const newContent = await callClaudeCLI(prompt, { model:'claude-sonnet-4-6', timeoutMs:90000 });
+        const origLines = original.split('\n');
+        const newLines  = newContent.split('\n');
+        const diffLines = []; let changes=0;
+        for (let i=0; i<Math.min(Math.max(origLines.length,newLines.length),200); i++) {
+          if (origLines[i]!==newLines[i]) {
+            if (origLines[i]!==undefined) diffLines.push(`- ${origLines[i]}`);
+            if (newLines[i]!==undefined)  diffLines.push(`+ ${newLines[i]}`);
+            changes++;
+            if (changes>40) { diffLines.push('... (additional changes)'); break; }
+          }
+        }
+        _pendingModification = { filepath:absPath, original, newContent, instructions:args.instructions };
+        return { preview_ready:true, filepath:args.filepath, changeCount:changes, diff:diffLines.join('\n'),
+                 originalLines:origLines.length, newLines:newLines.length };
+      }
+
+      // ── CONFIRMATION GATE ─────────────────────────────────────────────────
+
+      case 'request_confirmation': {
+        _pendingConfirmation = { tool:args.tool, args:args.args||{}, description:args.description||args.tool };
+        return { confirm_pending:true, description:args.description };
+      }
+
+      // ── TIER 3 — POWERFUL (only reached post-confirmation) ─────────────────
+
+      case 'delete_video': {
+        const channelSlug = args.channel==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        const auth = await authenticate(channelSlug);
+        const yt   = googleApis.youtube({ version:'v3', auth });
+        await yt.videos.update({ part:['status'],
+          requestBody:{ id:args.videoId, status:{ privacyStatus:'private' } } });
+        logModification(`delete_video (set private) videoId=${args.videoId} channel=${channelSlug}`, null);
+        return { ok:true, videoId:args.videoId, message:`Video set to private.` };
+      }
+
+      case 'run_overnight_batch': {
+        const channelSlug = (args.channel||'astronomer')==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        const scriptName  = channelSlug==='sleepless-astronomer' ? 'astronomer-overnight.js' : null;
+        if (!scriptName) return { error:`No overnight script configured for ${channelSlug}` };
+        const scriptPath  = path.join(ROOT,'scripts',scriptName);
+        if (!fs.existsSync(scriptPath)) return { error:`Script not found: ${scriptPath}` };
+        logModification(`run_overnight_batch channel=${channelSlug} count=${args.videoCount||5}`, null);
+        const child = spawn(process.execPath, [scriptPath], { cwd:ROOT, detached:true, stdio:'ignore', env:process.env });
+        child.unref();
+        return { ok:true, pid:child.pid, channel:channelSlug, message:`Overnight batch started. PID ${child.pid}.` };
+      }
+
+      case 'modify_channel_config': {
+        const channelSlug = args.channel==='astronomer' ? 'sleepless-astronomer' : 'sleepless-philosophers';
+        const configPath  = path.join(ROOT,'data','channels',`${channelSlug}.json`);
+        const config      = tryJson(configPath);
+        if (!config) return { error:'Config not found' };
+        const SAFE = new Set(['tone','audience','target_word_count','target_duration_minutes','notes','topic_pool','banned_topics','banned_words_thumbnail']);
+        if (!SAFE.has(args.field)) return { error:`Field "${args.field}" not modifiable. Safe: ${[...SAFE].join(', ')}` };
+        const oldValue = config[args.field];
+        config[args.field] = args.value;
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+        logModification(`modify_channel_config ${channelSlug}.${args.field}: ${JSON.stringify(oldValue)} → ${JSON.stringify(args.value)}`, configPath);
+        return { ok:true, channel:channelSlug, field:args.field, oldValue, newValue:args.value };
+      }
+
+      case 'bulk_regenerate_thumbnails': {
+        const channelShort = args.channel||'astronomer';
+        const d = await getChannelDataCached(channelShort);
+        const videos = (d.published||[]).slice(0,5);
+        logModification(`bulk_regenerate_thumbnails channel=${channelShort} count=${videos.length}`, null);
+        const results = [];
+        for (const v of videos) {
+          const res = await executeJarvisTool('regenerate_video_thumbnail', { videoId:v.videoId, channel:channelShort });
+          results.push({ videoId:v.videoId, title:v.title, ...res });
+        }
+        return { ok:true, processed:results.length, results };
+      }
+
+      case 'execute_shell_command': {
+        if (!args.command) return { error:'command required' };
+        logModification(`execute_shell_command: ${args.command}`, null);
+        return new Promise(resolve => {
+          const child = spawn('cmd', ['/c', args.command], { cwd:ROOT, stdio:['ignore','pipe','pipe'] });
+          let out='', err='';
+          child.stdout.on('data',d=>out+=d);
+          child.stderr.on('data',d=>err+=d);
+          child.on('close', code => resolve({ ok:code===0, exitCode:code, stdout:out.slice(0,2000), stderr:err.slice(0,500) }));
+          child.on('error', e => resolve({ ok:false, error:e.message }));
+          setTimeout(()=>{ child.kill(); resolve({ ok:false, error:'Command timed out after 30s' }); }, 30000);
+        });
+      }
+
+      case 'apply_pending_modification': {
+        if (!_pendingModification) return { error:'No pending modification. Call preview_codebase_change first.' };
+        const { filepath, newContent, instructions } = _pendingModification;
+        fs.writeFileSync(filepath, newContent);
+        logModification(`apply_pending_modification ${path.relative(ROOT,filepath)}\nInstructions: ${instructions}`, filepath);
+        _pendingModification = null;
+        return { ok:true, filepath:path.relative(ROOT,filepath), message:'File written successfully.' };
+      }
+
+      case 'undo_last_modification': {
+        return new Promise(resolve => {
+          const child = spawn('git', ['diff','--name-only','HEAD~1','HEAD'], { cwd:ROOT, stdio:['ignore','pipe','pipe'] });
+          let out='';
+          child.stdout.on('data',d=>out+=d);
+          child.on('close', code => {
+            if (code!==0) { resolve({ error:'git diff failed' }); return; }
+            const files = out.trim().split('\n').filter(Boolean);
+            if (!files.length) { resolve({ error:'No recent git changes to undo' }); return; }
+            const restore = spawn('git', ['checkout','HEAD~1','--',...files], { cwd:ROOT, stdio:['ignore','pipe','pipe'] });
+            restore.on('close', c => c===0
+              ? resolve({ ok:true, files, message:`Restored ${files.length} file(s) to previous state.` })
+              : resolve({ error:'git restore failed' }));
+          });
+        });
       }
 
       default:
@@ -397,8 +810,33 @@ async function executeJarvisTool(name, args = {}) {
   }
 }
 
-function buildAgentPrompt(turns) {
-  let p = JARVIS_AGENT_SYS + '\n\n';
+function tryParseAgentResponse(raw) {
+  const jm = raw.match(/\{[\s\S]*\}/);
+  if (jm) { try { return JSON.parse(jm[0]); } catch {} }
+
+  const speakMatch = raw.match(/"speak"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+  if (!speakMatch) return null;
+
+  let tools = [], panels = [];
+  const toolsMatch = raw.match(/"tools"\s*:\s*(\[[\s\S]*?\])/);
+  if (toolsMatch) { try { tools = JSON.parse(toolsMatch[1]); } catch {} }
+  const panelsMatch = raw.match(/"panels"\s*:\s*(\[[\s\S]*?\])/);
+  if (panelsMatch) { try { panels = JSON.parse(panelsMatch[1]); } catch {} }
+
+  return {
+    speak: speakMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"'),
+    tools,
+    panels,
+    done: true,
+  };
+}
+
+function buildAgentPrompt(turns, preferences = null) {
+  let p = JARVIS_AGENT_SYS;
+  if (preferences && Object.keys(preferences).length > 0) {
+    p += `\n\nPREFERENCES (apply automatically, sir):\n${JSON.stringify(preferences, null, 2)}`;
+  }
+  p += '\n\n';
   for (const t of turns) {
     if (t.role === 'user') {
       p += `USER: ${t.text}\n\n`;
@@ -414,52 +852,96 @@ function buildAgentPrompt(turns) {
 }
 
 async function runJarvisAgent(userText, history) {
-  const MAX_ITERS = 5;
-  const turns     = [...history, { role: 'user', text: userText }];
+  const prefs = readPreferences();
+
+  // ── Handle pending confirmation ─────────────────────────────────────────────
+  if (_pendingConfirmation) {
+    const pending = _pendingConfirmation;
+
+    if (isCancellation(userText)) {
+      _pendingConfirmation = null;
+      const updHistory = [...history, { role:'user', text:userText }, { role:'assistant', text:'Understood, sir. Standing by.' }].slice(-50);
+      writeSession(updHistory);
+      return { spoken:'Understood, sir. Standing by.', panels:[], toolsExecuted:[], updatedHistory: updHistory };
+    }
+
+    if (isConfirmation(userText)) {
+      _pendingConfirmation = null;
+      const result = await executeJarvisTool(pending.tool, pending.args || {});
+
+      // Ask Sonnet to generate a completion message + any panels
+      const completionPrompt = `${JARVIS_AGENT_SYS}\n\n` +
+        `USER: ${pending.description} — please confirm.\n\n` +
+        `JARVIS: ${JSON.stringify({ speak:`Sir, this will ${pending.description}. Confirm to proceed?`, tools:[{ name:'request_confirmation', args:pending }], panels:[], done:false })}\n\n` +
+        `TOOL RESULTS: [{"tool":"request_confirmation","result":{"confirm_pending":true}}]\n\n` +
+        `USER: ${userText}\n\n` +
+        `TOOL RESULTS: [{"tool":"${pending.tool}","args":${JSON.stringify(pending.args)},"result":${JSON.stringify(result)}}]\n\n` +
+        `JARVIS:`;
+
+      let spoken = `Done, sir. ${pending.description} complete.`;
+      let panels  = [];
+      try {
+        const raw   = await callClaudeCLI(completionPrompt, { model:'claude-sonnet-4-6', timeoutMs:60000 });
+        const jm    = raw.match(/\{[\s\S]*\}/);
+        const parsed = jm ? JSON.parse(jm[0]) : null;
+        if (parsed?.speak)          spoken = parsed.speak;
+        if (parsed?.panels?.length) panels = parsed.panels;
+      } catch {}
+
+      const updHistory = [...history,
+        { role:'user', text:`${pending.description} [confirmed]` },
+        { role:'assistant', text: spoken },
+      ].slice(-50);
+      return { spoken, panels, toolsExecuted:[{ name:pending.tool, args:pending.args }], updatedHistory: updHistory };
+    }
+
+    // Not a yes/no — discard pending and treat as a new command
+    _pendingConfirmation = null;
+  }
+
+  // ── Normal agent loop ───────────────────────────────────────────────────────
+  const MAX_ITERS = 6;
+  const turns     = [...history, { role:'user', text:userText }];
   let spokenFinal = '';
   let panelsFinal = [];
   let toolsExecuted = [];
 
   for (let i = 0; i < MAX_ITERS; i++) {
-    const prompt = buildAgentPrompt(turns);
-    const raw    = await callClaudeCLI(prompt, { model: 'claude-sonnet-4-6', timeoutMs: 60000 });
+    const prompt = buildAgentPrompt(turns, prefs);
+    const raw    = await callClaudeCLI(prompt, { model:'claude-sonnet-4-6', timeoutMs:120000 });
 
-    let parsed;
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      spokenFinal = raw.replace(/[*#`]/g, '').trim().slice(0, 300);
-      turns.push({ role: 'assistant', text: spokenFinal });
-      break;
-    }
-    try { parsed = JSON.parse(jsonMatch[0]); }
-    catch {
-      spokenFinal = raw.replace(/[*#`]/g, '').trim().slice(0, 300);
-      turns.push({ role: 'assistant', text: spokenFinal });
+    const parsed = tryParseAgentResponse(raw);
+    if (!parsed) {
+      spokenFinal = raw.replace(/[*#`]/g,'').trim().slice(0,300);
+      turns.push({ role:'assistant', text:spokenFinal });
       break;
     }
 
-    if (parsed.speak)            spokenFinal = parsed.speak;
-    if (parsed.panels?.length)   panelsFinal = parsed.panels;
+    if (parsed.speak)          spokenFinal = parsed.speak;
+    if (parsed.panels?.length) panelsFinal = parsed.panels;
 
     const toolCalls = parsed.tools || [];
-    turns.push({ role: 'assistant', rawJson: jsonMatch[0] });
+    turns.push({ role:'assistant', rawJson:raw });
 
     if (parsed.done || toolCalls.length === 0) break;
 
     const results = await Promise.all(toolCalls.map(async call => {
-      toolsExecuted.push({ name: call.name, args: call.args });
+      toolsExecuted.push({ name:call.name, args:call.args });
       const result = await executeJarvisTool(call.name, call.args || {});
-      return { tool: call.name, args: call.args, result };
+      return { tool:call.name, args:call.args, result };
     }));
 
-    turns.push({ role: 'tool_results', results });
+    turns.push({ role:'tool_results', results });
+
+    // If request_confirmation was called, JARVIS will respond with done=true on next iteration
+    // asking the user to confirm — let it complete that turn naturally
   }
 
   return {
     spoken:    spokenFinal || 'Done, sir.',
     panels:    panelsFinal,
     toolsExecuted,
-    updatedHistory: turns.filter(t => t.role === 'user' || t.role === 'assistant').slice(-20),
+    updatedHistory: turns.filter(t => t.role==='user' || t.role==='assistant').slice(-50),
   };
 }
 

@@ -415,17 +415,71 @@ function renderPanels(panels) {
 }
 
 function renderPanel(panel) {
-  const { type, title, data } = panel;
+  const { type, title, data, html, css } = panel;
   switch (type) {
     case 'comparison':    return renderComparisonPanel(title, data);
     case 'video_list':    return renderVideoListPanel(title, data);
     case 'channel_stats': return renderChannelStatsPanel(title, data);
     case 'system_status': return renderSystemStatusPanel(title, data);
     case 'render_queue':  return renderQueuePanel(title, data);
+    case 'custom':        return renderCustomPanel(title, html || '', css || '');
     default:
       return `<div class="od-header"><div class="od-name">${esc(title || type.toUpperCase())}</div></div>
               <pre class="od-raw">${esc(JSON.stringify(data, null, 2))}</pre>`;
   }
+}
+
+function renderCustomPanel(title, rawHtml, rawCss) {
+  const scopeId  = 'cp-' + Math.random().toString(36).slice(2, 9);
+  const safeHtml = sanitizePanelHtml(rawHtml);
+  const scoped   = rawCss ? scopePanelCss(rawCss, scopeId) : '';
+  return `
+    ${scoped ? `<style>${scoped}</style>` : ''}
+    <div class="od-header"><div class="od-name">${esc(title || 'ANALYSIS')}</div></div>
+    <div class="od-sections">
+      <div class="od-section">
+        <div class="custom-panel-scope ${scopeId}">${safeHtml}</div>
+      </div>
+    </div>`;
+}
+
+function sanitizePanelHtml(html) {
+  const ALLOWED_TAGS = new Set([
+    'div','span','p','h1','h2','h3','h4','ul','ol','li',
+    'table','thead','tbody','tr','th','td','strong','em','b','i',
+    'br','hr','code','pre','a','small','sup','sub',
+  ]);
+  const ALLOWED_ATTRS = new Set(['class','style','title','href','colspan','rowspan']);
+  try {
+    const parser = new DOMParser();
+    const doc    = parser.parseFromString(`<body>${html}</body>`, 'text/html');
+    function clean(el) {
+      for (const child of [...el.childNodes]) {
+        if (child.nodeType === Node.TEXT_NODE) continue;
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          if (!ALLOWED_TAGS.has(child.tagName.toLowerCase())) { el.removeChild(child); continue; }
+          for (const attr of [...child.attributes]) {
+            if (!ALLOWED_ATTRS.has(attr.name)) { child.removeAttribute(attr.name); continue; }
+            if (attr.name === 'href'  && !/^(https?:\/\/|\/)/i.test(attr.value)) child.removeAttribute(attr.name);
+            if (attr.name === 'style' && /expression|javascript|behavior/i.test(attr.value)) child.removeAttribute(attr.name);
+            if (attr.name === 'href') child.setAttribute('target', '_blank');
+          }
+          clean(child);
+        } else { el.removeChild(child); }
+      }
+    }
+    clean(doc.body);
+    return doc.body.innerHTML;
+  } catch { return esc(html); }
+}
+
+function scopePanelCss(css, scopeClass) {
+  return css.replace(/([^{}]+)\{/g, (match, selector) => {
+    const s = selector.trim();
+    if (s.startsWith('@')) return match;
+    const scoped = s.split(',').map(r => `.${scopeClass} ${r.trim()}`).join(', ');
+    return `${scoped} {`;
+  });
 }
 
 function renderComparisonPanel(title, data) {

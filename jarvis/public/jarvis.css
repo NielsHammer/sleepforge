@@ -900,6 +900,83 @@ html, body {
   overflow-y: auto;
 }
 
+/* ─── CUSTOM PANEL SCOPE ─────────────────────────────────────────────────────── */
+
+.custom-panel-scope {
+  color: var(--text2);
+  font-family: var(--ff-data);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.custom-panel-scope table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--ff-data);
+  font-size: 12px;
+}
+.custom-panel-scope th {
+  font-family: var(--ff-ui);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text3);
+  text-align: left;
+  padding: 6px 10px 6px 0;
+  border-bottom: 1px solid rgba(0,229,255,0.12);
+}
+.custom-panel-scope td {
+  padding: 7px 10px 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: top;
+}
+.custom-panel-scope .metric-big {
+  font-family: var(--ff-mono);
+  font-size: 42px;
+  color: #00E5FF;
+  text-shadow: 0 0 18px rgba(0,229,255,0.5);
+  line-height: 1;
+}
+.custom-panel-scope .metric-label {
+  font-family: var(--ff-ui);
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+.custom-panel-scope .bar-track {
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 4px 0;
+}
+.custom-panel-scope .bar-fill {
+  height: 100%;
+  background: #00E5FF;
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(0,229,255,0.6);
+  transition: width 0.8s cubic-bezier(0.34,1.56,0.64,1);
+}
+.custom-panel-scope .bar-fill.amber { background: #FFB300; box-shadow: 0 0 8px rgba(255,179,0,0.6); }
+.custom-panel-scope .callout {
+  border-left: 3px solid #FFB300;
+  padding: 10px 14px;
+  background: rgba(255,179,0,0.06);
+  border-radius: 0 4px 4px 0;
+}
+.custom-panel-scope .tag {
+  display: inline-block;
+  font-family: var(--ff-ui);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  padding: 2px 8px;
+  border: 1px solid rgba(0,229,255,0.25);
+  color: #00E5FF;
+  border-radius: 2px;
+  margin: 2px;
+}
+.custom-panel-scope a { color: #00E5FF; text-decoration: none; }
+.custom-panel-scope a:hover { text-shadow: 0 0 8px rgba(0,229,255,0.6); }
+
 /* ─── KEYFRAME ANIMATIONS ───────────────────────────────────────────────────── */
 
 @keyframes spin-cw {
