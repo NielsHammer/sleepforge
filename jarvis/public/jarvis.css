@@ -610,6 +610,32 @@ html, body {
   font-style: italic;
 }
 
+#cmd-mic {
+  font-family: var(--ff-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: rgba(0,229,255,0.5);
+  background: transparent;
+  border: 1px solid rgba(0,229,255,0.2);
+  padding: 7px 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-right: 6px;
+  transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+#cmd-mic:hover {
+  color: var(--cyan);
+  border-color: rgba(0,229,255,0.45);
+}
+#cmd-mic.listening {
+  color: var(--amber);
+  border-color: rgba(255,179,0,0.6);
+  background: rgba(255,179,0,0.08);
+  box-shadow: 0 0 8px rgba(255,179,0,0.4);
+  animation: blink 0.7s step-end infinite;
+}
+
 #cmd-send {
   font-family: var(--ff-ui);
   font-size: 10px;

@@ -309,6 +309,105 @@ function closeChannel() {
   setStatus('STANDING BY');
 }
 
+// ─── AUDIO CONTEXT ───────────────────────────────────────────────────────────
+
+let _audioCtx = null;
+function getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+}
+
+// ─── JARVIS VOICE PLAYBACK ────────────────────────────────────────────────────
+
+let _speaking = false;
+
+async function playJarvisVoice(text) {
+  if (!text) return;
+  _speaking = true;
+  setStatus('RESPONDING');
+  document.getElementById('core').classList.add('pulsing');
+
+  try {
+    const res = await fetch('/api/jarvis/speak', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+    if (!res.ok) throw new Error(`TTS HTTP ${res.status}`);
+
+    const arrayBuf = await res.arrayBuffer();
+    const ctx      = getAudioCtx();
+    const decoded  = await ctx.decodeAudioData(arrayBuf);
+    const src      = ctx.createBufferSource();
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 32;
+
+    src.buffer = decoded;
+    src.connect(analyser);
+    analyser.connect(ctx.destination);
+    src.start();
+
+    // Audio-reactive outer ring
+    const r1 = document.querySelector('.r1');
+    const dataArr = new Uint8Array(analyser.frequencyBinCount);
+    function animFrame() {
+      if (!_speaking) { if (r1) r1.style.transform = ''; return; }
+      analyser.getByteFrequencyData(dataArr);
+      const avg   = dataArr.reduce((s,v) => s + v, 0) / dataArr.length;
+      const scale = 1 + (avg / 255) * 0.45;
+      if (r1) r1.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      requestAnimationFrame(animFrame);
+    }
+    requestAnimationFrame(animFrame);
+
+    src.onended = () => {
+      _speaking = false;
+      if (r1) r1.style.transform = '';
+      document.getElementById('core').classList.remove('pulsing');
+      setStatus('STANDING BY');
+    };
+  } catch (e) {
+    console.error('[voice]', e);
+    _speaking = false;
+    document.getElementById('core').classList.remove('pulsing');
+    setStatus('STANDING BY');
+  }
+}
+
+// ─── UI ACTIONS ──────────────────────────────────────────────────────────────
+
+function handleActions(actions) {
+  if (!Array.isArray(actions)) return;
+  for (const a of actions) {
+    switch (a.type) {
+      case 'open_channel':
+        // Brief delay so voice starts first
+        setTimeout(() => openChannel(a.slug === 'astronomer' ? 'astronomer' : 'philosophers'), 600);
+        break;
+      case 'close_panel':
+        closeChannel();
+        break;
+      case 'highlight_metric': {
+        const ids = a.metric === 'subs'
+          ? ['m-astro-subs',  'm-phil-subs']
+          : ['m-astro-views', 'm-phil-views'];
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.style.transition = 'color 0.2s, text-shadow 0.2s';
+          el.style.color = '#FFB300';
+          el.style.textShadow = '0 0 12px rgba(255,179,0,0.8)';
+          setTimeout(() => {
+            el.style.color = '';
+            el.style.textShadow = '';
+          }, 3000);
+        });
+        break;
+      }
+    }
+  }
+}
+
 // ─── COMMAND INPUT ────────────────────────────────────────────────────────────
 
 function fillCmd(text) {
@@ -318,26 +417,104 @@ function fillCmd(text) {
   el.focus();
 }
 
-function sendCommand() {
+let _cmdPending = false;
+
+async function sendCommand(cmdOverride) {
+  if (_cmdPending) return;
   const el  = document.getElementById('command-input');
-  const cmd = (el.value || '').trim();
+  const cmd = (cmdOverride || el.value || '').trim();
   if (!cmd) return;
+
   el.value = '';
+  _cmdPending = true;
+  setStatus('PROCESSING', true);
 
-  setStatus(cmd.slice(0, 50), true);
-
+  // Show response panel immediately with "thinking" state
   const panel = document.getElementById('response-panel');
-  document.getElementById('response-title').textContent = 'COMMAND RECEIVED';
-  document.getElementById('response-body').textContent  =
-    `> ${cmd}\n\n[ PHASE 2 — COMMAND EXECUTION PENDING ]\nWire-up coming in next session.`;
+  document.getElementById('response-title').textContent = 'JARVIS';
+  document.getElementById('response-body').textContent  = `> ${cmd}\n\n…`;
   panel.classList.remove('hidden', 'slide-in');
   void panel.offsetWidth;
   panel.classList.add('slide-in');
 
-  setTimeout(() => {
-    const s = document.getElementById('core-status');
-    if (s && s.textContent === cmd.toUpperCase().slice(0, 50)) setStatus('STANDING BY');
-  }, 5000);
+  try {
+    const r = await fetch('/api/jarvis/command', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: cmd }),
+    });
+    const { spoken, actions } = await r.json();
+
+    document.getElementById('response-body').textContent = `> ${cmd}\n\n${spoken}`;
+    setStatus(spoken.slice(0, 50).toUpperCase());
+
+    // Play voice + handle actions
+    await playJarvisVoice(spoken);
+    handleActions(actions || []);
+  } catch (e) {
+    document.getElementById('response-body').textContent = `> ${cmd}\n\n[JARVIS OFFLINE — ${e.message}]`;
+    setStatus('ERROR');
+    setTimeout(() => setStatus('STANDING BY'), 3000);
+  } finally {
+    _cmdPending = false;
+  }
+}
+
+// ─── MIC / SPEECH RECOGNITION ────────────────────────────────────────────────
+
+let _recognition = null;
+let _micActive   = false;
+
+function toggleMic() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    setStatus('SPEECH API UNAVAILABLE');
+    setTimeout(() => setStatus('STANDING BY'), 2000);
+    return;
+  }
+
+  if (_micActive) {
+    _micActive = false;
+    if (_recognition) _recognition.stop();
+    document.getElementById('cmd-mic').classList.remove('listening');
+    setStatus('STANDING BY');
+    return;
+  }
+
+  _micActive = true;
+  document.getElementById('cmd-mic').classList.add('listening');
+  setStatus('LISTENING');
+
+  _recognition = new SR();
+  _recognition.lang         = 'en-US';
+  _recognition.interimResults = false;
+  _recognition.maxAlternatives = 1;
+
+  _recognition.onresult = e => {
+    const transcript = e.results[0][0].transcript;
+    document.getElementById('command-input').value = transcript;
+    _micActive = false;
+    document.getElementById('cmd-mic').classList.remove('listening');
+    // Auto-submit
+    sendCommand(transcript);
+  };
+
+  _recognition.onerror = () => {
+    _micActive = false;
+    document.getElementById('cmd-mic').classList.remove('listening');
+    setStatus('MIC ERROR');
+    setTimeout(() => setStatus('STANDING BY'), 2000);
+  };
+
+  _recognition.onend = () => {
+    if (_micActive) {
+      _micActive = false;
+      document.getElementById('cmd-mic').classList.remove('listening');
+      setStatus('STANDING BY');
+    }
+  };
+
+  _recognition.start();
 }
 
 // ─── UTILITIES ───────────────────────────────────────────────────────────────
@@ -388,7 +565,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('command-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') sendCommand();
   });
-  document.getElementById('cmd-send').addEventListener('click', sendCommand);
+  document.getElementById('cmd-send').addEventListener('click', () => sendCommand());
+  document.getElementById('cmd-mic').addEventListener('click', toggleMic);
 
   // Escape closes overlay
   document.addEventListener('keydown', e => {

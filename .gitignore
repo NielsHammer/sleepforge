@@ -18,6 +18,13 @@ node_modules/
 *.tmp
 .DS_Store
 
+# Large binary assets (download separately)
+bin/piper/
+assets/voices/jarvis/*.onnx
+data/test-jarvis-*.wav
+data/test-ryan.mp3
+data/jarvis-voice-sample.mp3
+
 # Large regenerable caches
 assets/images/library-v1/
 assets/images/library-v1-rejected/

@@ -93,34 +93,61 @@ async function getGpu() {
   });
 }
 
-// ─── EDGE TTS (Python edge-tts CLI — dynamically fetches fresh tokens) ──────────
+// ─── TTS — Piper (JARVIS voice) with Edge TTS fallback ───────────────────────
 
-const PYTHON_BIN = process.env.PYTHON_BIN || 'python';
+const PYTHON_BIN   = process.env.PYTHON_BIN  || 'python';
+// piper-tts is installed in system Python (not venv) — use explicit path
+const PIPER_PYTHON = process.env.PIPER_PYTHON || 'C:\\Python314\\python.exe';
+const PIPER_MODEL  = path.join(ROOT, 'assets', 'voices', 'jarvis', 'jarvis-medium.onnx');
+const PIPER_AVAIL  = fs.existsSync(PIPER_MODEL);
 
-async function synthesize(text, voice = 'en-GB-RyanNeural', rate = '+5%') {
+async function synthesize(text) {
+  if (PIPER_AVAIL) {
+    try { return await synthesizePiper(text); }
+    catch (e) { console.warn('[TTS] Piper failed, falling back to edge-tts:', e.message); }
+  }
+  return synthesizeEdge(text);
+}
+
+async function synthesizePiper(text) {
+  const tmpFile = path.join(os.tmpdir(), `piper_${crypto.randomUUID()}.wav`);
+  return new Promise((resolve, reject) => {
+    const proc = spawn(PIPER_PYTHON, ['-m', 'piper',
+      '--model', PIPER_MODEL,
+      '--output_file', tmpFile,
+    ], { timeout: 15000 });
+    let stderr = '';
+    proc.stderr.on('data', d => { stderr += d.toString(); });
+    proc.stdin.write(text + '\n');
+    proc.stdin.end();
+    proc.on('close', code => {
+      if (code !== 0) { reject(new Error(`piper (${code}): ${stderr.slice(-200)}`)); return; }
+      try {
+        const buf = fs.readFileSync(tmpFile);
+        fs.rmSync(tmpFile, { force: true });
+        resolve({ buf, contentType: 'audio/wav' });
+      } catch (e) { reject(e); }
+    });
+    proc.on('error', reject);
+  });
+}
+
+async function synthesizeEdge(text, voice = 'en-GB-RyanNeural', rate = '+5%') {
   const tmpFile = path.join(os.tmpdir(), `tts_${crypto.randomUUID()}.mp3`);
   return new Promise((resolve, reject) => {
     const proc = spawn(PYTHON_BIN, [
-      '-m', 'edge_tts',
-      '--text', text,
-      '--voice', voice,
-      '--rate', rate,
-      '--write-media', tmpFile,
+      '-m', 'edge_tts', '--text', text,
+      '--voice', voice, '--rate', rate, '--write-media', tmpFile,
     ], { timeout: 30000 });
     let stderr = '';
     proc.stderr.on('data', d => { stderr += d.toString(); });
     proc.on('close', code => {
-      if (code !== 0) {
-        reject(new Error(`edge_tts failed (${code}): ${stderr.slice(-300)}`));
-        return;
-      }
+      if (code !== 0) { reject(new Error(`edge_tts (${code}): ${stderr.slice(-300)}`)); return; }
       try {
         const buf = fs.readFileSync(tmpFile);
         fs.rmSync(tmpFile, { force: true });
-        resolve(buf);
-      } catch (err) {
-        reject(err);
-      }
+        resolve({ buf, contentType: 'audio/mpeg' });
+      } catch (e) { reject(e); }
     });
     proc.on('error', reject);
   });
@@ -191,6 +218,29 @@ PERSONALITY RULES:
 - End with a relevant next suggestion when useful.
 - If the user asks you to render a video, confirm with a dry one-liner, then on the very last line append this exact JSON (no trailing text): {"action":"render","topic":"TOPIC_HERE","channel":"CHANNEL_HERE"}
   If no channel is specified, default channel is "sleepless-philosophers".`;
+
+// Compact command prompt — returns JSON for the frontend to act on
+const JARVIS_CMD_SYS = `You are JARVIS, Tony Stark's AI assistant running SleepForge — a YouTube automation system.
+British, precise, dry-witted. Address the user as "sir".
+
+Respond with ONLY a JSON object, no other text:
+{"spoken":"1-2 sentence British response","actions":[]}
+
+Available actions (include only when genuinely useful):
+{"type":"open_channel","slug":"astronomer"}
+{"type":"open_channel","slug":"philosophers"}
+{"type":"close_panel"}
+{"type":"highlight_metric","metric":"subs"}
+
+Examples:
+User: Show Astronomer
+{"spoken":"Of course sir. Pulling up Sleepless Astronomer now.","actions":[{"type":"open_channel","slug":"astronomer"}]}
+User: Close that
+{"spoken":"Certainly, sir.","actions":[{"type":"close_panel"}]}
+User: Status
+{"spoken":"Both channels operational sir. No active renders at this time.","actions":[]}
+
+OUTPUT ONLY JSON. NO MARKDOWN. NO EXTRA TEXT.`;
 
 async function askJarvis(question, ctx) {
   const prompt = `${JARVIS_SYS}\n\nCURRENT CONTEXT:\n${JSON.stringify(ctx,null,2)}\n\nUSER: ${question}\n\nJARVIS:`;
@@ -370,13 +420,43 @@ app.post('/api/jarvis/speak', async (req,res) => {
   const { text } = req.body;
   if (!text) return res.status(400).json({ error:'text required' });
   try {
-    const mp3 = await synthesize(text);
-    res.set('Content-Type','audio/mpeg');
-    res.set('Content-Length', String(mp3.length));
-    res.send(mp3);
+    const { buf, contentType } = await synthesize(text);
+    res.set('Content-Type', contentType);
+    res.set('Content-Length', String(buf.length));
+    res.send(buf);
   } catch(err) {
-    console.error('TTS error:', err.message);
+    console.error('[TTS] error:', err.message);
     res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/jarvis/command  — intent parsing + action routing
+app.post('/api/jarvis/command', async (req,res) => {
+  const { text } = req.body;
+  if (!text) return res.status(400).json({ error: 'text required' });
+
+  const ctx = {
+    channels: listChannels().map(c => c.slug),
+    active_renders: readState().renders.filter(r => ['rendering','uploading'].includes(r.status)).length,
+    queue_depth: readState().renders.filter(r => r.status === 'queued').length,
+  };
+
+  try {
+    const raw = await callClaudeCLI(JARVIS_CMD_SYS +
+      `\n\nCONTEXT: ${JSON.stringify(ctx)}\n\nUSER: ${text}\n\nJARVIS:`,
+      { model: 'claude-haiku-4-5-20251001', timeoutMs: 20000 }
+    );
+
+    // Extract JSON — Claude sometimes wraps in markdown fences
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      return res.json({ spoken: raw.replace(/[*#`]/g,'').trim().slice(0,200), actions: [] });
+    }
+    const parsed = JSON.parse(jsonMatch[0]);
+    res.json({ spoken: parsed.spoken || '', actions: parsed.actions || [] });
+  } catch(err) {
+    console.error('[command] error:', err.message);
+    res.json({ spoken: `My apologies sir. ${err.message.slice(0,100)}`, actions: [] });
   }
 });
 
