@@ -3,305 +3,211 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JARVIS — SleepForge Command Center</title>
+  <title>JARVIS — SleepForge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="jarvis.css">
 </head>
 <body>
 
-<!-- ═══ BOOT OVERLAY ═══ -->
-<div id="boot">
-  <canvas id="boot-particles"></canvas>
-  <div id="boot-inner">
-    <div id="boot-logo">JARVIS</div>
-    <div id="boot-sub">SLEEPFORGE AUTONOMOUS PRODUCTION SYSTEM</div>
-    <div id="boot-progress-wrap"><div id="boot-bar"></div></div>
-    <div id="boot-log"></div>
-  </div>
-</div>
+<!-- ═══ SHELL ═══ -->
+<div id="shell">
 
-<!-- ═══ MAIN HUD ═══ -->
-<div id="app" class="hidden">
-  <canvas id="particles"></canvas>
-  <div id="scanlines"></div>
-
-  <!-- HEADER -->
-  <header id="hdr">
-    <div class="hdr-left">
-      <div class="hdr-logo">JARVIS</div>
-      <div class="hdr-tagline">SLEEPFORGE COMMAND CENTER</div>
+  <!-- TOP BAR -->
+  <header id="topbar">
+    <div class="topbar-left">
+      <div class="logo">JARVIS</div>
+      <div class="logo-sub">SleepForge Command Center</div>
     </div>
-    <div class="hdr-center">
-      <div id="clock">00:00:00</div>
-      <div id="dateline"></div>
+    <div class="topbar-center">
+      <div id="clock-bkk">--:--:--</div>
+      <div id="clock-date">Bangkok</div>
     </div>
-    <div class="hdr-right">
-      <div class="sys-badge pulse-badge" id="health-badge">
-        <span class="pulse-ring"></span><span class="pulse-dot"></span>NOMINAL
+    <div class="topbar-right">
+      <div class="status-pill" id="pill-chatterbox" title="Chatterbox TTS">
+        <span class="dot" id="dot-chatterbox"></span>TTS
       </div>
-      <div class="metric-pill">CPU<span id="cpu-val">--</span>%</div>
-      <div class="metric-pill">GPU<span id="gpu-val">--</span>%</div>
-      <div class="metric-pill">VRAM<span id="vram-val">--</span></div>
+      <div class="status-pill" id="pill-fal" title="Fal.ai">
+        <span class="dot" id="dot-fal"></span>FAL
+      </div>
+      <div class="status-pill" id="pill-yt" title="YouTube Auth">
+        <span class="dot" id="dot-yt"></span>YT
+      </div>
+      <div class="metric-chip"><span id="cpu-val">--</span>% CPU</div>
+      <div class="metric-chip" id="gpu-chip"><span id="gpu-val">--</span>% GPU</div>
+      <div class="metric-chip"><span id="vram-val">--</span> VRAM</div>
     </div>
   </header>
 
-  <!-- SIDEBAR -->
-  <nav id="sidebar">
-    <div class="nav-item active" data-panel="overview">
-      <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg>
-      <span>Overview</span>
-    </div>
-    <div class="nav-item" data-panel="channels">
-      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-.57c0-.81.48-1.53 1.22-1.85C8.51 16.21 10.14 16 12 16s3.49.21 4.78.58c.74.32 1.22 1.04 1.22 1.85V19z"/></svg>
-      <span>Channels</span>
-    </div>
-    <div class="nav-item" data-panel="queue">
-      <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg>
-      <span>Queue</span>
-    </div>
-    <div class="nav-item" data-panel="analytics">
-      <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
-      <span>Analytics</span>
-    </div>
-    <div class="nav-item" data-panel="library">
-      <svg viewBox="0 0 24 24"><path d="M20 4v16H8V4h12m0-2H8c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H10v-2h8v2zm0-4H10V6h8v2zm-3 8H10v-2h5v2zM4 6H2v16c0 1.1.9 2 2 2h16v-2H4V6z"/></svg>
-      <span>Library</span>
-    </div>
-    <div class="nav-item" data-panel="approval">
-      <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-      <span>Approve</span>
-    </div>
-    <div class="nav-item" data-panel="settings">
-      <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.63-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-      <span>Settings</span>
-    </div>
-  </nav>
+  <!-- BODY -->
+  <div id="body-wrap">
 
-  <!-- MAIN CONTENT -->
-  <main id="content">
+    <!-- SIDEBAR -->
+    <nav id="sidebar">
+      <div class="nav-section">
+        <button class="nav-btn active" onclick="showPage('overview')" id="nav-overview">
+          <i data-lucide="layout-dashboard"></i><span>Overview</span>
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Channels</div>
+        <button class="nav-btn" onclick="showPage('astronomer')" id="nav-astronomer">
+          <i data-lucide="telescope"></i><span>Astronomer</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('philosophers')" id="nav-philosophers">
+          <i data-lucide="book-open"></i><span>Philosophers</span>
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">System</div>
+        <button class="nav-btn" onclick="showPage('queue')" id="nav-queue">
+          <i data-lucide="list-ordered"></i><span>Render Queue</span>
+        </button>
+        <button class="nav-btn" onclick="showPage('jarvis')" id="nav-jarvis">
+          <i data-lucide="message-square"></i><span>JARVIS Chat</span>
+        </button>
+      </div>
+    </nav>
 
-    <!-- OVERVIEW -->
-    <section id="panel-overview" class="panel active">
-      <div class="panel-title">COMMAND OVERVIEW</div>
-      <div class="stat-row">
-        <div class="stat-card" id="sc-videos">
-          <div class="stat-glyph">▶</div>
-          <div class="stat-num" data-target="0">0</div>
-          <div class="stat-lbl">Videos Published</div>
+    <!-- MAIN CONTENT -->
+    <main id="main">
+
+      <!-- ═══ OVERVIEW PAGE ═══ -->
+      <div id="page-overview" class="page active">
+        <div class="page-title">Command Overview</div>
+
+        <!-- Channel Cards -->
+        <div class="channel-grid">
+          <!-- Astronomer -->
+          <div class="channel-card channel-astro" onclick="showPage('astronomer')">
+            <div class="card-accent-bar accent-astro"></div>
+            <div class="card-head">
+              <div>
+                <div class="card-name">Sleepless Astronomer</div>
+                <div class="card-handle">@sleepastronomer</div>
+              </div>
+              <div class="card-badge badge-astro">SPACE</div>
+            </div>
+            <div class="card-stats" id="astro-stats">
+              <div class="stat-item">
+                <div class="stat-val" id="astro-subs">—</div>
+                <div class="stat-lbl">Subscribers</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-val" id="astro-views">—</div>
+                <div class="stat-lbl">Total Views</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-val" id="astro-ctr">—</div>
+                <div class="stat-lbl">Last CTR</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-val" id="astro-retention">—</div>
+                <div class="stat-lbl">Avg Retention</div>
+              </div>
+            </div>
+            <div class="card-queue-strip" id="astro-queue-strip">
+              <div class="queue-loading">Loading schedule...</div>
+            </div>
+            <div class="card-last-video" id="astro-last-video">
+              <div class="last-video-loading">Fetching latest...</div>
+            </div>
+          </div>
+
+          <!-- Philosophers -->
+          <div class="channel-card channel-phil" onclick="showPage('philosophers')">
+            <div class="card-accent-bar accent-phil"></div>
+            <div class="card-head">
+              <div>
+                <div class="card-name">Sleepless Philosophers</div>
+                <div class="card-handle">@SleeplessPhilosophers</div>
+              </div>
+              <div class="card-badge badge-phil">PHILOSOPHY</div>
+            </div>
+            <div class="card-stats">
+              <div class="stat-item">
+                <div class="stat-val" id="phil-subs">—</div>
+                <div class="stat-lbl">Subscribers</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-val" id="phil-views">—</div>
+                <div class="stat-lbl">Total Views</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-val" id="phil-ctr">—</div>
+                <div class="stat-lbl">Last CTR</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-val" id="phil-retention">—</div>
+                <div class="stat-lbl">Avg Retention</div>
+              </div>
+            </div>
+            <div class="card-queue-strip" id="phil-queue-strip">
+              <div class="queue-loading">Loading schedule...</div>
+            </div>
+            <div class="card-last-video" id="phil-last-video">
+              <div class="last-video-loading">Fetching latest...</div>
+            </div>
+          </div>
         </div>
-        <div class="stat-card" id="sc-views">
-          <div class="stat-glyph">◉</div>
-          <div class="stat-num" data-target="0">0</div>
-          <div class="stat-lbl">Total Views</div>
-        </div>
-        <div class="stat-card amber" id="sc-earn">
-          <div class="stat-glyph">$</div>
-          <div class="stat-num" data-prefix="$" data-target="0">$0</div>
-          <div class="stat-lbl">Est. Earnings (30d)</div>
-        </div>
-        <div class="stat-card" id="sc-channels">
-          <div class="stat-glyph">◈</div>
-          <div class="stat-num" data-target="0">0</div>
-          <div class="stat-lbl">Active Channels</div>
+
+        <!-- Active Renders -->
+        <div class="section-head">Active Renders</div>
+        <div id="overview-renders">
+          <div class="empty-state">No active renders.</div>
         </div>
       </div>
 
-      <div class="two-col">
-        <div class="col-block">
-          <div class="block-title">TODAY'S QUEUE</div>
-          <div id="ov-queue"></div>
-        </div>
-        <div class="col-block">
-          <div class="block-title">RECENT VIDEOS</div>
-          <div id="ov-recent"></div>
+      <!-- ═══ ASTRONOMER PAGE ═══ -->
+      <div id="page-astronomer" class="page">
+        <div class="page-title">Sleepless Astronomer <span class="page-accent accent-astro-text">Space Documentary</span></div>
+        <div class="channel-detail" id="detail-astronomer">
+          <div class="detail-loading">Loading channel data...</div>
         </div>
       </div>
 
-      <div class="col-block mt-20">
-        <div class="block-title">SYSTEM DIAGNOSTICS</div>
-        <div class="diag-grid">
-          <div class="diag-item"><span>Chatterbox TTS</span><span class="badge-checking" id="diag-tts">CHECKING</span></div>
-          <div class="diag-item"><span>Fal.ai API</span><span class="badge-checking" id="diag-fal">CHECKING</span></div>
-          <div class="diag-item"><span>YouTube OAuth</span><span class="badge-checking" id="diag-yt">CHECKING</span></div>
-          <div class="diag-item"><span>Output Directory</span><span class="badge-ok">ONLINE</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CHANNELS -->
-    <section id="panel-channels" class="panel">
-      <div class="panel-title">CHANNEL NETWORK</div>
-      <div id="ch-grid" class="ch-grid"></div>
-      <div id="ch-detail" class="ch-detail hidden">
-        <button class="back-btn" onclick="closeChannelDetail()">← BACK TO CHANNELS</button>
-        <div class="panel-title" id="ch-detail-title">CHANNEL DETAIL</div>
-        <div id="ch-video-grid" class="ch-video-grid"></div>
-      </div>
-    </section>
-
-    <!-- QUEUE -->
-    <section id="panel-queue" class="panel">
-      <div class="panel-title-row">
-        <div class="panel-title">RENDER QUEUE</div>
-        <button class="btn-primary" onclick="openAddModal()">+ ADD TO QUEUE</button>
-      </div>
-      <div class="queue-table">
-        <div class="queue-header">
-          <span>TOPIC</span><span>CHANNEL</span><span>STATUS</span><span>PROGRESS</span><span>TIME</span>
-        </div>
-        <div id="queue-rows"></div>
-      </div>
-    </section>
-
-    <!-- ANALYTICS -->
-    <section id="panel-analytics" class="panel">
-      <div class="panel-title">PERFORMANCE ANALYTICS</div>
-
-      <!-- Benchmark row -->
-      <div class="stat-row" id="benchmark-row">
-        <div class="stat-card" id="bc-sf-ctr">
-          <div class="stat-glyph">▲</div>
-          <div class="stat-num" id="bc-sf-ctr-val">—</div>
-          <div class="stat-lbl">SleepForge Avg CTR</div>
-        </div>
-        <div class="stat-card" id="bc-ch-ctr">
-          <div class="stat-glyph">◉</div>
-          <div class="stat-num" id="bc-ch-ctr-val">—</div>
-          <div class="stat-lbl">Channel Baseline CTR</div>
-        </div>
-        <div class="stat-card" id="bc-sf-ret">
-          <div class="stat-glyph">⧖</div>
-          <div class="stat-num" id="bc-sf-ret-val">—</div>
-          <div class="stat-lbl">SleepForge Avg Retention</div>
-        </div>
-        <div class="stat-card" id="bc-ch-ret">
-          <div class="stat-glyph">◈</div>
-          <div class="stat-num" id="bc-ch-ret-val">—</div>
-          <div class="stat-lbl">Channel Baseline Retention</div>
+      <!-- ═══ PHILOSOPHERS PAGE ═══ -->
+      <div id="page-philosophers" class="page">
+        <div class="page-title">Sleepless Philosophers <span class="page-accent accent-phil-text">Philosophy</span></div>
+        <div class="channel-detail" id="detail-philosophers">
+          <div class="detail-loading">Loading channel data...</div>
         </div>
       </div>
 
-      <!-- Insights -->
-      <div class="block-title mt-20">WHAT'S WORKING THIS MONTH</div>
-      <div id="analytics-insights" class="insights-list">Loading intelligence…</div>
-
-      <!-- Principle scores -->
-      <div class="block-title mt-20">PRINCIPLE PERFORMANCE (CTR LIFT)</div>
-      <div id="principle-table" class="analytics-table"></div>
-
-      <!-- Top thumbnails -->
-      <div class="block-title mt-20">TOP 10 THUMBNAILS BY CTR</div>
-      <div id="thumb-grid" class="thumb-perf-grid"></div>
-
-      <!-- Top titles -->
-      <div class="block-title mt-20">TOP TITLES BY CTR</div>
-      <div id="analytics-table" class="analytics-table"></div>
-    </section>
-
-    <!-- LIBRARY -->
-    <section id="panel-library" class="panel">
-      <div class="panel-title-row">
-        <div class="panel-title">CHALK IMAGE LIBRARY</div>
-        <div class="lib-controls">
-          <input id="lib-search" class="search-box" type="text" placeholder="Search philosopher, era, mood…">
-          <span id="lib-count" class="lib-count">500 images</span>
+      <!-- ═══ QUEUE PAGE ═══ -->
+      <div id="page-queue" class="page">
+        <div class="page-title">Render Queue</div>
+        <div id="queue-list">
+          <div class="empty-state">No jobs queued.</div>
         </div>
       </div>
-      <div id="lib-grid" class="lib-grid"></div>
-      <button id="lib-more" class="load-more" onclick="loadMoreLibrary()">LOAD MORE</button>
-    </section>
 
-    <!-- CONTENT APPROVAL QUEUE -->
-    <section id="panel-approval" class="panel">
-      <div class="panel-title-row">
-        <div class="panel-title">CONTENT APPROVAL QUEUE</div>
-        <button class="btn-primary" id="gen-btn" onclick="generateContentSets()">+ GENERATE 5 SETS</button>
-      </div>
-      <div id="gen-status" class="gen-status hidden"></div>
-      <div id="approval-empty" class="approval-empty hidden">
-        <div class="approval-empty-icon">◈</div>
-        <div>No content sets in queue — click Generate to create some.</div>
-      </div>
-      <div id="approval-grid" class="approval-grid"></div>
-    </section>
-
-    <!-- SETTINGS -->
-    <section id="panel-settings" class="panel">
-      <div class="panel-title">SYSTEM CONFIGURATION</div>
-      <div class="settings-cols">
-        <div class="settings-group">
-          <div class="settings-group-title">API CREDENTIALS</div>
-          <div class="setting-row"><span>FAL.ai Image Generation</span><span class="key-check" id="key-fal">CHECKING</span></div>
-          <div class="setting-row"><span>Anthropic (Claude CLI)</span><span class="key-ok">✓ SUBSCRIPTION</span></div>
-          <div class="setting-row"><span>YouTube OAuth</span><span class="key-check" id="key-yt">CHECKING</span></div>
-        </div>
-        <div class="settings-group">
-          <div class="settings-group-title">PIPELINE DEFAULTS</div>
-          <div class="setting-row"><span>Default Privacy</span><span class="val-badge">PRIVATE</span></div>
-          <div class="setting-row"><span>Default Channel</span><span class="val-badge">sleepless-philosophers</span></div>
-          <div class="setting-row"><span>Est. RPM</span><span class="val-badge">$20</span></div>
-          <div class="setting-row"><span>BG Music Volume</span><span class="val-badge">12%</span></div>
-        </div>
-        <div class="settings-group">
-          <div class="settings-group-title">JARVIS VOICE</div>
-          <div class="setting-row"><span>Voice Profile</span><span class="val-badge">en-GB-RyanNeural</span></div>
-          <div class="setting-row"><span>Speech Rate</span><span class="val-badge">+5%</span></div>
-          <div class="setting-row">
-            <span>Voice Responses</span>
-            <label class="toggle"><input type="checkbox" id="voice-on" checked><span class="track"></span></label>
+      <!-- ═══ JARVIS CHAT PAGE ═══ -->
+      <div id="page-jarvis" class="page">
+        <div class="page-title">JARVIS</div>
+        <div id="chat-wrap">
+          <div id="chat-messages">
+            <div class="chat-msg jarvis">JARVIS online. What do you need, sir?</div>
+          </div>
+          <div id="chat-input-row">
+            <input id="chat-input" type="text" placeholder="Ask JARVIS anything…" autocomplete="off">
+            <button id="chat-send" onclick="sendChat()">Send</button>
           </div>
         </div>
       </div>
-    </section>
 
-  </main><!-- /content -->
-
-  <!-- CHAT BAR -->
-  <div id="chat-bar">
-    <div id="chat-msgs"></div>
-    <div id="chat-input-row">
-      <div class="chat-jarvis-label">J·A·R·V·I·S</div>
-      <input id="chat-in" type="text" placeholder="Query, sir…" autocomplete="off" spellcheck="false">
-      <button id="send-btn" onclick="sendMessage()">TRANSMIT</button>
-    </div>
-  </div>
-
-</div><!-- /app -->
-
-<!-- ADD TO QUEUE MODAL -->
-<div id="add-modal" class="modal-overlay hidden">
-  <div class="modal-box">
-    <div class="modal-title">ADD TO RENDER QUEUE</div>
-    <div class="modal-field">
-      <label>Topic</label>
-      <input id="modal-topic" type="text" placeholder="e.g. Marcus Aurelius on Mortality">
-    </div>
-    <div class="modal-field">
-      <label>Channel</label>
-      <select id="modal-channel"></select>
-    </div>
-    <div class="modal-field">
-      <label>Schedule (optional)</label>
-      <input id="modal-schedule" type="datetime-local">
-    </div>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeAddModal()">CANCEL</button>
-      <button class="btn-primary" onclick="submitQueue()">QUEUE IT</button>
-    </div>
-  </div>
-</div>
-
-<!-- IMAGE LIGHTBOX -->
-<div id="lightbox" class="modal-overlay hidden" onclick="closeLightbox()">
-  <div class="lightbox-box" onclick="event.stopPropagation()">
-    <img id="lb-img" src="">
-    <div id="lb-meta"></div>
-    <button class="btn-ghost" onclick="closeLightbox()">CLOSE</button>
+    </main>
   </div>
 </div>
 
 <script src="jarvis.js"></script>
+<script>
+  // Init Lucide icons after DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.lucide) lucide.createIcons();
+  });
+</script>
 </body>
 </html>

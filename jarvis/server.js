@@ -612,6 +612,71 @@ app.post('/api/content/reroll/:id', (req, res) => {
   child.on('close', () => {});
 });
 
+// ─── YOUTUBE QUEUE API ───────────────────────────────────────────────────────
+
+const { listChannelVideos, getVideoStats, authenticate } = await import('../src/youtube.js');
+const { google: googleApis } = await import('googleapis');
+
+const _ytCache = new Map(); // channelName -> { data, ts }
+const YT_CACHE_TTL = 5 * 60 * 1000;
+
+app.get('/api/youtube/queue/:channel', async (req, res) => {
+  const channel = req.params.channel;
+  const cached  = _ytCache.get(channel);
+  if (cached && Date.now() - cached.ts < YT_CACHE_TTL) return res.json(cached.data);
+
+  try {
+    const videos  = await listChannelVideos(channel);
+    const now     = new Date();
+
+    const scheduled = videos
+      .filter(v => v.privacyStatus === 'private' && v.scheduledAt && new Date(v.scheduledAt) > now)
+      .sort((a, b) => new Date(a.scheduledAt) - new Date(b.scheduledAt))
+      .slice(0, 14);
+
+    const published = videos
+      .filter(v => v.privacyStatus === 'public')
+      .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+      .slice(0, 5);
+
+    let lastStats = null;
+    if (published.length > 0) {
+      try {
+        const s = await getVideoStats(published[0].videoId, channel);
+        lastStats = { ...s, videoId: published[0].videoId, title: published[0].title, publishedAt: published[0].publishedAt };
+      } catch {}
+    }
+
+    // Channel identity (sub count etc via channels.list)
+    let channelInfo = null;
+    try {
+      const auth = await authenticate(channel);
+      const yt   = googleApis.youtube({ version: 'v3', auth });
+      const cr   = await yt.channels.list({ part: ['snippet', 'statistics'], mine: true });
+      const ch   = cr.data.items?.[0];
+      if (ch) channelInfo = {
+        title:       ch.snippet?.title,
+        description: ch.snippet?.description,
+        thumbnail:   ch.snippet?.thumbnails?.default?.url,
+        subs:        parseInt(ch.statistics?.subscriberCount || 0),
+        totalViews:  parseInt(ch.statistics?.viewCount || 0),
+        videoCount:  parseInt(ch.statistics?.videoCount || 0),
+      };
+    } catch {}
+
+    const data = { channel, scheduled, published, lastStats, channelInfo };
+    _ytCache.set(channel, { data, ts: Date.now() });
+    res.json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.delete('/api/youtube/queue/cache/:channel', (req, res) => {
+  _ytCache.delete(req.params.channel);
+  res.json({ ok: true });
+});
+
 // ─── METRICS BROADCAST ───────────────────────────────────────────────────────
 
 setInterval(async () => {

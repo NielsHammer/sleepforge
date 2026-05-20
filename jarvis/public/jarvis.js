@@ -1,927 +1,364 @@
-/* ═══════════════════════════════════════════════════════════
-   JARVIS — SleepForge Command Center — Frontend
-═══════════════════════════════════════════════════════════ */
-
 'use strict';
 
-// ─── GLOBALS ──────────────────────────────────────────────────────────────────
+// ─── STATE ────────────────────────────────────────────────────────────────────
 let ws;
-let voiceEnabled = true;
-let libPage = 0;
-let libSearch = '';
-let libTotal = 0;
-let activePanel = 'overview';
-let ctrChart = null;
-let viewsChart = null;
-const PANELS = ['overview','channels','queue','analytics','library','approval','settings'];
+let _jobs = [];
+const _ytData = {}; // channelSlug -> { scheduled, published, lastStats, channelInfo }
 
-// ─── BOOT ANIMATION ───────────────────────────────────────────────────────────
-const BOOT_LINES = [
-  'INITIALIZING CORE SYSTEMS...',
-  'LOADING SLEEPFORGE ENGINE v3.4...',
-  'CONNECTING TO YOUTUBE OAUTH...',
-  'SCANNING RENDER QUEUE...',
-  'CALIBRATING CHALK IMAGE LIBRARY...',
-  'JARVIS ONLINE. GOOD EVENING, SIR.',
-];
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  startClock();
+  connectWS();
+  pollStatus();
+  loadOverviewData();
+  if (window.lucide) lucide.createIcons();
+  document.getElementById('chat-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+  });
+});
 
-function boot() {
-  const bar   = document.getElementById('boot-bar');
-  const log   = document.getElementById('boot-log');
-  const el    = document.getElementById('boot');
-  initBootParticles();
-
-  let i = 0;
-  function nextLine() {
-    if (i >= BOOT_LINES.length) {
-      setTimeout(() => {
-        el.classList.add('fade-out');
-        setTimeout(() => {
-          el.style.display = 'none';
-          document.getElementById('app').classList.remove('hidden');
-          onAppReady();
-        }, 800);
-      }, 400);
-      return;
-    }
-    log.textContent = BOOT_LINES[i];
-    bar.style.width = `${Math.round(((i+1)/BOOT_LINES.length)*100)}%`;
-    i++;
-    setTimeout(nextLine, i === BOOT_LINES.length ? 600 : 340);
-  }
-  setTimeout(nextLine, 400);
-}
-
-function onAppReady() {
-  initParticles();
-  initClock();
-  initWebSocket();
-  loadPanel('overview');
-  pollMetrics();
-}
-
-// ─── BOOT PARTICLES ─────────────────────────────────────────────────────────
-function initBootParticles() {
-  const canvas = document.getElementById('boot-particles');
-  const ctx    = canvas.getContext('2d');
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const pts = Array.from({length:60}, () => ({
-    x: Math.random()*canvas.width, y: Math.random()*canvas.height,
-    vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3,
-    r: Math.random()*1.5+.5, a: Math.random()*.4+.05,
-  }));
-
-  function draw() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for (const p of pts) {
-      p.x = (p.x+p.vx+canvas.width)  % canvas.width;
-      p.y = (p.y+p.vy+canvas.height) % canvas.height;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.fillStyle = `rgba(0,212,255,${p.a})`;
-      ctx.fill();
-    }
-    requestAnimationFrame(draw);
-  }
-  draw();
-}
-
-// ─── MAIN PARTICLES ─────────────────────────────────────────────────────────
-function initParticles() {
-  const canvas = document.getElementById('particles');
-  const ctx    = canvas.getContext('2d');
-  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const pts = Array.from({length:80}, () => ({
-    x: Math.random()*canvas.width, y: Math.random()*canvas.height,
-    vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2,
-    r: Math.random()*1.2+.3, a: Math.random()*.18+.03,
-    pulse: Math.random()*Math.PI*2,
-  }));
-
-  function draw() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    const t = Date.now()/1000;
-    for (const p of pts) {
-      p.x = (p.x+p.vx+canvas.width)  % canvas.width;
-      p.y = (p.y+p.vy+canvas.height) % canvas.height;
-      const alpha = p.a * (0.7 + 0.3*Math.sin(t*0.8+p.pulse));
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.fillStyle = `rgba(0,212,255,${alpha})`;
-      ctx.fill();
-    }
-    requestAnimationFrame(draw);
-  }
-  draw();
-}
-
-// ─── CLOCK ───────────────────────────────────────────────────────────────────
-function initClock() {
-  const clockEl = document.getElementById('clock');
-  const dateEl  = document.getElementById('dateline');
+// ─── CLOCK (Bangkok UTC+7) ────────────────────────────────────────────────────
+function startClock() {
   function tick() {
     const now = new Date();
-    clockEl.textContent = now.toLocaleTimeString('en-GB', { hour12: false });
-    dateEl.textContent  = now.toLocaleDateString('en-GB', { weekday:'long', year:'numeric', month:'long', day:'numeric' }).toUpperCase();
+    const bkk = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
+    const h = String(bkk.getHours()).padStart(2,'0');
+    const m = String(bkk.getMinutes()).padStart(2,'0');
+    const s = String(bkk.getSeconds()).padStart(2,'0');
+    const clockEl = document.getElementById('clock-bkk');
+    if (clockEl) clockEl.textContent = `${h}:${m}:${s}`;
+    const dateEl = document.getElementById('clock-date');
+    if (dateEl) dateEl.textContent = bkk.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', timeZone:'Asia/Bangkok' }) + ' BKK';
   }
   tick();
   setInterval(tick, 1000);
 }
 
-// ─── WEBSOCKET ───────────────────────────────────────────────────────────────
-function initWebSocket() {
+// ─── WEBSOCKET ────────────────────────────────────────────────────────────────
+function connectWS() {
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
   ws = new WebSocket(`${proto}://${location.host}/ws`);
-
-  ws.onmessage = ({ data }) => {
-    const msg = JSON.parse(data);
-    if (msg.type === 'metrics')    handleMetrics(msg);
-    if (msg.type === 'state')      handleStateUpdate(msg.data);
-    if (msg.type === 'job_update') handleJobUpdate(msg.job);
-    if (msg.type === 'render_complete') {
-      addChatMsg('jarvis', `Render complete, sir. Video ID: ${msg.job?.videoId || 'pending'}. Check the queue for the link.`);
-      speakText('Render complete, sir.');
-    }
-    if (msg.type === 'content_gen_progress') handleContentGenProgress(msg);
-    if (msg.type === 'content_gen_done')     handleContentGenDone(msg);
-    if (msg.type === 'content_reroll_done')  handleContentRerollDone(msg);
-  };
-
-  ws.onclose  = () => setTimeout(initWebSocket, 3000);
-  ws.onerror  = () => {};
+  ws.addEventListener('message', e => {
+    try { handleWSMessage(JSON.parse(e.data)); } catch {}
+  });
+  ws.addEventListener('close', () => setTimeout(connectWS, 3000));
 }
 
-function handleMetrics({ cpu, gpu }) {
-  if (cpu != null) document.getElementById('cpu-val').textContent = cpu;
-  if (gpu?.gpu != null) {
-    document.getElementById('gpu-val').textContent  = gpu.gpu;
-    if (gpu.vram_used != null && gpu.vram_total != null) {
-      document.getElementById('vram-val').textContent = `${(gpu.vram_used/1024).toFixed(1)}/${(gpu.vram_total/1024).toFixed(0)}G`;
-    }
-  }
+function handleWSMessage(msg) {
+  if (msg.type === 'state')      { _jobs = msg.data?.renders || []; renderAllJobs(); }
+  if (msg.type === 'job_update') { syncJob(msg.job); renderAllJobs(); }
+  if (msg.type === 'metrics')    { updateMetrics(msg); }
 }
 
-function handleStateUpdate(state) {
-  if (activePanel === 'queue')    renderQueuePanel(state.renders);
-  if (activePanel === 'overview') renderQueueOverview(state.renders);
+function syncJob(job) {
+  const idx = _jobs.findIndex(j => j.id === job.id);
+  if (idx >= 0) _jobs[idx] = job; else _jobs.unshift(job);
 }
 
-function handleJobUpdate(job) {
-  if (!job) return;
-  if (activePanel === 'queue')    updateQueueRow(job);
-  if (activePanel === 'overview') renderQueueOverview(null);
-}
-
-// ─── METRICS POLL ────────────────────────────────────────────────────────────
-async function pollMetrics() {
+// ─── SYSTEM STATUS ────────────────────────────────────────────────────────────
+async function pollStatus() {
   try {
-    const s = await apiFetch('/api/status');
-    if (s.cpu != null) document.getElementById('cpu-val').textContent = s.cpu;
-    if (s.gpu?.gpu != null) document.getElementById('gpu-val').textContent = s.gpu.gpu;
-    if (s.gpu?.vram_used != null && s.gpu?.vram_total != null) {
-      document.getElementById('vram-val').textContent = `${(s.gpu.vram_used/1024).toFixed(1)}/${(s.gpu.vram_total/1024).toFixed(0)}G`;
-    }
-    // Update diagnostics if visible
-    const diag = {
-      'diag-tts':  s.services?.chatterbox,
-      'diag-fal':  s.services?.fal,
-      'diag-yt':   s.services?.youtube,
-    };
-    for (const [id, ok] of Object.entries(diag)) {
-      const el = document.getElementById(id);
-      if (!el) continue;
-      el.textContent  = ok ? 'ONLINE' : 'OFFLINE';
-      el.className    = ok ? 'badge-ok' : 'badge-err';
-    }
+    const d = await fetchJSON('/api/status');
+    setDot('chatterbox', d.services?.chatterbox);
+    setDot('fal',        !!d.services?.fal);
+    setDot('yt',         d.services?.youtube);
+    setText('cpu-val', d.cpu ?? '--');
+    setText('gpu-val', d.gpu?.gpu ?? '--');
+    const vram = (d.gpu?.vram_used != null && d.gpu?.vram_total)
+      ? `${d.gpu.vram_used}/${d.gpu.vram_total}MB`
+      : '--';
+    setText('vram-val', vram);
   } catch {}
-  setTimeout(pollMetrics, 6000);
+  setTimeout(pollStatus, 8000);
 }
 
-// ─── PANEL SWITCHING ─────────────────────────────────────────────────────────
-document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => {
-    const p = item.dataset.panel;
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    item.classList.add('active');
-    loadPanel(p);
-  });
-});
-
-function loadPanel(name) {
-  activePanel = name;
-  PANELS.forEach(p => {
-    const el = document.getElementById(`panel-${p}`);
-    if (el) el.classList.toggle('active', p === name);
-  });
-  switch(name) {
-    case 'overview':  loadOverview();   break;
-    case 'channels':  loadChannels();   break;
-    case 'queue':     loadQueue();      break;
-    case 'analytics': loadAnalytics();  break;
-    case 'library':   resetLibrary();   break;
-    case 'approval':  loadApprovalQueue(); break;
-    case 'settings':  loadSettings();   break;
-  }
+function setDot(id, ok) {
+  const dot  = document.getElementById(`dot-${id}`);
+  const pill = document.getElementById(`pill-${id}`);
+  if (!dot || !pill) return;
+  dot.className  = `dot ${ok ? 'ok' : 'err'}`;
+  pill.className = `status-pill ${ok ? 'ok' : 'err'}`;
 }
 
-// ─── OVERVIEW ────────────────────────────────────────────────────────────────
-async function loadOverview() {
-  const [videos, channels, state, status] = await Promise.all([
-    apiFetch('/api/videos'),
-    apiFetch('/api/channels'),
-    apiFetch('/api/state'),
-    apiFetch('/api/status').catch(() => ({})),
+// ─── OVERVIEW DATA ────────────────────────────────────────────────────────────
+async function loadOverviewData() {
+  await Promise.all([
+    loadChannelCard('sleepless-astronomer', 'astro'),
+    loadChannelCard('sleepless-philosophers', 'phil'),
   ]);
+}
 
-  // Stat cards
-  animateCount('sc-videos',   videos.length);
-  animateCount('sc-channels', channels.length);
+async function loadChannelCard(slug, prefix) {
+  try {
+    const d = await fetchJSON(`/api/youtube/queue/${slug}`);
+    _ytData[slug] = d;
 
-  // Estimated views & earnings (mock: assume each video gets avg 150 views in first 30d)
-  const estViews = videos.length * 150;
-  const estEarn  = Math.round(estViews / 1000 * 20 * 100) / 100;
-  animateCount('sc-views', estViews);
-  setStatNum('sc-earn', `$${estEarn.toFixed(0)}`);
+    // Stats
+    if (d.channelInfo) {
+      animateNumber(`${prefix}-subs`,  fmt(d.channelInfo.subs));
+      animateNumber(`${prefix}-views`, fmt(d.channelInfo.totalViews));
+    }
+    if (d.lastStats) {
+      setText(`${prefix}-ctr`,       d.lastStats.ctr != null ? `${d.lastStats.ctr.toFixed(1)}%` : '—');
+      setText(`${prefix}-retention`, d.lastStats.retention_avg_pct != null ? `${d.lastStats.retention_avg_pct.toFixed(1)}%` : '—');
+    }
 
-  // Queue items
-  renderQueueOverview(state.renders);
+    // Queue strip
+    renderQueueStrip(prefix, d.scheduled, slug);
 
-  // Recent videos
-  renderRecentVideos(videos.slice(0,8));
+    // Last video
+    renderLastVideo(prefix, d.published?.[0], d.lastStats);
 
-  // Diagnostics
-  const diag = {
-    'diag-tts': status?.services?.chatterbox,
-    'diag-fal': status?.services?.fal,
-    'diag-yt':  status?.services?.youtube,
-  };
-  for (const [id, ok] of Object.entries(diag)) {
-    const el = document.getElementById(id);
-    if (!el) continue;
-    el.textContent = ok ? 'ONLINE' : 'OFFLINE';
-    el.className   = ok ? 'badge-ok' : 'badge-err';
+    // If channel detail page is showing, populate it
+    if (document.getElementById(`page-${slug.replace('sleepless-', '')}`)?.classList.contains('active')) {
+      renderChannelDetail(slug, d);
+    }
+  } catch (e) {
+    setText(`${prefix}-subs`, '—');
+    console.warn(`loadChannelCard(${slug}):`, e.message);
   }
 }
 
-function renderQueueOverview(renders) {
-  const el = document.getElementById('ov-queue');
+function renderQueueStrip(prefix, scheduled, slug) {
+  const el = document.getElementById(`${prefix}-queue-strip`);
   if (!el) return;
-  if (!renders) {
-    apiFetch('/api/state').then(s => renderQueueOverview(s.renders));
+  const chipClass = prefix === 'astro' ? 'astro-chip' : 'phil-chip';
+
+  if (!scheduled?.length) {
+    el.innerHTML = `<span class="queue-chip empty-slot">⚠ No scheduled videos</span>`;
     return;
   }
-  const active = renders.filter(r => ['queued','rendering','uploading'].includes(r.status));
-  if (!active.length) {
-    el.innerHTML = `<div style="padding:12px 0;color:var(--text-dim);font-size:11px;letter-spacing:1px;">Queue empty, sir.</div>`;
-    return;
-  }
-  el.innerHTML = active.map(r => `
-    <div class="queue-row">
-      <div class="qr-topic">${esc(r.topic)}</div>
-      <div class="qr-status ${r.status}">${r.status.toUpperCase()}</div>
-      <div class="progress-bar-wrap"><div class="progress-bar" style="width:${r.progress||0}%"></div></div>
-    </div>`).join('');
+
+  // Show next 5 dates
+  const chips = scheduled.slice(0, 5).map((v, i) => {
+    const dt  = new Date(v.scheduledAt);
+    const lbl = dt.toLocaleDateString('en-US', { month:'short', day:'numeric', timeZone:'Asia/Bangkok' });
+    return `<span class="queue-chip ${chipClass}${i === 0 ? ' next' : ''}" title="${esc(v.title)}">${lbl}</span>`;
+  });
+
+  const more = scheduled.length > 5 ? `<span class="text-muted" style="font-size:11px">+${scheduled.length-5} more</span>` : '';
+  el.innerHTML = `<div class="queue-dates"><span class="queue-lbl">Next</span>${chips.join('')}${more}</div>`;
 }
 
-function renderRecentVideos(videos) {
-  const el = document.getElementById('ov-recent');
+function renderLastVideo(prefix, vid, stats) {
+  const el = document.getElementById(`${prefix}-last-video`);
   if (!el) return;
-  if (!videos.length) {
-    el.innerHTML = `<div style="padding:12px 0;color:var(--text-dim);font-size:11px;">No videos yet.</div>`;
-    return;
-  }
-  el.innerHTML = videos.map(v => `
-    <div class="recent-row">
-      ${v.thumbnailUrl
-        ? `<img class="recent-thumb" src="${v.thumbnailUrl}" alt="">`
-        : `<div class="recent-thumb-placeholder">▶</div>`}
-      <div class="recent-title">${esc(v.title)}</div>
-      <div class="recent-meta">${relTime(v.created)}</div>
-    </div>`).join('');
+  if (!vid) { el.innerHTML = `<div class="last-video-loading">No published videos found</div>`; return; }
+
+  const dt    = vid.publishedAt ? new Date(vid.publishedAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '';
+  const views = stats?.views != null ? `${fmt(stats.views)} views` : '';
+  const likes = stats?.likes != null ? ` · ${fmt(stats.likes)} likes` : '';
+  const wt    = stats?.watch_time_minutes != null ? ` · ${Math.round(stats.watch_time_minutes/60)}h watch time` : '';
+
+  el.innerHTML = `
+    <div class="last-video-title" title="${esc(vid.title)}">${esc(vid.title)}</div>
+    <div class="last-video-meta">${dt}${views ? ' · ' + views : ''}${likes}${wt}
+      ${vid.videoId ? ` · <a href="https://youtube.com/watch?v=${vid.videoId}" target="_blank" class="last-video-link">▶ Watch</a>` : ''}
+    </div>`;
 }
 
-// ─── CHANNELS ─────────────────────────────────────────────────────────────────
-async function loadChannels() {
-  const [channels, videos] = await Promise.all([apiFetch('/api/channels'), apiFetch('/api/videos')]);
-  const grid = document.getElementById('ch-grid');
-  document.getElementById('ch-detail').classList.add('hidden');
-  document.getElementById('ch-grid').classList.remove('hidden');
-
-  if (!channels.length) {
-    grid.innerHTML = `<div style="color:var(--text-dim);padding:24px;">No channels connected yet, sir.</div>`;
-    return;
-  }
-
-  grid.innerHTML = channels.map(ch => {
-    const chVideos = videos.filter(v => v.channel === ch.slug);
-    return `
-      <div class="ch-card" onclick="openChannelDetail('${esc(ch.slug)}')">
-        <div class="ch-card-name">${esc(ch.name)}</div>
-        <div class="ch-card-meta">
-          <div>Videos: <strong>${chVideos.length}</strong></div>
-          <div>Slug: <strong>${esc(ch.slug)}</strong></div>
-          <div>Est. Views: <strong>${chVideos.length * 150}</strong></div>
-        </div>
-        <button class="ch-open-btn">OPEN CHANNEL →</button>
-      </div>`;
-  }).join('');
+// ─── RENDER JOBS ──────────────────────────────────────────────────────────────
+function renderAllJobs() {
+  renderJobsContainer('overview-renders', _jobs.filter(j => ['rendering','uploading','queued'].includes(j.status)).slice(0, 5));
+  renderJobsContainer('queue-list', _jobs.slice(0, 30));
 }
 
-async function openChannelDetail(slug) {
-  document.getElementById('ch-grid').classList.add('hidden');
-  const detail = document.getElementById('ch-detail');
-  detail.classList.remove('hidden');
-  document.getElementById('ch-detail-title').textContent = slug.replace(/-/g,' ').toUpperCase();
-
-  const videos = await apiFetch('/api/videos');
-  const chVideos = videos.filter(v => v.channel === slug);
-  const grid = document.getElementById('ch-video-grid');
-
-  if (!chVideos.length) {
-    grid.innerHTML = `<div style="color:var(--text-dim);padding:24px;">No videos for this channel yet.</div>`;
-    return;
-  }
-
-  grid.innerHTML = chVideos.map(v => `
-    <div class="ch-vid-card">
-      ${v.thumbnailUrl
-        ? `<img class="ch-vid-thumb" src="${v.thumbnailUrl}" alt="">`
-        : `<div class="ch-vid-thumb-placeholder">▶</div>`}
-      <div class="ch-vid-info">
-        <div class="ch-vid-title">${esc(v.title)}</div>
-        <div class="ch-vid-meta">${relTime(v.created)} · ${v.sizeMb}MB
-          ${v.videoId ? `<br><a href="https://youtube.com/watch?v=${v.videoId}" target="_blank" style="color:var(--cyan)">YouTube ↗</a>` : ''}
-        </div>
-      </div>
-    </div>`).join('');
+function renderJobsContainer(containerId, jobs) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!jobs.length) { el.innerHTML = `<div class="empty-state">No active renders.</div>`; return; }
+  el.innerHTML = jobs.map(jobHTML).join('');
 }
 
-function closeChannelDetail() {
-  document.getElementById('ch-detail').classList.add('hidden');
-  document.getElementById('ch-grid').classList.remove('hidden');
+function jobHTML(j) {
+  const pct = j.progress || 0;
+  return `<div class="render-job fade-in">
+    <div class="job-dot ${j.status}"></div>
+    <div class="job-info">
+      <div class="job-title">${esc(j.topic || '—')}</div>
+      <div class="job-step">${esc(j.step || j.status)} · ${esc(j.channel || '')}</div>
+    </div>
+    <div class="job-bar-wrap">
+      <div class="job-bar-bg"><div class="job-bar" style="width:${pct}%"></div></div>
+      <div class="job-pct">${pct}%</div>
+    </div>
+    ${j.videoId ? `<a href="https://youtube.com/watch?v=${j.videoId}" target="_blank" style="font-size:11px;color:var(--astro)">▶ Watch</a>` : ''}
+  </div>`;
 }
 
-// ─── QUEUE ────────────────────────────────────────────────────────────────────
-async function loadQueue() {
-  const state = await apiFetch('/api/state');
-  const channels = await apiFetch('/api/channels');
-
-  // Populate modal channel select
-  const sel = document.getElementById('modal-channel');
-  sel.innerHTML = channels.map(c => `<option value="${c.slug}">${c.name}</option>`).join('');
-
-  renderQueuePanel(state.renders);
-}
-
-function renderQueuePanel(renders) {
-  const container = document.getElementById('queue-rows');
+// ─── CHANNEL DETAIL ───────────────────────────────────────────────────────────
+function renderChannelDetail(slug, d) {
+  const shortId   = slug.replace('sleepless-', '');
+  const container = document.getElementById(`detail-${shortId}`);
   if (!container) return;
 
-  if (!renders || !renders.length) {
-    container.innerHTML = `<div class="empty-queue">Queue empty. All quiet on the western front, sir.</div>`;
-    return;
-  }
+  const isAstro   = shortId === 'astronomer';
+  const nextClass = isAstro ? 'is-astro-next' : 'is-phil-next';
+  const info      = d.channelInfo;
+  const ls        = d.lastStats;
 
-  container.innerHTML = renders.map(r => `
-    <div class="queue-table-row" id="qrow-${r.id}">
-      <div class="qtr-topic">${esc(r.topic)}</div>
-      <div class="qtr-channel">${esc(r.channel || '—')}</div>
-      <div><span class="qr-status ${r.status}">${r.status.toUpperCase()}</span></div>
-      <div>
-        <div class="progress-bar-wrap" style="width:100%">
-          <div class="progress-bar" style="width:${r.progress||0}%"></div>
-        </div>
-        <div style="font-size:10px;color:var(--text-dim);margin-top:3px;">${esc(r.step||'')}</div>
-      </div>
-      <div class="qtr-time">${relTime(r.createdAt)}</div>
-    </div>`).join('');
-}
-
-function updateQueueRow(job) {
-  const row = document.getElementById(`qrow-${job.id}`);
-  if (!row) { loadQueue(); return; }
-  const statusEl = row.querySelector('.qr-status');
-  const barEl    = row.querySelector('.progress-bar');
-  const stepEl   = row.querySelectorAll('div')[3]?.querySelector('div:last-child');
-  if (statusEl) { statusEl.textContent = job.status.toUpperCase(); statusEl.className = `qr-status ${job.status}`; }
-  if (barEl)    barEl.style.width = `${job.progress||0}%`;
-  if (stepEl)   stepEl.textContent = job.step || '';
-}
-
-function openAddModal()  { document.getElementById('add-modal').classList.remove('hidden'); }
-function closeAddModal() { document.getElementById('add-modal').classList.add('hidden'); }
-
-async function submitQueue() {
-  const topic   = document.getElementById('modal-topic').value.trim();
-  const channel = document.getElementById('modal-channel').value;
-  const sched   = document.getElementById('modal-schedule').value;
-  if (!topic) { alert('Please enter a topic.'); return; }
-
-  closeAddModal();
-  document.getElementById('modal-topic').value = '';
-
-  await apiFetch('/api/queue/add', 'POST', { topic, channel, scheduledAt: sched || null });
-  loadPanel('queue');
-  addChatMsg('jarvis', `Queuing "${topic}" for ${channel}, sir. I'll notify you when it's ready.`);
-}
-
-// ─── ANALYTICS ───────────────────────────────────────────────────────────────
-async function loadAnalytics() {
-  // Load all 4 data sources in parallel
-  const [bench, principles, thumbs, insights] = await Promise.allSettled([
-    apiFetch('/api/analytics/benchmark'),
-    apiFetch('/api/analytics/principles'),
-    apiFetch('/api/analytics/thumbnails'),
-    apiFetch('/api/analytics/insights'),
-  ]);
-
-  // ── Benchmark stat cards ──
-  const b = bench.status === 'fulfilled' ? bench.value : null;
-  const sfVideos = b?.sleepforge_videos || [];
-  const sfCtr    = sfVideos.filter(v => v.ctr !== null);
-  const sfAvgCtr = sfCtr.length ? (sfCtr.reduce((s, v) => s + v.ctr, 0) / sfCtr.length).toFixed(2) : null;
-  const sfRet    = sfVideos.filter(v => v.retention_avg !== null);
-  const sfAvgRet = sfRet.length ? (sfRet.reduce((s, v) => s + v.retention_avg, 0) / sfRet.length).toFixed(1) : null;
-
-  document.getElementById('bc-sf-ctr-val').textContent  = sfAvgCtr  ? sfAvgCtr + '%'  : '—';
-  document.getElementById('bc-ch-ctr-val').textContent  = b?.ctr_baseline?.median       != null ? b.ctr_baseline.median.toFixed(2) + '%'  : '—';
-  document.getElementById('bc-sf-ret-val').textContent  = sfAvgRet  ? sfAvgRet + '%'  : '—';
-  document.getElementById('bc-ch-ret-val').textContent  = b?.retention_baseline?.median != null ? b.retention_baseline.median.toFixed(1) + '%' : '—';
-
-  // Colour cards: green if SleepForge beats channel baseline
-  if (sfAvgCtr && b?.ctr_baseline?.median) {
-    document.getElementById('bc-sf-ctr').classList.toggle('amber', parseFloat(sfAvgCtr) >= b.ctr_baseline.median);
-  }
-  if (sfAvgRet && b?.retention_baseline?.median) {
-    document.getElementById('bc-sf-ret').classList.toggle('amber', parseFloat(sfAvgRet) >= b.retention_baseline.median);
-  }
-
-  // ── Claude insights ──
-  const insightsEl = document.getElementById('analytics-insights');
-  if (insights.status === 'fulfilled' && Array.isArray(insights.value)) {
-    insightsEl.innerHTML = insights.value.map(ins => `
-      <div class="insight-row">
-        <span class="insight-icon">${ins.type === 'positive' ? '▲' : ins.type === 'negative' ? '▼' : '◆'}</span>
-        <div>
-          <div class="insight-title">${esc(ins.title || '')}</div>
-          <div class="insight-body">${esc(ins.body || '')}</div>
-        </div>
-      </div>`).join('');
-  } else {
-    insightsEl.textContent = b ? 'Run refresh-analytics.js to populate performance data.' : 'No analytics data yet — run ingest-own-channel.js first.';
-  }
-
-  // ── Principle performance table ──
-  const principleEl = document.getElementById('principle-table');
-  const pr = principles.status === 'fulfilled' ? principles.value : null;
-  if (pr?.principles?.length) {
-    principleEl.innerHTML = `
-      <div class="at-header"><span>PRINCIPLE</span><span>CTR LIFT</span><span>RET LIFT</span><span>VIDEOS</span><span>CONFIDENCE</span></div>
-      ${pr.principles.slice(0, 12).map(p => {
-        const liftClass = (p.ctr_lift_pct ?? 0) > 0 ? 'lift-pos' : (p.ctr_lift_pct ?? 0) < -2 ? 'lift-neg' : '';
-        return `<div class="at-row">
-          <div class="at-title">${esc(p.name || p.id)}</div>
-          <div class="at-ctr ${liftClass}">${p.ctr_lift_pct != null ? (p.ctr_lift_pct > 0 ? '+' : '') + p.ctr_lift_pct.toFixed(1) + '%' : '—'}</div>
-          <div class="at-ret">${p.retention_lift_pct != null ? (p.retention_lift_pct > 0 ? '+' : '') + p.retention_lift_pct.toFixed(1) + '%' : '—'}</div>
-          <div class="at-views">${p.n}</div>
-          <div class="at-channel conf-${p.confidence}">${p.confidence.toUpperCase()}</div>
-        </div>`;
-      }).join('')}`;
-  } else {
-    principleEl.textContent = 'No principle scores yet — run score-principles.js after analytics refresh.';
-  }
-
-  // ── Top 10 thumbnails by CTR ──
-  const thumbEl = document.getElementById('thumb-grid');
-  const th = thumbs.status === 'fulfilled' ? thumbs.value : [];
-  if (th.length) {
-    thumbEl.innerHTML = th.slice(0, 10).map(v => `
-      <div class="thumb-card">
-        ${v.thumbnail_url ? `<img src="${esc(v.thumbnail_url)}" alt="" loading="lazy">` : '<div class="thumb-placeholder">NO IMG</div>'}
-        <div class="thumb-meta">
-          <div class="thumb-ctr">${v.ctr != null ? v.ctr.toFixed(2) + '%' : '—'} CTR</div>
-          <div class="thumb-title">${esc((v.title || '').slice(0, 55))}</div>
-        </div>
-      </div>`).join('');
-  } else {
-    thumbEl.textContent = 'No thumbnail data yet.';
-  }
-
-  // ── Top titles by CTR ──
-  const tableEl = document.getElementById('analytics-table');
-  const sfByCtR = sfVideos.filter(v => v.ctr !== null).sort((a, b) => b.ctr - a.ctr).slice(0, 10);
-  if (sfByCtR.length) {
-    tableEl.innerHTML = `
-      <div class="at-header"><span>TITLE</span><span>CTR</span><span>RETENTION</span><span>VIEWS</span><span>RANK</span></div>
-      ${sfByCtR.map(v => `
-        <div class="at-row">
-          <div class="at-title">${esc((v.title || '').slice(0, 60))}</div>
-          <div class="at-ctr lift-pos">${v.ctr.toFixed(2)}%</div>
-          <div class="at-ret">${v.retention_avg != null ? v.retention_avg.toFixed(1) + '%' : '—'}</div>
-          <div class="at-views">${(v.views || 0).toLocaleString()}</div>
-          <div class="at-channel">${esc(v.ctr_rank || '—')}</div>
-        </div>`).join('')}`;
-  } else {
-    tableEl.innerHTML = `<div class="at-row" style="padding:20px;color:#3d6a8a">No ranked videos yet — run ingest-own-channel.js then channel-benchmark.js.</div>`;
-  }
-}
-
-// ─── LIBRARY ──────────────────────────────────────────────────────────────────
-function resetLibrary() {
-  libPage = 0; libSearch = '';
-  document.getElementById('lib-search').value = '';
-  document.getElementById('lib-grid').innerHTML = '';
-  loadMoreLibrary();
-
-  // Wire up search
-  const input = document.getElementById('lib-search');
-  input.oninput = debounce(() => {
-    libSearch = input.value;
-    libPage   = 0;
-    document.getElementById('lib-grid').innerHTML = '';
-    loadMoreLibrary();
-  }, 350);
-}
-
-async function loadMoreLibrary() {
-  const res = await apiFetch(`/api/library?page=${libPage}&limit=80&search=${encodeURIComponent(libSearch)}`);
-  libTotal  = res.total;
-  libPage++;
-
-  const grid = document.getElementById('lib-grid');
-  document.getElementById('lib-count').textContent = `${libTotal} images`;
-
-  const frag = document.createDocumentFragment();
-  for (const img of res.items) {
-    const card = document.createElement('div');
-    card.className = 'lib-img-card';
-    card.innerHTML = `
-      <img src="/library/${img.file}" alt="" loading="lazy">
-      <div class="lib-img-overlay">
-        <div class="lib-img-label">${esc(img.philosopher||'')}<br>${esc(img.era||'')}</div>
-      </div>`;
-    card.onclick = () => openLightbox(img);
-    frag.appendChild(card);
-  }
-  grid.appendChild(frag);
-
-  const moreBtn = document.getElementById('lib-more');
-  moreBtn.classList.toggle('hidden', libPage * 80 >= libTotal);
-}
-
-function openLightbox(img) {
-  document.getElementById('lb-img').src = `/library/${img.file}`;
-  document.getElementById('lb-meta').innerHTML =
-    `<strong>Philosopher:</strong> ${esc(img.philosopher||'—')}<br>` +
-    `<strong>Era:</strong> ${esc(img.era||'—')}<br>` +
-    `<strong>School:</strong> ${esc(img.school_of_thought||'—')}<br>` +
-    `<strong>Mood:</strong> ${esc(img.mood||'—')}<br>` +
-    `<strong>Keywords:</strong> ${(img.keywords||[]).join(', ')}`;
-  document.getElementById('lightbox').classList.remove('hidden');
-}
-function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
-
-// ─── SETTINGS ─────────────────────────────────────────────────────────────────
-async function loadSettings() {
-  const s = await apiFetch('/api/settings');
-  setKeyStatus('key-fal', s.keys.fal);
-  setKeyStatus('key-yt',  s.keys.youtube);
-}
-
-function setKeyStatus(id, ok) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = ok ? '✓ CONNECTED' : '✗ MISSING';
-  el.className   = ok ? 'key-ok' : 'key-err';
-}
-
-// ─── CHAT BAR ────────────────────────────────────────────────────────────────
-document.getElementById('chat-in').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-});
-
-document.getElementById('voice-on')?.addEventListener('change', e => {
-  voiceEnabled = e.target.checked;
-});
-
-async function sendMessage() {
-  const input = document.getElementById('chat-in');
-  const btn   = document.getElementById('send-btn');
-  const text  = input.value.trim();
-  if (!text) return;
-
-  input.value = '';
-  addChatMsg('user', text);
-  btn.disabled = true;
-
-  const thinking = addChatMsg('jarvis', 'Processing your query, sir…', true);
-
-  try {
-    const res = await apiFetch('/api/jarvis/chat', 'POST', { message: text });
-    thinking.remove();
-    addChatMsg('jarvis', res.reply);
-    if (voiceEnabled && res.reply) speakText(res.reply);
-  } catch(err) {
-    thinking.remove();
-    addChatMsg('jarvis', 'My apologies, sir. The neural link appears unstable.');
-  } finally {
-    btn.disabled = false;
-    input.focus();
-  }
-}
-
-function addChatMsg(who, text, thinking = false) {
-  const msgs = document.getElementById('chat-msgs');
-  const div  = document.createElement('div');
-  div.className = 'chat-msg';
-  div.innerHTML = `
-    <span class="chat-who ${who}">${who === 'user' ? 'SIR' : 'JARVIS'}</span>
-    <span class="chat-text${thinking ? ' thinking':''}">${esc(text)}</span>`;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-  return div;
-}
-
-// ─── VOICE / EDGE TTS ────────────────────────────────────────────────────────
-async function speakText(text) {
-  if (!voiceEnabled) return;
-  try {
-    const res = await fetch('/api/jarvis/speak', {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({ text: text.slice(0,200) }),
-    });
-    if (!res.ok) return;
-    const blob = await res.blob();
-    const url  = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    audio.onended = () => URL.revokeObjectURL(url);
-    await audio.play();
-  } catch {}
-}
-
-// ─── STAT CARD COUNT-UP ──────────────────────────────────────────────────────
-function animateCount(cardId, target) {
-  const card = document.getElementById(cardId);
-  if (!card) return;
-  const el = card.querySelector('.stat-num');
-  if (!el) return;
-  const start    = 0;
-  const duration = 1200;
-  const startTs  = performance.now();
-
-  function step(ts) {
-    const elapsed = ts - startTs;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased    = 1 - Math.pow(1-progress, 3);
-    const val      = Math.round(start + (target-start)*eased);
-    el.textContent = val.toLocaleString();
-    if (progress < 1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-}
-
-function setStatNum(cardId, value) {
-  const card = document.getElementById(cardId);
-  if (!card) return;
-  const el = card.querySelector('.stat-num');
-  if (el) el.textContent = value;
-}
-
-// ─── UTILS ────────────────────────────────────────────────────────────────────
-function esc(str) {
-  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function relTime(iso) {
-  if (!iso) return '—';
-  const diff = Date.now() - new Date(iso).getTime();
-  const m = Math.floor(diff/60000);
-  if (m < 1)   return 'just now';
-  if (m < 60)  return `${m}m ago`;
-  const h = Math.floor(m/60);
-  if (h < 24)  return `${h}h ago`;
-  return `${Math.floor(h/24)}d ago`;
-}
-
-async function apiFetch(url, method='GET', body=null) {
-  const opts = { method, headers:{ 'Content-Type':'application/json' } };
-  if (body) opts.body = JSON.stringify(body);
-  const res  = await fetch(url, opts);
-  if (!res.ok) throw new Error(`API ${url}: ${res.status}`);
-  return res.json();
-}
-
-function debounce(fn, ms) {
-  let t;
-  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
-}
-
-// ─── CONTENT APPROVAL QUEUE ──────────────────────────────────────────────────
-
-let _approvalSets = [];   // in-memory cache
-let _genRunning   = false;
-
-function handleContentGenProgress(msg) {
-  const el = document.getElementById('gen-status');
-  if (!el) return;
-  el.classList.remove('hidden');
-  el.textContent = msg.msg || 'Generating…';
-}
-
-function handleContentGenDone(msg) {
-  _genRunning = false;
-  const btn = document.getElementById('gen-btn');
-  if (btn) { btn.disabled = false; btn.textContent = '+ GENERATE 5 SETS'; }
-  const el = document.getElementById('gen-status');
-  if (el) { el.textContent = msg.error || 'Generation complete.'; setTimeout(() => el.classList.add('hidden'), 4000); }
-  if (activePanel === 'approval') loadApprovalQueue();
-}
-
-function handleContentRerollDone(msg) {
-  if (activePanel === 'approval') loadApprovalQueue();
-}
-
-async function loadApprovalQueue() {
-  const grid  = document.getElementById('approval-grid');
-  const empty = document.getElementById('approval-empty');
-  if (!grid) return;
-
-  grid.innerHTML = '<div style="color:var(--text-dim);font-size:11px;padding:20px;letter-spacing:1px;">LOADING…</div>';
-
-  try {
-    const sets = await apiFetch('/api/content/queue');
-    _approvalSets = sets;
-
-    if (!sets.length) {
-      grid.innerHTML = '';
-      empty.classList.remove('hidden');
-      return;
-    }
-    empty.classList.add('hidden');
-
-    const pending = sets.filter(s => s.status !== 'approved' && s.status !== 'rejected');
-    const approved = sets.filter(s => s.status === 'approved');
-
-    grid.innerHTML = '';
-    for (const set of [...pending, ...approved]) {
-      grid.appendChild(buildApprovalCard(set));
-    }
-  } catch (err) {
-    grid.innerHTML = `<div style="color:var(--red);font-size:11px;padding:20px">${err.message}</div>`;
-  }
-}
-
-function buildApprovalCard(set) {
-  const card = document.createElement('div');
-  card.className = `approval-card status-${set.status || 'pending'}`;
-  card.dataset.id = set.id;
-
-  const isApproved = set.status === 'approved';
-  const isRejected = set.status === 'rejected';
-
-  const tags = (set.tags || []).slice(0, 8).map(t =>
-    `<span class="ac-tag">${esc(t)}</span>`
-  ).join('');
-
-  const alts = (set.alternatives || []).map(a =>
-    `<div class="ac-alt" title="Click to use as primary" onclick="swapTitle('${set.id}', this)">${esc(a)}</div>`
-  ).join('');
-
-  const statusBadge = isApproved
-    ? '<span class="ac-status-badge approved">APPROVED</span>'
-    : isRejected ? '<span class="ac-status-badge rejected">REJECTED</span>' : '';
-
-  card.innerHTML = `
-    <div class="ac-thumb">
-      <img src="/api/content/thumbnail/${set.id}" alt="thumbnail preview"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="ac-thumb-placeholder" style="display:none">NO PREVIEW</div>
-      <span class="ac-tradition-tag">${esc(set.tradition || 'Philosophy')}</span>
-      ${statusBadge}
-    </div>
-    <div class="ac-body">
-      <div class="ac-topic">◈ ${esc(set.topic || '')}</div>
-      <div class="ac-title" id="act-${set.id}">${esc(set.title || '')}</div>
-      ${set.hook ? `<div class="ac-hook">"${esc(set.hook)}"</div>` : ''}
-      ${alts ? `
-        <div>
-          <button class="ac-alts-toggle" onclick="toggleAlts('${set.id}')">▸ SHOW ALTERNATIVE TITLES</button>
-          <div class="ac-alts" id="acalts-${set.id}">${alts}</div>
-        </div>` : ''}
-      ${set.description ? `<div class="ac-desc">${esc(set.description)}</div>` : ''}
-      ${tags ? `<div class="ac-tags">${tags}</div>` : ''}
-      <textarea class="ac-notes" id="acnotes-${set.id}" placeholder="Notes (optional — used to learn your preferences)…">${esc(set.notes || '')}</textarea>
-    </div>
-    <div class="ac-actions">
-      <button class="btn-approve" ${isApproved ? 'disabled' : ''} onclick="approveSet('${set.id}')">✓ APPROVE</button>
-      <button class="btn-reject"  ${isRejected ? 'disabled' : ''} onclick="rejectSet('${set.id}')">✕ REJECT</button>
-      <button class="btn-reroll"  ${isApproved||isRejected ? 'disabled' : ''} onclick="rerollSet('${set.id}')">↺ RE-ROLL</button>
+  // Stats row
+  const statsHTML = `
+    <div class="detail-stats-row">
+      <div class="detail-stat"><div class="detail-stat-val">${info ? fmt(info.subs) : '—'}</div><div class="detail-stat-lbl">Subscribers</div></div>
+      <div class="detail-stat"><div class="detail-stat-val">${info ? fmt(info.totalViews) : '—'}</div><div class="detail-stat-lbl">Total Views</div></div>
+      <div class="detail-stat"><div class="detail-stat-val">${info ? info.videoCount : '—'}</div><div class="detail-stat-lbl">Videos</div></div>
+      <div class="detail-stat"><div class="detail-stat-val">${ls?.ctr != null ? ls.ctr.toFixed(1)+'%' : '—'}</div><div class="detail-stat-lbl">Last CTR</div></div>
+      <div class="detail-stat"><div class="detail-stat-val">${ls?.retention_avg_pct != null ? ls.retention_avg_pct.toFixed(1)+'%' : '—'}</div><div class="detail-stat-lbl">Avg Retention</div></div>
     </div>`;
 
-  return card;
+  // Scheduled timeline — show next 14 days gaps
+  const now   = new Date();
+  const days  = Array.from({length:14}, (_,i) => {
+    const d = new Date(now); d.setDate(now.getDate() + i); return d;
+  });
+  const scheduledByDate = {};
+  for (const v of (d.scheduled || [])) {
+    const k = new Date(v.scheduledAt).toLocaleDateString('en-CA', { timeZone: 'Asia/Bangkok' }); // YYYY-MM-DD
+    scheduledByDate[k] = v;
+  }
+
+  const tlItems = days.map((day, i) => {
+    const key  = day.toLocaleDateString('en-CA', { timeZone: 'Asia/Bangkok' });
+    const vid  = scheduledByDate[key];
+    const lbl  = day.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+    if (vid) {
+      return `<div class="tl-item ${i === 0 ? nextClass : ''}">
+        <div class="tl-date">${lbl}</div>
+        <div class="tl-title">${esc(vid.title)}</div>
+      </div>`;
+    }
+    return `<div class="tl-empty">${lbl} — empty</div>`;
+  }).join('');
+
+  const timelineHTML = `
+    <div class="detail-section">
+      <div class="section-head">Scheduled — Next 14 Days</div>
+      <div class="timeline">${tlItems}</div>
+    </div>`;
+
+  // Published table
+  const rows = (d.published || []).map(v => {
+    const dt = v.publishedAt ? new Date(v.publishedAt).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '—';
+    return `<tr>
+      <td class="td-title" title="${esc(v.title)}">${esc(v.title)}</td>
+      <td class="td-date">${dt}</td>
+      <td class="td-yt">${v.videoId ? `<a href="https://youtube.com/watch?v=${v.videoId}" target="_blank">▶ ${v.videoId}</a>` : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  const tableHTML = `
+    <div class="detail-section">
+      <div class="section-head">Recent Published Videos</div>
+      <div class="table-wrap">
+        <table class="videos-table">
+          <thead><tr><th>Title</th><th>Published</th><th>YouTube</th></tr></thead>
+          <tbody>${rows || `<tr><td colspan="3" class="text-muted" style="text-align:center;padding:20px">No published videos found</td></tr>`}</tbody>
+        </table>
+      </div>
+    </div>`;
+
+  container.innerHTML = statsHTML + timelineHTML + tableHTML;
 }
 
-function esc(s) {
-  return String(s || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
+// ─── PAGE NAVIGATION ──────────────────────────────────────────────────────────
+function showPage(id) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+  // Show target
+  const page = document.getElementById(`page-${id}`);
+  if (page) page.classList.add('active');
+  const btn  = document.getElementById(`nav-${id}`);
+  if (btn) btn.classList.add('active');
+
+  // Load channel detail on demand
+  if (id === 'astronomer') {
+    const slug = 'sleepless-astronomer';
+    if (_ytData[slug]) renderChannelDetail(slug, _ytData[slug]);
+    else loadChannelCard(slug, 'astro').then(() => renderChannelDetail(slug, _ytData[slug]));
+  }
+  if (id === 'philosophers') {
+    const slug = 'sleepless-philosophers';
+    if (_ytData[slug]) renderChannelDetail(slug, _ytData[slug]);
+    else loadChannelCard(slug, 'phil').then(() => renderChannelDetail(slug, _ytData[slug]));
+  }
+  if (id === 'queue') renderJobsContainer('queue-list', _jobs.slice(0, 50));
 }
 
-function toggleAlts(id) {
-  const el  = document.getElementById(`acalts-${id}`);
-  const btn = el?.previousElementSibling;
+// ─── CHAT ─────────────────────────────────────────────────────────────────────
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg   = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  appendChat('user', msg);
+  appendChat('thinking', 'JARVIS is thinking…');
+
+  try {
+    const d = await fetchJSON('/api/jarvis/chat', { method:'POST', body: JSON.stringify({ message: msg }), headers: {'Content-Type':'application/json'} });
+    removeLastThinking();
+    appendChat('jarvis', d.reply || '(no reply)');
+  } catch (e) {
+    removeLastThinking();
+    appendChat('jarvis', `My apologies, sir. ${e.message}`);
+  }
+}
+
+function appendChat(role, text) {
+  const msgs = document.getElementById('chat-messages');
+  const div  = document.createElement('div');
+  div.className = `chat-msg ${role} fade-in`;
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeLastThinking() {
+  const msgs  = document.getElementById('chat-messages');
+  const nodes = msgs.querySelectorAll('.chat-msg.thinking');
+  nodes.forEach(n => n.remove());
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+async function fetchJSON(url, opts = {}) {
+  const r = await fetch(url, opts);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmt(n) {
+  if (n == null) return '—';
+  n = Number(n);
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'K';
+  return String(n);
+}
+
+function animateNumber(id, val) {
+  const el = document.getElementById(id);
   if (!el) return;
-  el.classList.toggle('open');
-  if (btn) btn.textContent = el.classList.contains('open') ? '▾ HIDE ALTERNATIVES' : '▸ SHOW ALTERNATIVE TITLES';
+  el.textContent = val;
+  el.classList.remove('count-in');
+  void el.offsetWidth; // reflow to restart animation
+  el.classList.add('count-in');
 }
 
-function swapTitle(id, altEl) {
-  const titleEl = document.getElementById(`act-${id}`);
-  if (!titleEl) return;
-  const old = titleEl.textContent;
-  titleEl.textContent = altEl.textContent;
-  altEl.textContent = old;
-}
-
-async function generateContentSets() {
-  if (_genRunning) return;
-  _genRunning = true;
-  const btn = document.getElementById('gen-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'GENERATING…'; }
-  const el = document.getElementById('gen-status');
-  if (el) { el.classList.remove('hidden'); el.textContent = 'Requesting content generation…'; }
-  try {
-    await apiFetch('/api/content/generate', 'POST', { count: 5 });
-  } catch (err) {
-    if (el) el.textContent = `Error: ${err.message}`;
-    _genRunning = false;
-    if (btn) { btn.disabled = false; btn.textContent = '+ GENERATE 5 SETS'; }
+function updateMetrics(msg) {
+  setText('cpu-val', msg.cpu ?? '--');
+  setText('gpu-val', msg.gpu?.gpu ?? '--');
+  if (msg.gpu?.vram_used != null) {
+    setText('vram-val', `${msg.gpu.vram_used}/${msg.gpu.vram_total}MB`);
   }
 }
-
-async function approveSet(id) {
-  const notes = document.getElementById(`acnotes-${id}`)?.value || '';
-  const card  = document.querySelector(`.approval-card[data-id="${id}"]`);
-  if (card) { card.style.opacity = '0.5'; }
-  try {
-    await apiFetch(`/api/content/approve/${id}`, 'POST', { notes, channel: 'sleepless-philosophers' });
-    if (card) {
-      card.className = 'approval-card status-approved';
-      card.style.opacity = '';
-      card.querySelector('.btn-approve').disabled = true;
-      card.querySelector('.btn-reroll').disabled  = true;
-      const badge = card.querySelector('.ac-status-badge,.ac-tradition-tag~*');
-      if (!card.querySelector('.ac-status-badge.approved')) {
-        const img = card.querySelector('.ac-thumb');
-        const b = document.createElement('span');
-        b.className = 'ac-status-badge approved'; b.textContent = 'APPROVED';
-        img.appendChild(b);
-      }
-    }
-  } catch (err) {
-    if (card) card.style.opacity = '';
-    alert(`Approve failed: ${err.message}`);
-  }
-}
-
-async function rejectSet(id) {
-  const notes = document.getElementById(`acnotes-${id}`)?.value || '';
-  const card  = document.querySelector(`.approval-card[data-id="${id}"]`);
-  if (!confirm('Reject and delete this content set?')) return;
-  try {
-    await apiFetch(`/api/content/reject/${id}`, 'POST', { notes });
-    if (card) card.remove();
-    const grid = document.getElementById('approval-grid');
-    if (!grid?.children.length) document.getElementById('approval-empty')?.classList.remove('hidden');
-  } catch (err) {
-    alert(`Reject failed: ${err.message}`);
-  }
-}
-
-async function rerollSet(id) {
-  const card = document.querySelector(`.approval-card[data-id="${id}"]`);
-  if (card) {
-    const thumb = card.querySelector('.ac-thumb');
-    if (thumb) {
-      const loading = document.createElement('div');
-      loading.className = 'ac-thumb-loading'; loading.textContent = 'RE-ROLLING…';
-      thumb.appendChild(loading);
-    }
-    card.querySelectorAll('.btn-approve,.btn-reject,.btn-reroll').forEach(b => b.disabled = true);
-  }
-  try {
-    await apiFetch(`/api/content/reroll/${id}`, 'POST');
-  } catch (err) {
-    if (card) card.querySelectorAll('button').forEach(b => b.disabled = false);
-    alert(`Re-roll failed: ${err.message}`);
-  }
-}
-
-// ─── INIT ────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', boot);

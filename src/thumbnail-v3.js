@@ -400,7 +400,10 @@ function buildAstrokobiPlannerPrompt({ title, scriptText, lockedHook, priorAttem
 ${numSpaceImages} photorealistic deep-space images are available as {{IMG:1}} through {{IMG:${numSpaceImages}}}.
 All images are real astrophotography — nebulae, galaxies, star fields, etc.
 Use image_requests with source_hint: "space_library" and they will be swapped in.
-You may use 1, 2, or 3 images — or none if you design a pure text/CSS composition.
+
+SINGLE IMAGE RULE — NON-NEGOTIABLE:
+USE EXACTLY 1 IMAGE. Place it as the full background or centered focal subject.
+NEVER use 2 or 3 images — multiple images ALWAYS produce split-screen layouts, which are BANNED.
 `
     : '';
 
@@ -441,9 +444,17 @@ FONT: Bold, condensed, sans-serif ONLY.
 COMPOSITION:
   - ONE clear focal subject (planet, probe, star, galaxy) fills 40-70% of the frame
   - Dark deep-space backdrop (near-black: #000008 to #0a0a1a)
-  - Hook text on top of or beside the focal subject
-  - Simple — 2 elements max: background image + hook text
+  - Hook text on top of or beside the focal subject — never between two subjects
+  - Simple — 2 elements max: ONE background image + hook text
   - NO: gold borders, chalk drawings, serif fonts, ornate overlays, decorative badges
+
+BANNED LAYOUTS — critic will REJECT any of these, score ≤ 3:
+  - Split-screen: any composition with subjects on both left AND right halves
+  - Side-by-side: two objects at equal visual weight (planet left / explosion right)
+  - Panel divider: any vertical or horizontal line dividing the frame into zones
+  - Multi-focal: more than one thing immediately recognizable as a distinct subject
+  - ✗ WRONG: [planet | star/explosion] with "STILL TALKING" floating between them
+  - ✓ RIGHT: [single Voyager probe fills frame against stars] with "STILL TALKING" overlaid
 
 COLOR:
   - Background: very dark (#000010 to #05050f)
@@ -1110,11 +1121,34 @@ SCORING BONUSES (add 1 point each, capped at 10):
 
 ` : '';
 
+  const astrokobiCriticBlock = (niche === 'space_documentary') ? `
+ASTROKOBI CHANNEL SCORING CRITERIA — apply these to your rating:
+
+HARD FAIL (cap rating at 3/10):
+- SPLIT-SCREEN layout: two distinct subjects on left vs right halves of the frame
+- Side-by-side composition: two objects at equal visual weight (planet + explosion, probe + planet)
+- Panel divider: any line, gradient edge, or hard separation dividing the frame into two zones
+- More than one immediately recognizable focal subject
+
+INSTANT DEDUCTIONS — subtract 2 points each:
+- More than 1 image visible as a distinct element (not just a background layer)
+- Hook text floating between two subjects rather than overlaying ONE subject
+- Warm/orange/yellow dominant palette (space should be deep blue, black, or cold white)
+- Text smaller than the hook area — hook must dominate
+
+SCORING BONUSES (add 1 point each, capped at 10):
+- Single focal subject fills 40-70% of frame (probe, planet, star field, telescope)
+- Full-bleed dark space backdrop with minimal competing elements
+- Hook text overlays or sits in dramatic negative space beside ONE clear subject
+- Bebas Neue / Impact font, huge (100px+), white, with drop shadow
+
+` : '';
+
   const prompt = `Use the Read tool to view the thumbnail image at this path:
 ${pngPath}
 
 Then rate this YouTube thumbnail for the video "${title}".
-${referenceBlock}${hookCheckBlock}${philosophyCriticBlock}
+${referenceBlock}${hookCheckBlock}${philosophyCriticBlock}${astrokobiCriticBlock}
 HARD FAILS — these cap the rating at 2/10, no exceptions:
 - Hook text is not visible in the thumbnail (missing, too small, or off-screen)
 - The thumbnail is mostly black or blank — rendering failed
