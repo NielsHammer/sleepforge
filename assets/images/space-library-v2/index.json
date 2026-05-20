@@ -1,0 +1,2302 @@
+[
+  {
+    "path": "assets/images/space-library-v2/voyager/voyager-01.jpg",
+    "keyword": "voyager",
+    "description": "Voyager spacecraft in deep space",
+    "keywords": [
+      "voyager"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:29:51.455Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/voyager/voyager-02.jpg",
+    "keyword": "voyager",
+    "description": "Voyager spacecraft in deep space",
+    "keywords": [
+      "voyager"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:29:54.704Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/voyager/voyager-03.jpg",
+    "keyword": "voyager",
+    "description": "Voyager spacecraft in deep space",
+    "keywords": [
+      "voyager"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:29:57.251Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/voyager/voyager-04.jpg",
+    "keyword": "voyager",
+    "description": "Voyager spacecraft in deep space",
+    "keywords": [
+      "voyager"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:29:59.723Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/voyager/voyager-05.jpg",
+    "keyword": "voyager",
+    "description": "Voyager spacecraft in deep space",
+    "keywords": [
+      "voyager"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:30:03.144Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/jwst/jwst-01.jpg",
+    "keyword": "jwst",
+    "description": "James Webb Space Telescope",
+    "keywords": [
+      "jwst"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:30:05.486Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/jwst/jwst-02.jpg",
+    "keyword": "jwst",
+    "description": "James Webb Space Telescope",
+    "keywords": [
+      "jwst"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:30:08.100Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/jwst/jwst-03.jpg",
+    "keyword": "jwst",
+    "description": "James Webb Space Telescope",
+    "keywords": [
+      "jwst"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:30:10.698Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/jwst/jwst-04.jpg",
+    "keyword": "jwst",
+    "description": "James Webb Space Telescope",
+    "keywords": [
+      "jwst"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:30:13.308Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/jwst/jwst-05.jpg",
+    "keyword": "jwst",
+    "description": "James Webb Space Telescope",
+    "keywords": [
+      "jwst"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:30:16.755Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/hubble/hubble-01.jpg",
+    "keyword": "hubble",
+    "description": "Hubble Space Telescope",
+    "keywords": [
+      "hubble"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:30:19.010Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/hubble/hubble-02.jpg",
+    "keyword": "hubble",
+    "description": "Hubble Space Telescope",
+    "keywords": [
+      "hubble"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:30:22.470Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/hubble/hubble-03.jpg",
+    "keyword": "hubble",
+    "description": "Hubble Space Telescope",
+    "keywords": [
+      "hubble"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:30:24.946Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/hubble/hubble-04.jpg",
+    "keyword": "hubble",
+    "description": "Hubble Space Telescope",
+    "keywords": [
+      "hubble"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:30:27.375Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/hubble/hubble-05.jpg",
+    "keyword": "hubble",
+    "description": "Hubble Space Telescope",
+    "keywords": [
+      "hubble"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:30:29.917Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cassini/cassini-01.jpg",
+    "keyword": "cassini",
+    "description": "Cassini Saturn probe",
+    "keywords": [
+      "cassini"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:30:32.476Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cassini/cassini-02.jpg",
+    "keyword": "cassini",
+    "description": "Cassini Saturn probe",
+    "keywords": [
+      "cassini"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:30:34.910Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cassini/cassini-03.jpg",
+    "keyword": "cassini",
+    "description": "Cassini Saturn probe",
+    "keywords": [
+      "cassini"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:30:37.352Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cassini/cassini-04.jpg",
+    "keyword": "cassini",
+    "description": "Cassini Saturn probe",
+    "keywords": [
+      "cassini"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:30:40.735Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cassini/cassini-05.jpg",
+    "keyword": "cassini",
+    "description": "Cassini Saturn probe",
+    "keywords": [
+      "cassini"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:30:44.020Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/curiosity/curiosity-01.jpg",
+    "keyword": "curiosity",
+    "description": "Mars Curiosity Rover",
+    "keywords": [
+      "curiosity"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:30:46.190Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/curiosity/curiosity-02.jpg",
+    "keyword": "curiosity",
+    "description": "Mars Curiosity Rover",
+    "keywords": [
+      "curiosity"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:30:48.994Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/curiosity/curiosity-03.jpg",
+    "keyword": "curiosity",
+    "description": "Mars Curiosity Rover",
+    "keywords": [
+      "curiosity"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:30:52.253Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/curiosity/curiosity-04.jpg",
+    "keyword": "curiosity",
+    "description": "Mars Curiosity Rover",
+    "keywords": [
+      "curiosity"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:30:54.937Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/curiosity/curiosity-05.jpg",
+    "keyword": "curiosity",
+    "description": "Mars Curiosity Rover",
+    "keywords": [
+      "curiosity"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:30:57.393Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/new-horizons/new-horizons-01.jpg",
+    "keyword": "new-horizons",
+    "description": "New Horizons Pluto flyby",
+    "keywords": [
+      "new-horizons"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:31:00.163Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/new-horizons/new-horizons-02.jpg",
+    "keyword": "new-horizons",
+    "description": "New Horizons Pluto flyby",
+    "keywords": [
+      "new-horizons"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:31:02.446Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/new-horizons/new-horizons-03.jpg",
+    "keyword": "new-horizons",
+    "description": "New Horizons Pluto flyby",
+    "keywords": [
+      "new-horizons"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:31:05.341Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/new-horizons/new-horizons-04.jpg",
+    "keyword": "new-horizons",
+    "description": "New Horizons Pluto flyby",
+    "keywords": [
+      "new-horizons"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:31:07.599Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/new-horizons/new-horizons-05.jpg",
+    "keyword": "new-horizons",
+    "description": "New Horizons Pluto flyby",
+    "keywords": [
+      "new-horizons"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:31:10.859Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/iss/iss-01.jpg",
+    "keyword": "iss",
+    "description": "International Space Station",
+    "keywords": [
+      "iss"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:31:12.968Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/iss/iss-02.jpg",
+    "keyword": "iss",
+    "description": "International Space Station",
+    "keywords": [
+      "iss"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:31:15.565Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/iss/iss-03.jpg",
+    "keyword": "iss",
+    "description": "International Space Station",
+    "keywords": [
+      "iss"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:31:19.300Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/iss/iss-04.jpg",
+    "keyword": "iss",
+    "description": "International Space Station",
+    "keywords": [
+      "iss"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:31:22.830Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/iss/iss-05.jpg",
+    "keyword": "iss",
+    "description": "International Space Station",
+    "keywords": [
+      "iss"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:31:25.299Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/apollo/apollo-01.jpg",
+    "keyword": "apollo",
+    "description": "Apollo lunar missions",
+    "keywords": [
+      "apollo"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:31:28.239Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/apollo/apollo-02.jpg",
+    "keyword": "apollo",
+    "description": "Apollo lunar missions",
+    "keywords": [
+      "apollo"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:31:32.033Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/apollo/apollo-03.jpg",
+    "keyword": "apollo",
+    "description": "Apollo lunar missions",
+    "keywords": [
+      "apollo"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:31:34.621Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/apollo/apollo-04.jpg",
+    "keyword": "apollo",
+    "description": "Apollo lunar missions",
+    "keywords": [
+      "apollo"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:31:37.289Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/apollo/apollo-05.jpg",
+    "keyword": "apollo",
+    "description": "Apollo lunar missions",
+    "keywords": [
+      "apollo"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:31:39.768Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/andromeda-collision/andromeda-collision-01.jpg",
+    "keyword": "andromeda-collision",
+    "description": "Andromeda galaxy merging with Milky Way",
+    "keywords": [
+      "andromeda-collision"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:31:42.818Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/andromeda-collision/andromeda-collision-02.jpg",
+    "keyword": "andromeda-collision",
+    "description": "Andromeda galaxy merging with Milky Way",
+    "keywords": [
+      "andromeda-collision"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:31:46.353Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/andromeda-collision/andromeda-collision-03.jpg",
+    "keyword": "andromeda-collision",
+    "description": "Andromeda galaxy merging with Milky Way",
+    "keywords": [
+      "andromeda-collision"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:31:49.362Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/andromeda-collision/andromeda-collision-04.jpg",
+    "keyword": "andromeda-collision",
+    "description": "Andromeda galaxy merging with Milky Way",
+    "keywords": [
+      "andromeda-collision"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:31:51.997Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/andromeda-collision/andromeda-collision-05.jpg",
+    "keyword": "andromeda-collision",
+    "description": "Andromeda galaxy merging with Milky Way",
+    "keywords": [
+      "andromeda-collision"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:31:54.703Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/exoplanet/exoplanet-01.jpg",
+    "keyword": "exoplanet",
+    "description": "Earth-like exoplanets",
+    "keywords": [
+      "exoplanet"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:31:56.764Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/exoplanet/exoplanet-02.jpg",
+    "keyword": "exoplanet",
+    "description": "Earth-like exoplanets",
+    "keywords": [
+      "exoplanet"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:31:58.909Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/exoplanet/exoplanet-03.jpg",
+    "keyword": "exoplanet",
+    "description": "Earth-like exoplanets",
+    "keywords": [
+      "exoplanet"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:32:01.365Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/exoplanet/exoplanet-04.jpg",
+    "keyword": "exoplanet",
+    "description": "Earth-like exoplanets",
+    "keywords": [
+      "exoplanet"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:32:04.822Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/exoplanet/exoplanet-05.jpg",
+    "keyword": "exoplanet",
+    "description": "Earth-like exoplanets",
+    "keywords": [
+      "exoplanet"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:32:07.618Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/dark-matter/dark-matter-01.jpg",
+    "keyword": "dark-matter",
+    "description": "Dark matter and dark energy visualization",
+    "keywords": [
+      "dark-matter"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:32:09.736Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/dark-matter/dark-matter-02.jpg",
+    "keyword": "dark-matter",
+    "description": "Dark matter and dark energy visualization",
+    "keywords": [
+      "dark-matter"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:32:12.341Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/dark-matter/dark-matter-03.jpg",
+    "keyword": "dark-matter",
+    "description": "Dark matter and dark energy visualization",
+    "keywords": [
+      "dark-matter"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:32:15.281Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/dark-matter/dark-matter-04.jpg",
+    "keyword": "dark-matter",
+    "description": "Dark matter and dark energy visualization",
+    "keywords": [
+      "dark-matter"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:32:18.995Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/dark-matter/dark-matter-05.jpg",
+    "keyword": "dark-matter",
+    "description": "Dark matter and dark energy visualization",
+    "keywords": [
+      "dark-matter"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:32:21.785Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gravitational-waves/gravitational-waves-01.jpg",
+    "keyword": "gravitational-waves",
+    "description": "Gravitational waves from merging black holes",
+    "keywords": [
+      "gravitational-waves"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:32:23.993Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gravitational-waves/gravitational-waves-02.jpg",
+    "keyword": "gravitational-waves",
+    "description": "Gravitational waves from merging black holes",
+    "keywords": [
+      "gravitational-waves"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:32:26.649Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gravitational-waves/gravitational-waves-03.jpg",
+    "keyword": "gravitational-waves",
+    "description": "Gravitational waves from merging black holes",
+    "keywords": [
+      "gravitational-waves"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:32:29.299Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gravitational-waves/gravitational-waves-04.jpg",
+    "keyword": "gravitational-waves",
+    "description": "Gravitational waves from merging black holes",
+    "keywords": [
+      "gravitational-waves"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:32:32.756Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gravitational-waves/gravitational-waves-05.jpg",
+    "keyword": "gravitational-waves",
+    "description": "Gravitational waves from merging black holes",
+    "keywords": [
+      "gravitational-waves"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:32:36.212Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/titan/titan-01.jpg",
+    "keyword": "titan",
+    "description": "Saturn's moon Titan with methane lakes",
+    "keywords": [
+      "titan"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:32:38.257Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/titan/titan-02.jpg",
+    "keyword": "titan",
+    "description": "Saturn's moon Titan with methane lakes",
+    "keywords": [
+      "titan"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:32:40.523Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/titan/titan-03.jpg",
+    "keyword": "titan",
+    "description": "Saturn's moon Titan with methane lakes",
+    "keywords": [
+      "titan"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:32:43.863Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/titan/titan-04.jpg",
+    "keyword": "titan",
+    "description": "Saturn's moon Titan with methane lakes",
+    "keywords": [
+      "titan"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:32:46.934Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/titan/titan-05.jpg",
+    "keyword": "titan",
+    "description": "Saturn's moon Titan with methane lakes",
+    "keywords": [
+      "titan"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:32:50.316Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pillars-of-creation/pillars-of-creation-01.jpg",
+    "keyword": "pillars-of-creation",
+    "description": "Eagle Nebula Pillars of Creation",
+    "keywords": [
+      "pillars-of-creation"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:32:52.515Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pillars-of-creation/pillars-of-creation-02.jpg",
+    "keyword": "pillars-of-creation",
+    "description": "Eagle Nebula Pillars of Creation",
+    "keywords": [
+      "pillars-of-creation"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:32:55.229Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pillars-of-creation/pillars-of-creation-03.jpg",
+    "keyword": "pillars-of-creation",
+    "description": "Eagle Nebula Pillars of Creation",
+    "keywords": [
+      "pillars-of-creation"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:32:58.386Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pillars-of-creation/pillars-of-creation-04.jpg",
+    "keyword": "pillars-of-creation",
+    "description": "Eagle Nebula Pillars of Creation",
+    "keywords": [
+      "pillars-of-creation"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:33:00.983Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pillars-of-creation/pillars-of-creation-05.jpg",
+    "keyword": "pillars-of-creation",
+    "description": "Eagle Nebula Pillars of Creation",
+    "keywords": [
+      "pillars-of-creation"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:33:03.654Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gamma-ray-burst/gamma-ray-burst-01.jpg",
+    "keyword": "gamma-ray-burst",
+    "description": "Gamma-ray burst explosion",
+    "keywords": [
+      "gamma-ray-burst"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:33:06.682Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gamma-ray-burst/gamma-ray-burst-02.jpg",
+    "keyword": "gamma-ray-burst",
+    "description": "Gamma-ray burst explosion",
+    "keywords": [
+      "gamma-ray-burst"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:33:10.194Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gamma-ray-burst/gamma-ray-burst-03.jpg",
+    "keyword": "gamma-ray-burst",
+    "description": "Gamma-ray burst explosion",
+    "keywords": [
+      "gamma-ray-burst"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:33:13.647Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gamma-ray-burst/gamma-ray-burst-04.jpg",
+    "keyword": "gamma-ray-burst",
+    "description": "Gamma-ray burst explosion",
+    "keywords": [
+      "gamma-ray-burst"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:33:16.162Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/gamma-ray-burst/gamma-ray-burst-05.jpg",
+    "keyword": "gamma-ray-burst",
+    "description": "Gamma-ray burst explosion",
+    "keywords": [
+      "gamma-ray-burst"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:33:18.741Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/europa/europa-01.jpg",
+    "keyword": "europa",
+    "description": "Europa ice moon with subsurface ocean",
+    "keywords": [
+      "europa"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:33:21.019Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/europa/europa-02.jpg",
+    "keyword": "europa",
+    "description": "Europa ice moon with subsurface ocean",
+    "keywords": [
+      "europa"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:33:24.346Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/europa/europa-03.jpg",
+    "keyword": "europa",
+    "description": "Europa ice moon with subsurface ocean",
+    "keywords": [
+      "europa"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:33:26.963Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/europa/europa-04.jpg",
+    "keyword": "europa",
+    "description": "Europa ice moon with subsurface ocean",
+    "keywords": [
+      "europa"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:33:29.359Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/europa/europa-05.jpg",
+    "keyword": "europa",
+    "description": "Europa ice moon with subsurface ocean",
+    "keywords": [
+      "europa"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:33:32.588Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/enceladus/enceladus-01.jpg",
+    "keyword": "enceladus",
+    "description": "Enceladus ice geysers",
+    "keywords": [
+      "enceladus"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:33:36.375Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/enceladus/enceladus-02.jpg",
+    "keyword": "enceladus",
+    "description": "Enceladus ice geysers",
+    "keywords": [
+      "enceladus"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:33:39.184Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/enceladus/enceladus-03.jpg",
+    "keyword": "enceladus",
+    "description": "Enceladus ice geysers",
+    "keywords": [
+      "enceladus"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:33:41.825Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/enceladus/enceladus-04.jpg",
+    "keyword": "enceladus",
+    "description": "Enceladus ice geysers",
+    "keywords": [
+      "enceladus"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:33:44.919Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/enceladus/enceladus-05.jpg",
+    "keyword": "enceladus",
+    "description": "Enceladus ice geysers",
+    "keywords": [
+      "enceladus"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:33:47.346Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/betelgeuse/betelgeuse-01.jpg",
+    "keyword": "betelgeuse",
+    "description": "Betelgeuse red supergiant star about to explode",
+    "keywords": [
+      "betelgeuse"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:33:49.982Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/betelgeuse/betelgeuse-02.jpg",
+    "keyword": "betelgeuse",
+    "description": "Betelgeuse red supergiant star about to explode",
+    "keywords": [
+      "betelgeuse"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:33:52.491Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/betelgeuse/betelgeuse-03.jpg",
+    "keyword": "betelgeuse",
+    "description": "Betelgeuse red supergiant star about to explode",
+    "keywords": [
+      "betelgeuse"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:33:55.863Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/betelgeuse/betelgeuse-04.jpg",
+    "keyword": "betelgeuse",
+    "description": "Betelgeuse red supergiant star about to explode",
+    "keywords": [
+      "betelgeuse"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:33:59.175Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/betelgeuse/betelgeuse-05.jpg",
+    "keyword": "betelgeuse",
+    "description": "Betelgeuse red supergiant star about to explode",
+    "keywords": [
+      "betelgeuse"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:34:02.429Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pluto/pluto-01.jpg",
+    "keyword": "pluto",
+    "description": "Pluto with Tombaugh Regio heart",
+    "keywords": [
+      "pluto"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:34:04.392Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pluto/pluto-02.jpg",
+    "keyword": "pluto",
+    "description": "Pluto with Tombaugh Regio heart",
+    "keywords": [
+      "pluto"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:34:07.067Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pluto/pluto-03.jpg",
+    "keyword": "pluto",
+    "description": "Pluto with Tombaugh Regio heart",
+    "keywords": [
+      "pluto"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:34:09.527Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pluto/pluto-04.jpg",
+    "keyword": "pluto",
+    "description": "Pluto with Tombaugh Regio heart",
+    "keywords": [
+      "pluto"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:34:11.947Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pluto/pluto-05.jpg",
+    "keyword": "pluto",
+    "description": "Pluto with Tombaugh Regio heart",
+    "keywords": [
+      "pluto"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:34:15.451Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pulsar/pulsar-01.jpg",
+    "keyword": "pulsar",
+    "description": "Pulsar rotating neutron star lighthouse",
+    "keywords": [
+      "pulsar"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:34:18.444Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pulsar/pulsar-02.jpg",
+    "keyword": "pulsar",
+    "description": "Pulsar rotating neutron star lighthouse",
+    "keywords": [
+      "pulsar"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:34:21.766Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pulsar/pulsar-03.jpg",
+    "keyword": "pulsar",
+    "description": "Pulsar rotating neutron star lighthouse",
+    "keywords": [
+      "pulsar"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:34:24.388Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pulsar/pulsar-04.jpg",
+    "keyword": "pulsar",
+    "description": "Pulsar rotating neutron star lighthouse",
+    "keywords": [
+      "pulsar"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:34:27.106Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pulsar/pulsar-05.jpg",
+    "keyword": "pulsar",
+    "description": "Pulsar rotating neutron star lighthouse",
+    "keywords": [
+      "pulsar"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:34:29.598Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/quasar/quasar-01.jpg",
+    "keyword": "quasar",
+    "description": "Quasar — brightest objects in universe",
+    "keywords": [
+      "quasar"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:34:31.750Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/quasar/quasar-02.jpg",
+    "keyword": "quasar",
+    "description": "Quasar — brightest objects in universe",
+    "keywords": [
+      "quasar"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:34:35.260Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/quasar/quasar-03.jpg",
+    "keyword": "quasar",
+    "description": "Quasar — brightest objects in universe",
+    "keywords": [
+      "quasar"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:34:38.150Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/quasar/quasar-04.jpg",
+    "keyword": "quasar",
+    "description": "Quasar — brightest objects in universe",
+    "keywords": [
+      "quasar"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:34:42.049Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/quasar/quasar-05.jpg",
+    "keyword": "quasar",
+    "description": "Quasar — brightest objects in universe",
+    "keywords": [
+      "quasar"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:34:44.766Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmic-web/cosmic-web-01.jpg",
+    "keyword": "cosmic-web",
+    "description": "Large-scale structure of the universe",
+    "keywords": [
+      "cosmic-web"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:34:47.117Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmic-web/cosmic-web-02.jpg",
+    "keyword": "cosmic-web",
+    "description": "Large-scale structure of the universe",
+    "keywords": [
+      "cosmic-web"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:34:49.793Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmic-web/cosmic-web-03.jpg",
+    "keyword": "cosmic-web",
+    "description": "Large-scale structure of the universe",
+    "keywords": [
+      "cosmic-web"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:34:52.479Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmic-web/cosmic-web-04.jpg",
+    "keyword": "cosmic-web",
+    "description": "Large-scale structure of the universe",
+    "keywords": [
+      "cosmic-web"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:34:55.044Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmic-web/cosmic-web-05.jpg",
+    "keyword": "cosmic-web",
+    "description": "Large-scale structure of the universe",
+    "keywords": [
+      "cosmic-web"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:34:57.761Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/neutron-star/neutron-star-01.jpg",
+    "keyword": "neutron-star",
+    "description": "Neutron star — densest object you can touch",
+    "keywords": [
+      "neutron-star"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:34:59.903Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/neutron-star/neutron-star-02.jpg",
+    "keyword": "neutron-star",
+    "description": "Neutron star — densest object you can touch",
+    "keywords": [
+      "neutron-star"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:35:02.792Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/neutron-star/neutron-star-03.jpg",
+    "keyword": "neutron-star",
+    "description": "Neutron star — densest object you can touch",
+    "keywords": [
+      "neutron-star"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:35:05.408Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/neutron-star/neutron-star-04.jpg",
+    "keyword": "neutron-star",
+    "description": "Neutron star — densest object you can touch",
+    "keywords": [
+      "neutron-star"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:35:08.046Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/neutron-star/neutron-star-05.jpg",
+    "keyword": "neutron-star",
+    "description": "Neutron star — densest object you can touch",
+    "keywords": [
+      "neutron-star"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:35:10.695Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-close/black-hole-close-01.jpg",
+    "keyword": "black-hole-close",
+    "description": "Black hole close-up event horizon",
+    "keywords": [
+      "black-hole-close"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:35:13.673Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-close/black-hole-close-02.jpg",
+    "keyword": "black-hole-close",
+    "description": "Black hole close-up event horizon",
+    "keywords": [
+      "black-hole-close"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:35:16.419Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-close/black-hole-close-03.jpg",
+    "keyword": "black-hole-close",
+    "description": "Black hole close-up event horizon",
+    "keywords": [
+      "black-hole-close"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:35:20.057Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-close/black-hole-close-04.jpg",
+    "keyword": "black-hole-close",
+    "description": "Black hole close-up event horizon",
+    "keywords": [
+      "black-hole-close"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:35:22.623Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-close/black-hole-close-05.jpg",
+    "keyword": "black-hole-close",
+    "description": "Black hole close-up event horizon",
+    "keywords": [
+      "black-hole-close"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:35:25.438Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/saturn-close/saturn-close-01.jpg",
+    "keyword": "saturn-close",
+    "description": "Saturn rings close-up",
+    "keywords": [
+      "saturn-close"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:35:28.275Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/saturn-close/saturn-close-02.jpg",
+    "keyword": "saturn-close",
+    "description": "Saturn rings close-up",
+    "keywords": [
+      "saturn-close"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:35:31.780Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/saturn-close/saturn-close-03.jpg",
+    "keyword": "saturn-close",
+    "description": "Saturn rings close-up",
+    "keywords": [
+      "saturn-close"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:35:34.220Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/saturn-close/saturn-close-04.jpg",
+    "keyword": "saturn-close",
+    "description": "Saturn rings close-up",
+    "keywords": [
+      "saturn-close"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:35:36.668Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/saturn-close/saturn-close-05.jpg",
+    "keyword": "saturn-close",
+    "description": "Saturn rings close-up",
+    "keywords": [
+      "saturn-close"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:35:39.121Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/nebula-colorful/nebula-colorful-01.jpg",
+    "keyword": "nebula-colorful",
+    "description": "Colorful emission nebula",
+    "keywords": [
+      "nebula-colorful"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:35:41.302Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/nebula-colorful/nebula-colorful-02.jpg",
+    "keyword": "nebula-colorful",
+    "description": "Colorful emission nebula",
+    "keywords": [
+      "nebula-colorful"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:35:43.933Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/nebula-colorful/nebula-colorful-03.jpg",
+    "keyword": "nebula-colorful",
+    "description": "Colorful emission nebula",
+    "keywords": [
+      "nebula-colorful"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:35:46.534Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/nebula-colorful/nebula-colorful-04.jpg",
+    "keyword": "nebula-colorful",
+    "description": "Colorful emission nebula",
+    "keywords": [
+      "nebula-colorful"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:35:49.200Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/nebula-colorful/nebula-colorful-05.jpg",
+    "keyword": "nebula-colorful",
+    "description": "Colorful emission nebula",
+    "keywords": [
+      "nebula-colorful"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:35:52.336Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/mars-surface/mars-surface-01.jpg",
+    "keyword": "mars-surface",
+    "description": "Mars landscape and missions",
+    "keywords": [
+      "mars-surface"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:35:54.532Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/mars-surface/mars-surface-02.jpg",
+    "keyword": "mars-surface",
+    "description": "Mars landscape and missions",
+    "keywords": [
+      "mars-surface"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:35:57.222Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/mars-surface/mars-surface-03.jpg",
+    "keyword": "mars-surface",
+    "description": "Mars landscape and missions",
+    "keywords": [
+      "mars-surface"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:35:59.533Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/mars-surface/mars-surface-04.jpg",
+    "keyword": "mars-surface",
+    "description": "Mars landscape and missions",
+    "keywords": [
+      "mars-surface"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:36:02.120Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/mars-surface/mars-surface-05.jpg",
+    "keyword": "mars-surface",
+    "description": "Mars landscape and missions",
+    "keywords": [
+      "mars-surface"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:36:04.841Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/milky-way/milky-way-01.jpg",
+    "keyword": "milky-way",
+    "description": "Milky Way galaxy",
+    "keywords": [
+      "milky-way"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:36:07.000Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/milky-way/milky-way-02.jpg",
+    "keyword": "milky-way",
+    "description": "Milky Way galaxy",
+    "keywords": [
+      "milky-way"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:36:09.788Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/milky-way/milky-way-03.jpg",
+    "keyword": "milky-way",
+    "description": "Milky Way galaxy",
+    "keywords": [
+      "milky-way"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:36:13.403Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/milky-way/milky-way-04.jpg",
+    "keyword": "milky-way",
+    "description": "Milky Way galaxy",
+    "keywords": [
+      "milky-way"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:36:16.162Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/milky-way/milky-way-05.jpg",
+    "keyword": "milky-way",
+    "description": "Milky Way galaxy",
+    "keywords": [
+      "milky-way"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:36:18.807Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-system/solar-system-01.jpg",
+    "keyword": "solar-system",
+    "description": "Solar system overview",
+    "keywords": [
+      "solar-system"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:36:21.495Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-system/solar-system-02.jpg",
+    "keyword": "solar-system",
+    "description": "Solar system overview",
+    "keywords": [
+      "solar-system"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:36:24.842Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-system/solar-system-03.jpg",
+    "keyword": "solar-system",
+    "description": "Solar system overview",
+    "keywords": [
+      "solar-system"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:36:28.096Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-system/solar-system-04.jpg",
+    "keyword": "solar-system",
+    "description": "Solar system overview",
+    "keywords": [
+      "solar-system"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:36:31.603Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-system/solar-system-05.jpg",
+    "keyword": "solar-system",
+    "description": "Solar system overview",
+    "keywords": [
+      "solar-system"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:36:34.328Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/supernova/supernova-01.jpg",
+    "keyword": "supernova",
+    "description": "Supernova stellar explosion",
+    "keywords": [
+      "supernova"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:36:36.459Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/supernova/supernova-02.jpg",
+    "keyword": "supernova",
+    "description": "Supernova stellar explosion",
+    "keywords": [
+      "supernova"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:36:39.864Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/supernova/supernova-03.jpg",
+    "keyword": "supernova",
+    "description": "Supernova stellar explosion",
+    "keywords": [
+      "supernova"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:36:42.497Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/supernova/supernova-04.jpg",
+    "keyword": "supernova",
+    "description": "Supernova stellar explosion",
+    "keywords": [
+      "supernova"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:36:44.997Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/supernova/supernova-05.jpg",
+    "keyword": "supernova",
+    "description": "Supernova stellar explosion",
+    "keywords": [
+      "supernova"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:36:48.399Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/deep-field/deep-field-01.jpg",
+    "keyword": "deep-field",
+    "description": "Deep field galaxy survey",
+    "keywords": [
+      "deep-field"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:36:50.478Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/deep-field/deep-field-02.jpg",
+    "keyword": "deep-field",
+    "description": "Deep field galaxy survey",
+    "keywords": [
+      "deep-field"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:36:53.313Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/deep-field/deep-field-03.jpg",
+    "keyword": "deep-field",
+    "description": "Deep field galaxy survey",
+    "keywords": [
+      "deep-field"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:36:56.167Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/deep-field/deep-field-04.jpg",
+    "keyword": "deep-field",
+    "description": "Deep field galaxy survey",
+    "keywords": [
+      "deep-field"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:36:58.922Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/deep-field/deep-field-05.jpg",
+    "keyword": "deep-field",
+    "description": "Deep field galaxy survey",
+    "keywords": [
+      "deep-field"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:37:01.581Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/comet/comet-01.jpg",
+    "keyword": "comet",
+    "description": "Comet in space",
+    "keywords": [
+      "comet"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:37:03.706Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/comet/comet-02.jpg",
+    "keyword": "comet",
+    "description": "Comet in space",
+    "keywords": [
+      "comet"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:37:07.073Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/comet/comet-03.jpg",
+    "keyword": "comet",
+    "description": "Comet in space",
+    "keywords": [
+      "comet"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:37:09.418Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/comet/comet-04.jpg",
+    "keyword": "comet",
+    "description": "Comet in space",
+    "keywords": [
+      "comet"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:37:12.249Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/comet/comet-05.jpg",
+    "keyword": "comet",
+    "description": "Comet in space",
+    "keywords": [
+      "comet"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:37:15.457Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/big-bang/big-bang-01.jpg",
+    "keyword": "big-bang",
+    "description": "Big Bang and early universe",
+    "keywords": [
+      "big-bang"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:37:17.630Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/big-bang/big-bang-02.jpg",
+    "keyword": "big-bang",
+    "description": "Big Bang and early universe",
+    "keywords": [
+      "big-bang"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:37:20.340Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/big-bang/big-bang-03.jpg",
+    "keyword": "big-bang",
+    "description": "Big Bang and early universe",
+    "keywords": [
+      "big-bang"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:37:23.000Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/big-bang/big-bang-04.jpg",
+    "keyword": "big-bang",
+    "description": "Big Bang and early universe",
+    "keywords": [
+      "big-bang"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:37:25.638Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/big-bang/big-bang-05.jpg",
+    "keyword": "big-bang",
+    "description": "Big Bang and early universe",
+    "keywords": [
+      "big-bang"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:37:28.182Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-jet/black-hole-jet-01.jpg",
+    "keyword": "black-hole-jet",
+    "description": "Black hole relativistic jet",
+    "keywords": [
+      "black-hole-jet"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:37:30.966Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-jet/black-hole-jet-02.jpg",
+    "keyword": "black-hole-jet",
+    "description": "Black hole relativistic jet",
+    "keywords": [
+      "black-hole-jet"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:37:33.695Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-jet/black-hole-jet-03.jpg",
+    "keyword": "black-hole-jet",
+    "description": "Black hole relativistic jet",
+    "keywords": [
+      "black-hole-jet"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:37:36.200Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-jet/black-hole-jet-04.jpg",
+    "keyword": "black-hole-jet",
+    "description": "Black hole relativistic jet",
+    "keywords": [
+      "black-hole-jet"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:37:38.695Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/black-hole-jet/black-hole-jet-05.jpg",
+    "keyword": "black-hole-jet",
+    "description": "Black hole relativistic jet",
+    "keywords": [
+      "black-hole-jet"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:37:42.430Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/star-forming/star-forming-01.jpg",
+    "keyword": "star-forming",
+    "description": "Star-forming region nebula",
+    "keywords": [
+      "star-forming"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:37:44.573Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/star-forming/star-forming-02.jpg",
+    "keyword": "star-forming",
+    "description": "Star-forming region nebula",
+    "keywords": [
+      "star-forming"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:37:47.385Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/star-forming/star-forming-03.jpg",
+    "keyword": "star-forming",
+    "description": "Star-forming region nebula",
+    "keywords": [
+      "star-forming"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:37:49.995Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/star-forming/star-forming-04.jpg",
+    "keyword": "star-forming",
+    "description": "Star-forming region nebula",
+    "keywords": [
+      "star-forming"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:37:52.512Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/star-forming/star-forming-05.jpg",
+    "keyword": "star-forming",
+    "description": "Star-forming region nebula",
+    "keywords": [
+      "star-forming"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:37:55.038Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-telescope/space-telescope-01.jpg",
+    "keyword": "space-telescope",
+    "description": "Space telescopes and observatories",
+    "keywords": [
+      "space-telescope"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:37:57.047Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-telescope/space-telescope-02.jpg",
+    "keyword": "space-telescope",
+    "description": "Space telescopes and observatories",
+    "keywords": [
+      "space-telescope"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:37:59.498Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-telescope/space-telescope-03.jpg",
+    "keyword": "space-telescope",
+    "description": "Space telescopes and observatories",
+    "keywords": [
+      "space-telescope"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:38:01.992Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-telescope/space-telescope-04.jpg",
+    "keyword": "space-telescope",
+    "description": "Space telescopes and observatories",
+    "keywords": [
+      "space-telescope"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:38:04.569Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-telescope/space-telescope-05.jpg",
+    "keyword": "space-telescope",
+    "description": "Space telescopes and observatories",
+    "keywords": [
+      "space-telescope"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:38:07.232Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-walk/space-walk-01.jpg",
+    "keyword": "space-walk",
+    "description": "Astronaut spacewalk EVA",
+    "keywords": [
+      "space-walk"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:38:09.381Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-walk/space-walk-02.jpg",
+    "keyword": "space-walk",
+    "description": "Astronaut spacewalk EVA",
+    "keywords": [
+      "space-walk"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:38:11.976Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-walk/space-walk-03.jpg",
+    "keyword": "space-walk",
+    "description": "Astronaut spacewalk EVA",
+    "keywords": [
+      "space-walk"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:38:14.778Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-walk/space-walk-04.jpg",
+    "keyword": "space-walk",
+    "description": "Astronaut spacewalk EVA",
+    "keywords": [
+      "space-walk"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:38:17.515Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-walk/space-walk-05.jpg",
+    "keyword": "space-walk",
+    "description": "Astronaut spacewalk EVA",
+    "keywords": [
+      "space-walk"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:38:19.941Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/planetary-nebula/planetary-nebula-01.jpg",
+    "keyword": "planetary-nebula",
+    "description": "Planetary nebula dying star shells",
+    "keywords": [
+      "planetary-nebula"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:38:21.861Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/planetary-nebula/planetary-nebula-02.jpg",
+    "keyword": "planetary-nebula",
+    "description": "Planetary nebula dying star shells",
+    "keywords": [
+      "planetary-nebula"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:38:25.237Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/planetary-nebula/planetary-nebula-03.jpg",
+    "keyword": "planetary-nebula",
+    "description": "Planetary nebula dying star shells",
+    "keywords": [
+      "planetary-nebula"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:38:28.760Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/planetary-nebula/planetary-nebula-04.jpg",
+    "keyword": "planetary-nebula",
+    "description": "Planetary nebula dying star shells",
+    "keywords": [
+      "planetary-nebula"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:38:31.290Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/planetary-nebula/planetary-nebula-05.jpg",
+    "keyword": "planetary-nebula",
+    "description": "Planetary nebula dying star shells",
+    "keywords": [
+      "planetary-nebula"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:38:33.981Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/moon-detail/moon-detail-01.jpg",
+    "keyword": "moon-detail",
+    "description": "Moon surface detail",
+    "keywords": [
+      "moon-detail"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:38:35.866Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/moon-detail/moon-detail-02.jpg",
+    "keyword": "moon-detail",
+    "description": "Moon surface detail",
+    "keywords": [
+      "moon-detail"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:38:40.058Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/moon-detail/moon-detail-03.jpg",
+    "keyword": "moon-detail",
+    "description": "Moon surface detail",
+    "keywords": [
+      "moon-detail"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:38:42.772Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/moon-detail/moon-detail-04.jpg",
+    "keyword": "moon-detail",
+    "description": "Moon surface detail",
+    "keywords": [
+      "moon-detail"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:38:45.088Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/moon-detail/moon-detail-05.jpg",
+    "keyword": "moon-detail",
+    "description": "Moon surface detail",
+    "keywords": [
+      "moon-detail"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:38:47.847Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-flare/solar-flare-01.jpg",
+    "keyword": "solar-flare",
+    "description": "Solar flare and space weather",
+    "keywords": [
+      "solar-flare"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:38:49.937Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-flare/solar-flare-02.jpg",
+    "keyword": "solar-flare",
+    "description": "Solar flare and space weather",
+    "keywords": [
+      "solar-flare"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:38:52.574Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-flare/solar-flare-03.jpg",
+    "keyword": "solar-flare",
+    "description": "Solar flare and space weather",
+    "keywords": [
+      "solar-flare"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:38:54.956Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-flare/solar-flare-04.jpg",
+    "keyword": "solar-flare",
+    "description": "Solar flare and space weather",
+    "keywords": [
+      "solar-flare"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:38:57.724Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/solar-flare/solar-flare-05.jpg",
+    "keyword": "solar-flare",
+    "description": "Solar flare and space weather",
+    "keywords": [
+      "solar-flare"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:39:00.222Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/asteroid/asteroid-01.jpg",
+    "keyword": "asteroid",
+    "description": "Asteroids and Near-Earth Objects",
+    "keywords": [
+      "asteroid"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:39:02.434Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/asteroid/asteroid-02.jpg",
+    "keyword": "asteroid",
+    "description": "Asteroids and Near-Earth Objects",
+    "keywords": [
+      "asteroid"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:39:05.157Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/asteroid/asteroid-03.jpg",
+    "keyword": "asteroid",
+    "description": "Asteroids and Near-Earth Objects",
+    "keywords": [
+      "asteroid"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:39:07.536Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/asteroid/asteroid-04.jpg",
+    "keyword": "asteroid",
+    "description": "Asteroids and Near-Earth Objects",
+    "keywords": [
+      "asteroid"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:39:11.202Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/asteroid/asteroid-05.jpg",
+    "keyword": "asteroid",
+    "description": "Asteroids and Near-Earth Objects",
+    "keywords": [
+      "asteroid"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:39:14.662Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/galaxy-types/galaxy-types-01.jpg",
+    "keyword": "galaxy-types",
+    "description": "Different galaxy morphologies",
+    "keywords": [
+      "galaxy-types"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:39:17.934Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/galaxy-types/galaxy-types-02.jpg",
+    "keyword": "galaxy-types",
+    "description": "Different galaxy morphologies",
+    "keywords": [
+      "galaxy-types"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:39:20.429Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/galaxy-types/galaxy-types-03.jpg",
+    "keyword": "galaxy-types",
+    "description": "Different galaxy morphologies",
+    "keywords": [
+      "galaxy-types"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:39:23.747Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/galaxy-types/galaxy-types-04.jpg",
+    "keyword": "galaxy-types",
+    "description": "Different galaxy morphologies",
+    "keywords": [
+      "galaxy-types"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:39:27.183Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/galaxy-types/galaxy-types-05.jpg",
+    "keyword": "galaxy-types",
+    "description": "Different galaxy morphologies",
+    "keywords": [
+      "galaxy-types"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:39:30.098Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmos-scale/cosmos-scale-01.jpg",
+    "keyword": "cosmos-scale",
+    "description": "Scale of the universe visualization",
+    "keywords": [
+      "cosmos-scale"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:39:32.364Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmos-scale/cosmos-scale-02.jpg",
+    "keyword": "cosmos-scale",
+    "description": "Scale of the universe visualization",
+    "keywords": [
+      "cosmos-scale"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:39:35.002Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmos-scale/cosmos-scale-03.jpg",
+    "keyword": "cosmos-scale",
+    "description": "Scale of the universe visualization",
+    "keywords": [
+      "cosmos-scale"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:39:37.731Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmos-scale/cosmos-scale-04.jpg",
+    "keyword": "cosmos-scale",
+    "description": "Scale of the universe visualization",
+    "keywords": [
+      "cosmos-scale"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:39:40.869Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/cosmos-scale/cosmos-scale-05.jpg",
+    "keyword": "cosmos-scale",
+    "description": "Scale of the universe visualization",
+    "keywords": [
+      "cosmos-scale"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:39:44.396Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-exploration/space-exploration-01.jpg",
+    "keyword": "space-exploration",
+    "description": "History of space exploration",
+    "keywords": [
+      "space-exploration"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:39:46.443Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-exploration/space-exploration-02.jpg",
+    "keyword": "space-exploration",
+    "description": "History of space exploration",
+    "keywords": [
+      "space-exploration"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:39:48.905Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-exploration/space-exploration-03.jpg",
+    "keyword": "space-exploration",
+    "description": "History of space exploration",
+    "keywords": [
+      "space-exploration"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:39:51.584Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-exploration/space-exploration-04.jpg",
+    "keyword": "space-exploration",
+    "description": "History of space exploration",
+    "keywords": [
+      "space-exploration"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:39:54.149Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/space-exploration/space-exploration-05.jpg",
+    "keyword": "space-exploration",
+    "description": "History of space exploration",
+    "keywords": [
+      "space-exploration"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:39:57.552Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/heat-death/heat-death-01.jpg",
+    "keyword": "heat-death",
+    "description": "Universe end scenarios",
+    "keywords": [
+      "heat-death"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:39:59.783Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/heat-death/heat-death-02.jpg",
+    "keyword": "heat-death",
+    "description": "Universe end scenarios",
+    "keywords": [
+      "heat-death"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:40:03.379Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/heat-death/heat-death-03.jpg",
+    "keyword": "heat-death",
+    "description": "Universe end scenarios",
+    "keywords": [
+      "heat-death"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:40:06.835Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/heat-death/heat-death-04.jpg",
+    "keyword": "heat-death",
+    "description": "Universe end scenarios",
+    "keywords": [
+      "heat-death"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:40:09.501Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/heat-death/heat-death-05.jpg",
+    "keyword": "heat-death",
+    "description": "Universe end scenarios",
+    "keywords": [
+      "heat-death"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:40:12.997Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pale-blue-dot/pale-blue-dot-01.jpg",
+    "keyword": "pale-blue-dot",
+    "description": "Earth from space perspective",
+    "keywords": [
+      "pale-blue-dot"
+    ],
+    "prompt_index": 0,
+    "generated": "2026-05-20T00:40:14.825Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pale-blue-dot/pale-blue-dot-02.jpg",
+    "keyword": "pale-blue-dot",
+    "description": "Earth from space perspective",
+    "keywords": [
+      "pale-blue-dot"
+    ],
+    "prompt_index": 1,
+    "generated": "2026-05-20T00:40:17.289Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pale-blue-dot/pale-blue-dot-03.jpg",
+    "keyword": "pale-blue-dot",
+    "description": "Earth from space perspective",
+    "keywords": [
+      "pale-blue-dot"
+    ],
+    "prompt_index": 2,
+    "generated": "2026-05-20T00:40:20.482Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pale-blue-dot/pale-blue-dot-04.jpg",
+    "keyword": "pale-blue-dot",
+    "description": "Earth from space perspective",
+    "keywords": [
+      "pale-blue-dot"
+    ],
+    "prompt_index": 3,
+    "generated": "2026-05-20T00:40:23.899Z"
+  },
+  {
+    "path": "assets/images/space-library-v2/pale-blue-dot/pale-blue-dot-05.jpg",
+    "keyword": "pale-blue-dot",
+    "description": "Earth from space perspective",
+    "keywords": [
+      "pale-blue-dot"
+    ],
+    "prompt_index": 4,
+    "generated": "2026-05-20T00:40:27.443Z"
+  }
+]
