@@ -311,15 +311,79 @@ Return ONLY this JSON:
 
 function validateAstrokobiHookText(hook) {
   if (!hook) return { valid: false, issues: ['empty hook'] };
-  const words = hook.trim().replace(/\.$/, '').split(/\s+/);
+  const clean = hook.trim().toUpperCase().replace(/\.$/, '').trim();
+  const words = clean.split(/\s+/);
   const issues = [];
+
   if (words.length > 5) {
     issues.push(`hook is ${words.length} words — AstroKobi hooks are 1-4 words max`);
   }
   if (hook.endsWith('?') && words.length > 4) {
     issues.push('hook is a long question — AstroKobi hooks are short statements');
   }
+
+  // Banned: bare single past-tense verb — observation, no narrative implication
+  const BARE_PAST_VERBS = new Set(['ENDED','STOPPED','DIED','FELL','BURNED','COLLAPSED','EXPLODED','VANISHED','DISAPPEARED','FAILED','BROKE','CRASHED','MELTED','FROZE','SHATTERED']);
+  if (words.length === 1 && BARE_PAST_VERBS.has(clean)) {
+    issues.push(`"${hook}" is a bare past-tense verb with no subject — no narrative, no curiosity gap. Try "IT ${clean}" or "THEY ${clean}" to imply a story.`);
+  }
+
+  // Banned: NOUN + OBSERVATION-VERB (LIGHT LOSES, TIME ENDS, STARS DIE, SIGNAL STOPS)
+  const OBS_VERBS = new Set(['LOSES','ENDS','DIES','STOPS','FADES','BURNS','FALLS','BREAKS','FAILS','FREEZES','SLOWS','BENDS','ESCAPES','REMAINS']);
+  const SPACE_NOUNS = new Set(['LIGHT','TIME','STARS','SPACE','MATTER','ENERGY','GRAVITY','SIGNAL','LIFE','HEAT','DATA','SOUND','RADIO','PROBE','CRAFT']);
+  if (words.length === 2 && SPACE_NOUNS.has(words[0]) && OBS_VERBS.has(words[1])) {
+    issues.push(`"${hook}" is a NOUN+VERB observation (state description, not a story). Banned pattern. Use a reaction ("IT STOPPED"), impossibility ("SHOULDN'T FADE"), or mystery ("NOBODY KNOWS") instead.`);
+  }
+
+  // Banned: bare adjective+noun descriptions — states without action
+  const ADJ_NOUN_BANNED = [['DEAD','STAR'],['DARK','SKY'],['COLD','VOID'],['FOREVER','GONE'],['NEVER','FOUND'],['ALWAYS','DARK'],['EMPTY','SPACE'],['SILENT','VOID'],['LOST','SIGNAL'],['FADING','SIGNAL']];
+  if (words.length === 2) {
+    for (const [a, b] of ADJ_NOUN_BANNED) {
+      if (words[0] === a && words[1] === b) {
+        issues.push(`"${hook}" is a descriptor-state hook — no curiosity gap, no story implied.`);
+        break;
+      }
+    }
+  }
+
   return { valid: issues.length === 0, issues };
+}
+
+// ─── ASTROKOBI LLM JUDGE ──────────────────────────────────────────────────────
+// Sends hook + title to Sonnet. Passes if score >= 7.
+// Called after structural validation passes, for AstroKobi thumbnails only.
+
+async function judgeAstrokobiHook(hook, title) {
+  const prompt = `You are judging a YouTube thumbnail hook for an astronomy sleep channel (AstroKobi style: dramatic, cinematic, photorealistic space).
+
+TITLE: "${title}"
+HOOK TEXT: "${hook}"
+
+A hook PASSES (score 7+) if it meets ALL three tests:
+1. STORY TEST: Does the hook imply a story, mystery, or reveal? "IT ANSWERED" implies something responded to a question. "SHOULD NOT BE POSSIBLE" implies broken expectations. PASS examples: "THEY FOUND IT", "NOBODY KNOWS", "47 YEARS LATER", "ONE SURVIVED". FAIL examples: "LIGHT LOSES", "TIME ENDS", "DEAD STAR" — these are observations, not stories.
+2. CURIOSITY GAP TEST: Would a viewer think "WAIT WHAT? I need to click"? The hook + title together must create an unanswered question in the viewer's mind.
+3. SUBJECT CONNECTION TEST: Does the hook connect logically to the title's subject? The connection must be obvious within 2 seconds of seeing hook + title together.
+
+Return ONLY this JSON (no markdown):
+{
+  "score": 1-10,
+  "story_test": "PASS or FAIL",
+  "curiosity_gap_test": "PASS or FAIL",
+  "subject_test": "PASS or FAIL",
+  "verdict": "one sentence: why it passes or exactly what would make it better"
+}`;
+
+  try {
+    const text = await callClaudeCLI(prompt, { model: CLI_MODEL, timeoutMs: 90000 });
+    const m = text.match(/\{[\s\S]*?\}/);
+    if (!m) return { score: 7, passes: true, verdict: 'judge returned no JSON — passing' };
+    const result = JSON.parse(m[0]);
+    result.passes = (result.score || 0) >= 7;
+    return result;
+  } catch (e) {
+    console.log(`  [Hook Judge] Failed: ${e.message} — bypassing judge`);
+    return { score: 7, passes: true, verdict: 'judge unavailable — bypassed' };
+  }
 }
 
 // ─── ASTROKOBI PLANNER PROMPT ─────────────────────────────────────────────────
@@ -522,6 +586,47 @@ async function generateHookCandidates({ title, scriptText, niche, tone, channelC
       : validateHookText(result.winner);
 
     if (validation.valid) {
+      // For AstroKobi: run LLM judge after structural validation passes
+      if (isAstrokobi) {
+        console.log(`  [Hook Judge] Judging "${result.winner}" vs title...`);
+        const judgment = await judgeAstrokobiHook(result.winner, title);
+        console.log(`  [Hook Judge] Score: ${judgment.score}/10 | Story: ${judgment.story_test} | Curiosity: ${judgment.curiosity_gap_test} | Subject: ${judgment.subject_test}`);
+        console.log(`  [Hook Judge] Verdict: ${judgment.verdict}`);
+
+        if (!judgment.passes) {
+          // Try runner-up candidates that also pass structural validation + LLM judge
+          const validator = validateAstrokobiHookText;
+          let judgedFallback = null;
+          for (const c of (result.candidates || [])) {
+            if (c.hook === result.winner) continue;
+            if (!validator(c.hook).valid) continue;
+            const cj = await judgeAstrokobiHook(c.hook, title);
+            console.log(`  [Hook Judge] Runner-up "${c.hook}": ${cj.score}/10`);
+            if (cj.passes) { judgedFallback = { hook: c.hook, judgment: cj }; break; }
+          }
+          if (judgedFallback) {
+            console.log(`  [Hook Judge] Using runner-up: "${judgedFallback.hook}" (${judgedFallback.judgment.score}/10)`);
+            result.winner = judgedFallback.hook;
+            result.winner_reasoning = `(LLM judge fallback, score ${judgedFallback.judgment.score}/10) ${judgedFallback.judgment.verdict}`;
+            result._llm_judgment = judgedFallback.judgment;
+            return result;
+          }
+
+          _lastHookFailureFeedback = `Hook "${result.winner}" rejected by LLM judge (score ${judgment.score}/10): ${judgment.verdict}. Story test: ${judgment.story_test}. Curiosity gap: ${judgment.curiosity_gap_test}. Subject connection: ${judgment.subject_test}. Generate hooks that imply a STORY or MYSTERY — not state descriptions.`;
+
+          if (attempt === 3) {
+            console.log('  [Hook Judge] All attempts rejected — using best available with warning');
+            result._llm_judge_failed = true;
+            result._llm_judgment = judgment;
+            return result;
+          }
+          console.log(`  [Hook Judge] Retrying (attempt ${attempt}/3)...`);
+          continue;
+        }
+
+        result._llm_judgment = judgment;
+      }
+
       if (attempt > 1) console.log(`  [Hook] Attempt ${attempt}: PASSED validation — "${result.winner}"`);
       return result;
     }
@@ -529,7 +634,7 @@ async function generateHookCandidates({ title, scriptText, niche, tone, channelC
     console.log(`  [Hook] Attempt ${attempt}: FAILED validation — "${result.winner}"`);
     for (const issue of validation.issues) console.log(`    ✗ ${issue}`);
 
-    // Also try the other candidates — pick first one that passes
+    // Also try the other candidates — pick first one that passes structural validation
     const validator = isAstrokobi ? validateAstrokobiHookText : validateHookText;
     const fallback = (result.candidates || []).find(c => validator(c.hook).valid);
     if (fallback) {

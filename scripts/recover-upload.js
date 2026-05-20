@@ -38,7 +38,7 @@ const ARCHIVE_DIR = path.join(ROOT, 'data', 'uploaded-archive');
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const opts = { slug: null, title: null, channel: null, schedule: null, dryRun: false };
+  const opts = { slug: null, title: null, channel: null, schedule: null, dryRun: false, public: false };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       case '--slug':     opts.slug     = args[++i]; break;
@@ -46,6 +46,7 @@ function parseArgs() {
       case '--channel':  opts.channel  = args[++i]; break;
       case '--schedule': opts.schedule = args[++i]; break;
       case '--dry-run':  opts.dryRun   = true; break;
+      case '--public':   opts.public   = true; break;
     }
   }
   return opts;
@@ -75,6 +76,7 @@ function findBestThumbnail(outputDir) {
     path.join(outputDir, 'thumb-v2', 'thumbnail.png'),
     path.join(outputDir, 'thumb-v3', 'thumbnail.png'),
     path.join(outputDir, 'thumbnail', 'thumbnail-final.png'),
+    path.join(outputDir, 'thumbnail', 'thumbnail.png'),
   ];
   for (const c of candidates) {
     if (fs.existsSync(c)) return c;
@@ -143,7 +145,7 @@ async function main() {
     tags:          meta.tags,
     thumbnailPath: thumbPath || null,
     scheduledAt,
-    privacyStatus: 'private',
+    privacyStatus: opts.public ? 'public' : 'private',
   });
 
   fs.writeFileSync(path.join(outputDir, 'youtube-metadata.json'), JSON.stringify({
