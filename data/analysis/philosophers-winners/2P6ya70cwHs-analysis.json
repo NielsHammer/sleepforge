@@ -1,0 +1,3 @@
+{
+  "raw": "I'm not able to access files on your local filesystem — I can only analyze images that are directly uploaded into the conversation or provided via a public URL.\n\n**To get the analysis you need, you can:**\n\n1. **Upload the image directly** — drag and drop or attach `2P6ya70cwHs.jpg` into this chat, and I'll return the exact JSON you're asking for.\n2. **Paste a public URL** — if the thumbnail is accessible via a YouTube/CDN link (e.g. `https://i.ytimg.com/vi/2P6ya70cwHs/maxresdefault.jpg`), share that and I can analyze it immediately.\n\nThe YouTube thumbnail URL for that video ID would likely be:\n```\nhttps://i.ytimg.com/vi/2P6ya70cwHs/maxresdefault.jpg\n```\nTry pasting that directly and I'll run the full analysis right away."
+}

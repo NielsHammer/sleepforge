@@ -1,0 +1,34 @@
+[
+  {
+    "iteration": 0,
+    "score": 7.7,
+    "categories": {
+      "INFORMATION_DENSITY": 7,
+      "SPECIFICITY": 10,
+      "REPETITION": 6,
+      "PROGRESSION": 8,
+      "SUSPENSE": 4,
+      "MYSTERY_TONE": 8,
+      "SLEEP_PACING": 7,
+      "VISUAL_DESCRIPTION": 8,
+      "AI_SLOP": 9,
+      "INTRO_QUALITY": 10
+    }
+  },
+  {
+    "iteration": 1,
+    "score": 8.7,
+    "categories": {
+      "INFORMATION_DENSITY": 8,
+      "SPECIFICITY": 10,
+      "REPETITION": 7,
+      "PROGRESSION": 9,
+      "SUSPENSE": 9,
+      "MYSTERY_TONE": 9,
+      "SLEEP_PACING": 9,
+      "VISUAL_DESCRIPTION": 8,
+      "AI_SLOP": 8,
+      "INTRO_QUALITY": 10
+    }
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "subject": "intro",
+    "moment": "sleep welcome",
+    "action": "gentle welcome to the listener",
+    "setting": "quiet, dark space",
+    "philosopher": "intro",
+    "narration": "Welcome.\n\nSleepless Astronomer is built for people who find sleep difficult — and who find the universe easier to think about than whatever kept them awake.\n\nBefore we begin: get comfortable. If you're in bed, pull the covers a little closer. If you're somewhere else, let yourself settle into it. Close your eyes. The screen doesn't matter. Everything that matters tonight comes through sound.\n\nWe're going to move slowly through What's Inside a Black Hole: An Hour of Deep Space Wonder. You'll hear careful descriptions — the kind you'd want told to you in the dark, with long pauses between thoughts. There are no images you need to look at. Just language, and silence between sentences, and the gradual weight of something very old and very vast settling gently around you.\n\nTake a breath. Let your body grow a little heavier.\n\nAnd when you're ready, we'll begin."
+  },
+  {
+    "subject": "m87-black-hole-event-horizon-telescope",
+    "moment": "The Shadow of M87",
+    "action": "On April 10, 2019, the Event Horizon Telescope Collaboration — eight radio observatories spanning four continents, functioning as a single Earth-sized dish — released the first direct image of a black hole's shadow: M87*, located 55 million light-years away, with a mass 6.5 billion times that of our Sun. The luminous ring in the image spans roughly 40 billion kilometers — wider than the entire orbit of Neptune around the Sun.",
+    "setting": "The Shadow of M87",
+    "arc_role": "hook",
+    "philosopher": "m87-black-hole-event-horizon-telescope",
+    "narration": "Eight radio observatories across four continents united on April tenth, twenty nineteen. Together they formed a single radio telescope the size of Earth. And when their signals aligned, they'd revealed something that'd eluded physicists for nearly a century: the shadow of a black hole.\n\nThey detected a ring suspended in darkness. A luminous boundary marking the event horizon of a black hole fifty-five million light years away, in a galaxy called M eighty-seven. The black hole's mass is staggering: six point five billion times the mass of our Sun, compressed into an impossibly small space where space and time warp completely around it.\n\nThis ring stretches forty billion kilometers across the void. To understand the scale: that's wider than the entire orbit of Neptune around our Sun. And this ring marks an absolute threshold. Nothing crosses back through it. Not light. Not matter. Not even time itself, in any way we understand it.\n\nBut what creates this boundary? What defines the exact dimensions of no return? These questions couldn't be answered by observation alone. They demanded calculation. And one man had calculated the answer. A physicist in a frozen trench during the First World War, writing mathematics on paper as his body slowly failed. He'd defined what that ring encircles. And his mathematics have held true across the decades."
+  },
+  {
+    "subject": "schwarzschild-radius-wartime-derivation",
+    "moment": "Schwarzschild's Final Letter",
+    "action": "On December 22, 1915, German physicist Karl Schwarzschild mailed a handwritten letter to Albert Einstein from the Russian Front — where he was already dying of pemphigus, a blistering skin disease contracted in the trenches. The letter contained the first exact solution to Einstein's field equations of general relativity, defining what is now called the Schwarzschild radius: the critical threshold of no return for any mass. Compressed to that radius, Earth would collapse to a sphere just 8.87 millimeters across — roughly the size of a marble.",
+    "setting": "Schwarzschild's Final Letter",
+    "arc_role": "setup",
+    "philosopher": "schwarzschild-radius-wartime-derivation",
+    "narration": "Those mathematics were born in a letter. December nineteen fifteen. Karl Schwarzschild writes it from the Russian Front, mails it to Albert Einstein. A disease called pemphigus spreads across his skin — a slow blistering from the trenches. He's dying. But his mind is clear and his hand is steady.\n\nThe letter contains something no one has found before: an exact solution to Einstein's field equations of general relativity. Complete mathematics of gravity itself. In those equations, Schwarzschild has discovered the critical threshold — the boundary of no return. It's what we now call the Schwarzschild radius.\n\nImagine our entire Earth compressed down. All its oceans and mountains and cities. Compressed to something you could hold in your palm. Eight point eight-seven millimeters across. A marble made of glass. That's what his mathematics reveals. Any mass squeezed to that radius collapses inward. The boundary itself defined. Set in equations.\n\nBut Schwarzschild has drawn this boundary from the outside, mapped it in mathematics. His solution tells you where the threshold is. It doesn't yet reveal what happens if something crosses it. What would it feel like to fall through that marble-sized point? What does space itself become when you cross the boundary and there is no way back?"
+  },
+  {
+    "subject": "spaghettification-tidal-forces-event-horizon",
+    "moment": "Spaghettification's Quiet Divide",
+    "action": "Near a stellar-mass black hole of ten solar masses, the difference in gravitational pull between a human's head and feet — the tidal gradient — would exceed ten trillion times Earth's own gravitational gradient, stretching every cell into a filament thinner than a single proton within milliseconds of approach; yet at the event horizon of a supermassive black hole like M87*, that same gradient is so diluted across its colossal scale that an infalling traveler would feel no physical sensation whatsoever as they crossed the point of no return — slipping through silence, the universe behind them slowly redshifting to black.",
+    "setting": "Spaghettification's Quiet Divide",
+    "arc_role": "setup",
+    "philosopher": "spaghettification-tidal-forces-event-horizon",
+    "narration": "The answer rests on scale.\n\nNear a small black hole, gravity would shred you instantly. Each cell stretched thin as a proton within milliseconds.\n\nBut near a massive one, you'd cross in silence, feeling nothing. To you, just moments. To them, forever."
+  },
+  {
+    "subject": "hawking-radiation-black-hole-evaporation",
+    "moment": "Hawking's Evaporating Eternity",
+    "action": "In a 1974 paper titled 'Black Hole Explosions?' published in the journal Nature, Stephen Hawking demonstrated that quantum effects at the event horizon cause black holes to slowly emit thermal radiation — now called Hawking radiation — as particle-antiparticle pairs spontaneously form and one escapes before annihilation. For a black hole of one solar mass, this radiation temperature is approximately 60 nanokelvins — far colder than the cosmic microwave background at 2.7 Kelvin — and at that rate of loss, the black hole would take ten to the power of sixty-seven years to fully evaporate: a duration that outlasts the current age of the universe by fifty-seven orders of magnitude.",
+    "setting": "Hawking's Evaporating Eternity",
+    "arc_role": "setup",
+    "philosopher": "hawking-radiation-black-hole-evaporation",
+    "narration": "But even forever has a limit. At the event horizon where time stretches infinitely, something unexpected begins to happen. Quantum effects set to work. Pairs of particles and antiparticles continuously flicker into existence — born from the quantum foam itself. One escapes. One falls inward. And the black hole, impossibly, begins to leak away.\n\nStephen Hawking discovered this in nineteen seventy-four. In a paper published in Nature, he showed that black holes aren't truly black at all. They emit a faint thermal radiation — radiation so cold it seems almost beyond imagining. For a black hole with the mass of our Sun, the temperature would be about sixty nanokelvins. That's colder than the cosmic microwave background, that ancient light left over from the universe's birth.\n\nAt that rate of loss, it would take ten to the power of sixty-seven years for the black hole to fully evaporate. Ten followed by sixty-seven zeros. A duration so vast it outlasts the entire age of our universe by fifty-seven orders of magnitude. The universe is thirteen point eight billion years old. This single black hole would persist for a time that makes those billions of years feel like a single held breath.\n\nAnd so it endures. Dissolving across timescales beyond comprehension. Slowly, quantum by quantum, returning to the luminous field from which everything emerged."
+  }
+]

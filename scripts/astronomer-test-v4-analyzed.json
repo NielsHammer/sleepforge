@@ -1,0 +1,46 @@
+[
+  {
+    "subject": "intro",
+    "moment": "sleep welcome",
+    "action": "gentle welcome to the listener",
+    "setting": "quiet, dark space",
+    "philosopher": "intro",
+    "narration": "You've found Sleepless Astronomer.\n\nThis is a place to rest while the cosmos does the talking. These videos are designed for sleep — for the hours when the mind is restless and the night is quiet.\n\nIf you can, lie back. Let your eyes close. Take a deep breath, and feel the weight of the day begin to lift. There's nothing to track tonight, nothing to hold. Every scale, every distance, every wonder will come through sound alone — the way a story is told when the lights are off.\n\nYou might fall asleep before the end. That's not only fine — it's the point.\n\nTonight's subject is Saturn's hexagon: a storm that has outlasted civilizations. We'll take our time with it. There's no rush here. Only the slow, patient turning of the universe, and a voice to keep you company as you drift.\n\nWhenever you're ready."
+  },
+  {
+    "subject": "saturn-north-pole-voyager-flyby",
+    "moment": "The Shape That Shouldn't Exist",
+    "action": "On November 12, 1980, Voyager 1 swept past Saturn and transmitted photographs that left NASA imaging scientist Bradford Smith publicly speechless — the north pole of a gas giant was enclosed inside a perfect, storm-carved hexagon, each angle precise to within fractions of a degree, a geometric shape that has no business existing in fluid chaos",
+    "setting": "The Shape That Shouldn't Exist",
+    "arc_role": "hook",
+    "philosopher": "saturn-north-pole-voyager-flyby",
+    "narration": "On November twelfth, nineteen eighty, Voyager One sweeps past Saturn. It had left Earth on September fifth, nineteen seventy-seven — more than three years earlier — tracing a long arc past Jupiter and crossing more than one and a half billion kilometers of open space before reaching Saturn's outer rings.\n\nImages arrive slowly, transmitted as radio pulses across that same distance, building themselves line by line. Bradford Smith, the imaging scientist, goes quiet — his pen still above the notes he'd been keeping, the words simply failing to come as the shape resolves itself, degree by degree, into something no one has a name for yet.\n\nAt the north pole of Saturn — at the crown of a sphere of gas and wind some one hundred and sixteen thousand kilometers wide — something holds its form. Each of its six sides precise to within fractions of a degree, as though drawn by deliberate hands. But it hasn't been drawn. It's formed itself inside chaos and storm. A hexagon. Carved from wind and held within wind. A shape that has no business existing in fluid chaos.\n\nFor just a few hours, Voyager One holds the angle. Then the spacecraft is gone, carrying those photographs back toward Earth. The hexagon remains, spinning below. A shape registered once, in the dark. And the question it leaves behind is patient and wide: what would years of careful attention reveal?"
+  },
+  {
+    "subject": "saturn-hexagon-scale-diagram",
+    "moment": "A Storm Wider Than Worlds",
+    "action": "The hexagon spans approximately 29,000 kilometers across — wide enough to drop nearly four Earths inside it side by side — and each of its six sides measures roughly 13,800 kilometers, longer than Earth's entire diameter of 12,742 kilometers, while jet stream winds along its walls sustain speeds of 320 kilometers per hour with almost no variation, and the entire structure rotates at exactly 10 hours, 39 minutes, and 24 seconds — a period matching Saturn's deep interior rotation, as though the planet's own core is conducting it",
+    "setting": "A Storm Wider Than Worlds",
+    "arc_role": "setup",
+    "philosopher": "saturn-hexagon-scale-diagram",
+    "narration": "The answer arrives slowly. Four Earths could be set side by side inside it — the hexagon spans twenty-nine thousand kilometers across. Each wall runs thirteen thousand eight hundred kilometers long, exceeding Earth's full diameter. The winds hold constant at three hundred and twenty kilometers per hour, neither gusting nor fading.\n\nIt rotates once every ten hours, thirty-nine minutes, and twenty-four seconds — a period that matches Saturn's deep interior, as though the planet's own core is conducting it from below.\n\nA geometry this precise shouldn't hold inside fluid motion. The forces pulling at it are immense, relentless, chaotic. And yet something keeps it locked.\n\nBut why a hexagon — and not a circle, a spiral, or nothing at all?"
+  },
+  {
+    "subject": "saturn-hexagon-cassini-color-change",
+    "moment": "The Color That Took Fifteen Years",
+    "action": "When the Cassini spacecraft arrived at Saturn in July 2004, the hexagon glowed a deep, cold blue; by the mission's final transmissions in September 2017, it had shifted to a warm amber gold — scientists including Leigh Fletcher at the University of Leicester concluded the color change tracked Saturn's northern hemisphere moving from winter into its 15-year summer solstice, altering ultraviolet exposure and haze chemistry, while nested at the hexagon's center sat a polar hurricane with an eye wall 2,000 kilometers wide and wind speeds exceeding 540 kilometers per hour — a storm within a storm, perfectly contained",
+    "setting": "The Color That Took Fifteen Years",
+    "arc_role": "setup",
+    "philosopher": "saturn-hexagon-cassini-color-change",
+    "narration": "Between nineteen eighty and two thousand four, the hexagon turned unobserved — twenty-four years long enough for Saturn to trace nearly four-fifths of one complete orbit of the sun, the shape holding its geometry without a single instrument trained on it.\n\nWhen Cassini arrived at Saturn in July two thousand four, the hexagon radiated deep, cold blue. By two thousand seventeen, it'd shifted to warm amber gold. The change tracked Saturn's northern hemisphere moving from winter into summer — the altered angle of sunlight reshaping photochemistry in the upper atmosphere, tinting the clouds with haze that hadn't been there before.\n\nAt the hexagon's heart, a hurricane spins. An eye wall two thousand kilometers wide. Winds beyond five hundred kilometers per hour.\n\nThat's not the most arresting detail. The most arresting detail is what holds all of it in place — something quieter, and far older, than the storm itself."
+  },
+  {
+    "subject": "rossby-wave-laboratory-experiment",
+    "moment": "Water, Rotation, and Truth",
+    "action": "In laboratory experiments conducted in the 1980s and later refined at the University of Oxford, physicist Peter Read placed a rotating tank of water and glycerol on a turntable, created a temperature differential between its center and edge, and watched as the fluid spontaneously organized itself into stable geometric vortex patterns — including hexagons — confirming that Saturn's shape is the natural equilibrium state of a jet stream experiencing a fluid instability known as a Rossby wave, the same wave pattern that governs Earth's own polar jet stream, meaning the hexagon requires no exotic explanation: it is simply what a fast, stable jet stream on a fast-rotating planet does, and by the time Cassini fell silent, the storm had been continuously documented for 37 years — older than most governments currently on Earth",
+    "setting": "Water, Rotation, and Truth",
+    "arc_role": "setup",
+    "philosopher": "rossby-wave-laboratory-experiment",
+    "narration": "In the nineteen-eighties, physicist Peter Read worked at Oxford with a simple apparatus: a rotating tank of water and glycerol, a turntable beneath it, a temperature difference maintained between the center and the outer edge. The fluid organized itself into hexagons.\n\nThe same physics shapes Earth's polar vortex — Rossby waves bending the high-altitude jet stream into lobes that drift and pull above the northern hemisphere each winter. On Saturn, the jet stream moves faster, the rotation is steadier, and the hexagon that formed above the north pole has persisted through thirty-seven years of recorded observation.\n\nOlder than most governments on Earth. Older than most things we'd think to call enduring.\n\nRossby waves don't ask for permission to be orderly. On two planets, separated by more than one billion kilometers of space, the same mathematics quietly runs. And somewhere above Saturn's methane clouds, in the long cold of its polar dark, the hexagon turns — shaped by forces that have no preference for where they work."
+  }
+]

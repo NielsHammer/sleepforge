@@ -1,0 +1,46 @@
+[
+  {
+    "subject": "intro",
+    "moment": "channel welcome",
+    "action": "gentle welcome to the listener",
+    "setting": "quiet, open space",
+    "philosopher": "intro",
+    "narration": "Welcome to Sleepless Astronomer.\n\nThese recordings are built for listening. Wherever you are right now — settling in for the night, working through something long, sitting in transit, or just finding something quiet to have on — you don't need the screen. Everything comes through sound. Every distance, every object, every idea in the dark between stars described the way a story's described: in words, at a pace that lets them settle.\n\nGet comfortable. Take a breath. Let whatever's been filling your head ease back a little.\n\nTonight we're moving through what lives at the edge of a black hole. The universe has been unfolding for almost fourteen billion years. It doesn't mind if you take your time.\n\nHowever you choose to listen — fully present, half-present, eyes open, eyes closed — there's no wrong way. Just let it come to you.\n\nWhenever you're ready, let's begin."
+  },
+  {
+    "subject": "black-hole-photon-sphere",
+    "moment": "Where Light Orbits Forever",
+    "action": "At exactly 1.5 times the Schwarzschild radius from any black hole's center — a shell called the photon sphere — light no longer escapes nor falls inward; it travels in perfect circles indefinitely. For Sagittarius A*, the black hole anchoring our own Milky Way, this eternal orbital ring sits only 15.6 kilometers above the point of no return.",
+    "setting": "Where Light Orbits Forever",
+    "arc_role": "hook",
+    "philosopher": "black-hole-photon-sphere",
+    "narration": "There's a place where light travels in circles. Not escaping outward. Not falling inward. Held in orbit by the curvature of space itself, by nothing else, nothing more. This is the photon sphere — the shell of perpetually circling light that surrounds every black hole in the universe.\n\nAt exactly one and a half times the Schwarzschild radius from any black hole's center, light finds itself suspended here. Caught. For Sagittarius A*, the black hole anchoring our own Milky Way, that threshold sits only fifteen point six kilometers above the event horizon — the distance you might drive on an ordinary morning, nothing on a cosmic scale, a breath of space separating orbiting light from the point of no return.\n\nLight that's traveled for billions of years through the emptiness arrives here and stays. It traces its circle. It doesn't slow. It doesn't escape. It continues in the only path gravity allows.\n\nAnd in that narrow zone, other things are still descending. Superheated gas spiraling inward. Matter pressing toward the boundary it won't cross back through."
+  },
+  {
+    "subject": "black-hole-accretion-disk",
+    "moment": "The Trillion-Degree Spiral",
+    "action": "The accretion disk surrounding M87* reaches plasma temperatures of approximately 10 trillion Kelvin in its innermost ring — roughly six hundred times hotter than the core of our Sun — and gas there accelerates to nearly 30% the speed of light before disappearing across the event horizon.",
+    "setting": "The Trillion-Degree Spiral",
+    "arc_role": "setup",
+    "philosopher": "black-hole-accretion-disk",
+    "narration": "Around M87*, the immense black hole at the center of the Messier Eighty-Seven galaxy, an accretion disk has been spiraling for millions of years. The plasma at its innermost ring reaches temperatures of approximately ten trillion Kelvin — roughly six hundred times hotter than the core of our Sun. A temperature no material we've named can hold unchanged. A temperature that transforms matter into something barely recognizable.\n\nIndividual particles in that inner ring accelerate toward the event horizon at nearly thirty percent the speed of light — fast enough that the geometry around them compresses noticeably, the gap between one position and the next closing in a narrowing blur, matter threading inward along a path that tightens with every fraction of a second. Time bends around them. The spiral steepens. The heat compounds. And then the matter crosses the event horizon, and there's nothing — no signal, no sound, no radiation that returns.\n\nBut at that edge, something else is happening. Not inside it. Not falling through. At the surface itself — a phenomenon Stephen Hawking first described in January nineteen seventy-four. A process that would take decades for instruments to approach, that still resists direct measurement, but that physicists have treated as real since the mathematics first required it."
+  },
+  {
+    "subject": "hawking-radiation-event-horizon",
+    "moment": "Hawking's Invisible Whisper",
+    "action": "In a paper published in Nature in January 1974 titled 'Black Hole Explosions?', Stephen Hawking predicted that quantum fluctuations just outside the event horizon spontaneously generate pairs of virtual particles — one swallowed inward, one radiating outward. For a black hole with the mass of our Sun, this emission temperature is 60 nanokelvins — colder than any naturally occurring region yet measured in the observable universe.",
+    "setting": "Hawking's Invisible Whisper",
+    "arc_role": "setup",
+    "philosopher": "hawking-radiation-event-horizon",
+    "narration": "In a paper published in Nature in January nineteen seventy-four, titled \"Black Hole Explosions?\", Stephen Hawking proposed something that would reshape how physicists understand the darkest objects in the universe. The question mark was deliberate. What followed was a quiet revolution.\n\nJust outside the event horizon, space itself fluctuates. Pairs of particles flare into existence and vanish — briefer than any interval a clock could measure, in a region thinner than a single proton — what physicists call the quantum foam. Occasionally, one particle of a pair falls inward while its partner escapes outward. The black hole loses a trace of mass. Slowly. Infinitesimally slowly.\n\nFor a black hole with the mass of our Sun, this Hawking radiation would carry a temperature of sixty nanokelvins — sixty billionths of a degree above absolute zero. Colder than the void between galaxies. Colder than the cosmic microwave background, the faint afterglow of the Big Bang, which holds at approximately two point seven Kelvin. Colder than any natural place we've measured in the observable universe.\n\nFor nearly fifty years, this remained mathematics. A theory with no instrument delicate enough to reach it. But physicists waited. Our telescopes grew more precise. And the universe was about to offer something — not proof of Hawking radiation, but a glimpse of the boundary where it would have to be."
+  },
+  {
+    "subject": "event-horizon-telescope-m87",
+    "moment": "A Glowing Asymmetric Ring",
+    "action": "The Event Horizon Telescope image of M87* released on April 10, 2019 — processed in part through an algorithm developed by MIT computer scientist Katie Bouman — showed a crescent dramatically brighter on its southern side than its northern side. The asymmetry is caused by relativistic beaming: plasma racing toward Earth brightens by a factor of several thousand while plasma moving away nearly vanishes, producing a lopsided ring of fire visible across 55 million light-years.",
+    "setting": "A Glowing Asymmetric Ring",
+    "arc_role": "setup",
+    "philosopher": "event-horizon-telescope-m87",
+    "narration": "The Event Horizon Telescope image of M87* released on April tenth, twenty nineteen — processed from data gathered by eight radio telescopes stretching from Hawaii to Spain to the South Pole — revealed not the black hole itself, but the space immediately surrounding it. Eight instruments coordinated into a single global array, listening for the faint signals that spacetime gives off near that boundary.\n\nWhat the data returned was unexpected in its shape. A crescent. Glowing unevenly. The southern edge intense and continuous. The northern edge faded to near darkness, as though gravity had dimmed one half while drawing out the other.\n\nThat asymmetry has a name: relativistic beaming. Plasma racing toward us brightens by a factor of several thousand. The same plasma receding into deep space dims until it nearly vanishes. The result is a lopsided ring of light burning across fifty-five million light-years — a record of motion, of geometry, of a thing we'd never directly recorded before.\n\nKatie Bouman, a computer scientist at MIT, had developed the algorithm that gave shape to what the telescopes gathered. Raw radio signals from eight continents woven through mathematics, reconstructed into something whole. The calculations traced the curvature of spacetime itself — bent so severely that light no longer escapes, that it holds in orbit just above the threshold.\n\nThe edge of a black hole had made itself known. Not with brightness or noise, but with the quiet asymmetry of matter in motion. A crescent of plasma burning at the boundary between existence and void. A place where gravity has grown so complete that it rewrites what's possible."
+  }
+]

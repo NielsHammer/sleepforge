@@ -4,45 +4,75 @@
     "channel": "astronomer",
     "topic": "neutron stars",
     "scheduleDate": "2026-05-21",
-    "status": "queued",
+    "status": "completed",
     "createdAt": "2026-05-20T13:46:30.134Z",
     "resetAt": "2026-05-21T21:28:00.000Z",
-    "resetReason": "EBUSY resolved — stale files manually cleared"
+    "resetReason": "EBUSY resolved — stale files manually cleared",
+    "startedAt": "2026-05-20T22:48:47.594Z",
+    "updatedAt": "2026-05-21T00:17:54.700Z",
+    "queueId": "bf87649f-3522-43c6-8c62-ca6168620b69",
+    "videoId": "at4n07na0VA",
+    "url": "https://youtube.com/watch?v=at4n07na0VA",
+    "title": "How Two Neutron Stars Collided to Make Gold | 1 Hour for Deep Sleep",
+    "pipelineSec": 5285
   },
   {
     "id": "ffdddc28-a173-47a6-9167-06ebe75fa033",
     "channel": "astronomer",
     "topic": "black holes",
     "scheduleDate": "2026-05-21",
-    "status": "rendering",
+    "status": "completed",
     "createdAt": "2026-05-20T15:04:06.401Z",
     "startedAt": "2026-05-20T21:23:48.051Z",
-    "updatedAt": "2026-05-20T21:23:48.052Z"
+    "updatedAt": "2026-05-20T22:48:30.589Z",
+    "queueId": "ffdddc28-a173-47a6-9167-06ebe75fa033",
+    "videoId": "cA-0qe4RLxw",
+    "url": "https://youtube.com/watch?v=cA-0qe4RLxw",
+    "title": "What Lies Beyond a Black Hole's Event Horizon? | Fall Asleep to the Cosmos",
+    "pipelineSec": 5078
   },
   {
     "id": "da67ca36-2cf7-4adb-96ea-0c8a6d607cb3",
     "channel": "astronomer",
     "topic": "the Milky Way",
     "scheduleDate": "2026-05-22",
-    "status": "queued",
+    "status": "completed",
     "createdAt": "2026-05-20T15:04:06.402Z",
     "resetAt": "2026-05-21T21:28:00.000Z",
-    "resetReason": "transient Claude API socket error — re-queued"
+    "resetReason": "transient Claude API socket error — re-queued",
+    "startedAt": "2026-05-21T00:18:19.085Z",
+    "updatedAt": "2026-05-21T03:30:08.606Z",
+    "queueId": "da67ca36-2cf7-4adb-96ea-0c8a6d607cb3",
+    "videoId": "o20MHNRMJTI",
+    "url": "https://youtube.com/watch?v=o20MHNRMJTI",
+    "title": "This Ancient Black Hole Holds Our Galaxy Together | Fall Asleep to the Cosmos",
+    "pipelineSec": 11448
   },
   {
     "id": "ca92735b-9ae7-4de2-a494-bfe495636eef",
     "channel": "philosophers",
     "topic": "Stoicism",
     "scheduleDate": "2026-05-21",
-    "status": "queued",
-    "createdAt": "2026-05-20T15:04:06.403Z"
+    "status": "completed",
+    "createdAt": "2026-05-20T15:04:06.403Z",
+    "startedAt": "2026-05-21T03:30:23.651Z",
+    "updatedAt": "2026-05-21T06:33:34.920Z",
+    "queueId": "ca92735b-9ae7-4de2-a494-bfe495636eef",
+    "videoId": "CEbggGIf3GA",
+    "url": "https://youtube.com/watch?v=CEbggGIf3GA",
+    "title": "The Stoic Dichotomy Will Break Your Anxiety to Fall Asleep To",
+    "pipelineSec": 10929
   },
   {
     "id": "356503f7-1ae5-4d39-b1e7-b3bc504c65f1",
     "channel": "philosophers",
     "topic": "Marcus Aurelius",
     "scheduleDate": "2026-05-22",
-    "status": "queued",
-    "createdAt": "2026-05-20T15:04:06.403Z"
+    "status": "failed",
+    "createdAt": "2026-05-20T15:04:06.403Z",
+    "startedAt": "2026-05-21T06:33:56.452Z",
+    "updatedAt": "2026-05-21T08:59:17.670Z",
+    "queueId": "356503f7-1ae5-4d39-b1e7-b3bc504c65f1",
+    "error": "claude CLI exited 1: You've hit your session limit · resets 4:20pm (Asia/Bangkok)"
   }
 ]

@@ -1,0 +1,11 @@
+(node:20572) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+file:///C:/dev/sleepforge/scripts/astronomer-single.js:466
+      throw new Error(`Upload failed after 5 attempts: ${err.message}`);
+            ^
+
+Error: Upload failed after 5 attempts: Token refresh failed for "sleepless-astronomer": invalid_grant
+    at file:///C:/dev/sleepforge/scripts/astronomer-single.js:466:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.14.0

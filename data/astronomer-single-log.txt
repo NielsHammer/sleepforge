@@ -1,0 +1,81 @@
+═══════════════════════════════════════════════════════════
+SleepForge — Astronomer Single Video
+Topic:  What's Inside a Black Hole: An Hour of Deep Space Wonder
+Output: C:\dev\sleepforge\output\what-s-inside-a-black-hole-an-hour-of-deep-space-wonder
+Start:  2026-05-18T20:52:15.539Z
+Fixes:  claude-cli default 600s + 3-retry, outline 600s, scorer 600s
+═══════════════════════════════════════════════════════════
+
+── Step 1: Title candidates ──
+  Cached: "What Exists Beyond Where Time Stops? | 1 Hour for Deep Sleep"
+
+── Step 2: Script generation (60 min, two-pass) ──
+  Cached raw (batch-raw): 21 scenes
+  Raw: 21 scenes, 8242 words
+
+── Step 3: Analyze + rewrite (target ≥ 8.0) ──
+  Cached final: 21 scenes
+
+── Step 4: Chatterbox TTS ──
+  Cached: voiceover.wav exists, skipping TTS
+  Voiceover: 4293.8s (71.6 min)
+
+── Step 5: Whisper timestamps ──
+  Cached: 8224 words
+
+── Step 6: Director — keyword_semantic matching ──
+  Director [keyword]: 623 clips — 126 keyword hits, 497 fallbacks
+  Clips: 623  Keyword hits: 126/623 (20%)  Duplicates: 79
+
+── Step 7: FFmpeg composition ──
+  Cached: body.mp4 exists, skipping slideshow + mix + compose
+  Cached: final.mp4 valid (71.6 min), skipping intro prepend
+  Final: 849 MB, 4299s (71.6 min)
+
+── Step 8: Thumbnail (3 AstroKobi attempts) ──
+============================================================
+SleepForge Thumbnail v3 (HTML/CSS)
+============================================================
+  Title: What Exists Beyond Where Time Stops? | 1 Hour for Deep Sleep
+  Niche: space_documentary
+  Script: 3000 chars
+  Space library: 3 images pre-selected
+    • 015-deep-space.jpg
+    • 220-deep-field.jpg
+    • 321-observatory.jpg
+
+--- Step 0:   Candidates:
+    "LIGHT LOSES." — curiosity:9 surprise:9 brev  Candidates:
+    "LIGHT SURRENDERS" — curiosity:9 surprise:9 brevity:10 total:35
+    "LIGHT IS TRAPPED" — curiosity:8 surprise:9 brevity:9 total:34
+    "EVEN LIGHT FALLS" — curiosity:8 surprise:8 brevity:9 total:33
+    "LIGHT IS IMPRISONED" — curiosity:9 surprise:8 brevity:9 total:33
+    "NOTHING ESCAPES" — curiosity:7 surprise:7 brevity:10 total:33
+  WINNER: "LIGHT SURRENDERS"
+  Why: Two words at maximum brevity, the verb 'surrenders' personifies light — the universe's ultimate symbol of freedom and speed — as something defeated, forcing the viewer to pair it with the title's question about where time stops and immediately wonder: what in existence is powerful enough to make *light* give up?
+
+--- Steps 0.4 + 0.5: Skipped (AstroKobi — concrete space topic, library images pre-loaded) ---
+
+--- S  Subject: black hole with glowing accretion disk (event horizon / photon sphere)
+  Hook: LIGHT LOSES.
+  Image request  [Thumbnail] Failed: claude CLI exited 4294967295:  — continuing without thumbnail
+
+── Step 9: YouTube metadata ──
+
+── Step 10: YouTube upload (PUBLIC) ──
+  [Upload] Attempt 1/5 failed: Token refresh failed for "sleepless-astronomer": invalid_grant
+  Waiting 60s...
+  [Upload] Attempt 2/5 failed: Token refresh failed for "sleepless-astronomer": invalid_grant
+  Waiting 60s...
+  [Upload] Attempt 3/5 failed: Token refresh failed for "sleepless-astronomer": invalid_grant
+  Waiting 60s...
+  [Upload] Attempt 4/5 failed: Token refresh failed for "sleepless-astronomer": invalid_grant
+  Waiting 60s...
+  [Upload] Attempt 5/5 failed: Token refresh failed for "sleepless-astronomer": invalid_grant
+ttempt 2/5 failed: Token refresh failed for "sleepless-astronomer": invalid_grant
+  Waiting 60s...
+  [Upload] Attempt 3/5 failed: Token refresh failed for "sleepless-astronomer": invalid_grant
+  Waiting 60s...
+  [Upload] Attempt 4/5 failed: Token refresh failed for "sleepless-astronomer": invalid_grant
+  Waiting 60s...
+  [Upload] Attempt 5/5 failed: Token refresh failed for "sleepless-astronomer": invalid_grant

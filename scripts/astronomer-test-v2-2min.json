@@ -1,0 +1,34 @@
+[
+  {
+    "subject": "intro",
+    "moment": "sleep welcome",
+    "action": "gentle welcome to the listener",
+    "setting": "quiet, dark space",
+    "philosopher": "intro",
+    "narration": "Welcome.\n\nSleepless Astronomer is built for people who find sleep difficult — and who find the universe easier to think about than whatever kept them awake.\n\nBefore we begin: get comfortable. If you're in bed, pull the covers a little closer. If you're somewhere else, let yourself settle into it. Close your eyes. The screen doesn't matter. Everything that matters tonight comes through sound.\n\nWe're going to move slowly through What's Inside a Black Hole: An Hour of Deep Space Wonder. You'll hear careful descriptions — the kind you'd want told to you in the dark, with long pauses between thoughts. There are no images you need to look at. Just language, and silence between sentences, and the gradual weight of something very old and very vast settling gently around you.\n\nTake a breath. Let your body grow a little heavier.\n\nAnd when you're ready, we'll begin."
+  },
+  {
+    "subject": "black-hole-approach",
+    "moment": "A spacecraft approaching a black hole from deep space",
+    "action": "The darkness ahead grows larger as gravity's effects become measurable",
+    "setting": "Deep space, far beyond any star, where the Sun is a distant memory",
+    "narration": "Far beyond any star, in deep space where the Sun is only a memory, something waits. Invisible. Ancient. A black hole, born when a massive star collapsed billions of years ago. You'd approach slowly. Space would soften. Time would slow. Your instruments would whisper: gravity is increasing. The darkness ahead isn't empty — it's the absence of light. Everything that crosses a certain invisible line falls forever. That line is the event horizon. And it's still far away.",
+    "philosopher": "black-hole-approach"
+  },
+  {
+    "subject": "accretion-disk",
+    "moment": "Matter spiraling into the black hole at millions of degrees",
+    "action": "Superheated gas glowing brilliantly as it spirals inward at near-relativistic speeds",
+    "setting": "Surrounding the black hole's event horizon in a disk of fire and light",
+    "narration": "Around the black hole, gas and dust spiral inward in a disk of light. Friction between particles generates temperatures of millions of degrees. The material glows white-hot — brighter than entire galaxies combined. This accretion disk has been spinning for millions of years, feeding the black hole particle by particle. But nothing escapes. Every particle spirals faster and faster, drawn by gravity so strong that space itself curves around it. The disk shines as if defying gravity. But it's not defying anything. It's only obeying laws we're still learning to understand.",
+    "philosopher": "accretion-disk"
+  },
+  {
+    "subject": "black-hole-singularity",
+    "moment": "The infinitely dense point at the center of the black hole",
+    "action": "All matter compressed into zero space, beyond observation or measurement",
+    "setting": "The deepest point in the universe, beyond the event horizon",
+    "narration": "At the center, mathematics and mystery meet. All the matter ever fallen through the event horizon — stars, dust, light itself — compressed to a point so small it has no size. This singularity exists beyond our ability to observe or understand. No signal escapes it. No thought can reach it. The black hole keeps its deepest secrets forever. And around it, space is patient. Still. Silent. It has been waiting for billions of years. It will wait for billions more. Everything ends here. And that ending is perfect.",
+    "philosopher": "black-hole-singularity"
+  }
+]

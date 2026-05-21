@@ -1,0 +1,18 @@
+[
+  {
+    "iteration": 0,
+    "score": 3.1,
+    "categories": {
+      "INFORMATION_DENSITY": 3,
+      "SPECIFICITY": 5,
+      "REPETITION": 0,
+      "PROGRESSION": 2,
+      "SUSPENSE": 2,
+      "MYSTERY_TONE": 6,
+      "SLEEP_PACING": 7,
+      "VISUAL_DESCRIPTION": 3,
+      "AI_SLOP": 3,
+      "INTRO_QUALITY": 0
+    }
+  }
+]

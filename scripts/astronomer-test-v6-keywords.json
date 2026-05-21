@@ -1,0 +1,46 @@
+[
+  {
+    "subject": "intro",
+    "moment": "channel welcome",
+    "action": "gentle welcome to the listener",
+    "setting": "quiet, open space",
+    "philosopher": "intro",
+    "narration": "Welcome.\n\nSleepless Astronomer is built around one idea: that the universe makes for good company, however you need it. Whether that means lying in the dark and letting words wash over you, working quietly with something on in the background, or sitting somewhere calm and actually following along — all of that works. These videos are designed to function without you watching. Every image is a description. Every detail is spoken, not shown.\n\nSo do whatever you need to do to be comfortable. Adjust the volume. Find a better position. There's no wrong way to be here.\n\nTonight we're exploring Voyager 1's Journey Past Jupiter and Saturn. We'll take our time — long sentences, careful phrasing, no rush toward any conclusion. The ideas themselves are worth sitting with.\n\nTake a breath when you're ready.\n\nAnd let's begin."
+  },
+  {
+    "subject": "voyager-launch-planetary-alignment",
+    "moment": "The 176-Year Window",
+    "action": "In 1965, aerospace engineer Gary Flandro at JPL calculated that a rare alignment of Jupiter, Saturn, Uranus, and Neptune — occurring only once every 176 years — would open a launch window beginning in 1977, allowing a single spacecraft to visit all four outer planets using each planet's gravity as a slingshot",
+    "setting": "The 176-Year Window",
+    "arc_role": "hook",
+    "philosopher": "voyager-launch-planetary-alignment",
+    "narration": "In nineteen sixty-five, an engineer named Gary Flandro studied the paths of distant planets. He was mapping a future no one would see. The four great worlds of the outer solar system — Jupiter, Saturn, Uranus, and Neptune — they'd aligned with one another. A rare configuration. One that happens only once every one hundred seventy-six years.\n\nHe'd discovered something that year. For a brief window in time, beginning in nineteen seventy-seven, a single spacecraft could use each planet's gravity as a slingshot, moving from one world to the next. A journey that'd otherwise take centuries. It would open for just a few years, then close. And wouldn't open again until the year twenty one fifty-three.\n\nNearly two centuries. That's how long another generation would have to wait before they could make this same attempt. The choice was settled, then, in its own quiet way. If humanity wanted to reach those distant worlds — if they wanted to know what waited there in the silence and the cold — they'd have to act now. A small window. A brief one. But it was open.\n\nThe spacecraft was ready. No one yet knew what they would find waiting at Jupiter."
+  },
+  {
+    "subject": "io-volcanic-plume-voyager",
+    "moment": "Morabito's Impossible Plume",
+    "action": "On March 8, 1979, navigation engineer Linda Morabito was processing a star-background image of Io to calibrate Voyager 1's position when she noticed a crescent-shaped smear rising 300 kilometers above the moon's limb — the first active volcano ever discovered beyond Earth, erupting at that exact moment",
+    "setting": "Morabito's Impossible Plume",
+    "arc_role": "setup",
+    "philosopher": "io-volcanic-plume-voyager",
+    "narration": "Voyager 1 crosses the threshold. The spacecraft spends four months in Jupiter's realm, sending back images that astronomers will study in growing wonder.\n\nOn March eighth, nineteen seventy-nine, a navigation engineer named Linda Morabito is processing a star-background image of Io. She's calibrating the spacecraft's position when something emerges from the data. Rising from the moon's curved edge, a crescent-shaped smear climbs three hundred kilometers above the surface. It's a plume. Molten rock and sulfur gases erupting from deep beneath the frozen crust, fountaining outward into the void. The first active volcano ever discovered beyond Earth. Erupting at that very moment.\n\nIo should've been a cold, dead world of ancient frozen rock. But it isn't. Its interior churns with heat, with geysers that stain the surface in brilliant yellows and oranges. Much remains unknown about how such a small moon can harbor such violence.\n\nBut Morabito's discovery poses a question. If this moon is hiding such a churning world beneath its icy skin, what might Saturn's system conceal? The spacecraft will arrive there in sixteen months. Something there will prove even harder to explain."
+  },
+  {
+    "subject": "saturn-ring-spokes-voyager",
+    "moment": "Spokes That Broke the Rules",
+    "action": "On November 12, 1980, Bradford Smith's imaging team photographed dark, radial 'spokes' stretching across Saturn's B ring — features that rotated in lockstep with Saturn's magnetic field rather than following Keplerian orbital mechanics, meaning inner particles were moving slower than physics predicted, a phenomenon that could not be fully explained for another two decades",
+    "setting": "Spokes That Broke the Rules",
+    "arc_role": "setup",
+    "philosopher": "saturn-ring-spokes-voyager",
+    "narration": "Voyager arrives at Saturn. The cameras fill with details humans have never witnessed before.\n\nDark spokes radiate across the B ring like wheels. They shouldn't be there. Bradford Smith's imaging team photographs them on November twelfth, nineteen eighty. The spokes rotate in lockstep with Saturn's magnetic field, not following Keplerian orbital mechanics. Inner particles move slower than physics predicted. The rules are breaking.\n\nMuch remains unexplained. Much remains hidden even now. The probe drifts toward what matters most."
+  },
+  {
+    "subject": "titan-atmosphere-voyager-trajectory",
+    "moment": "The Titan Sacrifice",
+    "action": "Mission planners intentionally threaded Voyager 1 through Titan's gravitational field on November 12, 1980, knowing it would bend the probe 35 degrees above the ecliptic plane and permanently end any chance of visiting Uranus or Neptune — a conscious trade made because Titan's thick, nitrogen-rich atmosphere, opaque at 1.5 times Earth's atmospheric pressure, was judged the single most scientifically irreplaceable target in the outer solar system",
+    "setting": "The Titan Sacrifice",
+    "arc_role": "setup",
+    "philosopher": "titan-atmosphere-voyager-trajectory",
+    "narration": "That something is Titan.\n\nMission planners thread the probe through Titan's gravitational field on November twelfth, knowing it'll bend the path thirty-five degrees above the plane of the planets. A conscious sacrifice — Uranus and Neptune won't be visited. But Titan's thick, nitrogen-rich atmosphere, opaque at one and a half times Earth's pressure, won't come this way again. One chance only.\n\nEjected above the plane and accelerating at sixty-one thousand kilometers per hour, Voyager One is leaving. The solar system falls away."
+  }
+]

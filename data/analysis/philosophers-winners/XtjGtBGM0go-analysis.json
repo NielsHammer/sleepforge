@@ -1,0 +1,3 @@
+{
+  "raw": "I'm not able to access files on your local filesystem — I can only analyze images that are directly uploaded or embedded in the conversation. The path `C:\\dev\\sleepforge\\data\\analysis\\philosophers-winners\\XtjGtBGM0go.jpg` exists on your machine, not somewhere I can reach.\n\n**To get the analysis you need, please:**\n1. Drag and drop / attach the image directly into this chat, **or**\n2. Paste it as an inline image\n\nOnce you share the actual image here, I'll return the exact JSON format you specified immediately."
+}

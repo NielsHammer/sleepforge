@@ -1,0 +1,3 @@
+{
+  "raw": "I'm not able to access files on your local filesystem. I don't have the ability to read from paths like `C:\\dev\\sleepforge\\data\\analysis\\philosophers-winners\\djSkhYfs1Tc.jpg` — I can only analyze images that are directly uploaded into our conversation or accessible via a public URL.\n\n**To get the analysis you need, you can:**\n\n1. **Upload the image directly** into this chat (drag and drop or attach it), and I'll analyze it immediately and return the JSON.\n2. **Host it at a public URL** (e.g., via Imgur, S3, etc.) and share the link.\n\nOnce I can actually see the image, I'll return the exact JSON structure you specified with accurate observations rather than fabricated data."
+}
